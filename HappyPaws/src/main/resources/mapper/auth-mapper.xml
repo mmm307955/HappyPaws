@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AuthDAO">
+	<select id="test" resultType="users">
+		SELECT * FROM users
+	</select>
+
+	<select id="login" resultType="users">
+		SELECT * FROM users WHERE us_id=#{us_id}
+	</select>
+
+	<select id="checkNick" resultType="users">
+		SELECT us_id, us_nick FROM users WHERE us_nick=#{us_nick}
+	</select>
+
+<!-- 	<select id="selUsers" resultType="users"> -->
+<!-- 	<![CDATA[ -->
+<!-- 		SELECT * FROM users WHERE age < 50 -->
+<!-- 	]]> -->
+<!-- 	</select> -->
+</mapper>

@@ -1,0 +1,4 @@
+* { box-sizing: border-box; }
+body { margin: 0; }
+#US_JOIN #US_JOIN_DIV { width: 650px; max-width: 95%; margin: 10px auto; }
+#US_JOIN input, #US_JOIN select { display: block; width: 100%; margin: 0; height: 50px; margin-bottom: 20px; }
