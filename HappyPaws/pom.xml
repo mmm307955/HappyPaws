@@ -56,6 +56,20 @@
 			<artifactId>argon2-jvm</artifactId>
 			<version>2.11</version>
 		</dependency>
+		
+		<!-- commons 파일 업로드 라이브러리(MultipartRequest객체 제공) -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
+		<!-- java데이터를 json객체로 변환하는 라이브러리 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.12.6</version>
+		</dependency>
 
 		
 		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
@@ -88,6 +102,7 @@
 		    <version>4.2.7</version>
 		</dependency>
 
+		
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
