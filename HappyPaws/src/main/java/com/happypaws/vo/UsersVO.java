@@ -56,7 +56,7 @@ public class UsersVO {
 
 	@Override
     public String toString() {
-        return "UsersVO [us_id=" + us_id + ", us_sns=" + us_sns + + ", us_password=" + us_password + ", us_name="
+        return "UsersVO [us_id=" + us_id + ", us_sns=" + us_sns + ", us_password=" + us_password + ", us_name="
 				+ us_name + ", us_nick=" + us_nick + ", us_email=" + us_email + ", us_phone=" + us_phone
 				+ ", us_address=" + us_address + ", us_date=" + us_date + ", us_is_del=" + us_is_del + ", us_profile=" + us_profile + "]";
     }

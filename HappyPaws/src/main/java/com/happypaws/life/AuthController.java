@@ -27,20 +27,12 @@ public class AuthController {
 	@Autowired
 	private AuthSVC svc;
 
-	@Autowired
-	private SNSAuthUtil auth;
-
 	@GetMapping("/login")
 	public String login(Model model, HttpServletRequest request) {
 		if (JwtCookieUtil.extractJwtFromCookie(request) != null) {
 			return "redirect:/";
 		}
-		
-		try {
-			model.addAttribute("naverLoginUrl", auth.naverLoginUrl());
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+
 		return "/WEB-INF/auth/login.jsp";
 	}
 
