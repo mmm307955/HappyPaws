@@ -3,11 +3,6 @@ package com.happypaws.util;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
-/**
- * @since 10.24
- * @version 0.0.0
- * @author 강동준
- */
 public class Argon2Util {
 	/** 비밀번호 해싱 */
 	public static String hashPassword(String password) {

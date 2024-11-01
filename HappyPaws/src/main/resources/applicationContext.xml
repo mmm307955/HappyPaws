@@ -25,5 +25,4 @@
 	<bean class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlsession"></constructor-arg>
 	</bean>
-
 </beans>

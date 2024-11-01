@@ -4,16 +4,39 @@
 
 <mapper namespace="AuthDAO">
 	<select id="test" resultType="users">
-		SELECT * FROM users
+		SELECT * FROM users WHERE us_id=#{us_id} AND us_name=#{us_name} AND us_nick=#{us_nick}
 	</select>
 
 	<select id="login" resultType="users">
-		SELECT * FROM users WHERE us_id=#{us_id}
+		SELECT * FROM users WHERE us_id=#{us_id} AND us_sns='default' AND us_is_del='N'
 	</select>
 
-	<select id="checkNick" resultType="users">
-		SELECT us_id, us_nick FROM users WHERE us_nick=#{us_nick}
+	<select id="checkId" resultType="int">
+		SELECT COUNT(*) FROM users WHERE us_id=#{us_id}
 	</select>
+
+	<select id="checkNick" resultType="int">
+		SELECT COUNT(*) FROM users WHERE us_nick=#{us_nick}
+	</select>
+
+	<insert id="join">
+		INSERT INTO users (us_id, us_password, us_name, us_nick, us_email, us_phone, us_address)
+		VALUES(#{us_id}, #{us_password}, #{us_name}, #{us_nick}, #{us_email}, #{us_phone}, #{us_address})
+	</insert>
+	
+	<select id="findId" resultType="string">
+		SELECT us_id FROM users WHERE us_name=#{us_name} AND us_phone=#{us_phone} AND us_sns='default' AND us_is_del='N'
+	</select>
+	
+	<select id="findPw" resultType="int">
+		SELECT COUNT(*) FROM users WHERE us_id=#{us_id} AND us_name=#{us_name} AND us_phone=#{us_phone} AND us_sns='default' AND us_is_del='N'
+	</select>
+	
+	<update id="changePw">
+		UPDATE users
+		SET us_password=#{us_password}
+		WHERE us_id=#{us_id} AND us_name=#{us_name} AND us_phone=#{us_phone} AND us_sns='default' AND us_is_del='N'
+	</update>
 
 <!-- 	<select id="selUsers" resultType="users"> -->
 <!-- 	<![CDATA[ -->

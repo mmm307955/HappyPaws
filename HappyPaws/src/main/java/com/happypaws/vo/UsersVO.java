@@ -2,14 +2,9 @@ package com.happypaws.vo;
 
 import java.util.Date;
 
-/**
- * @since 10.24
- * @version 0.0.0
- * @author 강동준
- * vo 생성 및 매개변수 9개에 대한 getter, setter, toString 생성
- */
 public class UsersVO {
 	private String us_id = null;
+	private String us_sns = "default";
 	private String us_password = null;
 	private String us_name = null;
 	private String us_nick = null;
@@ -21,6 +16,9 @@ public class UsersVO {
 
 	public String getUs_id() { return us_id; }
 	public void setUs_id(String us_id) { this.us_id = us_id; }
+
+	public String getUs_sns() { return us_sns; }
+	public void setUs_sns(String us_sns) { this.us_sns = us_sns; }
 
 	public String getUs_password() { return us_password; }
 	public void setUs_password(String us_password) { this.us_password = us_password; }
@@ -48,8 +46,8 @@ public class UsersVO {
 
 	@Override
 	public String toString() {
-		return "UsersVO [us_id=" + us_id + ", us_password=" + us_password + ", us_name=" + us_name + ", us_nick="
-				+ us_nick + ", us_email=" + us_email + ", us_phone=" + us_phone + ", us_address=" + us_address
-				+ ", us_date=" + us_date + ", us_is_del=" + us_is_del + "]";
+		return "UsersVO [us_id=" + us_id + ", us_sns=" + us_sns + ", us_password=" + us_password + ", us_name="
+				+ us_name + ", us_nick=" + us_nick + ", us_email=" + us_email + ", us_phone=" + us_phone
+				+ ", us_address=" + us_address + ", us_date=" + us_date + ", us_is_del=" + us_is_del + "]";
 	}
 }

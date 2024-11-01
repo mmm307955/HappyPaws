@@ -12,8 +12,7 @@
 </head>
 <body>
 	<h1>임시 시작페이지</h1>
-	<a href="us_join" style="display:none">회원가입</a>
-	<a href="test">테스트</a>
-	<a href="login">로그인</a>
+	<a href="auth/testAuth">로그인 정보 확인(테스트)</a>
+	<a href="auth/login">로그인</a>
 </body>
 </html>
