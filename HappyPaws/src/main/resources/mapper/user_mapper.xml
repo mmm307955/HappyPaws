@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.happypaws.dao.UserDAO">
+
+	<!-- 모든 사용자 조회 -->
+    <select id="userSelectAll" resultType="com.happypaws.vo.UsersVO">
+        SELECT * FROM USERS
+    </select>
+    
+    <!-- 사용자 검색 -->
+    <select id="searchUsers" parameterType="map" resultType="com.happypaws.vo.UsersVO">
+        SELECT * FROM USERS
+        <where>
+            <if test="searchType != null and searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchType == 'us_id'">
+                        AND us_id LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'us_name'">
+                        AND us_name LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'us_email'">
+                        AND us_email LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+
+    <!--  사용자상세 조회 -->
+  <select id="user_detail" parameterType="String" resultType="com.happypaws.vo.UsersVO">
+        SELECT * FROM USERS WHERE US_ID = #{us_id}
+    </select>
+    
+     <!-- 사용자 삭제 -->
+<!--     <delete id="us_is_del" parameterType="String"> -->
+<!--         DELETE FROM USERS WHERE US_ID = #{us_id} -->
+<!--     </delete> -->
+    <update id="us_is_del">
+    	UPDATE users SET us_is_del='Y' WHERE us_id=#{us_id}
+    </update>
+        
+    <!--사용자 정보 업데이트 -->
+     <update id="user_update">
+        UPDATE users SET
+            us_password = #{us_password},
+            us_name = #{us_name},
+            us_nick = #{us_nick},
+            us_email = #{us_email},
+            us_address = #{us_address}
+            WHERE us_id = #{us_id}
+    </update>
+    
+    
+      <!-- 마이페이지 사용자 정보 업데이트 -->
+    <update id="updateUserInfo">
+        UPDATE USERS SET
+            us_name = #{us_name},
+            us_nick = #{us_nick},
+            us_email = #{us_email},
+            us_phone = #{us_phone},
+            us_address = #{us_address},
+            us_profile = #{us_profile}
+        WHERE us_id = #{us_id}
+    </update>
+    
+    
+    <!-- 로그인용 사용자 조회 -->
+      <select id="getUser" resultType="com.happypaws.vo.UsersVO">
+        SELECT * FROM USERS WHERE US_ID=#{us_id} AND US_PASSWORD=#{us_password}
+    </select>
+    
+    
+     <select id="myPage" parameterType="String" resultType="com.happypaws.vo.UsersVO">
+        SELECT * FROM users WHERE us_id = #{us_id}
+    </select>
+    
+     <!-- 사용자 ID로 조회 -->
+    <select id="getUserById" parameterType="string" resultType="com.happypaws.vo.UsersVO">
+        SELECT * FROM users WHERE us_id = #{us_id}
+    </select>
+
+    <!-- 비밀번호 업데이트 -->
+    <update id="updatePassword" parameterType="com.happypaws.vo.UsersVO">
+        UPDATE users SET us_password = #{us_password} WHERE us_id = #{us_id}
+    </update>
+    
+
+</mapper>

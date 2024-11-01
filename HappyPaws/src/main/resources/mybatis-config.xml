@@ -5,13 +5,18 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.happypaws.vo.UsersVO" alias="users"></typeAlias>
+		<typeAlias type="com.happypaws.vo.UsersVO" alias="user" />
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="mapper/auth-mapper.xml" />
+
 		<mapper resource="mapper/board-mapping.xml" />
 		<mapper resource="mapper/qna-mapping.xml"/>
 		<mapper resource="mapper/cmty-mapping.xml"/>
+
+		<mapper resource="mapper/user_mapper.xml" />
+		<mapper resource="mapper/ad_mapper.xml" />
 	</mappers>
 	
 </configuration>
