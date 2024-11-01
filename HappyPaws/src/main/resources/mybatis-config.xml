@@ -6,6 +6,8 @@
 	<typeAliases>
 		<typeAlias type="com.happypaws.vo.UsersVO" alias="users"></typeAlias>
 		<typeAlias type="com.happypaws.vo.UsersVO" alias="user" />
+		<typeAlias type="com.happypaws.vo.ProductsVO" alias="products"></typeAlias>
+		<typeAlias type="com.happypaws.vo.ProductOptionVO" alias="productOptions"></typeAlias>
 	</typeAliases>
 	
 	<mappers>
@@ -17,6 +19,8 @@
 
 		<mapper resource="mapper/user_mapper.xml" />
 		<mapper resource="mapper/ad_mapper.xml" />
+
+		<mapper resource="mapper/AdminProductMapper.xml" />
 	</mappers>
 	
 </configuration>

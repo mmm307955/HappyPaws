@@ -26,5 +26,8 @@
 	<a href="/userList.do">회원관리</a>
 	<a href="/us_myPage.do?us_id=${us_id}">마이페이지-사용자</a>
 	<a href="/ad_myPage.do?ad_id=${ad_id}">마이페이지-관리자</a>
+
+	<p>관리자 상품 관리 - 민지</p>
+	<a href="ad_manageProductList">상품 관리 페이지</a>
 </body>
 </html>
