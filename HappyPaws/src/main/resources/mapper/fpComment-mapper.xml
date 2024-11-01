@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FpCommentDAO">
+	<insert id="insertFpComment">
+		INSERT INTO fpComment(fp_seq, fpc_id, fpc_content, fpc_date)
+		VALUES(#{fp_seq}, #{fpc_id}, #{fpc_content}, #{fpc_date})
+	</insert>
+	
+	<update id="updatefpComment">
+		UPDATE fpComment
+		SET fpc_content = #{fpc_content}
+		WHERE fpc_seq = #{fpc_seq}
+	</update>
+	
+	<delete id="deletefpComment">
+		DELETE FROM fpComment WHERE fpc_seq = #{fpc_seq}
+	</delete>
+	
+	<select id="getfpCommentList" resultType="fpComment">
+		SELECT * FROM fpComment WHERE 1=1
+		ORDER BY fpc_seq DESC 
+	</select>
+	
+	<select id="countfpCommentList" resultType="int">
+		SELECT COUNT(*) FROM findpet WHERE fp_seq = #{fp_seq}
+	</select>
+</mapper>

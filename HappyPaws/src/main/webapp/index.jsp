@@ -1,15 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="UTF-8">
-	<title>temp title</title>
-	<style>
-		a {
-			display: block;
-		}
-	</style>
-</head>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date"%>
+<%@ include file="header.jsp" %>
 <body>
 	<h1>임시 시작페이지</h1>
 

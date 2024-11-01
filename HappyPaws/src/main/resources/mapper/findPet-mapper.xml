@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FindPetDAO">
+	<insert id="insertFindPet">
+		INSERT INTO Findpet(fp_id, fp_title, fp_ph, fp_img, fp_place, fp_time, fp_category, fp_breed, fp_reward, fp_content, fp_date)
+		VALUES(#{fp_id}, #{fp_title}, #{fp_ph}, #{fp_img}, #{fp_place}, #{fp_time}, #{fp_category}, #{fp_breed}, #{fp_reward}, #{fp_content}, #{fp_date})
+	</insert>
+	
+	<update id="updateFindPet">
+		UPDATE Findpet
+		SET fp_title = #{fp_title}, fp_ph = #{fp_ph}, fp_img = #{fp_img}, fp_place = #{fp_place}, fp_time = #{fp_time}, fp_category = #{fp_category}, fp_breed = #{fp_breed}, fp_reward = #{fp_reward}, fp_content = #{fp_content}
+		WHERE fp_seq = #{fp_seq}
+	</update>
+	
+	<delete id="deleteFindPet">
+		DELETE FROM Findpet WHERE fp_seq = #{fp_seq}
+	</delete>
+	
+	<select id="getFindPet" resultType="FindPet">
+		SELECT * FROM Findpet WHERE fp_seq = #{fp_seq}
+	</select>
+	
+	<select id="getFindPetList" resultType="FindPet">
+		SELECT * FROM Findpet WHERE 1=1
+		<if test="searchCondition == 'TITLE' "> AND fp_title LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+		<if test="searchCondition == 'CONTENT' "> AND fp_content LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+		ORDER BY fp_seq DESC 
+		LIMIT #{listcnt} OFFSET #{start}
+	
+	</select>
+	
+	<select id="countFindPet" resultType="int">
+		SELECT COUNT(*) FROM Findpet WHERE 1=1
+		<if test="searchCondition == 'TITLE' "> AND fp_title LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+		<if test="searchCondition == 'CONTENT' "> AND fp_content LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+	</select>
+	
+	<update id="updateFindPetCnt">
+		UPDATE Findpet SET fp_cnt = IFNULL(#{fp_cnt}, 0) + 1 WHERE fp_seq = #{fp_seq}
+	</update>
+</mapper>

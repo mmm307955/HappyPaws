@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="NewFamilyDAO">
+	<insert id="insertNewFamily">
+		INSERT INTO newFamily(nf_id, nf_title, nf_phone, nf_img, nf_age, nf_gender, nf_category, nf_breed, nf_content, nf_date, nf_cnt, nf_ok, nf_del)
+		VALUES(#{nf_id}, #{nf_title}, #{nf_phone}, #{nf_img}, #{nf_age}, #{nf_gender}, #{nf_category}, #{nf_breed}, #{nf_content}, #{nf_date}, #{nf_cnt}, #{nf_ok}, #{nf_del})
+	</insert>
+	
+	<update id="updateNewFamily">
+		UPDATE newFamily
+		SET nf_title = #{nf_title}, nf_phone = #{nf_phone}, nf_img = #{nf_img}, nf_age = #{nf_age}, nf_gender = #{nf_gender}, nf_category = #{nf_category}, nf_breed = #{nf_breed}, nf_content = #{nf_content}, nf_date = #{nf_date}, nf_cnt = #{nf_cnt}, nf_ok = #{nf_ok}, nf_del = #{nf_del}
+		WHERE nf_seq = #{nf_seq}
+	</update>
+	
+	<delete id="deleteNewFamily">
+		DELETE FROM newFamily WHERE nf_seq = #{nf_seq}
+	</delete>
+	
+	<select id="getNewFamily" resultType="newFamily">
+		SELECT * FROM newFamily WHERE nf_seq = #{nf_seq}
+	</select>
+	
+	<select id="getNewFamilyList" resultType="newFamily">
+		SELECT * FROM newFamily WHERE 1=1
+		<if test="searchCondition == 'TITLE' "> AND nf_title LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+		<if test="searchCondition == 'CONTENT' "> AND nf_content LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+		ORDER BY nf_seq DESC 
+		LIMIT #{listcnt} OFFSET #{start}
+	</select>
+	
+	<select id="countNewFamily" resultType="int">
+		SELECT COUNT(*) FROM newFamily WHERE 1=1
+		<if test="searchCondition == 'TITLE' "> AND nf_title LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+		<if test="searchCondition == 'CONTENT' "> AND nf_content LIKE CONCAT('%', #{searchKeyword}, '%') </if>
+	</select>
+	
+	<update id="updateNewFamilyCnt">
+		UPDATE newFamily SET nf_cnt = IFNULL(#{nf_cnt}, 0) + 1 WHERE nf_seq = #{nf_seq}
+	</update>
+</mapper>
