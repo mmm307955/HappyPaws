@@ -1,7 +1,5 @@
 package com.happypaws.life;
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.happypaws.svc.AuthSVC;
 import com.happypaws.util.Argon2Util;
 import com.happypaws.util.JwtCookieUtil;
-import com.happypaws.util.SNSAuthUtil;
 import com.happypaws.vo.UsersVO;
 
 @Controller

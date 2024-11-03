@@ -78,7 +78,7 @@
         </tr>
         <tr>
             <th>가입일</th>
-            <td><fmt:formatDate value="${user.us_date}" pattern="yyyy-MM-dd" /></td>
+            <td>${user.us_date}</td>
         </tr>
     </table>
     

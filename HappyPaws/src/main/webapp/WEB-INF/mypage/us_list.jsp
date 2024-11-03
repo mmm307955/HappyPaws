@@ -100,9 +100,7 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
         <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_nick}</td>
         <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_email}</td>
         <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_address}</td>
-        <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">
-            <fmt:formatDate value="${user.us_date}" pattern="yyyy-MM-dd" />
-        </td>
+        <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_date}</td>
     </tr>
     </c:if>
 </c:forEach>
