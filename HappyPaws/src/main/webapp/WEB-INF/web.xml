@@ -10,6 +10,16 @@
 	</context-param>
 	
 	<filter>
+	    <filter-name>cookieReadingFilter</filter-name>
+	    <filter-class>com.happypaws.util.CookieReadingFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+	    <filter-name>cookieReadingFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
 		<filter-name>characterEncoding</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
 		<init-param>

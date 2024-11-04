@@ -1,7 +1,5 @@
 package com.happypaws.vo;
 
-import java.util.Date;
-
 import org.springframework.web.multipart.MultipartFile;
 
 public class UsersVO {

@@ -229,7 +229,7 @@ td {
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="snack">
+                    <input type="hidden" name="category" value="간식">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">간식</button>
                 </form>
@@ -237,7 +237,7 @@ td {
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="mat">
+                    <input type="hidden" name="category" value="매트">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">매트</button>
                 </form>
@@ -245,7 +245,7 @@ td {
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="food">
+                    <input type="hidden" name="category" value="사료">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">사료</button>
                 </form>
@@ -253,14 +253,14 @@ td {
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="tableware">
+                    <input type="hidden" name="category" value="식기">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">식기</button>
                 </form>
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="nutritionSupplements">
+                    <input type="hidden" name="category" value="영양제">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">영양제</button>
                 </form>
@@ -268,14 +268,14 @@ td {
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="Hygiene">
+                    <input type="hidden" name="category" value="위생">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">위생</button>
                 </form>
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="mobilefield">
+                    <input type="hidden" name="category" value="이동장">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">이동장</button>
                 </form>
@@ -283,14 +283,14 @@ td {
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="toy">
+                    <input type="hidden" name="category" value="장난감">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">장난감</button>
                 </form>
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="house">
+                    <input type="hidden" name="category" value="집/하우스">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">집/하우스</button>
                 </form>
@@ -298,21 +298,21 @@ td {
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="fashion">
+                    <input type="hidden" name="category" value="패션">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">패션</button>
                 </form>
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="petAppliances">
+                    <input type="hidden" name="category" value="펫가전">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">펫가전</button>
                 </form>
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="harnessString">
+                    <input type="hidden" name="category" value="하네스/줄">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">하네스/줄</button>
                 </form>
@@ -320,7 +320,7 @@ td {
                 <form action="ad_manageProductList" method="post" style="display: inline;">
                     <input type="hidden" name="searchCondition" value="${searchCondition}">
                     <input type="hidden" name="searchKeyword" value="${searchKeyword}">
-                    <input type="hidden" name="category" value="insectRepellentGoods">
+                    <input type="hidden" name="category" value="해충방지용품">
                     <input type="hidden" name="nowPage" value="${paging.nowPage}">
                     <button type="submit">해충방지용품</button>
                 </form>

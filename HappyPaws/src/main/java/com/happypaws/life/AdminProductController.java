@@ -72,7 +72,7 @@ public class AdminProductController {
 			@RequestParam(value = "nowPage", required = false) String nowPage,
 			@RequestParam(value = "category", required = false) String category) {
 		
-		String cntPerPage = "5";
+		String cntPerPage = "10";
 		if (vo.getSearchCondition() == null)
 			vo.setSearchCondition("pr_id");
 		else
@@ -231,7 +231,7 @@ public class AdminProductController {
 	private String uploadFile(MultipartFile file, HttpServletRequest request) throws IOException {
 		if (!file.isEmpty()) {
 			// 파일 저장 경로 설정
-			String realPath = request.getSession().getServletContext().getRealPath("/resources/");
+			String realPath = request.getSession().getServletContext().getRealPath("/resources/upload");
 			File uploadDir = new File(realPath);
 			if (!uploadDir.exists()) {
 				uploadDir.mkdirs();
@@ -244,7 +244,7 @@ public class AdminProductController {
 			// 파일을 서버에 저장
 			file.transferTo(destinationFile);
 
-			return "/resources/" + filename;
+			return "/resources/upload" + filename;
 		}
 		return "/resources/images/HappyPawsLogo.png"; // 기본 이미지 경로
 	}

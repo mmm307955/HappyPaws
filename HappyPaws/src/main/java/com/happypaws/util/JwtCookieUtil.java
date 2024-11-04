@@ -30,6 +30,7 @@ public class JwtCookieUtil {
 				.claim("us_sns", user.getUs_sns())
 				.claim("us_name", user.getUs_name())
 				.claim("us_nick", user.getUs_nick())
+				.claim("us_profile", user.getUs_profile())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
 				.signWith(secretKeySpec, SignatureAlgorithm.HS256)
@@ -62,6 +63,7 @@ public class JwtCookieUtil {
 					user.setUs_sns((String) claims.get("us_sns"));
 					user.setUs_name((String) claims.get("us_name"));
 					user.setUs_nick((String) claims.get("us_nick"));
+					user.setUs_profile((String) claims.get("us_profile"));
 					return user;
 				}
 			}

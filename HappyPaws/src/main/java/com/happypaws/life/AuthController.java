@@ -2,6 +2,7 @@ package com.happypaws.life;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -145,7 +146,8 @@ public class AuthController {
 	}
 
 	@RequestMapping("/logout")
-	public String logout(HttpServletResponse response) {
+	public String logout(HttpServletResponse response, HttpSession session) {
+		session.removeAttribute("user");
 		JwtCookieUtil.deleteJwtCookie(response);
 		return "redirect:/";
 	}
@@ -154,7 +156,6 @@ public class AuthController {
 	@GetMapping("/testAuth")
 	public String test(Model model, HttpServletRequest request) {
 		UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
-		model.addAttribute("token", user);
 		model.addAttribute("info", svc.test(user));
 		return "/WEB-INF/auth/test.jsp";
 	}
