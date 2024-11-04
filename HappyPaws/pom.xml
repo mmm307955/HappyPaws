@@ -69,6 +69,11 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.11.0</version>
+		</dependency>
 		
 		<!-- java데이터를 json객체로 변환하는 라이브러리 -->
 		<dependency>
