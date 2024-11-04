@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductDAO">
+
+	<select id="getProductListCount" resultType="int">
+		SELECT COUNT(*) FROM PRODUCTS WHERE 1 = 1 AND PR_NAME LIKE CONCAT('%',#{searchKeyword},'%')
+	</select>
+
+	<select id="getProductList" resultType="product">
+		SELECT * FROM PRODUCTS WHERE 1 = 1 AND PR_NAME LIKE CONCAT('%',#{searchKeyword},'%')
+		ORDER BY PR_ID DESC 
+		LIMIT #{rowFirst}, #{rowSizePerPage}
+	</select>
+	
+	<select id="getProductDetail" resultType="product">
+		SELECT * FROM PRODUCTS P LEFT JOIN PRODUCT_OPTIONS PO ON P.PR_ID = PO.PR_ID WHERE P.PR_ID = #{pr_id}
+	</select>
+	
+	<select id="getProductReviewCount" resultType="int">
+		SELECT COUNT(*) FROM PRODUCTS_COMMENTS WHERE PR_ID = #{pr_id} 
+	</select>
+	
+	<select id="getProductReviewRating" resultType="product">
+		SELECT * FROM PRODUCTS_COMMENTS WHERE PR_ID = #{pr_id}
+	</select>
+	
+	<select id="getProductReview" resultType="product">
+		SELECT * FROM PRODUCTS_COMMENTS WHERE PR_ID = #{pr_id}
+		ORDER BY PR_ID DESC
+		LIMIT #{rowFirst}, #{rowSizePerPage}
+	</select>
+	
+	<select id="getProductQuestion" resultType="product">
+		SELECT * FROM PRODUCTS_QNA WHERE PR_ID = #{pr_id}
+	</select>
+	
+</mapper>

@@ -33,5 +33,8 @@
 
 	<p>가족 찾기 메뉴(임시명) - 현승</p>
 	<a href="/getLostPetList.do">아이를 발견했어요</a>
+
+	<p>회원 상품 관리 - 성현</p>
+	<a href="pr_list">반려용품</a>
 </body>
 </html>
