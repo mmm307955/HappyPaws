@@ -109,7 +109,7 @@
 		// 전화번호 onclick 이벤트
 		function phone_number_authentication() {
 			// 전화번호로 인증하는 기능
-			if (switchPhoneFormat) {
+			if (switchPhoneFormat()) {
 				auth_phone = true;
 				alert("기능구현을 하지 못해 임시적으로 허락해드리겠습니다.");
 			} else {
@@ -121,12 +121,12 @@
 		
 		function switchPhoneFormat() {
 			auth_phone = false;
-			let phoneNum = event.target.value.split("-").join("");
+			let phoneNum = document.querySelector("#us_phone").value.split("-").join("");
 			
 			if (phoneNum.length == 11) {
 				phoneNum = phoneNum.substr(0, 3) + "-" + phoneNum.substr(3, 4) + "-" + phoneNum.substr(7, 4);
 				if (/^010-\d{4}-\d{4}$/.test(phoneNum)) {
-					event.target.value = phoneNum;
+					document.querySelector("#us_phone").value = phoneNum;
 					return true;
 				}
 			}
@@ -138,7 +138,7 @@
 		function join_submit() {
 			let isValidity = true;
 
-			if (auth_id) {
+			if (!auth_id) {
 				alert("아이디 중복 확인을 해주세요.")
 				isValidity = false;
 			}
@@ -149,16 +149,16 @@
 			}
 
 			if (document.joinForm.us_password.value != document.joinForm.us_check_password.value) {
-				alert("/비밀번호와 비밀번호 확인이 다릅니다.");
+				alert("비밀번호가 서로 다릅니다.");
 				isValidity = false;
 			}
 
-			if (auth_nick) {
+			if (!auth_nick) {
 				alert("닉네임 중복 확인을 해주세요.");
 				isValidity = false;
 			}
 
-			if (auth_phone) {
+			if (!auth_phone) {
 				alert("전화번호 인증을 해주세요.");
 				isValidity = false;
 			}

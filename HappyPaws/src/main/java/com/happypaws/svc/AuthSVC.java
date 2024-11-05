@@ -35,11 +35,11 @@ public class AuthSVC {
 		return dao.findId(user);
 	}
 
-	public boolean findPw(UsersVO user) {
-		return dao.findPw(user);
+	public boolean checkUser(UsersVO user) {
+		return dao.checkUser(user);
 	}
 
-	public boolean changePw(UsersVO user) {
-		return dao.changePw(user);
+	public boolean findPw(UsersVO user) {
+		return dao.findPw(user);
 	}
 }
