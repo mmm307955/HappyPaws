@@ -52,12 +52,6 @@ public class UsersVO {
     public MultipartFile getUs_profile_file() { return us_profile_file; }
     public void setUs_profile_file(MultipartFile us_profile_file) { this.us_profile_file = us_profile_file; }
 
-	public String getUs_profile() { return us_profile; }
-    public void setUs_profile(String us_profile) { this.us_profile = us_profile; }
-
-    public MultipartFile getUs_profile_file() { return us_profile_file; }
-    public void setUs_profile_file(MultipartFile us_profile_file) { this.us_profile_file = us_profile_file; }
-
 	@Override
     public String toString() {
         return "UsersVO [us_id=" + us_id + ", us_sns=" + us_sns + ", us_password=" + us_password + ", us_name="

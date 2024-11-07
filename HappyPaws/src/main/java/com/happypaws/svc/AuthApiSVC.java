@@ -145,11 +145,8 @@ public class AuthApiSVC {
 			inputStream.close();
 			fileOutputStream.close();
 			user.setUs_profile(fileName);
-
-			System.out.println("프로필 사진이 성공적으로 저장되었습니다: " + saveFile.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("프로필 사진 저장 중 오류 발생.");
 		}
 	}
 }
