@@ -11,12 +11,12 @@ public class AuthDAO {
 	@Autowired
 	private SqlSessionTemplate mybatis;
 
-	public UsersVO test(UsersVO vo) {
-		return mybatis.selectOne("AuthDAO.test", vo);
-	}
-
 	public UsersVO login(UsersVO user) {
 		return mybatis.selectOne("AuthDAO.login", user);
+	}
+
+	public boolean snsJoin(UsersVO user) {
+		return mybatis.insert("AuthDAO.snsJoin", user) > 0;
 	}
 
 	public boolean checkId(String id) {

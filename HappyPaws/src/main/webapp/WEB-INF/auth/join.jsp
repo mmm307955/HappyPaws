@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>회원가입</title>
+	<%@include file="../../head.jsp"%>
+	<title>행복한 발자국 - 회원가입</title>
 	<style>
 		form > input {
 			width: 100%;
@@ -12,28 +12,32 @@
 	</style>
 </head>
 <body>
-	<button type="button" onclick="document.joinForm.onsubmit = null">테스트를 위한 유효성 검사 제거하기</button>
-
-	<form action="/auth/join" method="post" name="joinForm" onsubmit="return join_submit()" style="width: 300px;">
-		<div>
-			<input type="text" name="us_id" id="us_id" placeholder="아이디 입력" required>
-			<input type="button" value="아이디 중복 검사">
-		</div>
-		<input type="password" name="us_password" id="us_password" placeholder="비밀번호 입력" required>
-		<input type="password" name="us_check_password" id="us_check_password" placeholder="비밀번호 확인" required>
-		<input type="text" name="us_name" id="us_name" placeholder="이름 입력" required>
-		<div>
-			<input type="text" name="us_nick" id="us_nick" placeholder="닉네임 입력" required>
-			<input type="button" value="닉네임 중복 검사">
-		</div>
-		<input type="email" name="us_email" id="us_email" placeholder="이메일 입력">
-		<div>
-			<input type="text" name="us_phone" id="us_phone" placeholder="전화번호 입력" required>
-			<input type="button" onclick="phone_number_authentication()" value="전화번호 인증">
-		</div>
-		<input type="text" name="us_address" id="us_address" placeholder="주소 입력">
-		<input type="submit" value="회원가입하기">
-	</form>
+	<%@include file="../../header.jsp"%>
+	<main>
+		<button type="button" onclick="document.joinForm.onsubmit = null">테스트를 위한 유효성 검사 제거하기</button>
+	
+		<form action="/auth/join" method="post" name="joinForm" onsubmit="return join_submit()" style="width: 300px;">
+			<div>
+				<input type="text" name="us_id" id="us_id" placeholder="아이디 입력" required>
+				<input type="button" value="아이디 중복 검사">
+			</div>
+			<input type="password" name="us_password" id="us_password" placeholder="비밀번호 입력" required>
+			<input type="password" name="us_check_password" id="us_check_password" placeholder="비밀번호 확인" required>
+			<input type="text" name="us_name" id="us_name" placeholder="이름 입력" required>
+			<div>
+				<input type="text" name="us_nick" id="us_nick" placeholder="닉네임 입력" required>
+				<input type="button" value="닉네임 중복 검사">
+			</div>
+			<input type="email" name="us_email" id="us_email" placeholder="이메일 입력">
+			<div>
+				<input type="text" name="us_phone" id="us_phone" placeholder="전화번호 입력" required>
+				<input type="button" onclick="phone_number_authentication()" value="전화번호 인증">
+			</div>
+			<input type="text" name="us_address" id="us_address" placeholder="주소 입력">
+			<input type="submit" value="회원가입하기">
+		</form>
+	</main>
+	<%@include file="../../footer.jsp" %>
 	<script>
 		let auth_id = false;
 		// 아이디 중복 검사
@@ -55,7 +59,6 @@
 			}).then(data => {
 				if (data === "true") {
 					alert("사용할 수 있는 아이디입니다.");
-					document.querySelector("#us_id").readOnly = true;
 					auth_id = true;
 					return true;
 				} else {
@@ -69,6 +72,7 @@
 		}
 
 		document.querySelector('[value="아이디 중복 검사"]').addEventListener('click', id_duplicate_check);
+		document.joinForm.us_id.addEventListener('change', () => auth_id = false);
 
 		let auth_nick = false;
 		// 닉네임 중복 검사
@@ -90,7 +94,6 @@
 			}).then(data => {
 				if (data === "true") {
 					alert("사용할 수 있는 닉네임입니다.");
-					document.querySelector("#us_nick").readOnly = true;
 					auth_nick = true;
 					return true;
 				} else {
@@ -104,6 +107,7 @@
 		}
 
 		document.querySelector('[value="닉네임 중복 검사"]').addEventListener('click', nick_duplicate_check);
+		document.joinForm.us_nick.addEventListener('change', () => auth_id = false);
 		
 		let auth_phone = false;
 		// 전화번호 onclick 이벤트
@@ -139,7 +143,7 @@
 			let isValidity = true;
 
 			if (!auth_id) {
-				alert("아이디 중복 확인을 해주세요.")
+				alert("아이디 중복 확인을 해주세요.");
 				isValidity = false;
 			}
 

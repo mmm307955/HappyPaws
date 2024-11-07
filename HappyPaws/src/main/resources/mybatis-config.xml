@@ -5,7 +5,6 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.happypaws.vo.UsersVO" alias="users"></typeAlias>
-		<typeAlias type="com.happypaws.vo.UsersVO" alias="user" />
 		<typeAlias type="com.happypaws.vo.ProductsVO" alias="products"></typeAlias>
 		<typeAlias type="com.happypaws.vo.ProductOptionVO" alias="productOptions"></typeAlias>
 		<typeAlias type="com.happypaws.vo.FindPetVO" alias="findPet"/>

@@ -11,12 +11,12 @@ public class AuthSVC {
 	@Autowired
 	private AuthDAO dao;
 
-	public UsersVO test(UsersVO vo) {
-		return dao.test(vo);
-	}
-
 	public UsersVO login(UsersVO user) {
 		return dao.login(user);
+	}
+
+	public boolean snsJoin(UsersVO user) {
+		return dao.snsJoin(user);
 	}
 
 	public boolean checkId(String id) {

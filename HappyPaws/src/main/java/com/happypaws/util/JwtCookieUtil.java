@@ -22,8 +22,8 @@ public class JwtCookieUtil {
 	// JWT 생성 및 쿠키 저장 메서드
 	/** 로그인 시 */
 	public static void createJwtCookie(HttpServletResponse response, UsersVO user) {
-		SecretKeySpec secretKeySpec = new SecretKeySpec
-				(SECRET_KEY.getBytes(StandardCharsets.UTF_8),
+		SecretKeySpec secretKeySpec = new SecretKeySpec(
+				SECRET_KEY.getBytes(StandardCharsets.UTF_8),
 				SignatureAlgorithm.HS256.getJcaName());
 
 		String token = Jwts.builder().setSubject(user.getUs_id())
@@ -47,17 +47,17 @@ public class JwtCookieUtil {
 	// 쿠키에서 JWT 추출 및 정보 검증 메서드
 	/** 상시 */
 	public static UsersVO extractJwtFromCookie(HttpServletRequest request) {
-		SecretKeySpec secretKeySpec = new SecretKeySpec
-				(SECRET_KEY.getBytes(StandardCharsets.UTF_8),
+		SecretKeySpec secretKeySpec = new SecretKeySpec(
+				SECRET_KEY.getBytes(StandardCharsets.UTF_8),
 				SignatureAlgorithm.HS256.getJcaName());
 
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
 				if (TOKEN_NAME.equals(cookie.getName())) {
-					Claims claims = Jwts.parserBuilder().
-							setSigningKey(secretKeySpec).build().
-							parseClaimsJws(cookie.getValue()).getBody();
+					Claims claims = Jwts.parserBuilder()
+							.setSigningKey(secretKeySpec).build()
+							.parseClaimsJws(cookie.getValue()).getBody();
 					UsersVO user = new UsersVO();
 					user.setUs_id(claims.getSubject());
 					user.setUs_sns((String) claims.get("us_sns"));

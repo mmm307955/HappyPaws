@@ -2,17 +2,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
+	<%@include file="../../head.jsp"%>
 	<title>아이디 찾기</title>
 </head>
 <body>
-	<form action="/auth/find_id" method="post" name="findIdForm" onsubmit="return findIdSubmit()">
-		<input type="text" name="us_name" id="us_name" placeholder="이름 입력" required>
-		<input type="text" name="us_phone" id="us_phone" placeholder="전화번호 입력" required>
-		<input type="submit" value="아이디 찾기">
-	</form>
-
-	<p>${find_id}</p>
+	<%@include file="../../header.jsp"%>
+	<main>
+		<form action="/auth/find_id" method="post" name="findIdForm" onsubmit="return findIdSubmit()">
+			<input type="text" name="us_name" id="us_name" placeholder="이름 입력" required>
+			<input type="text" name="us_phone" id="us_phone" placeholder="전화번호 입력" required>
+			<input type="submit" value="아이디 찾기">
+		</form>
+	
+		<p>${find_id}</p>
+	</main>
+	<%@include file="../../footer.jsp" %>
 
 	<script>
 		function switchPhoneFormat() {

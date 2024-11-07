@@ -1,0 +1,158 @@
+* { box-sizing: border-box; }
+/* 전체 화면에 기본 스타일 */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;   
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;    /* 뷰포트 전체 높이를 채움 */
+}
+/* 고정된 헤더 스타일 */
+header {
+    width: 100%;
+    position: fixed;      /* 스크롤해도 고정되도록 설정 */
+    top: 0;               /* 화면 위쪽에 고정 */
+    left: 0;
+    z-index: 1000;        /* 콘텐츠 위로 올라오도록 설정 */
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-top: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* 헤더 내부 컨테이너 */
+.header-container {
+    width: 1000px;         /* 헤더 폭을 1000px로 설정 */
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* 로고 스타일 */
+.logo img {
+    height: 50px;         /* 로고 크기 조절 */
+    margin-top: -15px;
+}
+
+/* 메뉴 스타일 */
+.header-menu {
+    display: flex;          /* 메뉴 항목을 가로로 나열 */
+    gap: 20px;              /* 메뉴 간 간격 */
+    margin-left: 20px; 
+}
+
+/* 메뉴 스타일 */
+.header-menu a {
+    text-decoration: none;
+    margin: 0 15px;        /* 메뉴 간 간격 */
+    padding: 5px 0;
+    transition: color 0.3s;
+    color:black;
+}
+
+/* a 태그에 마우스 오버 시 텍스트 색상 변경 */
+.header-menu a:hover {
+    color: #ffcc00;  /* 텍스트 색상을 노란색으로 변경 */
+}
+
+/* a 태그 기본 스타일 */
+.header-menu a {
+    color: #333;
+    text-decoration: none;
+    position: relative; /* a 태그를 기준으로 ::before 요소 위치 설정 */
+    padding-top: 10px;  /* 위쪽에 여유 공간 추가 */
+    transition: color 0.3s;
+}
+
+/* a 태그에 마우스 오버 시 텍스트 색상 변경 */
+.header-menu a:hover {
+    color: #ffcc00;  /* 텍스트 색상을 노란색으로 변경 */
+}
+
+/* a 태그에 마우스를 올렸을 때 위쪽에 노란색 동그라미가 작게 나타나도록 설정 */
+.header-menu a::before {
+    content: "";
+    position: absolute;
+    bottom: 60%;            /* a 태그 바로 위에 위치 */
+    left: 100%;
+    width: 8px;              /* 동그라미 크기 */
+    height: 8px;
+    background-color: #ffcc00; /* 동그라미 색상 */
+    border-radius: 50%;      /* 동그라미 모양으로 만들기 */
+    transform: translateX(-50%) scale(0); /* 기본 상태에서 숨김 */
+    transition: transform 0.3s ease; /* 부드러운 애니메이션 */
+}
+
+/* 마우스를 올렸을 때 노란색 동그라미가 나타나도록 설정 */
+.header-menu a:hover::before , .header-menu a.active::before {
+    transform: translateX(-50%) scale(1); /* 원래 크기로 나타나기 */
+}
+
+/* 활성화된 링크 스타일 */
+.header-menu a.active {
+    color: #ffcc00; /* 활성화된 링크의 색상 */
+    font-weight: bold; /* 텍스트를 강조 */
+}
+
+/* 로그인 버튼 */
+.header-login-div {
+    margin-left: auto;      /* 로그인 링크를 오른쪽으로 이동 */
+}
+
+.header-login-div a {
+    display: inline;
+}
+
+.header-login-div img {
+    height: 45px;
+    border-radius: 22px;
+}
+
+.header-login-link {
+    text-decoration: none;
+    font-size: 20px;
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+
+.header-login-link:hover {
+    color: #ffcc00;
+}
+
+/* 컨테이너  */
+main {
+	width:1000px;
+	margin: 0 auto;
+	margin-top: 20px;
+	flex: 1;  
+}
+
+/*푸터*/
+footer {
+	width:100%;
+	padding: 10px;
+	text-align: center;
+	font-size: 14px;
+	line-height: 1.5;
+	border-top: 1px solid #ccc;
+	margin-top: 40px;
+}
+
+footer p {
+	margin: 0;
+	padding: 5px 0;
+}
+
+footer a{
+	display: inline;
+	color: black;
+	text-decoration: none;
+}

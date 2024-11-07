@@ -13,21 +13,21 @@ import javax.servlet.http.HttpSession;
 import com.happypaws.vo.UsersVO;
 
 public class CookieReadingFilter implements Filter {
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (request instanceof HttpServletRequest) {
-            HttpServletRequest httpRequest = (HttpServletRequest) request;
-            HttpSession session = httpRequest.getSession();
-            UsersVO sessionValue = (session != null) ? (UsersVO) session.getAttribute("user") : null;
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		if (request instanceof HttpServletRequest) {
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			HttpSession session = httpRequest.getSession();
+			UsersVO sessionValue = (session != null) ? (UsersVO) session.getAttribute("user") : null;
 
-            if (sessionValue == null) {
-            	UsersVO user = JwtCookieUtil.extractJwtFromCookie(httpRequest);
-            	if (user != null) {
-            		session.setAttribute("user", user);
-            	}
-            }
-        }
+			if (sessionValue == null) {
+				UsersVO user = JwtCookieUtil.extractJwtFromCookie(httpRequest);
+				if (user != null) {
+					session.setAttribute("user", user);
+				}
+			}
+		}
 
-        chain.doFilter(request, response);  // 다음 필터 또는 서블릿으로 요청 전달
-    }
+		chain.doFilter(request, response);
+	}
 }
