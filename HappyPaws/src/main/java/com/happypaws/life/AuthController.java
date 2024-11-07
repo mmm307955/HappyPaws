@@ -49,9 +49,6 @@ public class AuthController {
 		return "/WEB-INF/auth/login.jsp";
 	}
 
-	/**
-	 * 로그인 기능
-	 */
 	@PostMapping("/login")
 	public String login(UsersVO user, HttpServletResponse response, Model model) {
 		String password = user.getUs_password();

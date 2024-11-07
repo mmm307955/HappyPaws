@@ -45,7 +45,7 @@ public class UsersVO {
 
 	public String getUs_is_del() { return us_is_del; }
 	public void setUs_is_del(String us_is_del) { this.us_is_del = us_is_del; }
-	
+
 	public String getUs_profile() { return us_profile; }
     public void setUs_profile(String us_profile) { this.us_profile = us_profile; }
 
