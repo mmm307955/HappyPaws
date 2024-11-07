@@ -4,7 +4,6 @@
 <div class="jumbotron">
    <h1>글쓰기</h1>      
 </div>
-<%@ include file="../../../menu.jsp" %>  
 <div class="container-fluid">
   <form action="insertBoard.do" method="post" enctype="multipart/form-data">
     <div class="input-group mb-3">

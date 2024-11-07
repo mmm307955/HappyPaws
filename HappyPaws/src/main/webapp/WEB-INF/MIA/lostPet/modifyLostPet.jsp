@@ -90,7 +90,6 @@ input, select, textarea {
     });
 </script>
 <body>
-	<%@ include file="../../../menu.jsp"%>
 	<div class="jumbotron">
 		<h1>글 수정</h1>
 	</div>

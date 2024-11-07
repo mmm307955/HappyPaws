@@ -10,7 +10,6 @@
 <div class="jumbotron">
    <h1>공지 사항 ${userRole }</h1>      
 </div>
-<%@ include file="../../../menu.jsp" %>
 <div class="container">
 	<nav id="searchNav" class="navbar navbar-expand-sm navbar-dark">
 		<form class="form-inline" action="getBoardList.do" method="post">

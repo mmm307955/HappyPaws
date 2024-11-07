@@ -22,7 +22,6 @@ function selLp(val, val2, val3, val4, nowpage){
 }
 </style>
 <body>
-<%@ include file="../../../menu.jsp"%>
 	<div class="jumbotron">
 	</div>
 

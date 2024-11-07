@@ -22,7 +22,7 @@ public class Admincontroller {
     public String ad_myPage(@RequestParam("ad_id") String ad_id, Model m) {
         AdVO admin= svc.ad_detail(ad_id); 
         m.addAttribute("admin", admin);  
-        return "/WEB-INF/mypage/ad_myPage.jsp";  
+        return "/WEB-INF/mypage/ad_mypage.jsp";  
     }
     // 비밀번호 변경 폼으로 이동
     @GetMapping("/updateAdminPassword.do")
@@ -32,7 +32,7 @@ public class Admincontroller {
             return "/WEB-INF/mypage/adminLogin.do"; 
         }
         model.addAttribute("ad_id", ad_id);
-        return "/WEB-INF/mypage/ad_myPage.jsp"; 
+        return "/WEB-INF/mypage/ad_mypage.jsp"; 
     }
 
     // 비밀번호 변경 처리
@@ -44,11 +44,11 @@ public class Admincontroller {
         boolean isValid = svc.verifyPassword(ad_id, currentPassword);
         if (!isValid) {
             model.addAttribute("error", "현재 비밀번호가 일치하지 않습니다.");
-            return "/WEB-INF/mypage/ad_myPage.jsp";
+            return "/WEB-INF/mypage/ad_mypage.jsp";
         }
 
         svc.updatePassword(ad_id, newPassword);
         model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
-        return "/WEB-INF/mypage/ad_myPage.jsp";
+        return "/WEB-INF/mypage/ad_mypage.jsp";
     }
 }

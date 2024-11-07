@@ -18,7 +18,6 @@
 <div class="jumbotron">
    <h1>상세 보기</h1>      
 </div>
-<%@ include file="../../../menu.jsp" %>  
 <div class="container-fluid">
 <%
 	if (request.getParameter("error")!=null) {
