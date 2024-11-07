@@ -28,11 +28,11 @@
 		SELECT us_id FROM users WHERE us_name=#{us_name} AND us_phone=#{us_phone} AND us_sns='default' AND us_is_del='N'
 	</select>
 	
-	<select id="findPw" resultType="int">
+	<select id="checkUser" resultType="int">
 		SELECT COUNT(*) FROM users WHERE us_id=#{us_id} AND us_name=#{us_name} AND us_phone=#{us_phone} AND us_sns='default' AND us_is_del='N'
 	</select>
 	
-	<update id="changePw">
+	<update id="findPw">
 		UPDATE users
 		SET us_password=#{us_password}
 		WHERE us_id=#{us_id} AND us_name=#{us_name} AND us_phone=#{us_phone} AND us_sns='default' AND us_is_del='N'

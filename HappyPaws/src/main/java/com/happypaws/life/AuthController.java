@@ -30,7 +30,6 @@ public class AuthController {
 		if (JwtCookieUtil.extractJwtFromCookie(request) != null) {
 			return "redirect:/";
 		}
-
 		return "/WEB-INF/auth/login.jsp";
 	}
 
@@ -129,16 +128,17 @@ public class AuthController {
 		return "/WEB-INF/auth/find_password.jsp";
 	}
 
-	@PostMapping("/find_password")
+	@ResponseBody
+	@PostMapping("/check_user")
 	public String findPassword(UsersVO user, Model model) {
-		model.addAttribute("find_pw", svc.findPw(user));
-		return "/WEB-INF/auth/find_password.jsp";
+		System.out.println(user);
+		return svc.checkUser(user) ? "true" : "false";
 	}
 
-	@PostMapping("/change_password")
-	public String changePassword(UsersVO user) {
+	@PostMapping("/find_password")
+	public String findPassword(UsersVO user) {
 		user.setUs_password(Argon2Util.hashPassword(user.getUs_password()));
-		if (svc.changePw(user)) {
+		if (svc.findPw(user)) {
 			return "redirect:/auth/login";
 		} else {
 			return "redirect:/auth/find_password";

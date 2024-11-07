@@ -35,11 +35,11 @@ public class AuthDAO {
 		return mybatis.selectOne("AuthDAO.findId", user);
 	}
 
-	public boolean findPw(UsersVO user) {
-		return (int) mybatis.selectOne("AuthDAO.findPw", user) > 0;
+	public boolean checkUser(UsersVO user) {
+		return (int) mybatis.selectOne("AuthDAO.checkUser", user) > 0;
 	}
 
-	public boolean changePw(UsersVO user) {
-		return mybatis.update("AuthDAO.changePw", user) > 0;
+	public boolean findPw(UsersVO user) {
+		return mybatis.update("AuthDAO.findPw", user) > 0;
 	}
 }
