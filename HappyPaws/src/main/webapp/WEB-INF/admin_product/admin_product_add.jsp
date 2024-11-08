@@ -7,160 +7,179 @@
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 
 <style>
-.container {
-	width: 600px;
-	background-color: white;
-	padding: 20px;
-	border-radius: 10px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.title {
-	text-align: center;
-	font-size: 24px;
-	margin-bottom: 20px;
-}
-
-.image-upload {
-	width: 100%;
-	height: 300px;
-	background-color: #ddd;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-bottom: 20px;
-	margin-top: 50px;
-}
-
-#image-preview {
-	max-width: 100%;
-	max-height: 100%;
-	display: none; /* 기본적으로 숨김 */
-}
-
-.form-group {
-	margin-bottom: 15px;
-}
-
-.form-group label {
-	display: block;
-	margin-bottom: 5px;
-}
-
-.form-group input[type="text"], .form-group input[type="number"],
-	.form-group textarea, .form-group select {
-	width: 100%;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-}
-
-.pr_name {
-	width: 500px;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-}
-
-.form-group textarea {
-	resize: none;
-	height: 150px;
-}
-
-.options {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	margin-bottom: 15px;
-}
-
-.option-group {
-	gap: 10px; /* 각 입력 필드 간의 간격 */
-}
-
-.option-group button {
-	flex-shrink: 0; /* 버튼이 작게 유지되도록 */
-	padding: 10px;
-}
-
-.options input[type="text"], .options input[type="number"] {
-	padding: 10px;
-	width: 500px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-}
-
-.buttons {
-	display: flex;
-	justify-content: center;
-}
-
-.buttons button {
-	padding: 10px 20px;
-	margin: 5px;
-	border: none;
-	background-color: #333;
-	color: white;
-	cursor: pointer;
-	border-radius: 5px;
-}
-
-.buttons button.cancel {
-	background-color: #bbb;
-}
-
-.buttons button.register {
-	background-color: #4CAF50;
-}
-
-.option-name_status, .option-stock_price, .pr_name_status {
-	display: flex; /* 요소를 가로로 정렬 */
-	gap: 10px; /* 요소 간의 간격 조정 */
-	align-items: center; /* 세로 정렬 */
-}
-
-.pr_name_status input[type="text"] {
-	flex: 3;
-}
-
-.pr_name_status select {
-	flex: 1;
-}
-
-.option-stock_price button {
-	padding: 10px;
-	width: 40px; /* 버튼 너비 설정 */
-	height: 40px; /* 버튼 높이 설정 */
-	text-align: center;
-	line-height: 20px; /* 버튼 내 텍스트 위치 조정 */
-	font-size: 16px;
-	border: 1px solid #ccc;
-}
-
-.option-name_status select {
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	box-sizing: border-box;
-}
-
-.add-option, .remove-option {
-	border-radius: 10px;
-	background-color: #535353;
-	font-weight: bold;
-	color: white;
-}
+         .container {
+            width: 600px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .image-upload {
+            width: 100%;
+            height: 300px;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-top: 50px;
+        }
+        #image-preview {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group textarea,
+        .form-group select {
+        	width: 100%;
+        	padding: 10px;
+        	border: 1px solid #ccc;
+        	border-radius: 5px;
+        }
+        
+        .pr_name { 
+         width: 500px; 
+         padding: 10px; 
+         border: 1px solid #ccc; 
+         border-radius: 5px; 
+         } 
+        
+        .form-group textarea {
+            resize: none;
+            height: 150px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        
+		.option-group input {
+		        width : 65%;
+		}
+		
+		.option-group button {
+		        flex-shrink: 0; /* 버튼이 작게 유지되도록 */
+		        padding : 10px;
+		}
+        .options input[type="text"],
+        .options input[type="number"] {
+            padding : 10px;
+            width:500px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .buttons button.cancel {
+            background-color: #bbb;
+        }
+        .buttons button.register {
+            background-color: #4CAF50;
+        }
+        .buttons button.delete {
+        background-color: #ff5858;
+        }
+        
+         .option-name_status, .option-stock_price, .pr_name_status {
+		    display: flex; /* 요소를 가로로 정렬 */
+		    align-items: center; /* 세로 정렬 */
+		}
+		
+		.pr_name_status input[type="text"] {
+		    flex: 3;
+		}
+		
+		.pr_name_status select {
+		    flex: 1;
+		    margin-left: 7px;
+		    margin-top: 23px;
+		}
+		
+		.option-stock_price button {
+		    padding: 10px;
+		    width: 40px; /* 버튼 너비 설정 */
+		    height: 40px; /* 버튼 높이 설정 */
+		    text-align: center;
+		    line-height: 20px; /* 버튼 내 텍스트 위치 조정 */
+		    font-size: 16px;
+		    border: 1px solid #ccc;
+		}
+		      
+		.option-name_status select {
+		padding : 10px;
+		border: 1px solid #ccc;
+	    border-radius: 5px;
+	    box-sizing: border-box;
+	    margin-left: 10px;
+		}
+		
+		 .add-option,  .remove-option {
+		border-radius: 10px;
+		background-color:#535353; 
+		font-weight:bold;
+		color:white;
+		}
+		
+		.options input[type="text"], .options input[type="number"] {
+	    padding: 10px;
+	    width: 222px;
+	    border: 1px solid #ccc;
+	    border-radius: 5px;
+	    margin-right : 10px;
+	    
+		}
+		
+		options input[type="number"] {
+		margin-left: 10px;
+		}
+		
+		#pr_opt_status{
+		margin : 0;
+		}
+		#pr_opt_name, #pr_name{
+		width: 450px;
+		}
+		
+		[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+		    cursor: pointer;
+		    margin-left: 7px;
+		}
+		
 </style>
 </head>
 <body>
 
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
-
 		<div class="container">
 			<div class="title">상품 등록</div>
-			<form action="ad_manageProductAdd" method="POST"
-				enctype="multipart/form-data">
+			<form action="ad_manageProductAdd" method="POST" enctype="multipart/form-data">
 
 				<!-- 이미지 업로드 영역 -->
 				<div class="image-upload">
@@ -169,29 +188,38 @@
 				</div>
 				<!-- 파일 업로드 필드 -->
 				<div class="form-group" style="text-align: center">
+				<label for="pr_thumbnail_file">
 					<input type="file" id="pr_thumbnail_file" name="pr_thumbnail_file"
 						accept="image/*">
+						 </label>
 				</div>
 
 				<div class="form-group">
-					상품명
 					<div class="pr_name_status">
-						<input type="text" id="pr_name" name="pr_name" value=""> <select
+						<label for="pr_name">
+							상품명   <br>
+						<input type="text" id="pr_name" name="pr_name" value="">
+						</label>
+						<label for="pr_status">
+						 <select
 							id="pr_status" name="pr_status">
 							<option value="available">판매중</option>
 							<option value="out_of_stock">일시품절</option>
 							<option value="discontinued">품절</option>
 						</select>
+						</label>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="pr_price">대표 가격(원)</label> <input type="number"
+					<label for="pr_price">대표 가격(원)
+					<input type="number"
 						id="pr_price" name="pr_price" value="" placeholder="숫자만 입력 가능합니다.">
+				</label>
 				</div>
 
 				<div class="form-group">
-					<label for="pr_category">카테고리 선택</label> <select id="pr_category"
+					<label for="pr_category">카테고리 선택 <select id="pr_category"
 						name="pr_category">
 						<option value="식품">식품</option>
 						<option value="위생">위생</option>
@@ -199,25 +227,35 @@
 						<option value="의류">의류</option>
 						<option value="놀이">놀이</option>
 					</select>
+					</label>
 				</div>
 
 				옵션 입력
 				<div id="options-container" class="options">
 					<div class="option-group">
 						<div class="option-name_status">
-							<input type="text" name="pr_opt_name" value=""
-								placeholder="옵션명 필수 입력" required> <select
+						<label for="pr_opt_name"></label>
+							<input type="text" name="pr_opt_name" id="pr_opt_name" value=""
+								placeholder="옵션명 필수 입력" required> 
+								<label for="pr_opt_status">
+								<select
 								id="pr_opt_status" name="pr_opt_status">
 								<option value="available">판매중</option>
 								<option value="out_of_stock">일시품절</option>
 								<option value="discontinued">품절</option>
 							</select>
+							</label>
 						</div>
 						<br>
 						<div class="option-stock_price">
+						 <label for="pr_opt_price">
 							<input type="number" name="pr_opt_price" value=""
-								placeholder="옵션 추가금 입력" required> <input type="number"
+								placeholder="옵션 추가금 입력" required> 
+								</label>
+								<label for="pr_opt_stock">
+								<input type="number"
 								name="pr_opt_stock" value="" placeholder="재고 수량 입력" required>
+							</label>
 							<button type="button" class="add-option">+</button>
 							<button type="button" class="remove-option">-</button>
 						</div>

@@ -23,6 +23,7 @@
 		<p>인증 - 동준</p>
 		<a href="auth/testAuth">로그인 정보 확인(테스트)</a>
 		<a href="auth/login">로그인</a>
+		<a href="auth/logout">로그아웃</a>
 	
 		<p>게시판 - 창욱</p>
 		<a href="board/notice_list">관리자-공지사항</a>

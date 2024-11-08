@@ -46,9 +46,9 @@
         .form-group textarea,
         .form-group select {
         	width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        	padding: 10px;
+        	border: 1px solid #ccc;
+        	border-radius: 5px;
         }
         
         .pr_name { 
@@ -65,21 +65,17 @@
         .options {
             display: flex;
             flex-direction: column;
-            gap: 10px;
             margin-bottom: 15px;
         }
-         .option-group {
-		        gap: 10px; /* 각 입력 필드 간의 간격 */
-		    }
-		
-		    .option-group input {
+        
+		.option-group input {
 		        width : 65%;
-		    }
+		}
 		
-		    .option-group button {
+		.option-group button {
 		        flex-shrink: 0; /* 버튼이 작게 유지되도록 */
 		        padding : 10px;
-		    }
+		}
         .options input[type="text"],
         .options input[type="number"] {
             padding : 10px;
@@ -112,7 +108,6 @@
         
          .option-name_status, .option-stock_price, .pr_name_status {
 		    display: flex; /* 요소를 가로로 정렬 */
-		    gap: 10px; /* 요소 간의 간격 조정 */
 		    align-items: center; /* 세로 정렬 */
 		}
 		
@@ -122,6 +117,8 @@
 		
 		.pr_name_status select {
 		    flex: 1;
+		    margin-left: 7px;
+		    margin-top: 23px;
 		}
 		
 		.option-stock_price button {
@@ -139,20 +136,39 @@
 		border: 1px solid #ccc;
 	    border-radius: 5px;
 	    box-sizing: border-box;
+	    margin-left: 10px;
 		}
 		
 		 .add-option,  .remove-option {
 		border-radius: 10px;
-		background-color:#535353;
+		background-color:#535353; 
 		font-weight:bold;
 		color:white;
 		}
 		
 		.options input[type="text"], .options input[type="number"] {
 	    padding: 10px;
-	    width: 500px;
+	    width: 222px;
 	    border: 1px solid #ccc;
 	    border-radius: 5px;
+	    margin-right : 10px;
+	    
+		}
+		
+		options input[type="number"] {
+		margin-left: 10px;
+		}
+		
+		#pr_opt_status{
+		margin : 0;
+		}
+		#pr_opt_name, #pr_name{
+		width: 450px;
+		}
+		
+		[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+		    cursor: pointer;
+		    margin-left: 7px;
 		}
 		
     </style>
@@ -160,8 +176,7 @@
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
-
-<div class="container">
+	<div class="container">
 	<form action="ad_manageProductModify" method="POST" enctype="multipart/form-data">
 	<input type="hidden" id="pr_id" name="pr_id" value="${param.pr_id}">
 	<input type="hidden" name="nowPage" value="${param.nowPage}">
@@ -170,9 +185,7 @@
 	
     <div class="title">상품 수정</div>
    
-
-<img id="image-preview" src="${pageContext.request.contextPath}/resources/upload/${product.pr_thumbnail}" 
-     alt="이미지 미리보기" onerror="this.src='../../../resources/images/HappyPawsLogo.png';" style="display: ${product.pr_thumbnail != null ? 'block' : 'none'};">
+<img id="image-preview" src="${pageContext.request.contextPath}/resources/upload/${product.pr_thumbnail}" alt="이미지 미리보기" onerror="this.src='../../../resources/images/HappyPawsLogo.png';" style="display: ${product.pr_thumbnail != null ? 'block' : 'none'};">
 
 	
 	<!-- 기존 이미지 경로를 저장하는 hidden 필드 -->
@@ -181,28 +194,35 @@
     
     <!-- 파일 업로드 필드 -->
     <div class="form-group" style="text-align:center">
+    <label for="pr_thumbnail_file">
         <input type="file" id="pr_thumbnail_file" name="pr_thumbnail_file" accept="image/*">
+    </label>
     </div>
 
     <div class="form-group">
-        상품명
     	<div class="pr_name_status">
-        <input type="text" id="pr_name" name="pr_name" value="${product.pr_name}">
-        <select id="pr_status" name="pr_status">
-		    <option value="available" <c:if test="${product.pr_status == 'available'}">selected</c:if>>판매중</option>
-		    <option value="out_of_stock" <c:if test="${product.pr_status == 'out_of_stock'}">selected</c:if>>일시품절</option>
-		    <option value="discontinued" <c:if test="${product.pr_status == 'discontinued'}">selected</c:if>>품절</option>
-		</select>
+	    	<label for="pr_name">
+		        상품명   <br>
+		        <input type="text" id="pr_name" name="pr_name" value="${product.pr_name}" >   
+	        </label>
+	        <label for="pr_status">
+	        <select id="pr_status" name="pr_status">
+			    <option value="available" <c:if test="${product.pr_status == 'available'}">selected</c:if>>판매중</option>
+			    <option value="out_of_stock" <c:if test="${product.pr_status == 'out_of_stock'}">selected</c:if>>일시품절</option>
+			    <option value="discontinued" <c:if test="${product.pr_status == 'discontinued'}">selected</c:if>>품절</option>
+			</select>
+			</label>
 		</div>
     </div>
 
     <div class="form-group">
-        <label for="pr_price">대표 가격(원)</label>
+        <label for="pr_price">대표 가격(원)
         <input type="number" id="pr_price" name="pr_price" value="${product.pr_price}" placeholder="숫자만 입력 가능합니다.">
+  		</label>
     </div>
 
     <div class="form-group">
-    <label for="pr_category">카테고리 선택</label>
+    <label for="pr_category">카테고리 선택
     <select id="pr_category" name="pr_category">
         <option value="식품" <c:if test="${product.pr_category == '식품'}">selected</c:if>>식품</option>
         <option value="위생" <c:if test="${product.pr_category == '위생'}">selected</c:if>>위생</option>
@@ -210,31 +230,40 @@
         <option value="의류" <c:if test="${product.pr_category == '의류'}">selected</c:if>>의류</option>
         <option value="놀이" <c:if test="${product.pr_category == '놀이'}">selected</c:if>>놀이</option>
     </select>
+    </label>
 </div>
 
-옵션 입력
-<div id="options-container" class="options">
-<c:forEach var="option" items="${productOption}">
-    <div class="option-group">
-        <div class="option-name_status">
-            <input type="text" name="pr_opt_name" value="${option.pr_opt_name}" placeholder="옵션명 필수 입력">
-            <select id="pr_opt_status" name="pr_opt_status">
-                <option value="available" <c:if test="${option.pr_opt_status == 'available'}">selected</c:if>>판매중</option>
-                <option value="out_of_stock" <c:if test="${option.pr_opt_status == 'out_of_stock'}">selected</c:if>>일시품절</option>
-                <option value="discontinued" <c:if test="${option.pr_opt_status == 'discontinued'}">selected</c:if>>품절</option>
-            </select>
-        </div>
-        <br>
-        <div class="option-stock_price">
-            <input type="number" name="pr_opt_price" value="${option.pr_opt_price}" placeholder="옵션 추가금 입력">
-            <input type="number" name="pr_opt_stock" value="${option.pr_opt_stock}" placeholder="재고 수량 입력">
-            <button type="button" class="add-option">+</button>
-            <button type="button" class="remove-option">-</button>
-        </div>
-	       <br>
-    </div>
-</c:forEach>
-</div>
+	옵션 입력
+	<div id="options-container" class="options">
+	<c:forEach var="option" items="${productOption}">
+	    <div class="option-group">
+	        <div class="option-name_status">
+	        <label for="pr_opt_name"></label>
+	            <input type="text" name="pr_opt_name" id="pr_opt_name" value="${option.pr_opt_name}" placeholder="옵션명 필수 입력">
+	        <label for="pr_opt_status">
+	            <select id="pr_opt_status" name="pr_opt_status">
+	                <option value="available" <c:if test="${option.pr_opt_status == 'available'}">selected</c:if>>판매중</option>
+	                <option value="out_of_stock" <c:if test="${option.pr_opt_status == 'out_of_stock'}">selected</c:if>>일시품절</option>
+	                <option value="discontinued" <c:if test="${option.pr_opt_status == 'discontinued'}">selected</c:if>>품절</option>
+	            </select>
+	        </label>
+	        </div>
+	        <br>
+	        <div class="option-stock_price">
+	        <label for="pr_opt_price">
+	            <input type="number" name="pr_opt_price" id="pr_opt_price" value="${option.pr_opt_price}" placeholder="옵션 추가금 입력">
+	            </label>
+	            <label for="pr_opt_stock">
+	            <input type="number" name="pr_opt_stock" id="pr_opt_stock" value="${option.pr_opt_stock}" placeholder="재고 수량 입력">
+	            </label>
+	            <button type="button" class="add-option">+</button>
+	            <button type="button" class="remove-option">-</button>
+	        </div>
+		   <br>
+	    </div>
+	</c:forEach>
+	</div>
+
 
      <div class="form-group">
             <label for="pr_desc">제품 정보</label>
@@ -254,7 +283,11 @@
 			    <button onclick="deleteProduct('${product.pr_id }',${nowPage}, '${searchCondition}', '${searchKeyword}', '${param.category}')">삭제</button>
 		</div>
 		
-		<script>
+    </form>
+	</div>
+</main>
+<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
+<script>
 		function cancel(nowPage, searchCondition, searchKeyword) {
 			
 		    location.href = "/ad_manageProductList?nowPage=" + nowPage + "&searchCondition=" + searchCondition + "&searchKeyword=" + searchKeyword;
@@ -270,12 +303,6 @@
 		    
 
 		</script>
-
-    </form>
-</div>
-</main>
-<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
-
 <script>
 	//옵션 개수 구하는 함수
 	function getOptionCount() {

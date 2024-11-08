@@ -37,8 +37,8 @@ public class AdminController {
         UsersVO admin = JwtCookieUtil.extractJwtFromCookie(request);
         
         if (admin != null) {
-        	ad_id = admin.getUs_id();			
-		}
+            ad_id = admin.getUs_id();            
+        }
 
         if (ad_id == null) {
             model.addAttribute("error", "관리자 ID를 찾을 수 없습니다.");
@@ -50,6 +50,12 @@ public class AdminController {
         boolean isValid = Argon2Util.verifyPassword(storedHash, currentPassword);
         if (!isValid) {
             model.addAttribute("error", "현재 비밀번호가 일치하지 않습니다.");
+            return "/WEB-INF/mypage/ad_mypage.jsp";
+        }
+
+        // 새 비밀번호와 현재 비밀번호가 동일한지 확인
+        if (currentPassword.equals(newPassword)) {
+            model.addAttribute("error", "현재 비밀번호와 동일한 비밀번호로 변경할 수 없습니다.");
             return "/WEB-INF/mypage/ad_mypage.jsp";
         }
 

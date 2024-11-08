@@ -334,8 +334,8 @@ td {
 		<div class="product-search">
 			<!-- 검색 및 카테고리 필터 -->
 				<form class="form-inline" action="ad_manageProductList" method="post">
-					<!-- 검색 옵션 선택 -->
-						<select name="searchCondition">
+					<!-- 검색 옵션 선택 --><label for="searchCondition"></label>
+						<select name="searchCondition" id="searchCondition">
 							<c:forEach items="${conditionMap}" var="option">
 								<option value="${option.value}"
 									<c:if test="${searchCondition == option.value}">selected</c:if>>
@@ -343,7 +343,8 @@ td {
 							</c:forEach>
 						</select>
 						<!-- 검색 입력 -->
-						<input type="search" name="searchKeyword" placeholder="검색어를 입력하세요." value="${searchKeyword}">
+						<label for="searchInput"></label>
+						<input type="search" name="searchKeyword" id="searchInput" placeholder="검색어를 입력하세요." value="${searchKeyword}">
 						<button type="submit">검색</button>
 				</form>
 		</div>
@@ -413,6 +414,7 @@ td {
 				</form>
 			</div>
 			<table class="table table-hover">
+			<caption style="color:transparent">상품 관리 테이블 - 상품 리스트와 옵션 상태</caption>
 				<thead class="btn-primary">
 					<tr>
 						<th>상품ID</th>
@@ -464,16 +466,15 @@ td {
 														<li style="font-weight: bold;">
 															옵션명 : ${opt.pr_opt_name}
 														</li>
-<%-- 														<li>옵션 상태: ${opt.pr_opt_status}</li> --%>
-															<li>옵션 상태: 
-															    <c:choose>
-															        <c:when test="${opt.pr_opt_status == 'available'}">판매중</c:when>
-															        <c:when test="${opt.pr_opt_status == 'out_of_stock'}">일시 품절</c:when>
-															        <c:when test="${opt.pr_opt_status == 'discontinued'}">품절</c:when>
-															        <c:otherwise>알 수 없음</c:otherwise>
-															    </c:choose>
-															</li>
-
+														<li>옵션 상태: 
+														    <c:choose>
+														        <c:when test="${opt.pr_opt_status == 'available'}">판매중</c:when>
+														        <c:when test="${opt.pr_opt_status == 'out_of_stock'}">일시 품절</c:when>
+														        <c:when test="${opt.pr_opt_status == 'discontinued'}">품절</c:when>
+														        <c:otherwise>알 수 없음</c:otherwise>
+														    </c:choose>
+														</li>
+																												
 														<li>재고: ${opt.pr_opt_stock} 개</li>
 														<li>추가금액: ${opt.pr_opt_price} 원</li>
 													</ul>
@@ -491,6 +492,7 @@ td {
 						</c:otherwise>
 					</c:choose>
 				</tbody>
+<!-- 				<tfoot></tfoot> -->
 			</table>
 			
 			<a href="ad_manageProductAdd" >상품 등록하기</a>
