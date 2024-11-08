@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@include file="../../head.jsp" %>
 <meta charset="UTF-8">
 <title>회원상세보기</title>
 <style>
@@ -40,19 +41,49 @@
     .button-container {
         margin-top: 20px;
     }
-    .button-container button, .button-container input[type="submit"] {
+       .button-container button,
+    .button-container input[type="submit"] {
         padding: 5px 10px;
         font-size: 1em;
         margin: 0 5px;
+        background-color: #e0e0e0;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
     }
+      /* 기본 상태에서의 버튼 스타일 */
+    .button-container button:hover,
+    .button-container input[type="submit"]:hover {
+        background-color: #d0d0d0; /* 마우스 오버 시 색상 */
+    }
+
+    /* 포커스 상태 스타일 (키보드 접근 시) */
+    .button-container button:focus,
+    .button-container input[type="submit"]:focus {
+        outline: 2px solid #005fcc; /* 파란색 테두리 */
+        outline-offset: 2px;
+        background-color: #d0d0d0;
+    }
+
+    /* 클릭 시 (active 상태) 색상 변경 */
+    .button-container button:active,
+    .button-container input[type="submit"]:active {
+        background-color: #a0a0a0;
+        color: white;
+    }
+    
+
+
 </style>
 <script>
     function confirmDelete() {
-        return confirm("정말로 회원 정보를 삭제하시겠습니까?");
+        return confirm("정말로 회원 정보를 탈퇴하시겠습니까?");
     }
 </script>
 </head>
 <body>
+<%@include file="../../header.jsp" %>
+<main>
 <div id="content">
     <h2>회원 상세 정보</h2>
     <table>
@@ -78,19 +109,22 @@
         </tr>
         <tr>
             <th>가입일</th>
-            <td>${user.us_date}</td>
+         	<td>${user.us_date}</td>
         </tr>
     </table>
-    
    
     <div class="button-container">
         <button onclick="location.href='userUpdate.do?us_id=${user.us_id}'">수정</button>
-        <form action="userDelete.do" method="get" onsubmit="return confirmDelete()" style="display:inline;">
+        <form action="userDelete.do" method="post" onsubmit="return confirmDelete()" style="display:inline;">
             <input type="hidden" name="us_id" value="${user.us_id}">
-            <input type="submit" value="삭제">
+            <input type="submit" value="탈퇴">
         </form>
         <button onclick="location.href='userList.do'">목록으로</button>
     </div>
 </div>
+
+
+</main>
+<%@include file="../../footer.jsp" %> 
 </body>
 </html>

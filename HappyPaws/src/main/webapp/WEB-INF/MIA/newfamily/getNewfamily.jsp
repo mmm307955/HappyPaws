@@ -1,117 +1,239 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="../../../header.jsp" %>
-<%
-	String sts = "";
-	if(session.getAttribute("userId") == null){
-		 sts = "disabled";
-	}
-%>
+<%@page language="java" contentType="text/html; charset=UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ include file="../MIA.jsp"%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>행복한 발자국</title>
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/MIA.css">
+<script>
+$(document).ready(function() {
+    function setupEventHandlers() {
+        $("#nfMod").click(function() {
+            document.fm.action = "/updateNewFamily.do";
+            document.fm.method = "get";
+            document.fm.nf_seq.value = "${newFamily.nf_seq}";
+            document.fm.nowPage.value = "${nowPage}" || 1;
+            document.fm.searchCondition.value = "${searchCondition}";
+            document.fm.searchKeyword.value = "${searchKeyword}";
+            document.fm.category.value = "${category}";
+            document.fm.submit();
+        });
+
+        $("#nfDel").click(function() {
+            let con_test = confirm("정말로 삭제하시겠습니까?");
+            if (con_test) {
+                let s = document.fm.nf_seq.value;
+                location.href = "/deleteNewFamily.do?nf_seq=" + s;
+            }
+        });
+
+        $("#nfList").click(function() {
+            document.hideFrm.action = "/getNewFamilyList.do";
+            document.hideFrm.method = "post";
+            document.hideFrm.nowPage.value = "${nowPage}" || 1;
+            document.hideFrm.searchCondition.value = "${searchCondition}";
+            document.hideFrm.searchKeyword.value = "${searchKeyword}";
+            document.hideFrm.category.value = "${category}";
+            document.hideFrm.submit();
+        });
+
+        $(document).on('click', '#open', function() {
+        	let nfCommentDiv = $(this).closest(".nfComment");
+            let nfcMod1 = nfCommentDiv.find(".nfcMod1");
+            let nfcMod2 = nfCommentDiv.find(".nfcMod2");
+            let nfcMod3 = nfCommentDiv.find(".nfcMod3");
+        	nfcMod1.hide();
+            nfcMod2.show();
+            nfcMod3.hide();
+        });
+        
+        $(document).on('click', '#close', function() {
+        	let nfCommentDiv = $(this).closest(".nfComment");
+            let nfcMod1 = nfCommentDiv.find(".nfcMod1");
+            let nfcMod2 = nfCommentDiv.find(".nfcMod2");
+            let nfcMod3 = nfCommentDiv.find(".nfcMod3");
+        	nfcMod1.show();
+            nfcMod2.hide();
+            nfcMod3.show();
+        });
+        
+        $(document).on('click', '#nfcMod', function() {
+            let nfCommentDiv = $(this).closest(".nfComment");
+            let nfcMod1 = nfCommentDiv.find(".nfcMod1");
+            let nfcMod2 = nfCommentDiv.find(".nfcMod2");
+            let textarea = nfCommentDiv.find("textarea");
+
+                // 댓글 내용 확인
+                let content = $.trim(textarea.val());
+                let nf_seq = nfCommentDiv.find("input[name='nf_seq']").val();
+                let nfc_seq = nfCommentDiv.find("input[name='nfc_seq']").val();
+
+                if (content === '') {
+                    alert("댓글 내용을 입력해야 합니다.");
+                    textarea.focus(); // 텍스트 영역에 포커스
+                    return;
+                }
+
+                if (nf_seq && nfc_seq) {
+                    location.href = "/updateNfComment.do?nf_seq=" + nf_seq +
+                        "&nfc_seq=" + nfc_seq +
+                        "&nfc_content=" + encodeURIComponent(content) +
+                        "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
+                        "&searchCondition=" + encodeURIComponent("${searchCondition}") +
+                        "&category=" + encodeURIComponent("${category}") +
+                        "&nowPage=" + "${nowPage}";
+                } else {
+                    console.error("수정할 수 없는 댓글입니다.");
+                }            
+        });
+
+        $(document).on('click', '#nfcDel', function() {
+            let con_test = confirm("정말로 삭제하시겠습니까?");
+            if (con_test) {
+                let nf_seq = $(this).closest(".nfComment").find("input[name='nf_seq']").val();
+                let nfc_seq = $(this).closest(".nfComment").find("input[name='nfc_seq']").val();
+
+                if (nf_seq && nfc_seq) {
+                    location.href = "/deleteNfComment.do?nf_seq=" + nf_seq +
+                        "&nfc_seq=" + nfc_seq +
+                        "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
+                        "&searchCondition=" + encodeURIComponent("${searchCondition}") +
+                        "&category=" + encodeURIComponent("${category}") +
+                        "&nowPage=" + "${nowPage}";
+                } else {
+                    console.error("삭제할 수 없는 댓글입니다.");
+                }
+            }
+        });
+    }
+
+    setupEventHandlers();
+});
+</script>
+<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
+</head>
 <body>
-<style>
-	#imgBox {display:none;position:absolute;top:0;left:0;height:100vh!important;background-color:rgba(0,0,0,0.5);z-index:9999999;}
-	#imgContentBox {width:600px;max-height:550px;overflow:auto;position:absolute;top:30%;left:30%;border-radius:5px;z-index:9999999;}
-	#imgBoxTitleBar {border-bottom:1px solid #777;border-radius:5px 5px 0 0;background-color:#ddd;width:100%;padding:10px;text-align:right;font-size:20px;font-weight:bolder;}
-	#imgBoxImg {width:100%;border-radius: 0 0 5px 5px;}
-	#closeX {padding:5px 20px;border-radius:5px;border:1px solid #777;background-color:red;color:#fff;}
-	#closeX:hover {background-color:#777;cursor:pointer;}
-</style>
-<div class="jumbotron">
-   <h1>상세 보기</h1>      
-</div>
-<div class="container-fluid">
-<%
-	if (request.getParameter("error")!=null) {
-		out.println("<div class='alert alert-danger'>");
-		out.println("해당 글은 작성자만이 수정할 수 있습니다.");
-		out.println("</div>");
-	}
-%>
-  <form name="fm" action="/updateBoard.do" method="post" enctype="multipart/form-data">
-  <input type="hidden" name="seq" value="${board.seq}">
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">제목</span>
-      </div>
-      <input type="text" class="form-control innm" name="title" value="${board.title}" <%=sts %>>      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">작성자</span>
-      </div>
-      <input type="text" class="form-control innm" name="writer" value="${board.writer}" readonly <%=sts %>>      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">내용</span>
-      </div>
-      <textarea class="form-control innm" rows="10" id="comment" name="content" <%=sts %>>${board.content}</textarea>      
-    </div>  
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">파일</span>
-      </div>
-   		<c:if test="${board.filename ne NULL}">
-   			<span style="cursor:pointer;padding:0 20px;" onclick="seeImg()">[파일보기]</span>
-   			<script>
-	        	function seeImg(){
-	        		$("#imgBox").show();
-	        	}
-	        </script>
-   			<span style="cursor:pointer;" onclick="downloadFile('${board.filename}')">[파일다운]</span>
-   			<script>
-	   			function downloadFile(filename){
-	   		        location.href = "/download.do?filename="+filename;
-	   			}
-			</script>
-   		</c:if>
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">파일등록</span>
-      </div>
-      <input type="file" class="form-control innm" name="uploadFile">      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">등록일</span>
-      </div>
-      <input type="text" class="form-control innm" name="regdate" value="${board.regdate}" readonly <%=sts %>>      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">조회수</span>
-      </div>
-      <input type="text" class="form-control innm" name="cnt" value="${board.cnt}" readonly <%=sts %>>      
-    </div>
-    <div id="footer">
-	  	<button type="submit" class="btn btn-primary" <%=sts %>>글수정</button>
-	  	<button id="conWrite" type="button" class="btn btn-primary" <%=sts %>>글쓰기</button>
-	  	<button id="conDel" type="button" class="btn btn-primary" <%=sts %>>글삭제</button>
-	  	<button id="conList" type="button" class="btn btn-primary">글목록</button>
-	</div>
-  </form>
-  <!-- 241017_추가 페이징처리와 목록, 검색 유지 기능 처리(시작)  -->
-  <form name="hideFrm" style="display:none;">
-	  <input type="hidden" name="nowPage" value="${nowPage}" >
-	  <input type="hidden" name="searchKeyword" value="${searchKeyword}" >
-	  <input type="hidden" name="searchCondition" value="${searchCondition}" >
-  </form>
-  <!-- 241017_추가 페이징처리와 목록, 검색 유지 기능 처리(종료)  -->
-</div>
-<!-- 클릭시 보이는 이미지 start -->
-<div id="imgBox" class="container-fluid">
-	<div id="imgContentBox">
-		<div id="imgBoxTitleBar">
-			<span id="closeX" onclick="closeX()">X</span>
-			 <script>
-        	function closeX(){
-        		$("#imgBox").hide();
-        	}
-        </script>
+	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<main>
+		<div class="n_write">
+			<div class="n_viewform">
+				<h1>아이를 찾아주세요</h1>
+				<div class="n_title">
+					<span class="title">
+						${newFamily.nf_title}
+						<c:if test="${newFamily.nf_ok == 'Y'}">
+							<span style="color: red; font-weight: bold;">[찾았어요]</span>
+						</c:if>
+					</span>
+					<span class="author">작성자: ${newFamily.us_nick}</span>
+				</div>
+				<div class="n_second">
+					<span class="cnt">조회수: ${newFamily.nf_cnt}</span>
+					<span class="date">작성일: ${newFamily.nf_date}</span>
+				</div>
+
+				<div class="n_third">
+					<div class="ph">연락처: ${newFamily.nf_ph}</div>
+					<img src="${pageContext.request.contextPath}/resources/MIA-img/newFamilyImg/${newFamily.nf_img}" alt="New Family Image" class="new-family-image">
+					<table class="detail-table">
+						<tr class="detail-row">
+							<td class="label">나이</td>
+							<td class="value">${newFamily.nf_age}</td>
+						</tr>
+						<tr class="detail-row">
+							<td class="label">성별</td>
+							<td class="value">${newFamily.nf_gender}</td>
+						</tr>
+						<tr class="detail-row">
+							<td class="label">품종</td>
+							<td class="value">${newFamily.nf_breed}</td>
+						</tr>
+					</table>
+				</div>
+
+				<form name="fm">
+					<input type="hidden" name="nf_seq" value="${newFamily.nf_seq}">
+					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
+					<input type="hidden" name="searchCondition" value="${searchCondition}">
+					<input type="hidden" name="category" value="${category}">
+					<input type="hidden" name="nowPage" value="${nowPage}">
+					<div class="n_content">
+						<p>${fn:replace(newFamily.nf_content, lf, "<br>")}</p>
+					</div>
+				</form>
+			</div>
 		</div>
-		<img id="imgBoxImg" src="${pageContext.request.contextPath }/resources/img/${board.filename}">
-	</div>
-</div>
-<!-- 클릭시 보이는 이미지 end -->
+
+		<form name="hideFrm" style="display: none;">
+			<input type="hidden" name="searchKeyword" value="${searchKeyword}">
+			<input type="hidden" name="searchCondition" value="${searchCondition}">
+			<input type="hidden" name="category" value="${category}">
+			<input type="hidden" name="nowPage" value="${nowPage}">
+		</form>
+
+		<div class="commentlist">
+			<c:forEach var="nfComment" items="${nfComment}">
+				<div class="comment">
+					<input type="hidden" name="nf_seq" value="${nfComment.nf_seq}">
+					<input type="hidden" name="nfc_seq" value="${nfComment.nfc_seq}">
+					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
+					<input type="hidden" name="searchCondition" value="${searchCondition}">
+					<input type="hidden" name="category" value="${category}">
+					<input type="hidden" name="nowPage" value="${nowPage}">
+					<div>
+						<strong><c:out value="${nfComment.us_nick}" /></strong>
+						<span><c:out value="${nfComment.nfc_date}" /></span>
+					</div>
+					<div>
+						<p class="nfcMod1">
+							<c:out value="${nfComment.nfc_content}" />
+						</p>
+						<div class="nfcMod2" style="display: none">
+							<textarea name="nfc_content" required>${nfComment.nfc_content}</textarea>
+							<div class="btn-container">
+								<button id="nfcMod" type="button">수정</button>
+								<button id="close" type="button">닫기</button>
+							</div>
+						</div>
+						<div class="btn-container nfcMod3">
+							<button id="open" type="button">수정</button>
+							<button id="nfcDel" type="button">삭제</button>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+
+		<form action="insertNfComment.do" method="post" class="commentWrite">
+			<div class="comment">
+				<input type="hidden" name="nfc_id" value="admin">
+				<input type="hidden" name="nf_seq" value="${newFamily.nf_seq}">
+				<input type="hidden" name="searchCondition" value="${searchCondition}">
+				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
+				<input type="hidden" name="category" value="${category}">
+				<input type="hidden" name="nowPage" value="${nowPage}">
+				<strong>관리자</strong>
+				<textarea id="nfc_content" name="nfc_content" required></textarea>
+				<div class="btn-container">
+					<button type="submit">등록</button>
+				</div>
+			</div>
+		</form>
+
+		<section class="commandList">
+			<div class="btn-container">
+				<button id="nfMod" type="button">글 수정</button>
+				<button id="nfDel" type="button">글 삭제</button>
+				<button id="nfList" type="button">글 목록</button>
+			</div>
+		</section>
+	</main>
+	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
+
 </html>

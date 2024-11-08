@@ -15,6 +15,7 @@ public class UsersVO {
 	private String us_is_del = null;
 	private String us_profile = null;
 	private MultipartFile us_profile_file = null;
+	private String postcode = null;  
 
 	public String getUs_id() { return us_id; }
 	public void setUs_id(String us_id) { this.us_id = us_id; }
@@ -45,17 +46,23 @@ public class UsersVO {
 
 	public String getUs_is_del() { return us_is_del; }
 	public void setUs_is_del(String us_is_del) { this.us_is_del = us_is_del; }
-
+	
 	public String getUs_profile() { return us_profile; }
     public void setUs_profile(String us_profile) { this.us_profile = us_profile; }
 
     public MultipartFile getUs_profile_file() { return us_profile_file; }
     public void setUs_profile_file(MultipartFile us_profile_file) { this.us_profile_file = us_profile_file; }
+    
+    public String getPostcode() { return postcode; } 
+    public void setPostcode(String postcode) { this.postcode = postcode; }  
 
-	@Override
+
+
+    @Override
     public String toString() {
         return "UsersVO [us_id=" + us_id + ", us_sns=" + us_sns + ", us_password=" + us_password + ", us_name="
-				+ us_name + ", us_nick=" + us_nick + ", us_email=" + us_email + ", us_phone=" + us_phone
-				+ ", us_address=" + us_address + ", us_date=" + us_date + ", us_is_del=" + us_is_del + ", us_profile=" + us_profile + "]";
+                + us_name + ", us_nick=" + us_nick + ", us_email=" + us_email + ", us_phone=" + us_phone
+                + ", us_address=" + us_address + ", us_date=" + us_date + ", us_is_del=" + us_is_del
+                + ", us_profile=" + us_profile + ", postcode=" + postcode + "]"; 
     }
 }

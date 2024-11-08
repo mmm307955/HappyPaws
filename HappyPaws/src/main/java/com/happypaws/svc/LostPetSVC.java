@@ -21,13 +21,13 @@ public class LostPetSVC {
     public void updateLostPet(LostPetVO vo) {
         lostPetDAO.updateLostPet(vo);
     }
-
+    
     public void deleteLostPet(LostPetVO vo) {
         lostPetDAO.deleteLostPet(vo);
     }
 
     public void deleteAllLostPet(LostPetVO vo) {
-        lostPetDAO.deleteAllLostPet(vo); // 여기 수정
+        lostPetDAO.deleteAllLostPet(vo);
     }
     
     public LostPetVO getLostPet(LostPetVO vo) {
@@ -46,7 +46,14 @@ public class LostPetSVC {
         lostPetDAO.updateLostPetCnt(vo);
     }
 
-    public String getCurrentImage(int lpSeq) {
-        return lostPetDAO.getCurrentImage(lpSeq);
+    public String getCurrentImage(int lp_seq) {
+        return lostPetDAO.getCurrentImage(lp_seq);
+    }
+
+    public void countLpComment(List<LostPetVO> lostPetList) {
+        for (LostPetVO lostPet : lostPetList) {
+            int commentCount = lostPetDAO.countLpComment(lostPet.getLp_seq());
+            lostPet.setCommentCount(commentCount);
+        }
     }
 }

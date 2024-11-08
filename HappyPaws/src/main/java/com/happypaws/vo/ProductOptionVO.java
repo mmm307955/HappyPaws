@@ -6,6 +6,8 @@ public class ProductOptionVO {
 	private String pr_opt_name;
 	private int pr_opt_stock;
 	private int pr_opt_price;
+	private String pr_opt_status;
+	
 	
 	
 	public int getPr_id() {
@@ -39,10 +41,23 @@ public class ProductOptionVO {
 		this.pr_opt_price = pr_opt_price;
 	}
 	
+	
+	public String getPr_opt_status() {
+		return pr_opt_status;
+	}
+	public void setPr_opt_status(String pr_opt_status) {
+		this.pr_opt_status = pr_opt_status;
+	}
+	
 	@Override
 	public String toString() {
 		return "ProductOptionVO [pr_id=" + pr_id + ", pr_opt_id=" + pr_opt_id + ", pr_opt_name=" + pr_opt_name
-				+ ", pr_opt_stock=" + pr_opt_stock + ", pr_opt_price=" + pr_opt_price + "]";
+				+ ", pr_opt_stock=" + pr_opt_stock + ", pr_opt_price=" + pr_opt_price + ", pr_opt_status="
+				+ pr_opt_status + ", getPr_opt_status()=" + getPr_opt_status() + ", getPr_id()=" + getPr_id()
+				+ ", getPr_opt_id()=" + getPr_opt_id() + ", getPr_opt_name()=" + getPr_opt_name()
+				+ ", getPr_opt_stock()=" + getPr_opt_stock() + ", getPr_opt_price()=" + getPr_opt_price()
+				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
+				+ "]";
 	}
 	
 	

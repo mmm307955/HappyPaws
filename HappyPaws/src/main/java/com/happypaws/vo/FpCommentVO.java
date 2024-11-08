@@ -1,75 +1,75 @@
 package com.happypaws.vo;
 
 public class FpCommentVO {
-	private int fpSeq;
-	private int fpcSeq;
-	private String fpcId;
-	private String fpcRole;
-	private String fpcCode;
-	private String fpcContent;
-	private String fpcDate;
+	private int fp_seq;
+	private int fpc_seq;
+	private String fpc_id;
+	private String fpc_role;
+	private String fpc_code;
+	private String fpc_content;
+	private String fpc_date;
 
-
-	public int getFpSeq() {
-		return fpSeq;
+	private String us_profile;
+	private String us_nick;
+	
+	public int getFp_seq() {
+		return fp_seq;
 	}
-
-	public void setFpSeq(int fpSeq) {
-		this.fpSeq = fpSeq;
+	public void setFp_seq(int fp_seq) {
+		this.fp_seq = fp_seq;
 	}
-
-	public int getFpcSeq() {
-		return fpcSeq;
+	public int getFpc_seq() {
+		return fpc_seq;
 	}
-
-	public void setFpcSeq(int fpcSeq) {
-		this.fpcSeq = fpcSeq;
+	public void setFpc_seq(int fpc_seq) {
+		this.fpc_seq = fpc_seq;
 	}
-
-	public String getFpcId() {
-		return fpcId;
+	public String getFpc_id() {
+		return fpc_id;
 	}
-
-	public void setFpcId(String fpcId) {
-		this.fpcId = fpcId;
+	public void setFpc_id(String fpc_id) {
+		this.fpc_id = fpc_id;
 	}
-
-	public String getFpcRole() {
-		return fpcRole;
+	public String getFpc_role() {
+		return fpc_role;
 	}
-
-	public void setFpcRole(String fpcRole) {
-		this.fpcRole = fpcRole;
+	public void setFpc_role(String fpc_role) {
+		this.fpc_role = fpc_role;
 	}
-
-	public String getFpcCode() {
-		return fpcCode;
+	public String getFpc_code() {
+		return fpc_code;
 	}
-
-	public void setFpcCode(String fpcCode) {
-		this.fpcCode = fpcCode;
+	public void setFpc_code(String fpc_code) {
+		this.fpc_code = fpc_code;
 	}
-
-	public String getFpcContent() {
-		return fpcContent;
+	public String getFpc_content() {
+		return fpc_content;
 	}
-
-	public void setFpcContent(String fpcContent) {
-		this.fpcContent = fpcContent;
+	public void setFpc_content(String fpc_content) {
+		this.fpc_content = fpc_content;
 	}
-
-	public String getFpcDate() {
-		return fpcDate;
+	public String getFpc_date() {
+		return fpc_date;
 	}
-
-	public void setFpcDate(String fpcDate) {
-		this.fpcDate = fpcDate;
+	public void setFpc_date(String fpc_date) {
+		this.fpc_date = fpc_date;
 	}
-
+	public String getUs_profile() {
+		return us_profile;
+	}
+	public void setUs_profile(String us_profile) {
+		this.us_profile = us_profile;
+	}
+	public String getUs_nick() {
+		return us_nick;
+	}
+	public void setUs_nick(String us_nick) {
+		this.us_nick = us_nick;
+	}
 	@Override
 	public String toString() {
-		return "FpCommentVO [fpSeq=" + fpSeq + ", fpcSeq=" + fpcSeq + ", fpcId=" + fpcId + ", fpcRole=" + fpcRole
-				+ ", fpcCode=" + fpcCode + ", fpcContent=" + fpcContent + ", fpcDate=" + fpcDate + "]";
+		return "FpCommentVO [fp_seq=" + fp_seq + ", fpc_seq=" + fpc_seq + ", fpc_id=" + fpc_id + ", fpc_role="
+				+ fpc_role + ", fpc_code=" + fpc_code + ", fpc_content=" + fpc_content + ", fpc_date=" + fpc_date
+				+ ", us_profile=" + us_profile + ", us_nick=" + us_nick + "]";
 	}
-
 }

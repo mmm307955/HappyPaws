@@ -8,7 +8,6 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.happypaws.vo.NoticeVO;
 import com.happypaws.vo.QnaCmtVO;
 import com.happypaws.vo.QnaVO;
 

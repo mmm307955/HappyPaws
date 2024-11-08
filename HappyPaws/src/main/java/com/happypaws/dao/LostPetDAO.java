@@ -64,7 +64,12 @@ public class LostPetDAO {
     }
 
     // 현재 이미지 이름 가져오기
-    public String getCurrentImage(int lpSeq) {
-        return mybatis.selectOne("LostPetDAO.getCurrentImage", lpSeq);
+    public String getCurrentImage(int lp_seq) {
+        return mybatis.selectOne("LostPetDAO.getCurrentImage", lp_seq);
+    }
+    
+    // 댓글 수 조회
+    public int countLpComment(int lp_seq) {
+        return mybatis.selectOne("LostPetDAO.countLpComment", lp_seq);
     }
 }

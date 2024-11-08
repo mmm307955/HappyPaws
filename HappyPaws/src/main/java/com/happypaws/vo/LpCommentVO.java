@@ -6,6 +6,10 @@ public class LpCommentVO {
     private String lpc_id;
     private String lpc_content;
     private String lpc_date;
+    
+    private String us_profile;
+	private String us_nick;
+	
 	public int getLp_seq() {
 		return lp_seq;
 	}
@@ -36,10 +40,23 @@ public class LpCommentVO {
 	public void setLpc_date(String lpc_date) {
 		this.lpc_date = lpc_date;
 	}
+	public String getUs_profile() {
+		return us_profile;
+	}
+	public void setUs_profile(String us_profile) {
+		this.us_profile = us_profile;
+	}
+	public String getUs_nick() {
+		return us_nick;
+	}
+	public void setUs_nick(String us_nick) {
+		this.us_nick = us_nick;
+	}
+	
 	@Override
 	public String toString() {
 		return "LpCommentVO [lp_seq=" + lp_seq + ", lpc_seq=" + lpc_seq + ", lpc_id=" + lpc_id + ", lpc_content="
-				+ lpc_content + ", lpc_date=" + lpc_date + "]";
+				+ lpc_content + ", lpc_date=" + lpc_date + ", us_profile=" + us_profile + ", us_nick=" + us_nick + "]";
 	}
-    
+	
 }

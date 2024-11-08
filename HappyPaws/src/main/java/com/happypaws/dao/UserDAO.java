@@ -42,10 +42,10 @@ public class UserDAO {
         
     }
 
-    public void us_is_del(String us_id) {
-        int deletedRows = sql.delete("com.happypaws.dao.UserDAO.us_is_del", us_id);
-        System.out.println("삭제된 행의 수: " + deletedRows);
-    }
+//    public void us_is_del(String us_id) {
+//        int deletedRows = sql.delete("com.happypaws.dao.UserDAO.us_is_del", us_id);
+//        System.out.println("삭제된 행의 수: " + deletedRows);
+//    }
 
     
     public UsersVO myPage(String us_id) {
@@ -65,4 +65,14 @@ public class UserDAO {
         user.setUs_password(newPassword);
         sql.update("com.happypaws.dao.UserDAO.updatePassword", user);
     }
+    
+    public void updateUserToDeleted(String us_id) {
+        // MyBatis를 사용하여 us_is_del 필드를 'Y'로 업데이트
+        Map<String, Object> params = new HashMap<>();
+        params.put("us_id", us_id);
+        params.put("us_is_del", "Y");
+
+        sql.update("com.happypaws.dao.UserDAO.updateUserToDeleted", params);
+    }
+
 }

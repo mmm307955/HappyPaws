@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.happypaws.dao.UserDAO;
 import com.happypaws.vo.UsersVO;
@@ -32,9 +31,9 @@ public class UserSVC {
     	dao.user_update(vo);
     }
     
-    public void deleteById(String us_id) {
-    	 dao.us_is_del(us_id);
-    }
+//    public void deleteById(String us_id) {
+//    	 dao.us_is_del(us_id);
+//    }
 
 	public UsersVO getUserById(String us_id) {
 		
@@ -61,6 +60,12 @@ public class UserSVC {
 		
 		 dao.updatePassword(adminId, newPassword);
     }
+
+	public void updateUserToDeleted(String us_id) {
+		  dao.updateUserToDeleted(us_id); 
+
+		
+	}
 
 }
 

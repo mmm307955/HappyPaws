@@ -7,7 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.happypaws.vo.AdVO;
+import com.happypaws.vo.UsersVO;
 
 @Repository
 public class AdDAO {
@@ -16,21 +16,24 @@ public class AdDAO {
     private SqlSession sqlSession;
     
  // 관리자 정보 조회 메서드
-    public AdVO getAdminById(String ad_id) {
-        return sqlSession.selectOne("com.happypaws.dao.AdDAO.getAdminById", ad_id);
+    public UsersVO getAdminById(String us_id) {
+        return sqlSession.selectOne("AdDAO.getAdminById", us_id);
     }
 
 
     // 관리자 비밀번호 조회
-    public String getPasswordById(String ad_id) {
-        return sqlSession.selectOne("com.happypaws.dao.AdDAO.getPasswordById", ad_id);
+    public String getPasswordById(String us_id) {
+        return sqlSession.selectOne("AdDAO.getPasswordById", us_id);
     }
 
     // 비밀번호 업데이트
-    public void updatePassword(String ad_id, String newPassword) {
+    public void updatePassword(String us_id, String newPassword) {
+    	System.out.println("updatePassword");
         Map<String, Object> params = new HashMap<>();
-        params.put("ad_id", ad_id);
-        params.put("ad_password", newPassword);
-        sqlSession.update("com.happypaws.dao.AdDAO.updatePassword", params);
+        params.put("us_id", us_id);
+        params.put("us_password", newPassword);
+        sqlSession.update("AdDAO.updatePassword", params);
     }
+
+
 }

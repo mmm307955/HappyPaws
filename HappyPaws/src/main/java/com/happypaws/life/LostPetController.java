@@ -2,9 +2,9 @@ package com.happypaws.life;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.text.NumberFormat;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,17 +35,6 @@ public class LostPetController {
 	private LpCommentSVC lpCommentSVC;
 
 	String realPath = "c:/happyPaws/happyPaws/src/main/webapp/resources/MIA-img/lostPetImg/";
-
-	// 글목록 검색 옵션
-	@ModelAttribute("conditionMap")
-	public Map<String, String> searchConditionMap() {
-		Map<String, String> conditionMap = new HashMap<String, String>();
-		conditionMap.put("제목", "TITLE");
-		conditionMap.put("내용", "CONTENT");
-		conditionMap.put("작성자", "ID");
-		conditionMap.put("제목+내용", "TITLE,CONTENT");
-		return conditionMap;
-	}
 
 	// 글 등록
 	@RequestMapping(value = "/insertLostPet.do", method = RequestMethod.GET)
@@ -73,7 +61,9 @@ public class LostPetController {
 	// 글 수정
 	@RequestMapping(value = "/updateLostPet.do", method = RequestMethod.GET)
 	public String updateView(@RequestParam(value = "error", required = false) String error,
-			@RequestParam(value = "lp_seq") int seq, LostPetVO vo, Model model) {
+			@RequestParam(value = "lp_seq") int seq, LostPetVO vo, Model model,
+			@RequestParam(value = "nowPage", required = false) String nowPage,
+			@RequestParam(value = "category", required = false) String category) {
 
 		vo.setLp_seq(seq);
 		LostPetVO mlostpet = lostPetSVC.getLostPet(vo);
@@ -86,6 +76,7 @@ public class LostPetController {
 			cntChk = 0;
 		}
 
+		model.addAttribute("nowPage", vo.getNowPage());
 		model.addAttribute("searchKeyword", vo.getSearchKeyword());
 		model.addAttribute("searchCondition", vo.getSearchCondition());
 		model.addAttribute("category", vo.getCategory());
@@ -98,27 +89,34 @@ public class LostPetController {
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
 
-		// 기존 파일 이름과 비교하여 중복 여부 확인
-		String existingImg = lostPetSVC.getCurrentImage(vo.getLp_seq()); // 현재 이미지 이름을 가져오는 서비스 메서드
+		// 현재 이미지 이름을 가져오는 서비스 메서드
+		String existingImg = lostPetSVC.getCurrentImage(vo.getLp_seq());
 		String newFileName;
 
-		if (existingImg != null && existingImg.equals(originalFilename)) {
+		if (existingImg != null && !existingImg.isEmpty() && originalFilename.isEmpty()) {
+			// 파일을 업로드하지 않았을 때 기존 파일 이름을 그대로 사용
+			newFileName = existingImg;
+		} else if (existingImg != null && existingImg.equals(originalFilename)) {
 			// 파일 이름이 동일하면 기존 이름 사용
-			newFileName = originalFilename;
+			newFileName = existingImg;
 		} else {
-			// 파일 이름이 다르면 UUID 생성
+			// 파일 이름이 다르면 UUID 생성하여 새로운 파일 이름 설정
 			newFileName = UUID.randomUUID().toString() + "_" + originalFilename;
 		}
 
 		vo.setLp_img(newFileName);
 
-		// 파일을 지정한 경로에 저장
-		uploadFile.transferTo(new File(realPath + newFileName));
+		// 파일이 비어 있지 않다면 지정한 경로에 저장
+		if (!uploadFile.isEmpty()) {
+			uploadFile.transferTo(new File(realPath + newFileName));
+		}
 
 		// 데이터베이스 업데이트
 		lostPetSVC.updateLostPet(vo);
 
-		return "/getLostPet.do?lp_seq=" + vo.getLp_seq();
+		return "redirect:/getLostPet.do?lp_seq=" + vo.getLp_seq() + "&nowPage=" + vo.getNowPage() + "&category="
+				+ vo.getCategory() + "&searchKeyword=" + vo.getSearchKeyword() + "&searchCondition="
+				+ vo.getSearchCondition();
 	}
 
 	// 글 삭제
@@ -152,6 +150,7 @@ public class LostPetController {
 		LostPetVO mlostpet = lostPetSVC.getLostPet(vo);
 
 		cvo.setLp_seq(seq);
+
 		List<LpCommentVO> mlpCommentlist = lpCommentSVC.getLpCommentList(cvo);
 
 		if (!(error == null || error.equals(""))) {
@@ -162,53 +161,63 @@ public class LostPetController {
 			cntChk = 0;
 		}
 
+		// 사례금 포맷 적용
+		NumberFormat numberFormat = NumberFormat.getInstance(Locale.KOREA);
+		mlostpet.setFormattedReward(numberFormat.format(mlostpet.getLp_reward()));
+
+		model.addAttribute("nowPage", vo.getNowPage());
 		model.addAttribute("searchKeyword", vo.getSearchKeyword());
 		model.addAttribute("searchCondition", vo.getSearchCondition());
 		model.addAttribute("category", vo.getCategory());
 		model.addAttribute("lostPet", mlostpet);
 		model.addAttribute("lpComment", mlpCommentlist);
+
 		return "/WEB-INF/MIA/lostPet/getLostPet.jsp";
 	}
 
 	// 글 목록
 	@RequestMapping("/getLostPetList.do")
 	public String getLostPetListPost(PagingVO pv, LostPetVO vo, Model model,
-			@RequestParam(value = "nowPage", required = false) String nowPage,
-			@RequestParam(value = "category", required = false) String category) {
+			@RequestParam(value = "nowPage", required = false, defaultValue = "1") Integer nowPage,
+			@RequestParam(value = "category", required = false, defaultValue = "") String category) {
+		// 페이지당 항목 수 설정
+		int cntPerPage = 8;
 
-		String cntPerPage = "8";
-
-		// 검색 조건 및 키워드 설정
+		// 검색 조건과 키워드가 없을 때 기본값 설정
 		if (vo.getSearchCondition() == null) {
 			vo.setSearchCondition("TITLE");
-		} else {
-			vo.setSearchCondition(vo.getSearchCondition());
 		}
-
 		if (vo.getSearchKeyword() == null) {
 			vo.setSearchKeyword("");
-		} else {
-			vo.setSearchKeyword(vo.getSearchKeyword());
 		}
 
-		// 전체 개수 조회
+		// 전체 항목 개수 조회
 		int total = lostPetSVC.countLostPet(vo);
 
-		// 페이지 번호 설정
-		if (nowPage == null) {
-			nowPage = "1";
+		// 페이징 객체 생성
+		pv = new PagingVO(total, nowPage, cntPerPage);
+		vo.setStart(pv.getStart());
+		vo.setListcnt(cntPerPage);
+
+		// 분실 반려동물 목록 조회
+		List<LostPetVO> lostPetList = lostPetSVC.getLostPetList(vo);
+
+		// 댓글 수 설정
+		lostPetSVC.countLpComment(lostPetList);
+
+		// 사례금 포맷 적용
+		NumberFormat numberFormat = NumberFormat.getInstance(Locale.KOREA);
+		for (LostPetVO lostPet : lostPetList) {
+			lostPet.setFormattedReward(numberFormat.format(lostPet.getLp_reward()));
 		}
 
-		pv = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		// 모델에 필요한 데이터 추가
 		model.addAttribute("paging", pv);
-		vo.setStart(pv.getStart());
-		vo.setListcnt(Integer.parseInt(cntPerPage));
-
-		// 모델에 추가
+		model.addAttribute("nowPage", nowPage);
 		model.addAttribute("searchKeyword", vo.getSearchKeyword());
 		model.addAttribute("searchCondition", vo.getSearchCondition());
-		model.addAttribute("category", vo.getCategory());
-		model.addAttribute("lostPetList", lostPetSVC.getLostPetList(vo));
+		model.addAttribute("category", category);
+		model.addAttribute("lostPetList", lostPetList);
 
 		return "/WEB-INF/MIA/lostPet/getLostPetList.jsp";
 	}

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.happypaws.vo.ProductOptionVO;
 import com.happypaws.vo.ProductsVO;
-import com.happypaws.vo.UsersVO;
 
 @Repository
 public class AdminProductDAO {

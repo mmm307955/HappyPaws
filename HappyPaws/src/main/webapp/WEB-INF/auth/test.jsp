@@ -6,7 +6,7 @@
 	<%@include file="../../head.jsp"%>
 	<title>test</title>
     <style>
-        img {
+        main > img {
             width: 50px;
         }
     </style>

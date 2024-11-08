@@ -1,7 +1,5 @@
 package com.happypaws.dao;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -10,8 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.happypaws.vo.CmtyCommentVO;
 import com.happypaws.vo.CommunityVO;
-import com.happypaws.vo.QnaCmtVO;
-import com.happypaws.vo.QnaVO;
 
 @Repository
 public class CmtyDAO {

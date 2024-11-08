@@ -1,6 +1,6 @@
 package com.happypaws.life;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,44 +10,52 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.happypaws.svc.AdSVC;
-import com.happypaws.vo.AdVO;
+import com.happypaws.util.Argon2Util; // Argon2Util 임포트
+import com.happypaws.util.JwtCookieUtil;
+import com.happypaws.vo.UsersVO;
 
 @Controller
-public class Admincontroller {
+public class AdminController {
 
     @Autowired
     private AdSVC svc;
 
+    // 관리자 마이페이지 이동
     @GetMapping("/ad_myPage.do")
-    public String ad_myPage(@RequestParam("ad_id") String ad_id, Model m) {
-        AdVO admin= svc.ad_detail(ad_id); 
-        m.addAttribute("admin", admin);  
-        return "/WEB-INF/mypage/ad_mypage.jsp";  
-    }
-    // 비밀번호 변경 폼으로 이동
-    @GetMapping("/updateAdminPassword.do")
-    public String updateAdminPasswordForm(HttpSession session, Model model) {
-        String ad_id = (String) session.getAttribute("ad_id");
-        if (ad_id == null) {
-            return "/WEB-INF/mypage/adminLogin.do"; 
-        }
-        model.addAttribute("ad_id", ad_id);
-        return "/WEB-INF/mypage/ad_mypage.jsp"; 
+    public String ad_myPage(HttpServletRequest request, Model model) {
+        return "/WEB-INF/mypage/ad_mypage.jsp";
     }
 
     // 비밀번호 변경 처리
-    @PostMapping("/updateAdminPassword.do")
-    public String updateAdminPassword(@RequestParam("ad_id") String ad_id,
-                                      @RequestParam("currentPassword") String currentPassword,
-                                      @RequestParam("newPassword") String newPassword,
-                                      Model model) {
-        boolean isValid = svc.verifyPassword(ad_id, currentPassword);
+    @PostMapping("/updateAdminInfo.do")
+    public String updateAdminInfo(@RequestParam("currentPassword") String currentPassword,
+                                  @RequestParam("newPassword") String newPassword,
+                                  HttpServletRequest request,
+                                  Model model) {
+        // 쿠키에서 관리자 ID 가져오기
+        String ad_id = null;
+        UsersVO admin = JwtCookieUtil.extractJwtFromCookie(request);
+        
+        if (admin != null) {
+        	ad_id = admin.getUs_id();			
+		}
+
+        if (ad_id == null) {
+            model.addAttribute("error", "관리자 ID를 찾을 수 없습니다.");
+            return "/WEB-INF/mypage/ad_mypage.jsp";
+        }
+
+        // 현재 비밀번호 검증
+        String storedHash = svc.getStoredPasswordHash(ad_id); // 저장된 해시 값 가져오기
+        boolean isValid = Argon2Util.verifyPassword(storedHash, currentPassword);
         if (!isValid) {
             model.addAttribute("error", "현재 비밀번호가 일치하지 않습니다.");
             return "/WEB-INF/mypage/ad_mypage.jsp";
         }
 
-        svc.updatePassword(ad_id, newPassword);
+        // 새 비밀번호를 Argon2로 해싱
+        String hashedPassword = Argon2Util.hashPassword(newPassword);
+        svc.updatePassword(ad_id, hashedPassword); // 암호화된 비밀번호 저장
         model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
         return "/WEB-INF/mypage/ad_mypage.jsp";
     }

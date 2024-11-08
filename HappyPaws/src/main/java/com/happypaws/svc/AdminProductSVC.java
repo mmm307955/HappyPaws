@@ -68,9 +68,8 @@ public class AdminProductSVC {
 		return dao.productModifyView(vo);
 	}
 	
-//	//게시물 총 갯수
+	//게시물 총 갯수
 	public int countProducts(ProductsVO vo) {
-		System.out.println(vo.getListcnt());
 		return dao.countProducts(vo);
 	}
 	

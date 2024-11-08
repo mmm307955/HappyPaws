@@ -3,27 +3,29 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="NfCommentDAO">
-	<insert id="insertnfComment">
-		INSERT INTO nfComment(nf_seq, nfc_id, nfc_content, nfc_date)
-		VALUES(#{nf_seq}, #{nfc_id}, #{nfc_content}, #{nfc_date})
+
+	<insert id="insertNfComment">
+		INSERT INTO nfcomment (nf_seq, nfc_id, nfc_content, nfc_date)
+		VALUES (#{nf_seq}, #{nfc_id}, #{nfc_content}, #{nfc_date})
 	</insert>
-	
-	<update id="updatenfComment">
-		UPDATE nfComment
+
+	<update id="updateNfComment">
+		UPDATE nfcomment
 		SET nfc_content = #{nfc_content}
-		WHERE nfc_seq = #{nfc_seq}
+		WHERE nf_seq = #{nf_seq} AND nfc_seq = #{nfc_seq}
 	</update>
-	
-	<delete id="deletenfComment">
-		DELETE FROM nfComment WHERE nfc_seq = #{nfc_seq}
+
+	<delete id="deleteNfComment">
+		DELETE FROM nfcomment
+		WHERE nf_seq = #{nf_seq} AND nfc_seq = #{nfc_seq}
 	</delete>
-	
-	<select id="getnfCommentList" resultType="nfComment">
-		SELECT * FROM nfComment WHERE 1=1
-		ORDER BY nfc_seq DESC 
+
+
+	<select id="getNfCommentList" resultType="nfComment">
+		SELECT *
+		FROM nfcomment
+		WHERE nf_seq = #{nf_seq}
+		ORDER BY nfc_seq DESC
 	</select>
-	
-	<select id="countnfCommentList" resultType="int">
-		SELECT COUNT(*) FROM newfamily WHERE nf_seq = #{nf_seq}
-	</select>
+
 </mapper>

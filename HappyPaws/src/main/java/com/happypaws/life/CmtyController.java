@@ -15,7 +15,6 @@ import com.happypaws.svc.CmtySVC;
 import com.happypaws.util.PagingVO;
 import com.happypaws.vo.CmtyCommentVO;
 import com.happypaws.vo.CommunityVO;
-import com.happypaws.vo.QnaCmtVO;
 
 @Controller
 public class CmtyController {

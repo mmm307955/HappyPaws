@@ -39,9 +39,14 @@
 <!--     <delete id="us_is_del" parameterType="String"> -->
 <!--         DELETE FROM USERS WHERE US_ID = #{us_id} -->
 <!--     </delete> -->
-    <update id="us_is_del">
-    	UPDATE users SET us_is_del='Y' WHERE us_id=#{us_id}
-    </update>
+    <update id="updateUserToDeleted" parameterType="map">
+    UPDATE users
+    SET us_is_del = #{us_is_del}
+    WHERE us_id = #{us_id}
+</update>
+
+
+
         
     <!--사용자 정보 업데이트 -->
      <update id="user_update">
@@ -50,10 +55,10 @@
             us_name = #{us_name},
             us_nick = #{us_nick},
             us_email = #{us_email},
-            us_address = #{us_address}
+            us_address = #{us_address},
+            us_is_del = #{us_is_del} 
             WHERE us_id = #{us_id}
     </update>
-    
     
       <!-- 마이페이지 사용자 정보 업데이트 -->
     <update id="updateUserInfo">

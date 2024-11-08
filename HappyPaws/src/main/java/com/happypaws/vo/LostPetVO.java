@@ -12,12 +12,14 @@ public class LostPetVO {
 	private String lp_category;
 	private String lp_breed;
 	private int lp_reward;
+	private String formattedReward;
 	private String lp_content;
 	private String lp_date;
 	private int lp_cnt;
 	private String lp_ok;
 	private String lp_del;
 
+	private String nowPage;
 	private String searchCondition;
 	private String searchKeyword;
 	private String category;
@@ -27,10 +29,11 @@ public class LostPetVO {
 
 	private int start;
 	private int listcnt;
-
-	public LostPetVO() {
-		lp_id = "admin";
-	}
+	
+	private String us_profile;
+	private String us_nick;
+	
+	private int commentCount;
 
 	public int getLp_seq() {
 		return lp_seq;
@@ -104,6 +107,14 @@ public class LostPetVO {
 		this.lp_reward = lp_reward;
 	}
 
+	public String getFormattedReward() {
+		return formattedReward;
+	}
+
+	public void setFormattedReward(String formattedReward) {
+		this.formattedReward = formattedReward;
+	}
+
 	public String getLp_content() {
 		return lp_content;
 	}
@@ -142,6 +153,14 @@ public class LostPetVO {
 
 	public void setLp_del(String lp_del) {
 		this.lp_del = lp_del;
+	}
+
+	public String getNowPage() {
+		return nowPage;
+	}
+
+	public void setNowPage(String nowPage) {
+		this.nowPage = nowPage;
 	}
 
 	public String getSearchCondition() {
@@ -200,14 +219,41 @@ public class LostPetVO {
 		this.listcnt = listcnt;
 	}
 
+	public String getUs_profile() {
+		return us_profile;
+	}
+
+	public void setUs_profile(String us_profile) {
+		this.us_profile = us_profile;
+	}
+
+	public String getUs_nick() {
+		return us_nick;
+	}
+
+	public void setUs_nick(String us_nick) {
+		this.us_nick = us_nick;
+	}
+
+	public int getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
+
 	@Override
 	public String toString() {
 		return "LostPetVO [lp_seq=" + lp_seq + ", lp_id=" + lp_id + ", lp_title=" + lp_title + ", lp_ph=" + lp_ph
 				+ ", lp_place=" + lp_place + ", lp_time=" + lp_time + ", lp_category=" + lp_category + ", lp_breed="
-				+ lp_breed + ", lp_reward=" + lp_reward + ", lp_content=" + lp_content + ", lp_date=" + lp_date
-				+ ", lp_cnt=" + lp_cnt + ", lp_ok=" + lp_ok + ", lp_del=" + lp_del + ", searchCondition="
-				+ searchCondition + ", searchKeyword=" + searchKeyword + ", category=" + category + ", uploadFile="
-				+ uploadFile + ", lp_img=" + lp_img + ", start=" + start + ", listcnt=" + listcnt + "]";
+				+ lp_breed + ", lp_reward=" + lp_reward + ", formattedReward=" + formattedReward + ", lp_content="
+				+ lp_content + ", lp_date=" + lp_date + ", lp_cnt=" + lp_cnt + ", lp_ok=" + lp_ok + ", lp_del=" + lp_del
+				+ ", nowPage=" + nowPage + ", searchCondition=" + searchCondition + ", searchKeyword=" + searchKeyword
+				+ ", category=" + category + ", uploadFile=" + uploadFile + ", lp_img=" + lp_img + ", start=" + start
+				+ ", listcnt=" + listcnt + ", us_profile=" + us_profile + ", us_nick=" + us_nick + ", commentCount="
+				+ commentCount + "]";
 	}
+	
 	
 }

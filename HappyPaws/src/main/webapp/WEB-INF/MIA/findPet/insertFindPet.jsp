@@ -1,41 +1,114 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="../../../header.jsp" %>
-<body>
-<div class="jumbotron">
-   <h1>글쓰기</h1>      
-</div>
-<div class="container-fluid">
-  <form action="insertBoard.do" method="post" enctype="multipart/form-data">
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">제목</span>
-      </div>
-      <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요." required>      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">작성자</span>
-      </div>
-      <input type="text" class="form-control innm" name="writer" value="${userName }" readonly>      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">내용</span>
-      </div>
-      <textarea class="form-control" rows="10" id="comment" name="content"></textarea>      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">파일등록</span>
-      </div>
-      <input type="file" class="form-control innm" name="uploadFile">      
-    </div>
-    <div id="footer">
-	  	<button id="conComplete" type="submit" class="btn btn-primary">새글 등록</button>
-	  	<button id="conList" type="button" class="btn btn-primary">글목록</button>
-	 </div>
-  </form>  
-</div>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ include file="../MIA.jsp"%>
+<head>
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/MIA.css">
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const fileDOM = document.querySelector('#file2'); // 사진 업로드 input
+        const preview = document.querySelector('.find-pet-image'); // 이미지 미리보기
 
+        fileDOM.addEventListener('change', () => {
+            const reader = new FileReader();
+            reader.onload = ({ target }) => {
+                preview.src = target.result; // 미리보기 이미지 업데이트
+            };
+            if (fileDOM.files[0]) {
+                reader.readAsDataURL(fileDOM.files[0]); // 선택된 파일의 데이터 URL 읽기
+            }
+        });
+
+        // 롤백 버튼 이벤트
+        document.getElementById('rollback').addEventListener('click', function() {
+            history.back();
+        });
+    });
+</script>
+
+<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
+</head>
+<body>
+	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<main>
+		<div class="n_write">
+			<h1>아이를 찾아주세요</h1>
+			<div class="n_writeform">
+				<form action="/insertFindPet.do" method="post" enctype="multipart/form-data" name="boardform">
+					
+					<div class="n_write_header">
+						<span class="left">글 작성</span>
+					</div>
+					
+					<div class="n_title">
+					<input type="hidden" name="fp_id" value="admin"> 
+					<input type="text" class="form-control" name="fp_title" placeholder="제목을 입력하세요." required>
+					</div>
+					
+					<div class="n_ph">
+					<input type="text" class="form-control" name="fp_ph" placeholder="연락처를 입력하세요" required>
+					</div>
+					
+					<div class="n_img">
+						<img src="${pageContext.request.contextPath}/resources/MIA-img/findPetImg/기본이미지.png" class="find-pet-image">
+						<div class="img_save">
+							<label for="file2" class="upload-btn" style="cursor: pointer;">
+								<input id="file2" type="file" name="uploadFile" accept="image/*"
+								style="display: none;" /> <span>사진 첨부</span>
+							</label>
+						</div>
+					</div>
+
+					<div class="n_detail">
+						<table class="detail-table">
+							<tr class="detail-row">
+								<td class="label">발견 장소</td>
+								<td class="value"><input type="text" class="form-control"
+									name="fp_place" placeholder="발견 장소 입력" required></td>
+							</tr>
+							<tr class="detail-row">
+								<td class="label">발견 날짜</td>
+								<td class="value"><input type="date" class="form-control"
+									name="fp_time" required></td>
+							</tr>
+							<tr class="detail-row">
+								<td class="label">분류</td>
+								<td class="value"><select class="form-control"
+									name="fp_category" required>
+										<option value="dog">강아지</option>
+										<option value="cat">고양이</option>
+										<option value="small">소동물</option>
+										<option value="etc">기타</option>
+								</select></td>
+							</tr>
+							<tr class="detail-row">
+								<td class="label">품종</td>
+								<td class="value"><input type="text" class="form-control"
+									name="fp_breed" placeholder="품종 입력" required></td>
+							</tr>
+							<tr class="detail-row">
+								<td class="label">사례금</td>
+								<td class="value"><input type="number" class="form-control"
+									name="fp_reward" placeholder="숫자만 입력해주세요" min="0" required></td>
+							</tr>
+						</table>
+
+					</div>
+					<div class="input-group mb-3">
+						<textarea class="form-control" rows="5" name="fp_content"
+							placeholder="상세 설명을 입력하세요"></textarea>
+					</div>
+					<input type="hidden" name="fp_ok" value="N"> <input
+						type="hidden" name="fp_del" value="N">
+
+					<div class="btn-container">
+						<button id="submit" type="submit">글 등록</button>
+						<button id="rollback" type="button">취소</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
+	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
 </html>

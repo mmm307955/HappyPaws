@@ -3,21 +3,21 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.happypaws.dao.AdDAO">
+<mapper namespace="AdDAO">
 
 	 <!-- 관리자 아이디 조회 -->
-    <select id="getAdminById" parameterType="String" resultType="com.happypaws.vo.AdVO">
-        SELECT * FROM admin WHERE ad_id = #{ad_id}
+    <select id="getAdminById" parameterType="string" resultType="com.happypaws.vo.UsersVO">
+        SELECT * FROM users WHERE us_id = #{us_id}
     </select>
     
     <!-- 관리자 비밀번호 조회 -->
-    <select id="getPasswordById" parameterType="String" resultType="com.happypaws.vo.AdVO">
-        SELECT ad_password FROM admin WHERE ad_id = #{ad_id}
+    <select id="getPasswordById" parameterType="string" resultType="string">
+        SELECT us_password FROM users WHERE us_id = #{us_id}
     </select>
 
     <!-- 비밀번호 업데이트 -->
     <update id="updatePassword" parameterType="map">
-        UPDATE admin SET ad_password = #{ad_password} WHERE ad_id = #{ad_id}
+        UPDATE users SET us_password = #{us_password} WHERE us_id = #{us_id}
     </update>
 
 </mapper>

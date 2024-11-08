@@ -1,168 +1,121 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ include file="../../../header.jsp"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ include file="../MIA.jsp"%>
+<%
+java.util.List<String> categories = java.util.Arrays.asList("", "dog", "cat", "small", "etc");
+pageContext.setAttribute("categories", categories);
+%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>행복한 발자국</title>
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/MIA.css">
 <script>
-function selLp(val, val2, val3, val4, nowpage){
-    location.href = "/getLostPet.do?&lp_seq="+val+'&searchCondition='+val2+'&searchKeyword='+val3+'&category='+val4+'&nowPage='+nowpage;
-	}
-</script>
-<style>
-#searchNav {
-	-webkit-justify-content: flex-end;
-	justify-content: flex-end;
-}
+        function selLp(val, val2, val3, val4, nowpage) {
+            location.href = "/getLostPet.do?lp_seq=" + val + '&searchCondition=' + val2 + '&searchKeyword=' + val3 + '&category=' + val4 + '&nowPage=' + nowpage;
+        }
 
-.navbar {
-	padding: 10px 0px !important;
-}
-
-.pagination {
-	justify-content: center;
-}
-</style>
+        $(document).ready(function() {
+            $("#lpIns").click(function() {
+                location.href = "/insertLostPet.do";
+            });
+        });
+    </script>
+</head>
 <body>
-	<div class="jumbotron">
-	</div>
+	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<main>
+		<div class="n_list">
+			<h2><span style="color: red;">아이를 찾아주세요 </span>/ <a href="/getFindPetList.do">아이를 발견했어요</a> /  <a href="/getNewFamilyList.do">새로운 가족을 찾아요</a></h2>
+			
+			<div class="n_seachform">
+				<form>
+					<select name="searchCondition">
+						<option value="TITLE"
+							${searchCondition == 'TITLE' ? 'selected' : ''}>제목</option>
+						<option value="CONTENT"
+							${searchCondition == 'CONTENT' ? 'selected' : ''}>내용</option>
+						<option value="CONTENT"
+							${searchCondition == 'ID' ? 'selected' : ''}>작성자</option>
+						<option value="CONTENT"
+							${searchCondition == 'TITLE,CONTENT' ? 'selected' : ''}>제목+내용</option>
+					</select> <input type="search" name="searchKeyword" value="${searchKeyword}"
+						placeholder="검색어를 입력해주세요">
+				</form>
+				<button id="lpIns">글쓰기</button>
+			</div>
 
-	<h2>아이를 찾아주세요 / 아이를 발견했어요 / 새로운 가족을 찾아요</h2>
+			<div class="n_categoryform">
+				<c:forEach var="category" items="${categories}">
+					<form action="getLostPetList.do" method="post"
+						style="display: inline;">
+						<input type="hidden" name="searchCondition"
+							value="${searchCondition}"> <input type="hidden"
+							name="searchKeyword" value="${searchKeyword}"> <input
+							type="hidden" name="category" value="${category}"> <input
+							type="hidden" name="nowPage" value="${paging.nowPage}"> <input
+							type="submit"
+							value="<c:choose><c:when test="${category == ''}">전체</c:when><c:when test="${category == 'dog'}">강아지</c:when><c:when test="${category == 'cat'}">고양이</c:when><c:when test="${category == 'small'}">소동물</c:when><c:when test="${category == 'etc'}">기타</c:when></c:choose>">
+					</form>
+				</c:forEach>
+			</div>
 
-	<div class="container">
-		<nav id="searchNav" class="navbar navbar-expand-sm navbar-dark">
-			<form class="form-inline" action="getLostPetList.do" method="post">
-				<!-- 페이징 처리와 목록, 검색 유지 기능 처리(시작) -->
-				<select class="form-control" id="sel1" name="searchCondition"
-					style="display: inline-block !important;">
-					<c:forEach items="${conditionMap}" var="option">
-						<option value="${option.value}"
-							<c:if test="${searchCondition==option.value}">selected</c:if>>${option.key}</option>
-					</c:forEach>
-				</select>
-
-				<div class="input-group mb-3">
-					<input class="form-control" type="search" name="searchKeyword"
-						placeholder="검색어를 입력하세요." value="${searchKeyword}">
-					<div class="input-group-append">
-						<button class="btn btn-success" type="submit">검색</button>
+			<div class="n_listform">
+				<c:forEach items="${lostPetList}" var="lostPet">
+					<div class="n_list_item"
+						onclick="selLp(${lostPet.lp_seq}, '${searchCondition}', '${searchKeyword}', '${category}', ${paging.nowPage})"
+						style="cursor: pointer;">
+						<a
+							href="getLostPet.do?lp_seq=${lostPet.lp_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
+							<img
+							src="${pageContext.request.contextPath}/resources/MIA-img/lostPetImg/${lostPet.lp_img}"
+							alt="Lost Pet Image" class="pet-image">
+						</a>
+						<p>${lostPet.lp_title}
+							<c:if test="${lostPet.lp_ok == 'Y'}">
+								<span style="color: red; font-weight: bold;">[찾았어요]</span>
+							</c:if>
+						</p>
+						<p>지역: ${lostPet.lp_place}</p>
+						<p>사례금: ${lostPet.formattedReward}원</p>
+						<p>${lostPet.lp_date}댓글:${lostPet.commentCount}</p>
 					</div>
-					<div class="input-group-append">
-						<button type="button" id="conWrite"
-							class="btn btn-outline-primary">글 등록</button>
-					</div>
-				</div>
-				<input type="hidden" name="category" value="${category}">
-				<!-- 페이징 처리와 목록, 검색 유지 기능 처리(종료) -->
-			</form>
-		</nav>
+				</c:forEach>
+			</div>
 
-		<h2>
-			<form action="getLostPetList.do" method="post"
-				style="display: inline;">
-				<input type="hidden" name="searchCondition"
-					value="${searchCondition}">
-				<!-- 현재 searchCondition 값을 유지 -->
-				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
-				<!-- 현재 searchKeyword 값을 유지 -->
-				<input type="hidden" name="category" value=""> <input
-					type="hidden" name="nowPage" value="${paging.nowPage}">
-				<!-- 동적으로 nowPage 설정 -->
-				<button type="submit">전체</button>
-			</form>
+			<ul class="pagination">
+				<c:if
+					test="${paging.nowPage > 1 && paging.lastBtn > paging.viewBtnCnt}">
+					<li class="page-item"><a class="page-link"
+						href="getLostPetList.do?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">이전</a></li>
+				</c:if>
+				<c:forEach var="i" begin="${paging.startBtn}" end="${paging.endBtn}"
+					step="1">
+					<c:choose>
+						<c:when test="${paging.nowPage==i}">
+							<li class="page-item active"><a class="page-link">${i}</a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="page-item"><a class="page-link"
+								href="getLostPetList.do?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">${i}</a></li>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				<c:if
+					test="${paging.nowPage < paging.lastBtn && paging.lastBtn > paging.viewBtnCnt}">
+					<li class="page-item"><a class="page-link"
+						href="/getLostPetList.do?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">다음</a></li>
+				</c:if>
+			</ul>
+			<br> <br>
 
-			<form action="getLostPetList.do" method="post"
-				style="display: inline;">
-				<input type="hidden" name="searchCondition"
-					value="${searchCondition}">
-				<!-- 현재 searchCondition 값을 유지 -->
-				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
-				<!-- 현재 searchKeyword 값을 유지 -->
-				<input type="hidden" name="category" value="dog"> <input
-					type="hidden" name="nowPage" value="${paging.nowPage}">
-				<!-- 동적으로 nowPage 설정 -->
-				<button type="submit">강아지</button>
-			</form>
-
-			<form action="getLostPetList.do" method="post"
-				style="display: inline;">
-				<input type="hidden" name="searchCondition"
-					value="${searchCondition}"> <input type="hidden"
-					name="searchKeyword" value="${searchKeyword}"> <input
-					type="hidden" name="category" value="cat"> <input
-					type="hidden" name="nowPage" value="${paging.nowPage}">
-				<button type="submit">고양이</button>
-			</form>
-
-			<form action="getLostPetList.do" method="post"
-				style="display: inline;">
-				<input type="hidden" name="searchCondition"
-					value="${searchCondition}"> <input type="hidden"
-					name="searchKeyword" value="${searchKeyword}"> <input
-					type="hidden" name="category" value="small"> <input
-					type="hidden" name="nowPage" value="${paging.nowPage}">
-				<button type="submit">소동물</button>
-			</form>
-
-			<form action="getLostPetList.do" method="post"
-				style="display: inline;">
-				<input type="hidden" name="searchCondition"
-					value="${searchCondition}"> <input type="hidden"
-					name="searchKeyword" value="${searchKeyword}"> <input
-					type="hidden" name="category" value="etc"> <input
-					type="hidden" name="nowPage" value="${paging.nowPage}">
-				<button type="submit">기타</button>
-			</form>
-		</h2>
-
-		<div class="grid-container">
-			<c:forEach items="${lostPetList}" var="lostPet">
-				<div class="grid-item"
-					onclick="selLp(${lostPet.lp_seq}, '${searchCondition}', '${searchKeyword}', '${category}', ${paging.nowPage})"
-					style="cursor: pointer;">
-					<a
-						href="getLostPet.do?lp_seq=${lostPet.lp_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
-						<img
-						src="${pageContext.request.contextPath}/resources/MIA-img/lostPetImg/${lostPet.lp_img}"
-						alt="Lost Pet Image" class="pet-image">
-					</a>
-					<p>${lostPet.lp_title}
-						<c:if test="${lostPet.lp_ok == 'Y'}">
-							<span style="color: red; font-weight: bold;">[발견]</span>
-						</c:if>
-					</p>
-					<p>지역: ${lostPet.lp_place}</p>
-					<p>사례금: ${lostPet.lp_reward}</p>
-					<p>댓글 : ${lpCommnt.lpc_cnt}</p>
-				</div>
-			</c:forEach>
 		</div>
-
-
-		<ul class="pagination">
-			<c:if
-				test="${paging.nowPage > 1 && paging.lastBtn > paging.viewBtnCnt}">
-				<li class="page-item"><a class="page-link"
-					href="getLostPetList.do?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">이전</a></li>
-			</c:if>
-			<c:forEach var="i" begin="${paging.startBtn}" end="${paging.endBtn}"
-				step="1">
-				<c:choose>
-					<c:when test="${paging.nowPage==i}">
-						<li class="page-item active"><a class="page-link">${i}</a></li>
-					</c:when>
-					<c:otherwise>
-						<li class="page-item"><a class="page-link"
-							href="getLostPetList.do?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">${i}</a></li>
-					</c:otherwise>
-				</c:choose>
-			</c:forEach>
-			<c:if
-				test="${paging.nowPage < paging.lastBtn && paging.lastBtn > paging.viewBtnCnt}">
-				<li class="page-item"><a class="page-link"
-					href="/getLostPetList.do?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">다음</a></li>
-			</c:if>
-		</ul>
-		<br> <br>
-	</div>
-
+	</main>
+	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
 </html>

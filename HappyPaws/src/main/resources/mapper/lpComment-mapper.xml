@@ -7,23 +7,24 @@
 		INSERT INTO lpComment(lp_seq, lpc_id, lpc_content, lpc_date)
 		VALUES(#{lp_seq}, #{lpc_id}, #{lpc_content}, #{lpc_date})
 	</insert>
-	
+
 	<update id="updateLpComment">
-		UPDATE lpComment
+		UPDATE lpComment 
 		SET lpc_content = #{lpc_content}
-		WHERE lpc_seq = #{lpc_seq}
+		WHERE lp_seq = #{lp_seq} AND lpc_seq = #{lpc_seq}
 	</update>
-	
+
+
 	<delete id="deleteLpComment">
-		DELETE FROM lpComment WHERE lpc_seq = #{lpc_seq}
+		DELETE FROM lpComment 
+		WHERE lp_seq = #{lp_seq} AND lpc_seq = #{lpc_seq}
 	</delete>
-	
+
 	<select id="getLpCommentList" resultType="LpComment">
-		SELECT * FROM lpComment WHERE lp_seq = #{lp_seq}
-		ORDER BY lpc_seq DESC 
+		SELECT * 
+		FROM lpComment, users
+		WHERE lp_seq = #{lp_seq} 
+		ORDER BY lpc_seq DESC
 	</select>
-	
-	<select id="countLpCommentList" resultType="int">
-		SELECT COUNT(*) FROM lostpet WHERE lp_seq = #{lp_seq}
-	</select>
+
 </mapper>

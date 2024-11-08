@@ -1,6 +1,6 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 	<%@include file="./head.jsp"%>
 	<style>
@@ -31,17 +31,18 @@
 	
 		<p>마이페이지 - ks</p>
 		<a href="/userList.do">회원관리</a>
-		<a href="/us_myPage.do?us_id=${us_id}">마이페이지-사용자</a>
-		<a href="/ad_myPage.do?ad_id=${ad_id}" onclick="return false;">마이페이지-관리자</a>
+		<a href="/ad_myPage.do?ad_id=${ad_id}">마이페이지-관리자</a>
 	
 		<p>관리자 상품 관리 - 민지</p>
 		<a href="ad_manageProductList">상품 관리 페이지</a>
 	
-		<p>가족 찾기 메뉴(임시명) - 현승</p>
-		<a href="/getLostPetList.do">아이를 발견했어요</a>
-	
 		<p>회원 상품 관리 - 성현</p>
 		<a href="pr_list">반려용품</a>
+
+		<p>유기동물 페이지 - 현승</p>
+		<a href="/getLostPetList.do">아이를 찾아주세요</a>
+		<a href="/getFindPetList.do">아이를 발견했어요</a>
+		<a href="/getNewFamilyList.do">새로운 가족을 찾아요</a>
 	</main>
 	<%@include file="./footer.jsp" %>
 </body>

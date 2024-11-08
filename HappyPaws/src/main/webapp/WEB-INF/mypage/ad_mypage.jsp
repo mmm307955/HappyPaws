@@ -1,12 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
+<%@include file="../../head.jsp" %>
     <meta charset="UTF-8">
-    <title>관리자 마이페이지 </title>
-     <style>
+    <title>관리자 마이페이지</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
         }
@@ -38,48 +38,87 @@
         tr:hover {
             background-color: #ddd;
         }
+        
+        .logout-btn {
+            color: white;
+            text-decoration: none;
+            background-color: #FF6347; /* 로그아웃 버튼 색상 */
+            padding: 12px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        
     </style>
-    
     <script>
         function validateForm() {
             var newPassword = document.getElementById("newPassword").value;
             var confirmPassword = document.getElementById("confirmPassword").value;
-            if (newPassword != confirmPassword) {
+            if (newPassword !== confirmPassword) {
                 alert("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
                 return false;
             }
             return true;
         }
+
+        // 알림 메시지를 띄우는 함수
+        function showMessage(message) {
+            if (message) {
+                alert(message);
+            }
+        }
     </script>
 </head>
 <body>
-    <h2>관리자 마이페이지 </h2>
-    <form action="updateAdminPassword.do" method="post" onsubmit="return validateForm()">
-        <table>
-            <tr>
-                <td>아이디:</td>
-                <td><input type="text" name="ad_id" value="${admin.ad_id}" readonly></td>
-            </tr>
-            <tr>
-                <td>현재 비밀번호:</td>
-                <td><input type="password" name="currentPassword" required></td>
-            </tr>
-            <tr>
-                <td>새 비밀번호:</td>
-                <td><input type="password" name="newPassword" id="newPassword" required></td>
-            </tr>
-            <tr>
-                <td>새 비밀번호 확인:</td>
-                <td><input type="password" name="confirmPassword" id="confirmPassword" required></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="비밀번호 변경">
-                    <input type="button" value="취소" onclick="history.back()">
-                </td>
-            </tr>
-        </table>
-    </form>
+<%@include file="../../header.jsp" %>
+    <main>
+    <h2>비밀번호변경</h2>
+    <div id="content">
+        <!-- 서버에서 전달된 메시지 확인 -->
+        <c:if test="${not empty message}">
+            <script>
+                // 서버에서 전달된 메시지를 자바스크립트 함수로 전달
+                showMessage("<c:out value='${message}' escapeXml='false'/>");
+            </script>
+        </c:if>
+        <c:if test="${not empty error}">
+            <script>
+                // 서버에서 전달된 메시지를 자바스크립트 함수로 전달
+                showMessage("<c:out value='${error}' escapeXml='false'/>");
+            </script>
+        </c:if>
+
+        <form action="updateAdminInfo.do" method="post" onsubmit="return validateForm()">
+            <h3>비밀번호 변경</h3>
+            <table>
+                <tr>
+                    <td>현재 비밀번호:</td>
+                    <td><input type="password" name="currentPassword" required></td>
+                </tr>
+                <tr>
+                    <td>새 비밀번호:</td>
+                    <td><input type="password" name="newPassword" id="newPassword" required></td>
+                </tr>
+                <tr>
+                    <td>새 비밀번호 확인:</td>
+                    <td><input type="password" name="confirmPassword" id="confirmPassword" required></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="비밀번호 변경">
+                        <input type="button" value="취소" onclick="history.back()">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="logout" class="logout-btn">로그아웃</a>
+    </div>
+    
+    </main>
+  <%@include file="../../footer.jsp" %>  
 </body>
 </html>
->

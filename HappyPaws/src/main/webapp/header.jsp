@@ -4,7 +4,7 @@
 	<div class="header-container">
 		<!-- 로고 -->
 		<div class="logo">
-			<a href="/"><img src="/resources/images/HappyPawsLogo.png" /></a>
+			<a href="/"><img src="/resources/images/HappyPawsLogo.png" alt="logo"/></a>
 		</div>
 		<div class="header-menu">
 		   	<a>반려동물</a>
@@ -21,7 +21,7 @@
 				</c:when>
 				<c:otherwise>
 					<img src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/images/favicon.ico';" alt="이미지를 불러오는데 실패하였습니다.">
-					<a href="/auth/testAuth" class="header-login-link">${user.us_nick}</a>님
+					<a href="${pageContext.request.contextPath}/us_mainmyPage.do"class="header-login-link">${user.us_nick}</a>님
 				</c:otherwise>
 			</c:choose>
 		</div>

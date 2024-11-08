@@ -1,117 +1,237 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="../../../header.jsp" %>
-<%
-	String sts = "";
-	if(session.getAttribute("userId") == null){
-		 sts = "disabled";
-	}
-%>
+<%@page language="java" contentType="text/html; charset=UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ include file="../MIA.jsp"%>
+<head>
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/MIA.css">
+<script>
+$(document).ready(function() {
+    function setupEventHandlers() {
+        $("#fpMod").click(function() {
+            document.fm.action = "/updateFindPet.do";
+            document.fm.method = "get";
+            document.fm.fp_seq.value = "${findPet.fp_seq}";
+            document.fm.nowPage.value = "${nowPage}" || 1;
+            document.fm.searchCondition.value = "${searchCondition}";
+            document.fm.searchKeyword.value = "${searchKeyword}";
+            document.fm.category.value = "${category}";
+            document.fm.submit();
+        });
+
+        $("#fpDel").click(function() {
+            let con_test = confirm("정말로 삭제하시겠습니까?");
+            if (con_test) {
+                let s = document.fm.fp_seq.value;
+                location.href = "/deleteFindPet.do?fp_seq=" + s;
+            }
+        });
+
+        $("#fpList").click(function() {
+            document.hideFrm.action = "/getFindPetList.do";
+            document.hideFrm.method = "post";
+            document.hideFrm.nowPage.value = "${nowPage}" || 1;
+            document.hideFrm.searchCondition.value = "${searchCondition}";
+            document.hideFrm.searchKeyword.value = "${searchKeyword}";
+            document.hideFrm.category.value = "${category}";
+            document.hideFrm.submit();
+        });
+
+        $(document).on('click', '#open', function() {
+        	let fpCommentDiv = $(this).closest(".fpComment");
+            let fpcMod1 = fpCommentDiv.find(".fpcMod1");
+            let fpcMod2 = fpCommentDiv.find(".fpcMod2");
+            let fpcMod3 = fpCommentDiv.find(".fpcMod3");
+        	fpcMod1.hide();
+            fpcMod2.show();
+            fpcMod3.hide();
+        });
+        
+        $(document).on('click', '#close', function() {
+        	let fpCommentDiv = $(this).closest(".fpComment");
+            let fpcMod1 = fpCommentDiv.find(".fpcMod1");
+            let fpcMod2 = fpCommentDiv.find(".fpcMod2");
+            let fpcMod3 = fpCommentDiv.find(".fpcMod3");
+        	fpcMod1.show();
+            fpcMod2.hide();
+            fpcMod3.show();
+        });
+        
+        $(document).on('click', '#fpcMod', function() {
+            let fpCommentDiv = $(this).closest(".fpComment");
+            let fpcMod1 = fpCommentDiv.find(".fpcMod1");
+            let fpcMod2 = fpCommentDiv.find(".fpcMod2");
+            let textarea = fpCommentDiv.find("textarea");
+
+                // 댓글 내용 확인
+                let content = $.trim(textarea.val());
+                let fp_seq = fpCommentDiv.find("input[name='fp_seq']").val();
+                let fpc_seq = fpCommentDiv.find("input[name='fpc_seq']").val();
+
+                if (content === '') {
+                    alert("댓글 내용을 입력해야 합니다.");
+                    textarea.focus(); // 텍스트 영역에 포커스
+                    return;
+                }
+
+                if (fp_seq && fpc_seq) {
+                    location.href = "/updateFpComment.do?fp_seq=" + fp_seq +
+                        "&fpc_seq=" + fpc_seq +
+                        "&fpc_content=" + encodeURIComponent(content) +
+                        "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
+                        "&searchCondition=" + encodeURIComponent("${searchCondition}") +
+                        "&category=" + encodeURIComponent("${category}") +
+                        "&nowPage=" + "${nowPage}";
+                } else {
+                    console.error("수정할 수 없는 댓글입니다.");
+                }            
+        });
+
+        $(document).on('click', '#fpcDel', function() {
+            let con_test = confirm("정말로 삭제하시겠습니까?");
+            if (con_test) {
+                let fp_seq = $(this).closest(".fpComment").find("input[name='fp_seq']").val();
+                let fpc_seq = $(this).closest(".fpComment").find("input[name='fpc_seq']").val();
+
+                if (fp_seq && fpc_seq) {
+                    location.href = "/deleteFpComment.do?fp_seq=" + fp_seq +
+                        "&fpc_seq=" + fpc_seq +
+                        "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
+                        "&searchCondition=" + encodeURIComponent("${searchCondition}") +
+                        "&category=" + encodeURIComponent("${category}") +
+                        "&nowPage=" + "${nowPage}";
+                } else {
+                    console.error("삭제할 수 없는 댓글입니다.");
+                }
+            }
+        });
+    }
+
+    setupEventHandlers();
+});
+</script>
+<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
+</head>
 <body>
-<style>
-	#imgBox {display:none;position:absolute;top:0;left:0;height:100vh!important;background-color:rgba(0,0,0,0.5);z-index:9999999;}
-	#imgContentBox {width:600px;max-height:550px;overflow:auto;position:absolute;top:30%;left:30%;border-radius:5px;z-index:9999999;}
-	#imgBoxTitleBar {border-bottom:1px solid #777;border-radius:5px 5px 0 0;background-color:#ddd;width:100%;padding:10px;text-align:right;font-size:20px;font-weight:bolder;}
-	#imgBoxImg {width:100%;border-radius: 0 0 5px 5px;}
-	#closeX {padding:5px 20px;border-radius:5px;border:1px solid #777;background-color:red;color:#fff;}
-	#closeX:hover {background-color:#777;cursor:pointer;}
-</style>
-<div class="jumbotron">
-   <h1>상세 보기</h1>      
-</div>
-<div class="container-fluid">
-<%
-	if (request.getParameter("error")!=null) {
-		out.println("<div class='alert alert-danger'>");
-		out.println("해당 글은 작성자만이 수정할 수 있습니다.");
-		out.println("</div>");
-	}
-%>
-  <form name="fm" action="/updateBoard.do" method="post" enctype="multipart/form-data">
-  <input type="hidden" name="seq" value="${board.seq}">
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">제목</span>
-      </div>
-      <input type="text" class="form-control innm" name="title" value="${board.title}" <%=sts %>>      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">작성자</span>
-      </div>
-      <input type="text" class="form-control innm" name="writer" value="${board.writer}" readonly <%=sts %>>      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">내용</span>
-      </div>
-      <textarea class="form-control innm" rows="10" id="comment" name="content" <%=sts %>>${board.content}</textarea>      
-    </div>  
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">파일</span>
-      </div>
-   		<c:if test="${board.filename ne NULL}">
-   			<span style="cursor:pointer;padding:0 20px;" onclick="seeImg()">[파일보기]</span>
-   			<script>
-	        	function seeImg(){
-	        		$("#imgBox").show();
-	        	}
-	        </script>
-   			<span style="cursor:pointer;" onclick="downloadFile('${board.filename}')">[파일다운]</span>
-   			<script>
-	   			function downloadFile(filename){
-	   		        location.href = "/download.do?filename="+filename;
-	   			}
-			</script>
-   		</c:if>
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">파일등록</span>
-      </div>
-      <input type="file" class="form-control innm" name="uploadFile">      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">등록일</span>
-      </div>
-      <input type="text" class="form-control innm" name="regdate" value="${board.regdate}" readonly <%=sts %>>      
-    </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">조회수</span>
-      </div>
-      <input type="text" class="form-control innm" name="cnt" value="${board.cnt}" readonly <%=sts %>>      
-    </div>
-    <div id="footer">
-	  	<button type="submit" class="btn btn-primary" <%=sts %>>글수정</button>
-	  	<button id="conWrite" type="button" class="btn btn-primary" <%=sts %>>글쓰기</button>
-	  	<button id="conDel" type="button" class="btn btn-primary" <%=sts %>>글삭제</button>
-	  	<button id="conList" type="button" class="btn btn-primary">글목록</button>
-	</div>
-  </form>
-  <!-- 241017_추가 페이징처리와 목록, 검색 유지 기능 처리(시작)  -->
-  <form name="hideFrm" style="display:none;">
-	  <input type="hidden" name="nowPage" value="${nowPage}" >
-	  <input type="hidden" name="searchKeyword" value="${searchKeyword}" >
-	  <input type="hidden" name="searchCondition" value="${searchCondition}" >
-  </form>
-  <!-- 241017_추가 페이징처리와 목록, 검색 유지 기능 처리(종료)  -->
-</div>
-<!-- 클릭시 보이는 이미지 start -->
-<div id="imgBox" class="container-fluid">
-	<div id="imgContentBox">
-		<div id="imgBoxTitleBar">
-			<span id="closeX" onclick="closeX()">X</span>
-			 <script>
-        	function closeX(){
-        		$("#imgBox").hide();
-        	}
-        </script>
+	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<main>
+		<div class="n_write">
+			<div class="n_viewform">
+				<h1>아이를 찾아주세요</h1>
+				<div class="n_title">
+					<span class="title">
+						${findPet.fp_title}
+						<c:if test="${findPet.fp_ok == 'Y'}">
+							<span style="color: red; font-weight: bold;">[찾았어요]</span>
+						</c:if>
+					</span>
+					<span class="author">작성자: ${findPet.us_nick}</span>
+				</div>
+				<div class="n_second">
+					<span class="cnt">조회수: ${findPet.fp_cnt}</span>
+					<span class="date">작성일: ${findPet.fp_date}</span>
+				</div>
+
+				<div class="n_third">
+					<div class="ph">연락처: ${findPet.fp_ph}</div>
+					<img src="${pageContext.request.contextPath}/resources/MIA-img/findPetImg/${findPet.fp_img}" alt="Find Pet Image" class="find-pet-image">
+					<table class="detail-table">
+						<tr class="detail-row">
+							<td class="label">실종 장소</td>
+							<td class="value">${findPet.fp_place}</td>
+						</tr>
+						<tr class="detail-row">
+							<td class="label">실종 날짜</td>
+							<td class="value">${findPet.fp_time}</td>
+						</tr>
+						<tr class="detail-row">
+							<td class="label">품종</td>
+							<td class="value">${findPet.fp_breed}</td>
+						</tr>
+						<tr class="detail-row">
+							<td class="label">사례금</td>
+							<td class="value">${findPet.formattedReward}원</td>
+						</tr>
+					</table>
+				</div>
+
+				<form name="fm">
+					<input type="hidden" name="fp_seq" value="${findPet.fp_seq}">
+					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
+					<input type="hidden" name="searchCondition" value="${searchCondition}">
+					<input type="hidden" name="category" value="${category}">
+					<input type="hidden" name="nowPage" value="${nowPage}">
+					<div class="n_content">
+						<p>${fn:replace(findPet.fp_content, lf, "<br>")}</p>
+					</div>
+				</form>
+			</div>
 		</div>
-		<img id="imgBoxImg" src="${pageContext.request.contextPath }/resources/img/${board.filename}">
-	</div>
-</div>
-<!-- 클릭시 보이는 이미지 end -->
+
+		<form name="hideFrm" style="display: none;">
+			<input type="hidden" name="searchKeyword" value="${searchKeyword}">
+			<input type="hidden" name="searchCondition" value="${searchCondition}">
+			<input type="hidden" name="category" value="${category}">
+			<input type="hidden" name="nowPage" value="${nowPage}">
+		</form>
+
+		<div class="commentlist">
+			<c:forEach var="fpComment" items="${fpComment}">
+				<div class="fpComment">
+					<input type="hidden" name="fp_seq" value="${fpComment.fp_seq}">
+					<input type="hidden" name="fpc_seq" value="${fpComment.fpc_seq}">
+					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
+					<input type="hidden" name="searchCondition" value="${searchCondition}">
+					<input type="hidden" name="category" value="${category}">
+					<input type="hidden" name="nowPage" value="${nowPage}">
+					<div>
+						<strong><c:out value="${fpComment.us_nick}" /></strong>
+						<span><c:out value="${fpComment.fpc_date}" /></span>
+					</div>
+					<div>
+						<p class="fpcMod1">
+							<c:out value="${fpComment.fpc_content}" />
+						</p>
+						<div class="fpcMod2" style="display: none">
+							<textarea name="fpc_content" required>${fpComment.fpc_content}</textarea>
+							<div class="btn-container">
+								<button id="fpcMod" type="button">수정</button>
+								<button id="close" type="button">닫기</button>
+							</div>
+						</div>
+						<div class="fpcMod3">
+							<button id="open" type="button">수정</button>
+							<button id="fpcDel" type="button">삭제</button>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+
+		<form action="insertFpComment.do" method="post" class="fpCommentwrite">
+			<div class="fpComment">
+				<input type="hidden" name="fpc_id" value="admin">
+				<input type="hidden" name="fp_seq" value="${findPet.fp_seq}">
+				<input type="hidden" name="searchCondition" value="${searchCondition}">
+				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
+				<input type="hidden" name="category" value="${category}">
+				<input type="hidden" name="nowPage" value="${nowPage}">
+				<strong>관리자</strong>
+				<textarea id="fpc_content" name="fpc_content" required></textarea>
+				<div class="btn-container">
+					<button type="submit">등록</button>
+				</div>
+			</div>
+		</form>
+
+		<section class="commandList">
+			<div class="btn-container">
+				<button id="fpMod" type="button">글 수정</button>
+				<button id="fpDel" type="button">글 삭제</button>
+				<button id="fpList" type="button">글 목록</button>
+			</div>
+		</section>
+	</main>
+	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
 </html>

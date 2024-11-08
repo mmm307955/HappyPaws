@@ -5,14 +5,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@include file="../../head.jsp" %>
 <meta charset="UTF-8">
 <title>회원관리 목록</title>
+
 <style>
     body {
         font-family: Arial, sans-serif;
     }
     #content {
-        width: 80%;
+        width: 100%;
         margin: 0 auto;
         text-align: center;
     }
@@ -35,19 +37,30 @@
         padding: 5px 10px;
         font-size: 1em;
     }
-    table {
+      table {
         width: 100%;
+       
+        margin: 0 auto;
         border-collapse: collapse;
         margin-top: 10px;
+        table-layout: auto;
     }
+
+
+
     th, td {
         border: 1px solid #ddd;
         padding: 8px;
+         white-space: nowrap; 
+        overflow: hidden;
+      
     }
-    th {
-        background-color: #f2f2f2;
+     th {
+        background-color: #FFD700;
         font-weight: bold;
+        border-radius: 8px;
     }
+    
     tr:nth-child(even) {
         background-color: #f9f9f9;
     }
@@ -55,6 +68,8 @@
         background-color: #ddd;
     }
     .pagination {
+     	display: flex;
+        justify-content: center;
         margin-top: 20px;
     }
     .pagination button {
@@ -68,6 +83,8 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
 </script>
 </head>
 <body>
+<%@include file="../../header.jsp" %>
+<main>
 <div id="content">
     <h3>회원관리 목록</h3>
     <c:set var="currentPage" value="${param.page != null ? param.page : 1}" scope="request"/>
@@ -81,7 +98,6 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
         <th><input type="checkbox" onclick="toggleSelectAll(this)"></th>
             <th>번호</th>
             <th>아이디</th>
-            <th>비밀번호</th>
             <th>이름</th>
             <th>닉네임</th>
             <th>이메일</th>
@@ -92,10 +108,9 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
         <c:if test="${status.index >= startIndex && status.index < endIndex}">
         
          <tr>             
-              <td><input type="checkbox" name="userIds" value="${user.us_id}onclick="event.stopPropagation();"></td>
+              <td><input type="checkbox" name="userIds" value="${user.us_id} onclick="event.stopPropagation();"></td>
                  <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${status.index + 1}</td>
         <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_id}</td>
-        <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_password}</td>
         <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_name}</td>
         <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_nick}</td>
         <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_email}</td>
@@ -125,7 +140,8 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
     </c:forEach>
 </div>
 </div>
-
+</main>
+<%@include file="../../footer.jsp" %>  
 </body>
 
 </html>
