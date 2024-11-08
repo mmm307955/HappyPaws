@@ -10,7 +10,7 @@
 	<%@include file="../../header.jsp"%>
 	<main>
 		<form action="/auth/login" method="post">
-			<input type="text" name="us_id" placeholder="아이디 입력">
+			<input type="text" name="us_id" placeholder="아이디 입력" autofocus>
 			<input type="password" name="us_password" placeholder="비밀번호 입력">
 			<input type="submit" value="로그인">
 		</form>
@@ -33,6 +33,7 @@
 		<a href="/auth/find_password">비밀번호 찾기</a>
 		<hr>
 		<a href="${naverLoginUrl}"><img height="50" src="http://static.nid.naver.com/oauth/big_g.PNG"/></a>
+		<a href="${kakaoLoginUrl}">카카오 로그인</a>
 	</main>
 	<%@include file="../../footer.jsp" %>
 </body>

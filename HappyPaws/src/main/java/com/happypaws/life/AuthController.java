@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.happypaws.svc.AuthApiSVC;
 import com.happypaws.svc.AuthSVC;
 import com.happypaws.util.Argon2Util;
@@ -41,7 +42,7 @@ public class AuthController {
 		}
 
 		try {
-			model.addAttribute("naverLoginUrl", apiSvc.naverLoginUrl(request));
+			apiSvc.snsLoginUrl(request);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -70,51 +71,57 @@ public class AuthController {
 		return "/WEB-INF/auth/login.jsp";
 	}
 
-	@RequestMapping("/login/naver")
+	@RequestMapping("/login/{divider}")
 	public String naverLogin(@RequestParam(value = "code", required = false) String code,
 			@RequestParam(value = "state") String state,
 			@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "error_description", required = false) String errorDescription,
-			HttpServletRequest request, HttpServletResponse response) {
-		String storedState = (String) request.getSession().getAttribute("naverOauthState");
+			@PathVariable String divider, HttpServletRequest request, HttpServletResponse response) {
+		String storedState = (String) request.getSession().getAttribute("oauthState");
+		request.getSession().removeAttribute("oauthState");
+
 		if (storedState == null || !storedState.equals(state) || error != null || code == null) {
 			return "/WEB-INF/auth/loginError.jsp";
 		}
 
-		try {
-			String accessToken = apiSvc.requestNaverAccessToken(code, state);
-			UsersVO user = apiSvc.requestUserProfile(accessToken);
+		UsersVO user = null;
 
-			if (!svc.checkId(user.getUs_id())) {
-				user = svc.login(user);
-				user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
-				JwtCookieUtil.createJwtCookie(response, user);
-				return "redirect:/";
-			} else if (svc.checkNick(user.getUs_nick())) {
-				apiSvc.saveProfileImage(user);
-				svc.snsJoin(user);
-				user = svc.login(user);
-				user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
-				if (user != null && user.getUs_sns().equals("naver")) {
-					JwtCookieUtil.createJwtCookie(response, user);
-					return "redirect:/";
-				}
-			} else {
-				request.getSession().setAttribute("snsUser", user);
-				return "/WEB-INF/auth/change_nick.jsp";
+		try {
+			switch (divider) {
+			case "naver":
+				user = apiSvc.requestNaverUserDetails(code, state);
+				break;
+			case "kakao":
+				user = apiSvc.requestKakaoUserDetails(code);
+				break;
+			default:
+				return "/WEB-INF/auth/loginError.jsp";
 			}
-		} catch (JsonProcessingException e) {
-			request.getSession().setAttribute("error", e.getStackTrace());
-			return "/WEB-INF/auth/loginError.jsp";
-		} catch (UnsupportedEncodingException e) {
-			request.getSession().setAttribute("error", e.getStackTrace());
-			return "/WEB-INF/auth/loginError.jsp";
 		} catch (Exception e) {
 			request.getSession().setAttribute("error", e.getStackTrace());
 			return "/WEB-INF/auth/loginError.jsp";
 		}
-		request.getSession().setAttribute("error", "에러를 확인할 수 없습니다.");
-		return "/WEB-INF/auth/loginError.jsp";
+
+		if (!svc.checkId(user.getUs_id())) {
+			user = svc.login(user);
+			user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
+			JwtCookieUtil.createJwtCookie(response, user);
+			return "redirect:/";
+		}
+
+		if (svc.checkNick(user.getUs_nick())) {
+			apiSvc.saveProfileImage(user);
+			svc.snsJoin(user);
+			user = svc.login(user);
+			user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
+			if (user != null && user.getUs_sns().equals(divider)) {
+				JwtCookieUtil.createJwtCookie(response, user);
+				return "redirect:/";
+			}
+		}
+
+		request.getSession().setAttribute("snsUser", user);
+		return "/WEB-INF/auth/change_nick.jsp";
 	}
 
 	@PostMapping("/snsReJoin")
@@ -158,8 +165,21 @@ public class AuthController {
 		}
 	}
 
-	public void authPhone() {
-		// TODO Cool SMS을 통해 구현할 예정
+	@ResponseBody
+	@RequestMapping(value = "/authPhone", method = RequestMethod.GET)
+	public boolean authPhone(@RequestParam("us_phone") String phone) {
+		String messageId = apiSvc.generateAndSendCode(phone);
+		if (messageId != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/authPhone", method = RequestMethod.POST)
+	public boolean authPhone(@RequestParam("us_phone") String phone, @RequestParam("us_phone_auth_code") String code) {
+		return apiSvc.verifyCode(phone, code);
 	}
 
 	@PostMapping("/join")
@@ -167,6 +187,7 @@ public class AuthController {
 		user.setUs_password(Argon2Util.hashPassword(user.getUs_password()));
 		if (svc.join(user)) {
 			user = svc.login(user);
+			user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
 			JwtCookieUtil.createJwtCookie(response, user);
 			return "redirect:/auth/login";
 		} else {
@@ -220,9 +241,14 @@ public class AuthController {
 		return "/WEB-INF/auth/loginError.jsp";
 	}
 
+	@GetMapping("/terms")
+	public String terms() {
+		return "/WEB-INF/auth/terms.jsp";
+	}
+
 	/** 로그인 정보 확인 실험용 서블릿 */
 	@GetMapping("/testAuth")
 	public String test(Model model, HttpServletRequest request) {
-		return "/WEB-INF/auth/test.jsp";
+		return "/WEB-INF/auth/testMypage.jsp";
 	}
 }

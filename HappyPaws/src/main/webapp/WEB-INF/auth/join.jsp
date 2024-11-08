@@ -18,7 +18,7 @@
 	
 		<form action="/auth/join" method="post" name="joinForm" onsubmit="return join_submit()" style="width: 300px;">
 			<div>
-				<input type="text" name="us_id" id="us_id" placeholder="아이디 입력" required>
+				<input type="text" name="us_id" id="us_id" placeholder="아이디 입력" required autofocus>
 				<input type="button" value="아이디 중복 검사">
 			</div>
 			<input type="password" name="us_password" id="us_password" placeholder="비밀번호 입력" required>
@@ -31,7 +31,11 @@
 			<input type="email" name="us_email" id="us_email" placeholder="이메일 입력">
 			<div>
 				<input type="text" name="us_phone" id="us_phone" placeholder="전화번호 입력" required>
-				<input type="button" onclick="phone_number_authentication()" value="전화번호 인증">
+				<input type="button" value="전화번호 인증">
+			</div>
+			<div id="us_phone_auth_div" style="display: none;">
+				<input type="text" name="us_phone_auth_code" id="us_phone_auth_code" placeholder="인증번호 입력" required>
+				<input type="button" value="인증번호 확인">
 			</div>
 			<input type="text" name="us_address" id="us_address" placeholder="주소 입력">
 			<input type="submit" value="회원가입하기">
@@ -108,23 +112,57 @@
 
 		document.querySelector('[value="닉네임 중복 검사"]').addEventListener('click', nick_duplicate_check);
 		document.joinForm.us_nick.addEventListener('change', () => auth_id = false);
-		
+
 		let auth_phone = false;
-		// 전화번호 onclick 이벤트
-		function phone_number_authentication() {
-			// 전화번호로 인증하는 기능
-			if (switchPhoneFormat()) {
-				auth_phone = true;
-				alert("기능구현을 하지 못해 임시적으로 허락해드리겠습니다.");
-			} else {
+		document.querySelector('[value="전화번호 인증"]').addEventListener('click', function () {
+			if (!switchPhoneFormat()) {
 				alert("전화번호 형식을 지켜주세요.");
+				return;
 			}
-		}
+
+			$.ajax({
+				url: "/auth/authPhone",
+				type: "GET",
+				data: { 'us_phone': $('#us_phone').val() },
+				success: response => {
+					// 시간 흘러가게 설정하기
+					if (response) {
+						$('#us_phone_auth_div').css('display', 'block');
+					}
+				},
+				error: () => alert('인증번호 전송에 실패하였습니다.')
+			});
+		});
+
+		// 인증번호 확인 버튼 클릭 시 나오는 이벤트
+		document.querySelector('[value="인증번호 확인"]').addEventListener('click', function () {
+			let us_phone_auth_code = $('#us_phone_auth_code').val();
+			if (us_phone_auth_code.length != 6) {
+				alert("6자리를 입력해주세요.");
+				return;
+			}
+
+			$.ajax({
+				url: "/auth/authPhone",
+				type: "POST",
+				data: {
+					'us_phone': $('#us_phone').val(),
+					'us_phone_auth_code': us_phone_auth_code
+				},
+				success: response => {
+					if (response) {
+					auth_phone = true;
+						$('#us_phone_auth_div').css('display', 'none');
+						document.joinForm.us_phone.readOnly = true;
+					}
+				},
+				error: () => alert('인증번호 확인에 실패하였습니다.')
+			});
+		});
 
 		document.joinForm.us_phone.addEventListener("blur", switchPhoneFormat);
 		
 		function switchPhoneFormat() {
-			auth_phone = false;
 			let phoneNum = document.querySelector("#us_phone").value.split("-").join("");
 			
 			if (phoneNum.length == 11) {
