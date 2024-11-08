@@ -8,16 +8,25 @@
 /*     height: 100%;    */
 /* } */
 
+@font-face {
+    font-family: 'HakgyoansimDunggeunmisoTTF-R';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-R.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HakgyoansimDunggeunmisoTTF-R';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-B.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+
 * { box-sizing: border-box;
  font-family: 'HakgyoansimDunggeunmisoTTF-R' }
 /* 전체 화면에 기본 스타일 */
 
-@font-face {
-    font-family: 'HakgyoansimDunggeunmisoTTF-R';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-R.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
-}
 
 body, html {
     margin: 0;
@@ -31,6 +40,26 @@ body {
     flex-direction: column;
     min-height: 100vh;    /* 뷰포트 전체 높이를 채움 */
 }
+
+.ql-editor {
+    font-size: 18px;
+    font-family: 'HakgyoansimDunggeunmisoTTF-R', sans-serif;
+    /* font-family: 'HakgyoansimDunggeunmisoTTF-R', sans-serif; */
+}
+
+.ql-align-center {
+    text-align: center;
+}
+
+.ql-align-right {
+    text-align: right;
+}
+
+.ql-align-left {
+    text-align: left;
+}
+
+
 /* 고정된 헤더 스타일 */
 header {
     width: 100%;
@@ -52,7 +81,7 @@ header {
     align-items: center;
     padding: 10px 0;
     font-size: 20px;
-    font-weight: bold;
+
 }
 
 /* 로고 스타일 */
@@ -118,7 +147,7 @@ header {
 /* 활성화된 링크 스타일 */
 .header-menu a.active {
     color: #ffcc00; /* 활성화된 링크의 색상 */
-    font-weight: bold; /* 텍스트를 강조 */
+
 }
 
 /* 로그인 버튼 */
@@ -128,6 +157,7 @@ header {
 
 .header-login-div a {
     display: inline;
+    font-weight: bold;
 }
 
 .header-login-div img {

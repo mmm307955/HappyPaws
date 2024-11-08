@@ -1,7 +1,11 @@
 package com.happypaws.life;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.happypaws.svc.CmtySVC;
 import com.happypaws.util.PagingVO;
 import com.happypaws.vo.CmtyCommentVO;
+import com.happypaws.vo.CmtyupVO;
 import com.happypaws.vo.CommunityVO;
+import com.happypaws.vo.UsersVO;
 
 @Controller
 public class CmtyController {
@@ -27,8 +33,8 @@ public class CmtyController {
 	public String cmty_list(CommunityVO vo ,PagingVO pv ,Model model , 
 			@RequestParam(value = "nowPage", required = false) String nowPage
 	) {
-			
-		String cntPerPage = "10";
+		
+		String cntPerPage = "8";
 			
 		if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
 		if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
@@ -36,7 +42,8 @@ public class CmtyController {
 		
 		int total = cmty_SVC.countCmty(vo);
 			
-		pv = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));			model.addAttribute("paging", pv);
+		pv = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));			
+		model.addAttribute("paging", pv);
 	
 		vo.setStart(pv.getStart());
 		vo.setListcnt(Integer.parseInt(cntPerPage));
@@ -50,11 +57,13 @@ public class CmtyController {
 
 	// 커뮤니티-상세보기
 	@RequestMapping(value = "/board/cmty_view", method = RequestMethod.GET)
-	public String cmty_view(CommunityVO vo, Model model) {
+	public String cmty_view(CommunityVO vo , Model model) {
 	
+		
 		model.addAttribute("cmtyview", cmty_SVC.cmty_view(vo));
+		
 		cmty_SVC.cmty_count(vo);
-
+		
 		return "/WEB-INF/board/cmty_view.jsp";
 	}
 	
@@ -103,27 +112,85 @@ public class CmtyController {
     //커뮤니티 댓글추가
 	@RequestMapping(value = "/board/c_addComment", method = RequestMethod.POST)
 	@ResponseBody
-    public String c_addComment(CmtyCommentVO comment) {
-    	
+    public String c_addComment(CmtyCommentVO comment , HttpSession session) {
+		UsersVO user = (UsersVO) session.getAttribute("user");
+		
+		comment.setCmty_cmt_id(user.getUs_id());
+		
 		cmty_SVC.c_addComment(comment);
         return "OK";
     }
 	
+	//커뮤니티 댓글삭제
+	@RequestMapping(value = "/board/c_delComment", method = RequestMethod.GET)
+	@ResponseBody
+	public String c_delComment(CmtyCommentVO comment, HttpSession session) {
+
+		cmty_SVC.c_delComment(comment);
+		return "OK";
+		
+	}
+	
+	//커뮤니티 댓글수정
+	@RequestMapping(value = "/board/c_updateComment", method = RequestMethod.GET)
+	@ResponseBody
+	public String c_updateComment(CmtyCommentVO comment, HttpSession session) {
+
+		cmty_SVC.c_updateComment(comment);
+		return "OK";
+		
+	}
+	
 	// 특정 커뮤니티 글에 대한 댓글 목록
 	@RequestMapping(value = "/board/c_commentList", method = RequestMethod.GET)
 	@ResponseBody
-	public List<CmtyCommentVO> commentList(CmtyCommentVO comment) {
+	public Map<String, Object> commentList(CmtyCommentVO comment , HttpSession session) {
+		UsersVO user = (UsersVO) session.getAttribute("user");
 		
-	    return cmty_SVC.c_commentList(comment); // 해당 qna_seq에 대한 댓글 목록을 반환
+		String us_id = (user != null) ? user.getUs_id() : null;
+		List<CmtyCommentVO> comments = cmty_SVC.c_commentList(comment);
+		 
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("comments", comments);
+	    response.put("us_id", us_id);
+		
+	    return response; // 해당 qna_seq에 대한 댓글 목록을 반환
 	}
 	
 	// 특정 커뮤니티 글에 대한 대댓글 추가
 	@RequestMapping(value="/board/c_addReply",method=RequestMethod.POST)
 	@ResponseBody
-	public String c_addReply(CmtyCommentVO comment) {
+	public String c_addReply(CmtyCommentVO comment , HttpSession session) {
+		UsersVO user = (UsersVO) session.getAttribute("user");
 		
+		comment.setCmty_cmt_id(user.getUs_id());
 		cmty_SVC.c_addReply(comment);
 		
 		return "OK";  // 해당 qna_seq에 대한 댓글 목록을 반환
+	}
+	
+	// 커뮤니티 추천
+	@RequestMapping(value = "/board/cmty_up" , method =RequestMethod.POST , produces = "text/plain; charset=UTF-8") 
+	@ResponseBody
+	public String cmty_up(CmtyupVO vo, HttpSession session) {
+		UsersVO user = (UsersVO) session.getAttribute("user");
+		String msg = "";
+		if(user == null) {
+			msg ="로그인이 필요합니다.";
+		}else {
+			vo.setUs_id(user.getUs_id());
+			msg = cmty_SVC.cmty_up(vo);
+		}
+		
+		return msg;
+	}
+	
+	
+	// 추천수 가져오기
+	@RequestMapping(value = "/board/cmty_up_reload", method = RequestMethod.GET)
+	@ResponseBody
+	public int cmty_up_reload(Model model , CmtyupVO vo) {
+	   
+		return cmty_SVC.cmty_up_cut(vo); 
 	}
 }

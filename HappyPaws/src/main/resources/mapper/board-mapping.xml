@@ -9,10 +9,11 @@
 		VALUES (#{n_id}, #{n_title}, #{n_content}, #{n_date}, 0, #{n_chk})
 	</insert>
 	
-	
 	<!-- 목록보기 -->
 	<select id="notice_list" resultType="com.happypaws.vo.NoticeVO">
-		SELECT * FROM notice WHERE 1=1 AND N_DEL = 'N' 
+		SELECT notice.* , us_nick , us_profile 
+		FROM notice , users
+		WHERE 1=1 AND N_DEL = 'N' AND n_id = us_id
 		<if test="searchCondition == 'TITLE' "> AND N_TITLE LIKE CONCAT('%',#{searchKeyword},'%') </if>
 		<if test="searchCondition == 'CONTENT' "> AND N_CONTENT LIKE CONCAT('%',#{searchKeyword},'%') </if>
 		ORDER BY n_chk DESC , n_seq desc
@@ -21,7 +22,9 @@
 	
 	<!-- 상세보기 -->
 	<select id="notice_view" resultType="com.happypaws.vo.NoticeVO">
-		SELECT * FROM NOTICE WHERE N_SEQ= #{n_seq} AND N_DEL = 'N'
+		SELECT notice.* , us_nick , us_profile 
+		FROM notice , users 
+		WHERE N_SEQ= #{n_seq} AND N_DEL = 'N' AND n_id = us_id
 	</select>
 	
 	<!-- 조회수 카운트 -->

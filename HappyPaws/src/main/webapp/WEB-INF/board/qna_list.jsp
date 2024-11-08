@@ -3,31 +3,47 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
 	<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+	<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 	<script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/notice.css">
 	
 </head>
 <body>
+	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<main>
 	<div class="n_list">
 		<h1>Q&amp;A</h1>
 		<div class="n_seachform">
 			<form>
-				<select name="searchCondition">
+				<label style="display:none;">
+				<select name="searchCondition" >
 					<option value="TITLE" ${searchCondition == 'TITLE' ? 'selected' : ''} >제목</option>
 					<option value="CONTENT" ${searchCondition == 'CONTENT' ? 'selected' : ''}>내용</option>
 				</select>
-				<input type="search" name="searchKeyword" value="${searchKeyword}" placeholder="검색어를 입력해주세요">
+				</label>
+				<div class="custom-select-wrapper">
+	                <div class="custom-select-display">
+	                    <span></span>
+	                    <i class="fas fa-chevron-down"></i>
+	                </div>
+	                <div class="custom-options">
+	                    <div data-value="TITLE">제목</div>
+	                    <div data-value="CONTENT">내용</div>
+	                </div>
+	                <label>
+					<input type="search" name="searchKeyword" value="${searchKeyword}" placeholder="검색어를 입력해주세요">
+					<button type="submit"><img src="${pageContext.request.contextPath}/resources/images/searchicon.png" alt="검색" title="검색"></button>
+	            	</label>
+	            </div>
 			</form>
-			<button id="qna_write">글쓰기</button>
+			<c:set var="isLoggedIn" value="${not empty user.us_id}" />
+			<button id="qna_write" data-logged-in="${isLoggedIn}">글쓰기</button>
 		</div>
 		<table>
+			<caption style="display:none;">Q&amp;A</caption>
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -45,7 +61,10 @@
 					        	<td>${qna.qna_seq}</td>
 					            <td>${qna.qna_title}<c:if test="${qna.comment_count != 0}"> [${qna.comment_count}]</c:if></td>
 					            <td>${qna.formattedQnaDate}</td>
-					            <td>${qna.qna_id}</td>
+					            <td>
+					            	<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${qna.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
+					            	${qna.us_nick}
+					            </td>
 					        </tr>
 					    </c:forEach>
 					</c:when>
@@ -72,5 +91,7 @@
 			</c:if>
 		</ul>
 	</div>
+	</main>
+	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
 </html>

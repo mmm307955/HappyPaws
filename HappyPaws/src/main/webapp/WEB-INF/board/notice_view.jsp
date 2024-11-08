@@ -1,26 +1,29 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+	<!-- jQuery library -->
+	<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 	<script src="${pageContext.request.contextPath }/resources/js/board.js"></script>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/notice.css">
 </head>
 <body>
+	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<main>
 	<div class="n_view">
 		<div class="n_viewform">
 			<h1>공지사항</h1>
 			<div class="n_title">
 				<span class="title">${noticeview.n_title}</span>
-				<span class="author" >작성자: ${noticeview.n_id}</span>
+				<span class="author" >
+					<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${noticeview.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';">
+					${noticeview.us_nick}
+				</span>
 			</div>
 			<div class="n_date">
-				<span>작성일: ${noticeview.n_date}</span>
+				<span>${noticeview.n_date}</span>
 			</div>
 			<div class="n_content">
 				${noticeview.n_content}
@@ -43,5 +46,8 @@
 	  <input type="hidden" name="searchKeyword" value="${param.searchKeyword}">
 	  <input type="hidden" name="searchCondition" value="${param.searchCondition}">
   	</form>
+  	
+  	</main>
+  	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
 </html>

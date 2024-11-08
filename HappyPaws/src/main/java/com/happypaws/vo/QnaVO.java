@@ -23,7 +23,10 @@ public class QnaVO {
 	
 	//댓글 개수
 	private int comment_count;
-
+	
+	//작성자 닉네임 , 사진 추가
+	private String us_profile;
+	private String us_nick;
 	
 	public String getFormattedQnaDate() {
 	    if (qna_date != null) {
@@ -119,6 +122,22 @@ public class QnaVO {
 
 	public void setComment_count(int comment_count) {
 		this.comment_count = comment_count;
+	}
+
+	public String getUs_profile() {
+		return us_profile;
+	}
+
+	public void setUs_profile(String us_profile) {
+		this.us_profile = us_profile;
+	}
+
+	public String getUs_nick() {
+		return us_nick;
+	}
+
+	public void setUs_nick(String us_nick) {
+		this.us_nick = us_nick;
 	}
 
 	@Override

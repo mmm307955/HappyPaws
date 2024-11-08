@@ -13,6 +13,7 @@
 
 <!-- https://feathericons.com/ 아이콘 -->
 <script src="https://unpkg.com/feather-icons"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <!-- 파비콘 -->
 <link rel="icon" href="${pageContext.request.contextPath}/resources/images/favicon.ico" type="image/x-icon">

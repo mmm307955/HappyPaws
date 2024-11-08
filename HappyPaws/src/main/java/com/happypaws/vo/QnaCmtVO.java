@@ -8,6 +8,10 @@ public class QnaCmtVO {
 	private String qna_cmt_content;  // qna 댓글 내용
 	private String qna_cmt_date;    // qna 댓글 작성 날짜
 	
+	//작성자 닉네임 , 사진 추가
+	private String us_profile;
+	private String us_nick;
+	
 	public int getQna_cmt_seq() {
 		return qna_cmt_seq;
 	}
@@ -37,6 +41,18 @@ public class QnaCmtVO {
 	}
 	public void setQna_cmt_date(String qna_cmt_date) {
 		this.qna_cmt_date = qna_cmt_date;
+	}
+	public String getUs_profile() {
+		return us_profile;
+	}
+	public void setUs_profile(String us_profile) {
+		this.us_profile = us_profile;
+	}
+	public String getUs_nick() {
+		return us_nick;
+	}
+	public void setUs_nick(String us_nick) {
+		this.us_nick = us_nick;
 	}
 
 	

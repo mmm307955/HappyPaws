@@ -4,13 +4,13 @@
 <head>
 <meta charset="UTF-8">
 	<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+	<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 	<script src="${pageContext.request.contextPath }/resources/js/board.js"></script>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/notice.css">
 </head>
 <body>
+	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<main>
 	<div class="n_write">
 		<h1>공지사항</h1>
 		<div class="n_write_form">
@@ -23,7 +23,7 @@
 					</div>
 				</div>
 				<input type="text" name="n_title" placeholder="제목을 입력해주세요.">
-				<input type="hidden" name="n_id" value="user"> <!-- 나중에 유저 받아야함 -->
+				<input type="hidden" name="n_id" value="${user.us_id}"> 
 				<input type="hidden" name="n_content" id="n_content">
 				<div id="editor"></div>
 				
@@ -32,6 +32,7 @@
 			</form>
 		</div>
 	</div>
-	
+	</main>
+	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
 </html>

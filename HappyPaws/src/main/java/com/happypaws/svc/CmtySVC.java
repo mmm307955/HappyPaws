@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.happypaws.dao.CmtyDAO;
 import com.happypaws.vo.CmtyCommentVO;
+import com.happypaws.vo.CmtyupVO;
 import com.happypaws.vo.CommunityVO;
+import com.happypaws.vo.QnaVO;
 
 @Service
 public class CmtySVC {
@@ -55,6 +57,16 @@ public class CmtySVC {
 		dao.c_addComment(vo);
 	}
 	
+    //커뮤니티 - 댓글 삭제
+    public void c_delComment(CmtyCommentVO comment) {
+    	dao.c_delComment(comment);
+    }
+
+    //커뮤니티 - 댓글 수정
+    public void c_updateComment(CmtyCommentVO comment) {
+    	dao.c_updateComment(comment);
+    }
+    
 	//커뮤니티 - 댓글 가져오기
     public List<CmtyCommentVO> c_commentList(CmtyCommentVO comment) {
     	return dao.c_commentList(comment);
@@ -64,4 +76,15 @@ public class CmtySVC {
     public void c_addReply(CmtyCommentVO comment) {
     	dao.c_addReply(comment);
     }
+    
+    //커뮤니티 -추천
+    public String cmty_up(CmtyupVO vo) {
+    	return dao.cmty_up(vo);
+    }
+    
+    //커뮤니티 -추천수 가져오기
+    public int cmty_up_cut(CmtyupVO vo) {
+    	return dao.cmty_up_cut(vo);
+    }
+    
 }

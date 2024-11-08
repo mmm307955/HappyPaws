@@ -8,8 +8,11 @@
 	<select id="qna_list" resultType="com.happypaws.vo.QnaVO">
 		SELECT QNA.* , (SELECT COUNT(*) 
          FROM qna_comment 
-         WHERE qna_comment.qna_seq = QNA.qna_seq) AS comment_count  
-		FROM QNA WHERE 1=1 AND QNA_DEL = 'N' 
+         WHERE qna_comment.qna_seq = QNA.qna_seq) AS comment_count,
+         users.us_profile,
+    	 users.us_nick
+		FROM QNA LEFT JOIN USERS ON QNA.qna_ID = USERS.US_ID 
+		WHERE 1=1 AND QNA_DEL = 'N' 
 		<if test="searchCondition == 'TITLE' "> AND QNA_TITLE LIKE CONCAT('%',#{searchKeyword},'%') </if>
 		<if test="searchCondition == 'CONTENT' "> AND QNA_CONTENT LIKE CONCAT('%',#{searchKeyword},'%') </if>
 		ORDER BY QNA_SEQ DESC
@@ -25,7 +28,9 @@
 	
 	<!--QNA 상세보기 -->
 	<select id="qna_view" resultType="com.happypaws.vo.QnaVO">
-		SELECT * FROM QNA WHERE QNA_SEQ= #{qna_seq} AND QNA_DEL = 'N'
+		SELECT QNA.* , USERS.US_PROFILE, USERS.US_NICK 
+		FROM QNA , USERS
+		WHERE QNA_SEQ= #{qna_seq} AND QNA_DEL = 'N'  AND US_ID = QNA_ID;
 	</select>
 	
 	<!-- QNA 카운트 -->
@@ -59,12 +64,23 @@
 	    VALUES (#{qna_seq}, #{qna_cmt_id}, #{qna_cmt_content}, NOW())
 	</insert>
 	
+	<!-- QNA 댓글리스트 -->
 	<select id="commentList" resultType="com.happypaws.vo.QnaCmtVO">
-	    SELECT * FROM QNA_COMMENT WHERE QNA_SEQ = #{qna_seq} ORDER BY QNA_CMT_DATE ASC
+	    SELECT QNA_COMMENT.* , US_nick , US_PROFILE 
+		FROM QNA_COMMENT , USERS
+	    WHERE QNA_SEQ = #{qna_seq}  and us_id = qna_cmt_id
+	    ORDER BY QNA_CMT_DATE ASC
 	</select>
 	
 	<delete id="deleteComment">
 	    DELETE FROM QNA_COMMENT WHERE QNA_CMT_SEQ = #{qna_cmt_seq}
 	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateComment">
+		UPDATE QNA_COMMENT 
+		SET qna_cmt_content = #{qna_cmt_content}
+		where qna_cmt_seq = #{qna_cmt_seq}
+	</update>
 	
 </mapper>

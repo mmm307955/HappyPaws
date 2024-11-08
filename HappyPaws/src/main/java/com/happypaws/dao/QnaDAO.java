@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.happypaws.vo.NoticeVO;
 import com.happypaws.vo.QnaCmtVO;
 import com.happypaws.vo.QnaVO;
 
@@ -75,5 +76,8 @@ public class QnaDAO {
     public void deleteComment(QnaCmtVO comment) {
     	mybatis.delete("QnaDAO.deleteComment",comment);
     }
-	
+	//댓글 수정
+    public void updateComment(QnaCmtVO comment) {
+    	mybatis.update("QnaDAO.updateComment",comment);
+    }
 }

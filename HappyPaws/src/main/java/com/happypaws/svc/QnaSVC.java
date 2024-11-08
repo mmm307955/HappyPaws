@@ -63,4 +63,8 @@ public class QnaSVC {
     public void deleteComment(QnaCmtVO comment) {
     	dao.deleteComment(comment);
     }
+  //댓글 수정
+    public void updateComment(QnaCmtVO comment) {
+    	dao.updateComment(comment);
+    }
 }

@@ -1,47 +1,59 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-	<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+	<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 	<script src="${pageContext.request.contextPath }/resources/js/board.js"></script>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/notice.css">
 </head>
-<body>
+<body data-context-path="${pageContext.request.contextPath}">
+	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<main>
 	<div class="n_view">
 		<div class="n_viewform">
 			<h1>Q&amp;A</h1>
 			<div class="n_title">
 				<span class="title">${qnaview.qna_title}</span>
-				<span class="author" >작성자: ${qnaview.qna_id}</span>
+				<span class="author" >
+					<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${qnaview.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
+					${qnaview.us_nick}
+				</span>
 			</div>
 			<div class="n_date">
-				<span>작성일: ${qnaview.qna_date}</span>
+				<span>${qnaview.qna_date}</span>
 			</div>
 			<div class="n_content">
 				${qnaview.qna_content}
 			</div>
 			
 			<div class="comments">
+				
 			    <div id="commentList"></div>
+			    <c:if test="${not empty user.us_id}">
 			    <span>댓글쓰기</span>
 			    <div class="comment-input">
 				    <textarea id="commentContent" placeholder="댓글을 입력하세요"></textarea>
 				    <button id="submitComment" value="${param.qna_seq}">댓글 등록</button>
 			    </div>
+			    </c:if>
+			    <c:if test="${empty user.us_id}">
+				<div class="comment-input">
+				    <textarea id="commentContent" placeholder="로그인후 입력이 가능합니다." disabled></textarea>
+				    <button id="submitComment" value="${param.qna_seq}" disabled>댓글 등록</button>
+			    </div>
+				</c:if>
 			</div>
 			<div class="n_buttons">
-			    <div style="flex-grow: 1; text-align: center; margin-left: 140px;">
+			    <div style="flex-grow: 1; text-align: center;">
 			        <button id="qna_list">글 목록</button>
 			    </div>
-			    <div>
+			    <c:if test="${user.us_id == qnaview.qna_id}">
+			    <div style="margin-left: -140px;">
 			        <button class="qna_modify" data-seq="${qnaview.qna_seq}">수정</button>
 			        <button class="qna_delete" data-seq="${qnaview.qna_seq}">삭제</button>
 			    </div>
+			    </c:if>
 			</div>
 		</div>
 	</div>
@@ -55,5 +67,7 @@
 	        loadComments(); // 페이지 로드 시 댓글 목록 불러오기
 	    });
 	</script>
+	</main>
+	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
 </html>

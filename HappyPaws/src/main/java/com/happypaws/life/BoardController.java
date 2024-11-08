@@ -32,7 +32,9 @@ public class BoardController {
 	@PostMapping("/upload")
 	@ResponseBody
 	public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
-	    String uploadDir = request.getSession().getServletContext().getRealPath("/uploads/");
+//	    String uploadDir = request.getSession().getServletContext().getRealPath("/boarduploads/");
+		String uploadDir = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/boarduploads/";
+		
 	    String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 	    File targetFile = new File(uploadDir, fileName);
 	    
@@ -43,7 +45,7 @@ public class BoardController {
 	    }
 
 	    // 클라이언트로 반환할 이미지 URL
-	    String fileUrl = request.getContextPath() + "/uploads/" + fileName;
+	    String fileUrl = "/resources/boarduploads/" + fileName;
 	    
 	    Map<String, String> response = new HashMap<>();
 	    response.put("url", fileUrl);  // 이미지 URL을 클라이언트로 반환

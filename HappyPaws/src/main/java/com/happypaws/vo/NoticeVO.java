@@ -22,6 +22,11 @@ public class NoticeVO {
 	private int start; 
 	private int listcnt;
 	
+	
+	//작성자 닉네임 , 사진 추가
+	private String us_profile;
+	private String us_nick;
+	
 	//날짜 변환기능
 	public String getFormattedNoticeDate() {
 	    if (n_date != null) {
@@ -120,6 +125,26 @@ public class NoticeVO {
 		this.n_del = n_del;
 	}
 	
+	public String getUs_profile() {
+		return us_profile;
+	}
+
+
+	public void setUs_profile(String us_profile) {
+		this.us_profile = us_profile;
+	}
+
+
+	public String getUs_nick() {
+		return us_nick;
+	}
+
+
+	public void setUs_nick(String us_nick) {
+		this.us_nick = us_nick;
+	}
+
+
 	@Override
 	public String toString() {
 		return "NoticeVO [n_seq=" + n_seq + ", n_id=" + n_id + ", n_title=" + n_title + ", n_content=" + n_content

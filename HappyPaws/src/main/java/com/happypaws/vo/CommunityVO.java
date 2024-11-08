@@ -24,6 +24,10 @@ public class CommunityVO {
 	//댓글 
 	private int comment_count;
 	
+	//작성자 닉네임 , 사진 추가
+	private String us_profile;
+	private String us_nick;
+	
 	public String getFormattedCmtyDate() {
 	    if (cmty_date != null) {
 	        try {
@@ -44,7 +48,21 @@ public class CommunityVO {
 	    }
 	    return null;
 	}
-
+	
+    // 한글로 변환된 카테고리 값을 반환하는 메서드
+    public String getCmty_category_kr() {
+        switch (cmty_category) {
+            case "General":
+                return "자유게시판";
+            case "AdoptionReview":
+                return "입양/분양 후기";
+            case "FoundReview":
+                return "찾은 후기";
+            default:
+                return "알 수 없는 카테고리";
+        }
+    }
+	
 	public int getCmty_seq() {
 		return cmty_seq;
 	}
@@ -155,6 +173,22 @@ public class CommunityVO {
 
 	public void setComment_count(int comment_count) {
 		this.comment_count = comment_count;
+	}
+
+	public String getUs_profile() {
+		return us_profile;
+	}
+
+	public void setUs_profile(String us_profile) {
+		this.us_profile = us_profile;
+	}
+
+	public String getUs_nick() {
+		return us_nick;
+	}
+
+	public void setUs_nick(String us_nick) {
+		this.us_nick = us_nick;
 	}
 
 	@Override
