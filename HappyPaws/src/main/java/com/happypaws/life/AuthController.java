@@ -245,10 +245,4 @@ public class AuthController {
 	public String terms() {
 		return "/WEB-INF/auth/terms.jsp";
 	}
-
-	/** 로그인 정보 확인 실험용 서블릿 */
-	@GetMapping("/testAuth")
-	public String test(Model model, HttpServletRequest request) {
-		return "/WEB-INF/auth/testMypage.jsp";
-	}
 }
