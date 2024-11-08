@@ -7,49 +7,37 @@ public class ProductPagingVO {
 	private int btnTotalCount; 
 	private int btnCurTotal = 5;  
 	private int rowTotalCount; 
-	private int rowSizePerPage = 9; 
+	private int rowSizePerPage = 6; 
 	private int rowFirst; 
 	private int rowLast;
 
 	public ProductPagingVO() {}
 	
-	public ProductPagingVO(ProductPagingVO pv) {
-		// 값 설정
-		this.btnCur = pv.getBtnCur();
-		this.btnCurTotal = pv.getBtnCurTotal();
-		this.rowTotalCount = pv.getRowTotalCount();
-		this.rowSizePerPage = pv.getRowSizePerPage();
-		
-		// 계산 처리
-		this.btnTotalCount = (this.rowTotalCount - 1) / this.rowSizePerPage + 1;
-		this.btnFirst = this.btnCur - 2;
-		this.btnLast = this.btnCur + 2; 
-		this.rowFirst = (this.btnCur - 1) * this.rowSizePerPage + 1;
-		this.rowLast = this.rowFirst + this.rowSizePerPage - 1;
-		
-		// 조건 처리
-		if (this.rowLast > this.rowTotalCount) {
-			this.rowLast = this.rowTotalCount;
-		}
-		
-		if (this.btnLast > this.btnTotalCount) { 
-			this.btnLast = this.btnTotalCount;
-			this.btnFirst = this.btnCur - 3;
-			
-			if (this.btnCur == this.btnTotalCount) {
-				this.btnFirst = this.btnCur - 4;
-			}
-		}
-		
-		if (this.btnCur - 2 <= 0) {
-			this.btnFirst = 1;
-			this.btnLast = Math.min(this.btnCurTotal, this.btnTotalCount);
-		}
-		
-		if (this.rowFirst == 1) {
-			this.rowFirst = 0;
-		}
-	}
+    public ProductPagingVO(ProductPagingVO pv) {
+        // 기본값 설정
+        this.btnCur = Math.max(1, pv.getBtnCur());  // 현재 페이지는 최소 1
+        this.btnCurTotal = pv.getBtnCurTotal();
+        this.rowTotalCount = Math.max(0, pv.getRowTotalCount());  // 전체 데이터 수는 최소 0
+        this.rowSizePerPage = Math.max(1, pv.getRowSizePerPage());  // 페이지당 데이터 수는 최소 1
+        
+        // 전체 페이지 수 계산
+        this.btnTotalCount = (int) Math.ceil((double) this.rowTotalCount / this.rowSizePerPage);
+        
+        // 현재 페이지가 전체 페이지 수를 초과하지 않도록 보정
+        this.btnCur = Math.min(this.btnCur, this.btnTotalCount);
+
+        // 화면에 표시할 페이지 번호 범위 계산
+        int offset = (this.btnCurTotal - 1) / 2;
+        this.btnFirst = Math.max(1, this.btnCur - offset);
+        this.btnLast = Math.min(this.btnTotalCount, this.btnFirst + this.btnCurTotal - 1);
+
+        // btnFirst 재조정 (btnLast - btnFirst = btnCurTotal - 1 유지)
+        this.btnFirst = Math.max(1, this.btnLast - this.btnCurTotal + 1);
+
+        // 데이터 인덱스 계산
+        this.rowFirst = (this.btnCur - 1) * this.rowSizePerPage;
+        this.rowLast = Math.min(this.rowFirst + this.rowSizePerPage - 1, this.rowTotalCount - 1);
+    }
 
 	public int getBtnCur() {
 		return btnCur;

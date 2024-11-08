@@ -35,9 +35,82 @@ public class ProductDAO {
 	
 	public List<ProductVO> getProductReview(ProductVO vo) {
 		return mybatis.selectList("ProductDAO.getProductReview", vo);
+	} 
+
+	public int getMyReviewCount(ProductVO vo) {
+		return mybatis.selectOne("ProductDAO.getMyReviewCount", vo);
+	}	
+	
+	public int deleteProductReview(int prc_no) {
+		return mybatis.update("ProductDAO.deleteProductReview", prc_no);
 	}
 	
-	public List<ProductVO> getProductQuestion(int pr_id) {
-		return mybatis.selectList("ProductDAO.getProductDetail", pr_id);
+	public int setProductReview(ProductVO vo) {
+		return mybatis.insert("ProductDAO.setProductReview", vo);
+	}
+	
+	public List<ProductVO> getProductQuestion(ProductVO vo) {
+		return mybatis.selectList("ProductDAO.getProductQuestion", vo);
 	} 
+	
+	public int setProductQuestion(ProductVO vo) {
+		return mybatis.insert("ProductDAO.setProductQuestion", vo);
+	} 
+	
+	public int deleteProductQuestion(int prq_no) {
+		return mybatis.update("ProductDAO.deleteProductQuestion", prq_no);
+	} 
+	
+	public int setProductQuestionComments(ProductVO vo) {
+		return mybatis.update("ProductDAO.setProductQuestionComments", vo);
+	}
+	
+	public int getProductQuestionCount(int pr_id) {
+		return mybatis.selectOne("ProductDAO.getProductQuestionCount", pr_id);
+	}	
+	
+	public int addToCart(ProductVO vo) {
+		return mybatis.insert("ProductDAO.addToCart", vo);
+	}
+	
+	public List<ProductVO> getCartList(String us_id) {
+		return mybatis.selectList("ProductDAO.getCartList", us_id);
+	}
+	
+	public int updateCartQuantity(ProductVO vo) {
+		return mybatis.update("ProductDAO.updateCartQuantity", vo);
+	}
+	
+	public int removeFromCart(ProductVO vo) {
+		return mybatis.delete("ProductDAO.removeFromCart", vo);
+	}
+	
+	public int checkCartDuplicate(ProductVO vo) {
+	    return mybatis.selectOne("ProductDAO.checkCartDuplicate", vo);
+	}
+	
+    // 주문 등록
+    public int setProductOrder(ProductVO vo) {
+        return mybatis.insert("ProductDAO.setProductOrder", vo);
+    }
+
+    // 주문 상세 조회 
+    public ProductVO getProductOrder(int pror_no) {
+        return mybatis.selectOne("ProductDAO.getProductOrder", pror_no);
+    }
+
+    // 사용자별 주문 목록 조회
+    public List<ProductVO> getProductOrderList(String us_id) {
+        return mybatis.selectList("ProductDAO.getProductOrderList", us_id);
+    }
+
+    // 주문 상태 업데이트
+    public int updateOrderStatus(ProductVO vo) {
+        return mybatis.update("ProductDAO.updateOrderStatus", vo); 
+    }
+
+    // 주문 완료된 상품 장바구니에서 제거
+    public int deleteCartAfterOrder(ProductVO vo) {
+        return mybatis.delete("ProductDAO.deleteCartAfterOrder", vo);
+    }
 }

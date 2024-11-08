@@ -8,7 +8,7 @@
 		</div>
 		<div class="header-menu">
 		   	<a>반려동물</a>
-			<a>반려용품</a>
+	        <a href="pr_list" class="pr_-link">반려용품</a>
 			<a>공지사항</a>
 			<a>Q&amp;A</a>
 			<a href="/board/cmty_list" class="cmty-link">커뮤니티</a>
