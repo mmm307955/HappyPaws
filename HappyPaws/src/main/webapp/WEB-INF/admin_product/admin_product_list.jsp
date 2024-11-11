@@ -420,7 +420,7 @@ td {
 						<th>상품ID</th>
 						<th>상품 이미지</th>
 						<th>상품명</th>
-						<th>가격</th>
+						<th>대표가격</th>
 						<th>카테고리</th>
 						<th>판매 상태</th>
 						<th>옵션</th>
@@ -476,7 +476,7 @@ td {
 														</li>
 																												
 														<li>재고: ${opt.pr_opt_stock} 개</li>
-														<li>추가금액: ${opt.pr_opt_price} 원</li>
+														<li>옵션 금액: ${opt.pr_opt_price} 원</li>
 													</ul>
 												</c:if>
 											</c:forEach>

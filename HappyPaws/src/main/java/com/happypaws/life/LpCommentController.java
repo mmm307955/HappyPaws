@@ -12,13 +12,14 @@ import com.happypaws.svc.LpCommentSVC;
 import com.happypaws.vo.LpCommentVO;
 
 @Controller
+@RequestMapping("/MIA")
 public class LpCommentController {
 
 	@Autowired
 	private LpCommentSVC lpCommentSVC;
 
 	// 댓글 등록
-	@RequestMapping(value = "/insertLpComment.do")
+	@RequestMapping(value = "/insertLpComment")
 	public String insertLpComment(LpCommentVO vo, HttpServletRequest request)
 			throws IllegalStateException, IOException {
 		String searchCondition = request.getParameter("searchCondition");
@@ -30,12 +31,12 @@ public class LpCommentController {
 		lpCommentSVC.insertLpComment(vo);
 
 		// 리다이렉트할 때 필요한 파라미터 추가
-		return "redirect:/getLostPet.do?lp_seq=" + vo.getLp_seq() + "&searchCondition=" + searchCondition
+		return "redirect:/MIA/getLostPet?lp_seq=" + vo.getLp_seq() + "&searchCondition=" + searchCondition
 				+ "&searchKeyword=" + searchKeyword + "&category=" + category + "&nowPage=" + nowPage;
 	}
 
 	// 댓글 수정
-	@RequestMapping("/updateLpComment.do")
+	@RequestMapping("/updateLpComment")
 	public String updateLpComment(LpCommentVO vo, HttpServletRequest request) {
 	    String lp_seq = request.getParameter("lp_seq");
 	    String lpc_seq = request.getParameter("lpc_seq");
@@ -67,7 +68,7 @@ public class LpCommentController {
 	        System.err.println("예외 발생: " + e.getMessage());
 	    }
 
-	    return "redirect:/getLostPet.do?lp_seq=" + vo.getLp_seq() + 
+	    return "redirect:/MIA/getLostPet?lp_seq=" + vo.getLp_seq() + 
 	           "&searchCondition=" + searchCondition +
 	           "&searchKeyword=" + searchKeyword + 
 	           "&category=" + category + 
@@ -76,7 +77,7 @@ public class LpCommentController {
 
 
 	// 댓글 삭제
-	@RequestMapping("/deleteLpComment.do")
+	@RequestMapping("/deleteLpComment")
 	public String deleteLpComment(HttpServletRequest request) {
 		String lp_seq = request.getParameter("lp_seq");
 		String lpc_seq = request.getParameter("lpc_seq");
@@ -92,7 +93,7 @@ public class LpCommentController {
 		vo.setLpc_seq(Integer.parseInt(lpc_seq));
 
 		lpCommentSVC.deleteLpComment(vo);
-		return "redirect:/getLostPet.do?lp_seq=" + vo.getLp_seq() + "&searchCondition=" + searchCondition
+		return "redirect:/MIA/getLostPet?lp_seq=" + vo.getLp_seq() + "&searchCondition=" + searchCondition
 				+ "&searchKeyword=" + searchKeyword + "&category=" + category + "&nowPage=" + nowPage;
 	}
 }

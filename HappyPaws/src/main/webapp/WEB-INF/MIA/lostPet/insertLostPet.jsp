@@ -39,7 +39,7 @@
 		<div class="n_write">
 			<h1>아이를 찾아주세요</h1>
 			<div class="n_writeform">
-				<form action="/insertLostPet.do" method="post"
+				<form action="/MIA/insertLostPet" method="post"
 					enctype="multipart/form-data" name="boardform">
 
 					<div class="n_write_header">

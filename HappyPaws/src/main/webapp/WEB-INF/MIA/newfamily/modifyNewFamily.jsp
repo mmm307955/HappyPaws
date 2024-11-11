@@ -38,7 +38,7 @@
 		<div class="n_write">
 			<h1>글 수정</h1>
 			<div class="n_writeform">
-				<form action="/updateNewFamily.do" method="post"
+				<form action="/MIA/updateNewFamily" method="post"
 					enctype="multipart/form-data" name="boardform">
 					<input type="hidden" name="nf_seq" value="${newFamily.nf_seq}">
 					<input type="hidden" name="searchKeyword" value="${searchKeyword}">

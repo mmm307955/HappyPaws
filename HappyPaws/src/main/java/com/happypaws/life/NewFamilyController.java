@@ -23,6 +23,7 @@ import com.happypaws.vo.NfCommentVO;
 import com.happypaws.vo.PagingVO;
 
 @Controller
+@RequestMapping("/MIA")
 public class NewFamilyController {
 	int cntChk = 0;
 
@@ -35,12 +36,12 @@ public class NewFamilyController {
 	String realPath = "c:/happyPaws/happyPaws/src/main/webapp/resources/MIA-img/newFamilyImg/";
 
 	// 글 등록
-	@RequestMapping(value = "/insertNewFamily.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/insertNewFamily", method = RequestMethod.GET)
 	public String insertView(NewFamilyVO vo) throws IllegalStateException, IOException {
 		return "/WEB-INF/MIA/newFamily/insertNewFamily.jsp";
 	}
 
-	@RequestMapping(value = "/insertNewFamily.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/insertNewFamily", method = RequestMethod.POST)
 	public String insertNewFamily(NewFamilyVO vo) throws IllegalStateException, IOException {
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
@@ -53,11 +54,11 @@ public class NewFamilyController {
 		uploadFile.transferTo(new File(realPath + uniqueFileName));
 
 		newFamilySVC.insertNewFamily(vo);
-		return "redirect:getNewFamilyList.do";
+		return "redirect:/MIA/getNewFamilyList";
 	}
 
 	// 글 수정
-	@RequestMapping(value = "/updateNewFamily.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateNewFamily", method = RequestMethod.GET)
 	public String updateView(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "nf_seq") int seq, NewFamilyVO vo, Model model,
 			@RequestParam(value = "nowPage", required = false) String nowPage,
@@ -82,7 +83,7 @@ public class NewFamilyController {
 		return "/WEB-INF/MIA/newFamily/modifyNewFamily.jsp";
 	}
 
-	@RequestMapping(value = "/updateNewFamily.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateNewFamily", method = RequestMethod.POST)
 	public String updateNewFamily(NewFamilyVO vo, HttpSession session) throws IllegalStateException, IOException {
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
@@ -112,20 +113,20 @@ public class NewFamilyController {
 		// 데이터베이스 업데이트
 		newFamilySVC.updateNewFamily(vo);
 
-		return "redirect:/getNewFamily.do?nf_seq=" + vo.getNf_seq() + "&nowPage=" + vo.getNowPage() + "&category="
+		return "redirect:/MIA/getNewFamily?nf_seq=" + vo.getNf_seq() + "&nowPage=" + vo.getNowPage() + "&category="
 				+ vo.getCategory() + "&searchKeyword=" + vo.getSearchKeyword() + "&searchCondition="
 				+ vo.getSearchCondition();
 	}
 
 	// 글 삭제
-	@RequestMapping("/deleteNewFamily.do")
+	@RequestMapping("/deleteNewFamily")
 	public String deleteNewFamily(NewFamilyVO vo, HttpServletRequest request) {
 		newFamilySVC.deleteNewFamily(vo);
-		return "redirect:getNewFamilyList.do";
+		return "redirect:/MIA/getNewFamilyList";
 	}
 
 	// 글 완전히 삭제
-	@RequestMapping("/deleteAllNewFamily.do")
+	@RequestMapping("/deleteAllNewFamily")
 	public String deleteAllNewFamily(NewFamilyVO vo, HttpServletRequest request) {
 		realPath = request.getSession().getServletContext().getRealPath("/resources/img/");
 		if (vo.getNf_img() != null) {
@@ -134,11 +135,11 @@ public class NewFamilyController {
 			f.delete();
 		}
 		newFamilySVC.deleteAllNewFamily(vo);
-		return "redirect:getNewFamilyList.do";
+		return "redirect:/MIA/getNewFamilyList";
 	}
 
 	// 글 상세 조회 + 댓글 조회
-	@RequestMapping("/getNewFamily.do")
+	@RequestMapping("/getNewFamily")
 	public String getNewFamily(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "nf_seq") int seq, NewFamilyVO vo, Model model, NfCommentVO cvo,
 			@RequestParam(value = "nowPage", required = false) String nowPage,
@@ -170,7 +171,7 @@ public class NewFamilyController {
 	}
 
 	// 글 목록
-	@RequestMapping("/getNewFamilyList.do")
+	@RequestMapping("/getNewFamilyList")
 	public String getNewFamilyListPost(PagingVO pv, NewFamilyVO vo, Model model,
 			@RequestParam(value = "nowPage", required = false, defaultValue = "1") Integer nowPage,
 			@RequestParam(value = "category", required = false, defaultValue = "") String category) {

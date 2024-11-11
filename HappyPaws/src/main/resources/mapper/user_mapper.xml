@@ -6,7 +6,8 @@
 
 	<!-- 모든 사용자 조회 -->
     <select id="userSelectAll" resultType="com.happypaws.vo.UsersVO">
-        SELECT * FROM USERS
+         SELECT * FROM users WHERE us_is_del = 'N'
+
     </select>
     
     <!-- 사용자 검색 -->
@@ -44,9 +45,6 @@
     SET us_is_del = #{us_is_del}
     WHERE us_id = #{us_id}
 </update>
-
-
-
         
     <!--사용자 정보 업데이트 -->
      <update id="user_update">
@@ -92,6 +90,24 @@
     <update id="updatePassword" parameterType="com.happypaws.vo.UsersVO">
         UPDATE users SET us_password = #{us_password} WHERE us_id = #{us_id}
     </update>
+    
+    
+<select id="findPostsByUserId" parameterType="string" resultType="com.happypaws.vo.MyPostVO">
+    SELECT *
+    FROM user_posts
+    WHERE us_id = #{usId}
+</select>
+
+
+    <!-- `post_id`를 기반으로 특정 게시물 조회 쿼리 -->
+    <select id="findPostById" parameterType="int" resultType="com.happypaws.vo.MyPostVO">
+        SELECT post_id, title, content, created_date, us_id
+        FROM user_posts
+        WHERE post_id = #{post_id}
+    </select>
+
+
+
     
 
 </mapper>

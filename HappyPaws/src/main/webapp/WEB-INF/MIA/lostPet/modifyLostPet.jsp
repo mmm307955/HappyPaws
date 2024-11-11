@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		<div class="n_write">
 			<h1>글 수정</h1>
 			<div class="n_writeform">
-				<form action="/updateLostPet.do" method="post"
+				<form action="/MIA/updateLostPet" method="post"
 					enctype="multipart/form-data" name="boardform">
 					<input type="hidden" name="lp_seq" value="${lostPet.lp_seq}">
 					<input type="hidden" name="searchKeyword" value="${searchKeyword}">

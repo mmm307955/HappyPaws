@@ -34,7 +34,7 @@
 		<div class="n_write">
 			<h1>아이를 찾아주세요</h1>
 			<div class="n_writeform">
-				<form action="/insertFindPet.do" method="post" enctype="multipart/form-data" name="boardform">
+				<form action="/MIA/insertFindPet" method="post" enctype="multipart/form-data" name="boardform">
 					
 					<div class="n_write_header">
 						<span class="left">글 작성</span>

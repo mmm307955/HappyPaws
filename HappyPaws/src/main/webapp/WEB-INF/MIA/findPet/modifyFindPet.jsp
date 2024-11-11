@@ -32,7 +32,7 @@
 		<div class="n_write">
 			<h1>글 수정</h1>
 			<div class="n_writeform">
-				<form action="/updateFindPet.do" method="post" enctype="multipart/form-data" name="boardform">
+				<form action="/MIA/updateFindPet" method="post" enctype="multipart/form-data" name="boardform">
 					<input type="hidden" name="fp_seq" value="${findPet.fp_seq}">
 					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 					<input type="hidden" name="searchCondition" value="${searchCondition}">

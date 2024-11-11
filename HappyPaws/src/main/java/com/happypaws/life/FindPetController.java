@@ -23,6 +23,7 @@ import com.happypaws.vo.FpCommentVO;
 import com.happypaws.vo.PagingVO;
 
 @Controller
+@RequestMapping("/MIA")
 public class FindPetController {
     int cntChk = 0;
 
@@ -35,12 +36,12 @@ public class FindPetController {
     String realPath = "c:/happyPaws/happyPaws/src/main/webapp/resources/MIA-img/findPetImg/";
 
     // 글 등록
-    @RequestMapping(value = "/insertFindPet.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/insertFindPet", method = RequestMethod.GET)
     public String insertView(FindPetVO vo) throws IllegalStateException, IOException {
         return "/WEB-INF/MIA/findPet/insertFindPet.jsp";
     }
 
-    @RequestMapping(value = "/insertFindPet.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/insertFindPet", method = RequestMethod.POST)
     public String insertFindPet(FindPetVO vo) throws IllegalStateException, IOException {
         MultipartFile uploadFile = vo.getUploadFile();
         String originalFilename = uploadFile.getOriginalFilename();
@@ -53,11 +54,11 @@ public class FindPetController {
         uploadFile.transferTo(new File(realPath + uniqueFileName));
 
         findPetSVC.insertFindPet(vo);
-        return "redirect:getFindPetList.do";
+        return "redirect:/MIA/getFindPetList";
     }
 
     // 글 수정
-    @RequestMapping(value = "/updateFindPet.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/updateFindPet", method = RequestMethod.GET)
     public String updateView(@RequestParam(value = "error", required = false) String error,
                              @RequestParam(value = "fp_seq") int seq, FindPetVO vo, Model model,
                              @RequestParam(value = "nowPage", required = false) String nowPage,
@@ -81,7 +82,7 @@ public class FindPetController {
         return "/WEB-INF/MIA/findPet/modifyFindPet.jsp";
     }
 
-    @RequestMapping(value = "/updateFindPet.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateFindPet", method = RequestMethod.POST)
     public String updateFindPet(FindPetVO vo, HttpSession session) throws IllegalStateException, IOException {
         MultipartFile uploadFile = vo.getUploadFile();
         String originalFilename = uploadFile.getOriginalFilename();
@@ -111,20 +112,20 @@ public class FindPetController {
         // 데이터베이스 업데이트
         findPetSVC.updateFindPet(vo);
 
-        return "redirect:/getFindPet.do?fp_seq=" + vo.getFp_seq() + "&nowPage=" + vo.getNowPage() + "&category="
+        return "redirect:/MIA/getFindPet?fp_seq=" + vo.getFp_seq() + "&nowPage=" + vo.getNowPage() + "&category="
                 + vo.getCategory() + "&searchKeyword=" + vo.getSearchKeyword() + "&searchCondition="
                 + vo.getSearchCondition();
     }
 
     // 글 삭제
-    @RequestMapping("/deleteFindPet.do")
+    @RequestMapping("/deleteFindPet")
     public String deleteFindPet(FindPetVO vo, HttpServletRequest request) {
         findPetSVC.deleteFindPet(vo);
-        return "redirect:getFindPetList.do";
+        return "redirect:/MIA/getFindPetList";
     }
 
     // 글 완전히 삭제
-    @RequestMapping("/deleteAllFindPet.do")
+    @RequestMapping("/deleteAllFindPet")
     public String deleteAllFindPet(FindPetVO vo, HttpServletRequest request) {
         realPath = request.getSession().getServletContext().getRealPath("/resources/img/");
         if (vo.getFp_img() != null) {
@@ -133,11 +134,11 @@ public class FindPetController {
             f.delete();
         }
         findPetSVC.deleteAllFindPet(vo);
-        return "redirect:getFindPetList.do";
+        return "redirect:/MIA/getFindPetList";
     }
 
     // 글 상세 조회 + 댓글 조회
-    @RequestMapping("/getFindPet.do")
+    @RequestMapping("/getFindPet")
     public String getFindPet(@RequestParam(value = "error", required = false) String error,
                              @RequestParam(value = "fp_seq") int seq, FindPetVO vo, Model model, FpCommentVO cvo,
                              @RequestParam(value = "nowPage", required = false) String nowPage,
@@ -169,7 +170,7 @@ public class FindPetController {
     }
 
     // 글 목록
-    @RequestMapping("/getFindPetList.do")
+    @RequestMapping("/getFindPetList")
     public String getFindPetListPost(PagingVO pv, FindPetVO vo, Model model,
                                      @RequestParam(value = "nowPage", required = false, defaultValue = "1") Integer nowPage,
                                      @RequestParam(value = "category", required = false, defaultValue = "") String category) {

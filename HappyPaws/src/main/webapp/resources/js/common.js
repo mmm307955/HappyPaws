@@ -12,4 +12,9 @@ $(document).ready(function() {
         $(".notice-link").addClass("active");
     }
     
+    if (window.location.href.includes("pr_")) {
+        $(".pr_-link").addClass("active");
+    }
+   
+    
 });

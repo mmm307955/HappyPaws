@@ -17,12 +17,12 @@ pageContext.setAttribute("categories", categories);
     href="${pageContext.request.contextPath}/resources/css/MIA.css">
 <script>
         function selNf(val, val2, val3, val4, nowpage) {
-            location.href = "/getNewFamily.do?nf_seq=" + val + '&searchCondition=' + val2 + '&searchKeyword=' + val3 + '&category=' + val4 + '&nowPage=' + nowpage;
+            location.href = "/MIA/getNewFamily?nf_seq=" + val + '&searchCondition=' + val2 + '&searchKeyword=' + val3 + '&category=' + val4 + '&nowPage=' + nowpage;
         }
 
         $(document).ready(function() {
             $("#nfIns").click(function() {
-                location.href = "/insertNewFamily.do";
+                location.href = "/MIA/insertNewFamily";
             });
         });
     </script>
@@ -31,7 +31,7 @@ pageContext.setAttribute("categories", categories);
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 		<div class="n_list">
-			<h2><a href="/getLostPetList.do">아이를 찾아주세요</a> / <a href="/getFindPetList.do">아이를 발견했어요</a> / <span style="color: red;"> 새로운 가족을 찾아요 </span></h2>
+			<h2><a href="/MIA/getLostPetList">아이를 찾아주세요</a> / <a href="/MIA/getFindPetList">아이를 발견했어요</a> / <span style="color: red;"> 새로운 가족을 찾아요 </span></h2>
 
 			<div class="n_seachform">
 				<form>
@@ -52,7 +52,7 @@ pageContext.setAttribute("categories", categories);
 			
 			<div class="n_categoryform">
 				<c:forEach var="category" items="${categories}">
-					<form action="getNewFamilyList.do" method="post"
+					<form action="/MIA/getNewFamilyList" method="post"
 						style="display: inline;">
 						<input type="hidden" name="searchCondition"
 							value="${searchCondition}"> <input type="hidden"
@@ -71,7 +71,7 @@ pageContext.setAttribute("categories", categories);
 						onclick="selNf(${newFamily.nf_seq}, '${searchCondition}', '${searchKeyword}', '${category}', ${paging.nowPage})"
 						style="cursor: pointer;">
 						<a
-							href="getNewFamily.do?nf_seq=${newFamily.nf_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
+							href="/MIA/getNewFamily?nf_seq=${newFamily.nf_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
 							<img
 							src="${pageContext.request.contextPath}/resources/MIA-img/newFamilyImg/${newFamily.nf_img}"
 							alt="New Family Image" class="pet-image"
@@ -91,7 +91,7 @@ pageContext.setAttribute("categories", categories);
 				<c:if
 					test="${paging.nowPage > 1 && paging.lastBtn > paging.viewBtnCnt}">
 					<li class="page-item"><a class="page-link"
-						href="getNewFamilyList.do?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">이전</a></li>
+						href="/MIA/getNewFamilyList?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">이전</a></li>
 				</c:if>
 				<c:forEach var="i" begin="${paging.startBtn}" end="${paging.endBtn}"
 					step="1">
@@ -101,14 +101,14 @@ pageContext.setAttribute("categories", categories);
 						</c:when>
 						<c:otherwise>
 							<li class="page-item"><a class="page-link"
-								href="getNewFamilyList.do?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">${i}</a></li>
+								href="/MIA/getNewFamilyList?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">${i}</a></li>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
 				<c:if
 					test="${paging.nowPage < paging.lastBtn && paging.lastBtn > paging.viewBtnCnt}">
 					<li class="page-item"><a class="page-link"
-						href="/getNewFamilyList.do?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">다음</a></li>
+						href="/MIA/getNewFamilyList?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">다음</a></li>
 				</c:if>
 			</ul>
 			<br> <br>

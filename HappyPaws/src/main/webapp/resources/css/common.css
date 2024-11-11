@@ -205,3 +205,66 @@ footer a{
 	color: black;
 	text-decoration: none;
 }
+/*==================================================*/
+/* 페이지 CSS */
+.pagination {
+    padding-top: 0 !important; /* 상단 패딩 제거 */
+    padding-bottom: 0 !important; /* 하단 패딩 제거 */
+    --bs-pagination-border-color : none !important; 
+    display: flex !important; /* Flexbox를 사용하여 정렬 */
+    list-style: none !important; /* 기본 리스트 스타일 제거 */
+    padding: 0 !important; /* 패딩 제거 */
+    margin: 0 auto !important; /* 위아래 여백 설정 */
+    text-align: center !important;
+    width: 100px !important;
+    margin-top: 20px !important;
+}
+
+.pagination .page-item {
+    margin: 0 5px !important; /* 페이지 아이템 간 여백 */
+    width: 30px !important;
+    height: 30px !important;
+    position: relative !important;
+}
+
+.pagination .page-link {
+    text-decoration: none !important;
+    color: black !important;
+    width: 30px !important;
+    height: 30px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-radius: 50% !important;
+    line-height: normal !important; /* 기본 부트스트랩 설정 덮어쓰기 */
+    vertical-align: middle !important; /* 텍스트 가운데 정렬 */
+    padding: 0 !important; /* 부트스트랩의 기본 패딩 제거 */
+}
+
+.pagination .page-link{
+    background-color: unset !important;
+}
+
+.pagination .page-link:hover {
+    color: #fcd11e !important;
+  
+}
+
+.pagination .active {
+    position: relative !important; /* 부모 요소의 위치를 기준으로 설정 */
+}
+
+.pagination .active a {
+    width: 30px !important; /* 동그라미의 너비를 키움 */
+    height: 30px !important; /* 동그라미의 높이를 키움 */
+    color: black !important;
+    background-color: #ffeb994d !important;
+    border-radius: 50% !important;
+    border: 2px solid #fcd11e !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    line-height: normal !important; /* 클릭된 버튼의 텍스트 위치 문제 해결 */
+    padding: 0 !important; /* 추가 패딩 제거 */
+}

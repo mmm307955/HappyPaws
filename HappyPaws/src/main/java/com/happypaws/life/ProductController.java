@@ -157,12 +157,12 @@ public class ProductController {
 	            inquiryVO.setPr_id(pr_id);
 	            
 	            ProductPagingVO inquiryPaging = new ProductPagingVO();
-	            inquiryPaging.setBtnCur(inquiryPage);
+	            inquiryPaging.setBtnCur(Math.max(1, inquiryPage));
 	            inquiryPaging.setRowTotalCount(svc.getProductQuestionCount(pr_id));
 	            inquiryPaging.setRowSizePerPage(10);
 	            inquiryPaging = new ProductPagingVO(inquiryPaging);
 	            
-	            inquiryVO.setRowFirst(inquiryPaging.getRowFirst());
+	            inquiryVO.setRowFirst(Math.max(0, inquiryPaging.getRowFirst()));
 	            inquiryVO.setRowSizePerPage(inquiryPaging.getRowSizePerPage());
 	            
 	            model.addAttribute("productQuestion", svc.getProductQuestion(inquiryVO));
@@ -200,12 +200,12 @@ public class ProductController {
 	    inquiryVO.setPr_id(pr_id);
 	    
 	    ProductPagingVO inquiryPaging = new ProductPagingVO();
-	    inquiryPaging.setBtnCur(inquiryPage);
+	    inquiryPaging.setBtnCur(Math.max(1, inquiryPage));
 	    inquiryPaging.setRowTotalCount(svc.getProductQuestionCount(pr_id));
 	    inquiryPaging.setRowSizePerPage(10);
 	    inquiryPaging = new ProductPagingVO(inquiryPaging);
 	    
-	    inquiryVO.setRowFirst(inquiryPaging.getRowFirst());
+	    inquiryVO.setRowFirst(Math.max(0, inquiryPaging.getRowFirst()));
 	    inquiryVO.setRowSizePerPage(inquiryPaging.getRowSizePerPage());
 	    
 	    // Model에 데이터 추가

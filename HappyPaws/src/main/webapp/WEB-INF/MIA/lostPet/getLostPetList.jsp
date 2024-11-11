@@ -17,12 +17,12 @@ pageContext.setAttribute("categories", categories);
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
 <script>
         function selLp(val, val2, val3, val4, nowpage) {
-            location.href = "/getLostPet.do?lp_seq=" + val + '&searchCondition=' + val2 + '&searchKeyword=' + val3 + '&category=' + val4 + '&nowPage=' + nowpage;
+            location.href = "/MIA/getLostPet?lp_seq=" + val + '&searchCondition=' + val2 + '&searchKeyword=' + val3 + '&category=' + val4 + '&nowPage=' + nowpage;
         }
 
         $(document).ready(function() {
             $("#lpIns").click(function() {
-                location.href = "/insertLostPet.do";
+                location.href = "/MIA/insertLostPet";
             });
         });
     </script>
@@ -31,7 +31,7 @@ pageContext.setAttribute("categories", categories);
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 		<div class="n_list">
-			<h2><span style="color: red;">아이를 찾아주세요 </span>/ <a href="/getFindPetList.do">아이를 발견했어요</a> /  <a href="/getNewFamilyList.do">새로운 가족을 찾아요</a></h2>
+			<h2><span style="color: red;">아이를 찾아주세요 </span>/ <a href="/MIA/getFindPetList">아이를 발견했어요</a> /  <a href="/MIA/getNewFamilyList">새로운 가족을 찾아요</a></h2>
 			
 			<div class="n_seachform">
 				<form>
@@ -52,7 +52,7 @@ pageContext.setAttribute("categories", categories);
 
 			<div class="n_categoryform">
 				<c:forEach var="category" items="${categories}">
-					<form action="getLostPetList.do" method="post"
+					<form action="/MIA/getLostPetList" method="post"
 						style="display: inline;">
 						<input type="hidden" name="searchCondition"
 							value="${searchCondition}"> <input type="hidden"
@@ -71,7 +71,7 @@ pageContext.setAttribute("categories", categories);
 						onclick="selLp(${lostPet.lp_seq}, '${searchCondition}', '${searchKeyword}', '${category}', ${paging.nowPage})"
 						style="cursor: pointer;">
 						<a
-							href="getLostPet.do?lp_seq=${lostPet.lp_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
+							href="/MIA/getLostPet?lp_seq=${lostPet.lp_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
 							<img
 							src="${pageContext.request.contextPath}/resources/MIA-img/lostPetImg/${lostPet.lp_img}"
 							alt="Lost Pet Image" class="pet-image">
@@ -92,7 +92,7 @@ pageContext.setAttribute("categories", categories);
 				<c:if
 					test="${paging.nowPage > 1 && paging.lastBtn > paging.viewBtnCnt}">
 					<li class="page-item"><a class="page-link"
-						href="getLostPetList.do?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">이전</a></li>
+						href="/MIA/getLostPetList?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">이전</a></li>
 				</c:if>
 				<c:forEach var="i" begin="${paging.startBtn}" end="${paging.endBtn}"
 					step="1">
@@ -102,14 +102,14 @@ pageContext.setAttribute("categories", categories);
 						</c:when>
 						<c:otherwise>
 							<li class="page-item"><a class="page-link"
-								href="getLostPetList.do?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">${i}</a></li>
+								href="/MIA/getLostPetList?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">${i}</a></li>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
 				<c:if
 					test="${paging.nowPage < paging.lastBtn && paging.lastBtn > paging.viewBtnCnt}">
 					<li class="page-item"><a class="page-link"
-						href="/getLostPetList.do?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">다음</a></li>
+						href="/MIA/getLostPetList?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">다음</a></li>
 				</c:if>
 			</ul>
 			<br> <br>

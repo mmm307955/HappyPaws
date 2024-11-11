@@ -14,7 +14,7 @@
 $(document).ready(function() {
     function setupEventHandlers() {
         $("#nfMod").click(function() {
-            document.fm.action = "/updateNewFamily.do";
+            document.fm.action = "/MIA/updateNewFamily";
             document.fm.method = "get";
             document.fm.nf_seq.value = "${newFamily.nf_seq}";
             document.fm.nowPage.value = "${nowPage}" || 1;
@@ -28,12 +28,12 @@ $(document).ready(function() {
             let con_test = confirm("정말로 삭제하시겠습니까?");
             if (con_test) {
                 let s = document.fm.nf_seq.value;
-                location.href = "/deleteNewFamily.do?nf_seq=" + s;
+                location.href = "/MIA/deleteNewFamily?nf_seq=" + s;
             }
         });
 
         $("#nfList").click(function() {
-            document.hideFrm.action = "/getNewFamilyList.do";
+            document.hideFrm.action = "/MIA/getNewFamilyList";
             document.hideFrm.method = "post";
             document.hideFrm.nowPage.value = "${nowPage}" || 1;
             document.hideFrm.searchCondition.value = "${searchCondition}";
@@ -80,7 +80,7 @@ $(document).ready(function() {
                 }
 
                 if (nf_seq && nfc_seq) {
-                    location.href = "/updateNfComment.do?nf_seq=" + nf_seq +
+                    location.href = "/MIA/updateNfComment?nf_seq=" + nf_seq +
                         "&nfc_seq=" + nfc_seq +
                         "&nfc_content=" + encodeURIComponent(content) +
                         "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
@@ -99,7 +99,7 @@ $(document).ready(function() {
                 let nfc_seq = $(this).closest(".nfComment").find("input[name='nfc_seq']").val();
 
                 if (nf_seq && nfc_seq) {
-                    location.href = "/deleteNfComment.do?nf_seq=" + nf_seq +
+                    location.href = "/MIA/deleteNfComment?nf_seq=" + nf_seq +
                         "&nfc_seq=" + nfc_seq +
                         "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
                         "&searchCondition=" + encodeURIComponent("${searchCondition}") +
@@ -209,7 +209,7 @@ $(document).ready(function() {
 			</c:forEach>
 		</div>
 
-		<form action="insertNfComment.do" method="post" class="commentWrite">
+		<form action="/MIA/insertNfComment" method="post" class="commentWrite">
 			<div class="comment">
 				<input type="hidden" name="nfc_id" value="admin">
 				<input type="hidden" name="nf_seq" value="${newFamily.nf_seq}">

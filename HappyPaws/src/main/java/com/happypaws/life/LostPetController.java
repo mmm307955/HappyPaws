@@ -25,6 +25,7 @@ import com.happypaws.vo.LpCommentVO;
 import com.happypaws.vo.PagingVO;
 
 @Controller
+@RequestMapping("/MIA")
 public class LostPetController {
 	int cntChk = 0;
 
@@ -37,12 +38,12 @@ public class LostPetController {
 	String realPath = "c:/happyPaws/happyPaws/src/main/webapp/resources/MIA-img/lostPetImg/";
 
 	// 글 등록
-	@RequestMapping(value = "/insertLostPet.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/insertLostPet", method = RequestMethod.GET)
 	public String insertView(LostPetVO vo) throws IllegalStateException, IOException {
 		return "/WEB-INF/MIA/lostPet/insertLostPet.jsp";
 	}
 
-	@RequestMapping(value = "/insertLostPet.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/insertLostPet", method = RequestMethod.POST)
 	public String insertLostPet(LostPetVO vo) throws IllegalStateException, IOException {
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
@@ -55,11 +56,11 @@ public class LostPetController {
 		uploadFile.transferTo(new File(realPath + uniqueFileName));
 
 		lostPetSVC.insertLostPet(vo);
-		return "redirect:getLostPetList.do";
+		return "redirect:/MIA/getLostPetList";
 	}
 
 	// 글 수정
-	@RequestMapping(value = "/updateLostPet.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateLostPet", method = RequestMethod.GET)
 	public String updateView(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "lp_seq") int seq, LostPetVO vo, Model model,
 			@RequestParam(value = "nowPage", required = false) String nowPage,
@@ -84,7 +85,7 @@ public class LostPetController {
 		return "/WEB-INF/MIA/lostPet/modifyLostPet.jsp";
 	}
 
-	@RequestMapping(value = "/updateLostPet.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateLostPet", method = RequestMethod.POST)
 	public String updateLostPet(LostPetVO vo, HttpSession session) throws IllegalStateException, IOException {
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
@@ -114,20 +115,20 @@ public class LostPetController {
 		// 데이터베이스 업데이트
 		lostPetSVC.updateLostPet(vo);
 
-		return "redirect:/getLostPet.do?lp_seq=" + vo.getLp_seq() + "&nowPage=" + vo.getNowPage() + "&category="
+		return "redirect:/MIA/getLostPet?lp_seq=" + vo.getLp_seq() + "&nowPage=" + vo.getNowPage() + "&category="
 				+ vo.getCategory() + "&searchKeyword=" + vo.getSearchKeyword() + "&searchCondition="
 				+ vo.getSearchCondition();
 	}
 
 	// 글 삭제
-	@RequestMapping("/deleteLostPet.do")
+	@RequestMapping("/deleteLostPet")
 	public String deleteLostPet(LostPetVO vo, HttpServletRequest request) {
 		lostPetSVC.deleteLostPet(vo);
-		return "redirect:getLostPetList.do";
+		return "redirect:/MIA/getLostPetList";
 	}
 
 	// 글 완전히 삭제
-	@RequestMapping("/deleteAllLostPet.do")
+	@RequestMapping("/deleteAllLostPet")
 	public String deleteAllLostPet(LostPetVO vo, HttpServletRequest request) {
 		realPath = request.getSession().getServletContext().getRealPath("/resources/img/");
 		if (vo.getLp_img() != null) {
@@ -136,11 +137,11 @@ public class LostPetController {
 			f.delete();
 		}
 		lostPetSVC.deleteAllLostPet(vo);
-		return "redirect:getLostPetList.do";
+		return "redirect:/MIA/getLostPetList";
 	}
 
 	// 글 상세 조회 + 댓글 조회
-	@RequestMapping("/getLostPet.do")
+	@RequestMapping("/getLostPet")
 	public String getLostPet(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "lp_seq") int seq, LostPetVO vo, Model model, LpCommentVO cvo,
 			@RequestParam(value = "nowPage", required = false) String nowPage,
@@ -176,7 +177,7 @@ public class LostPetController {
 	}
 
 	// 글 목록
-	@RequestMapping("/getLostPetList.do")
+	@RequestMapping("/getLostPetList")
 	public String getLostPetListPost(PagingVO pv, LostPetVO vo, Model model,
 			@RequestParam(value = "nowPage", required = false, defaultValue = "1") Integer nowPage,
 			@RequestParam(value = "category", required = false, defaultValue = "") String category) {

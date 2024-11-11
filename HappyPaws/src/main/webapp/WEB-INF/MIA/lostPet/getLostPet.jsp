@@ -14,7 +14,7 @@
 $(document).ready(function() {
     function setupEventHandlers() {
         $("#lpMod").click(function() {
-            document.fm.action = "/updateLostPet.do";
+            document.fm.action = "/MIA/updateLostPet";
             document.fm.method = "get";
             document.fm.lp_seq.value = "${lostPet.lp_seq}";
             document.fm.nowPage.value = "${nowPage}" || 1;
@@ -28,12 +28,12 @@ $(document).ready(function() {
             let con_test = confirm("정말로 삭제하시겠습니까?");
             if (con_test) {
                 let s = document.fm.lp_seq.value;
-                location.href = "/deleteLostPet.do?lp_seq=" + s;
+                location.href = "/MIA/deleteLostPet?lp_seq=" + s;
             }
         });
 
         $("#lpList").click(function() {
-            document.hideFrm.action = "/getLostPetList.do";
+            document.hideFrm.action = "/MIA/getLostPetList";
             document.hideFrm.method = "post";
             document.hideFrm.nowPage.value = "${nowPage}" || 1;
             document.hideFrm.searchCondition.value = "${searchCondition}";
@@ -80,7 +80,7 @@ $(document).ready(function() {
                 }
 
                 if (lp_seq && lpc_seq) {
-                    location.href = "/updateLpComment.do?lp_seq=" + lp_seq +
+                    location.href = "/MIA/updateLpComment?lp_seq=" + lp_seq +
                         "&lpc_seq=" + lpc_seq +
                         "&lpc_content=" + encodeURIComponent(content) +
                         "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
@@ -99,7 +99,7 @@ $(document).ready(function() {
                 let lpc_seq = $(this).closest(".lpComment").find("input[name='lpc_seq']").val();
 
                 if (lp_seq && lpc_seq) {
-                    location.href = "/deleteLpComment.do?lp_seq=" + lp_seq +
+                    location.href = "/MIA/deleteLpComment?lp_seq=" + lp_seq +
                         "&lpc_seq=" + lpc_seq +
                         "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
                         "&searchCondition=" + encodeURIComponent("${searchCondition}") +
@@ -213,7 +213,7 @@ $(document).ready(function() {
 			</c:forEach>
 		</div>
 
-		<form action="insertLpComment.do" method="post" class="commentWrite">
+		<form action="/MIA/insertLpComment" method="post" class="commentWrite">
 			<div class="comment">
 				<input type="hidden" name="lpc_id" value="${user.us_id}">
 				<input type="hidden" name="lp_seq" value="${lostPet.lp_seq}">

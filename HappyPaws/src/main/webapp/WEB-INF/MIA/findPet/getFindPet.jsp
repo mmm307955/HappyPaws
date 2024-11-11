@@ -9,7 +9,7 @@
 $(document).ready(function() {
     function setupEventHandlers() {
         $("#fpMod").click(function() {
-            document.fm.action = "/updateFindPet.do";
+            document.fm.action = "/MIA/updateFindPet";
             document.fm.method = "get";
             document.fm.fp_seq.value = "${findPet.fp_seq}";
             document.fm.nowPage.value = "${nowPage}" || 1;
@@ -23,12 +23,12 @@ $(document).ready(function() {
             let con_test = confirm("정말로 삭제하시겠습니까?");
             if (con_test) {
                 let s = document.fm.fp_seq.value;
-                location.href = "/deleteFindPet.do?fp_seq=" + s;
+                location.href = "/MIA/deleteFindPet?fp_seq=" + s;
             }
         });
 
         $("#fpList").click(function() {
-            document.hideFrm.action = "/getFindPetList.do";
+            document.hideFrm.action = "/MIA/getFindPetList";
             document.hideFrm.method = "post";
             document.hideFrm.nowPage.value = "${nowPage}" || 1;
             document.hideFrm.searchCondition.value = "${searchCondition}";
@@ -75,7 +75,7 @@ $(document).ready(function() {
                 }
 
                 if (fp_seq && fpc_seq) {
-                    location.href = "/updateFpComment.do?fp_seq=" + fp_seq +
+                    location.href = "/MIA/updateFpComment?fp_seq=" + fp_seq +
                         "&fpc_seq=" + fpc_seq +
                         "&fpc_content=" + encodeURIComponent(content) +
                         "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
@@ -94,7 +94,7 @@ $(document).ready(function() {
                 let fpc_seq = $(this).closest(".fpComment").find("input[name='fpc_seq']").val();
 
                 if (fp_seq && fpc_seq) {
-                    location.href = "/deleteFpComment.do?fp_seq=" + fp_seq +
+                    location.href = "/MIA/deleteFpComment?fp_seq=" + fp_seq +
                         "&fpc_seq=" + fpc_seq +
                         "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
                         "&searchCondition=" + encodeURIComponent("${searchCondition}") +
@@ -208,7 +208,7 @@ $(document).ready(function() {
 			</c:forEach>
 		</div>
 
-		<form action="insertFpComment.do" method="post" class="fpCommentwrite">
+		<form action="insertFpComment" method="post" class="fpCommentwrite">
 			<div class="fpComment">
 				<input type="hidden" name="fpc_id" value="admin">
 				<input type="hidden" name="fp_seq" value="${findPet.fp_seq}">

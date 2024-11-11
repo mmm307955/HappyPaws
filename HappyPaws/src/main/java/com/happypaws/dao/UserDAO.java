@@ -1,15 +1,19 @@
 package com.happypaws.dao;
 
+
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-
+import com.happypaws.vo.MyPostVO;
 import com.happypaws.vo.UsersVO;
+import com.sun.jdi.connect.spi.Connection;
 
 
 @Component
@@ -74,5 +78,19 @@ public class UserDAO {
 
         sql.update("com.happypaws.dao.UserDAO.updateUserToDeleted", params);
     }
+
+
+    public List<MyPostVO> findPostsByUserId(String usId) {
+        return sql.selectList("com.happypaws.dao.UserDAO.findPostsByUserId", usId);
+    }
+    
+ // `post_id`를 기반으로 특정 게시물을 조회하는 메서드
+    public MyPostVO findPostById(int post_id) {
+        return sql.selectOne("com.happypaws.dao.UserDAO.findPostById", post_id);
+    }
+
+
+
+	
 
 }

@@ -12,13 +12,14 @@ import com.happypaws.svc.NfCommentSVC;
 import com.happypaws.vo.NfCommentVO;
 
 @Controller
+@RequestMapping("/MIA")
 public class NfCommentController {
 
 	@Autowired
 	private NfCommentSVC nfCommentSVC;
 
 	// 댓글 등록
-	@RequestMapping(value = "/insertNfComment.do")
+	@RequestMapping(value = "/insertNfComment")
 	public String insertNfComment(NfCommentVO vo, HttpServletRequest request)
 			throws IllegalStateException, IOException {
 		String searchCondition = request.getParameter("searchCondition");
@@ -30,12 +31,12 @@ public class NfCommentController {
 		nfCommentSVC.insertNfComment(vo);
 
 		// 리다이렉트할 때 필요한 파라미터 추가
-		return "redirect:/getNewFamily.do?nf_seq=" + vo.getNf_seq() + "&searchCondition=" + searchCondition
+		return "redirect:/MIA/getNewFamily?nf_seq=" + vo.getNf_seq() + "&searchCondition=" + searchCondition
 				+ "&searchKeyword=" + searchKeyword + "&category=" + category + "&nowPage=" + nowPage;
 	}
 
 	// 댓글 수정
-	@RequestMapping("/updateNfComment.do")
+	@RequestMapping("/updateNfComment")
 	public String updateNfComment(NfCommentVO vo, HttpServletRequest request) {
 	    String nf_seq = request.getParameter("nf_seq");
 	    String nfc_seq = request.getParameter("nfc_seq");
@@ -67,7 +68,7 @@ public class NfCommentController {
 	        System.err.println("예외 발생: " + e.getMessage());
 	    }
 
-	    return "redirect:/getNewFamily.do?nf_seq=" + vo.getNf_seq() + 
+	    return "redirect:/MIA/getNewFamily?nf_seq=" + vo.getNf_seq() + 
 	           "&searchCondition=" + searchCondition +
 	           "&searchKeyword=" + searchKeyword + 
 	           "&category=" + category + 
@@ -75,7 +76,7 @@ public class NfCommentController {
 	}
 
 	// 댓글 삭제
-	@RequestMapping("/deleteNfComment.do")
+	@RequestMapping("/deleteNfComment")
 	public String deleteNfComment(HttpServletRequest request) {
 		String nf_seq = request.getParameter("nf_seq");
 		String nfc_seq = request.getParameter("nfc_seq");
@@ -91,7 +92,7 @@ public class NfCommentController {
 		vo.setNfc_seq(Integer.parseInt(nfc_seq));
 
 		nfCommentSVC.deleteNfComment(vo);
-		return "redirect:/getNewFamily.do?nf_seq=" + vo.getNf_seq() + "&searchCondition=" + searchCondition
+		return "redirect:/MIA/getNewFamily?nf_seq=" + vo.getNf_seq() + "&searchCondition=" + searchCondition
 				+ "&searchKeyword=" + searchKeyword + "&category=" + category + "&nowPage=" + nowPage;
 	}
 }

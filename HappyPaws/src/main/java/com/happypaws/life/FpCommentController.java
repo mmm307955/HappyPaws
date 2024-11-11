@@ -12,13 +12,14 @@ import com.happypaws.svc.FpCommentSVC;
 import com.happypaws.vo.FpCommentVO;
 
 @Controller
+@RequestMapping("/MIA")
 public class FpCommentController {
 
     @Autowired
     private FpCommentSVC fpCommentSVC;
 
     // 댓글 등록
-    @RequestMapping(value = "/insertFpComment.do")
+    @RequestMapping(value = "/insertFpComment")
     public String insertFpComment(FpCommentVO vo, HttpServletRequest request)
             throws IllegalStateException, IOException {
         String searchCondition = request.getParameter("searchCondition");
@@ -30,12 +31,12 @@ public class FpCommentController {
         fpCommentSVC.insertFpComment(vo);
 
         // 리다이렉트할 때 필요한 파라미터 추가
-        return "redirect:/getFindPet.do?fp_seq=" + vo.getFp_seq() + "&searchCondition=" + searchCondition
+        return "redirect:/MIA/getFindPet?fp_seq=" + vo.getFp_seq() + "&searchCondition=" + searchCondition
                 + "&searchKeyword=" + searchKeyword + "&category=" + category + "&nowPage=" + nowPage;
     }
 
     // 댓글 수정
-    @RequestMapping("/updateFpComment.do")
+    @RequestMapping("/updateFpComment")
     public String updateFpComment(FpCommentVO vo, HttpServletRequest request) {
         String fp_seq = request.getParameter("fp_seq");
         String fpc_seq = request.getParameter("fpc_seq");
@@ -67,7 +68,7 @@ public class FpCommentController {
             System.err.println("예외 발생: " + e.getMessage());
         }
 
-        return "redirect:/getFindPet.do?fp_seq=" + vo.getFp_seq() + 
+        return "redirect:/MIA/getFindPet?fp_seq=" + vo.getFp_seq() + 
                "&searchCondition=" + searchCondition +
                "&searchKeyword=" + searchKeyword + 
                "&category=" + category + 
@@ -75,7 +76,7 @@ public class FpCommentController {
     }
 
     // 댓글 삭제
-    @RequestMapping("/deleteFpComment.do")
+    @RequestMapping("/deleteFpComment")
     public String deleteFpComment(HttpServletRequest request) {
         String fp_seq = request.getParameter("fp_seq");
         String fpc_seq = request.getParameter("fpc_seq");
@@ -91,7 +92,7 @@ public class FpCommentController {
         vo.setFpc_seq(Integer.parseInt(fpc_seq));
 
         fpCommentSVC.deleteFpComment(vo);
-        return "redirect:/getFindPet.do?fp_seq=" + vo.getFp_seq() + "&searchCondition=" + searchCondition
+        return "redirect:/MIA/getFindPet?fp_seq=" + vo.getFp_seq() + "&searchCondition=" + searchCondition
                 + "&searchKeyword=" + searchKeyword + "&category=" + category + "&nowPage=" + nowPage;
     }
 }

@@ -177,7 +177,7 @@
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 	<div class="container">
-	<form action="ad_manageProductModify" method="POST" enctype="multipart/form-data">
+	<form action="ad_manageProductModify" method="POST" enctype="multipart/form-data" id="productAddForm">
 	<input type="hidden" id="pr_id" name="pr_id" value="${param.pr_id}">
 	<input type="hidden" name="nowPage" value="${param.nowPage}">
 	<input type="hidden" name="searchCondition" value="${param.searchCondition}">
@@ -251,7 +251,7 @@
 	        <br>
 	        <div class="option-stock_price">
 	        <label for="pr_opt_price">
-	            <input type="number" name="pr_opt_price" id="pr_opt_price" value="${option.pr_opt_price}" placeholder="옵션 추가금 입력">
+	            <input type="number" name="pr_opt_price" id="pr_opt_price" value="${option.pr_opt_price}" placeholder="옵션 가격 입력">
 	            </label>
 	            <label for="pr_opt_stock">
 	            <input type="number" name="pr_opt_stock" id="pr_opt_stock" value="${option.pr_opt_stock}" placeholder="재고 수량 입력">
@@ -272,8 +272,12 @@
 
         <div class="form-group">
             <label for="pr_detail_desc">상품 상세 설명</label>
-            <textarea id="pr_detail_desc" name="pr_detail_desc">${product.pr_detail_desc}</textarea>
+<%--             <textarea id="pr_detail_desc" name="pr_detail_desc">${product.pr_detail_desc}</textarea> --%>
+       		<div id="editor">${product.pr_detail_desc}</div>
+			<input type="hidden" id="pr_detail_desc" name="pr_detail_desc">
         </div>
+       		
+       
         
 		<input type="hidden" id="option_count" name="option_count" value="1">
 		
@@ -299,6 +303,247 @@
 		       location.href = "/deleteProduct?pr_id=" + pr_id + "&nowPage=" + nowPage + "&searchCondition=" + searchCondition + "&searchKeyword=" + searchKeyword + "&pr_category=" + category;
 		    }
 		}
+		
+		$(document).ready(function() {
+		    // URL에 "cmty"가 포함된 경우 "active" 클래스 추가
+		    if (window.location.href.includes("cmty")) {
+		        $(".cmty-link").addClass("active");
+		    }
+		    
+		   var BlockEmbed = Quill.import('blots/block/embed');
+
+		   class CustomImageBlot extends BlockEmbed {
+		      static create(value) {
+		         let node = super.create();
+		         node.setAttribute('src', value.src);
+		         if (value.style) {
+		            node.setAttribute('style', value.style); // 인라인 스타일 추가
+		         }
+		         return node;
+		      }
+		   
+		      static value(node) {
+		         return {
+		            src: node.getAttribute('src'),
+		            style: node.getAttribute('style') // 인라인 스타일 반환
+		         };
+		      }
+		   }
+		   
+		   CustomImageBlot.blotName = 'customImage';
+		   CustomImageBlot.tagName = 'img';
+		   Quill.register(CustomImageBlot);
+		   
+		   function insertImageWithStyle(quill, imageUrl, width) {
+		      var range = quill.getSelection();
+		      var style = `width: ${width}px; height: auto;`;
+		      quill.insertEmbed(range.index, 'customImage', { src: imageUrl, style: style });
+		   }
+
+
+		   //Quill 라이브러리
+		   if ($('#editor').length) {
+		      var quill = new Quill('#editor', {
+		         theme: 'snow',
+		         modules: {
+		           toolbar: {
+		            container: [ 
+		              [{ 'header': [1, 2, false] }],
+		              ['bold', 'italic', 'underline'],
+		              ['image','code-block'],
+		              [{ 'align': [] }],
+		              [{ list: 'ordered' }, { list: 'bullet' }],
+		            ],
+		            handlers: {
+		               image: imageHandler  // 커스텀 이미지 핸들러
+		            }
+		           }
+		         }
+		        });
+		   }
+		   
+		    // 이미지 핸들러 함수
+		    function imageHandler() {
+		      var input = document.createElement('input');
+		      input.setAttribute('type', 'file');
+		      input.setAttribute('accept', 'image/*');
+		      input.click();
+		  
+		      input.onchange = function () {
+		        var file = input.files[0];
+		        var formData = new FormData();
+		        formData.append('file', file);
+		  
+		        // 서버로 이미지 업로드
+		        $.ajax({
+		         url: '/upload',  // 이미지 업로드 서버 URL
+		         type: 'POST',
+		         data: formData,
+		         processData: false,
+		         contentType: false,
+		         success: function (data) {
+		            // 서버로부터 이미지 URL을 받음
+		              var imageUrl = data.url;
+		  
+		              // Quill 에디터에 이미지 삽입
+		              var range = quill.getSelection();
+		              quill.insertEmbed(range.index, 'image', imageUrl);
+
+		            // 삽입된 이미지의 최대 width 설정
+		            setTimeout(function () {
+		               $('#editor img').each(function () {
+		                  if ($(this).attr('src') === imageUrl) {
+		                     $(this).css('max-width', '450px');
+		                     $(this).css('width', '100%'); // 초기 width 설정
+		                  }
+		               });
+		            }, 100);
+		         },
+		         error: function (error) {
+		           console.error('Image upload failed:', error);
+		         }
+		        });
+		      };
+		     }
+		     
+		   // Quill 에디터 내의 이미지 클릭 이벤트 바인딩
+		   $('#editor').on('click', 'img', function () {
+		      var $img = $(this);
+		      $('.resize-handle').remove();
+		      $('.align-container').remove();
+		   
+		      // 리사이즈 핸들 생성
+		      var $handle = $('<div class="resize-handle"></div>');
+		      $('body').append($handle);
+		      $handle.css({
+		         position: 'absolute',
+		         width: '10px',
+		         height: '10px',
+		         background: 'red',
+		         cursor: 'nwse-resize',
+		         zIndex: 1000
+		      });
+		   
+		      function updateHandlePosition() {
+		         var imgOffset = $img.offset();
+		         $handle.css({
+		            left: (imgOffset.left + $img.outerWidth() - 5) + 'px',
+		            top: (imgOffset.top + $img.outerHeight() - 5) + 'px'
+		         });
+		      }
+		   
+		      // 초기 핸들 위치 설정
+		      updateHandlePosition();
+		   
+		      $handle.on('mousedown touchstart', function (e) {
+		         e.preventDefault();
+		         var startX = e.pageX || e.originalEvent.touches[0].pageX;
+		   
+		         $(document).on('mousemove.resize touchmove.resize', function (event) {
+		            var currentX = event.pageX || event.originalEvent.touches[0].pageX;
+		            var newWidth = Math.min(450, Math.max(50, currentX - $img.offset().left)); // 최대 너비 450px 
+		   
+		            // 이미지가 오른쪽에 있을 때 음수나 비정상적인 너비를 방지
+		            if (newWidth > 50) {
+		               $img.css({
+		                  width: newWidth + 'px',
+		                  height: 'auto' // 비율 유지
+		               });
+		   
+		               // 리사이즈 중 핸들 위치 업데이트
+		               updateHandlePosition();
+		            }
+		         });
+		   
+		         $(document).on('mouseup.resize touchend.resize', function () {
+		            $(document).off('mousemove.resize touchmove.resize mouseup.resize touchend.resize');
+		         });
+		      });
+		   
+		      // 이미지 클릭 시 정렬 옵션 추가
+		      var $alignContainer = $('<div class="align-container"></div>');
+		      var alignButtons = ['left', 'center'].map(function (align) { // 'right' 정렬 제거
+		         var $button = $('<button></button>').text(align);
+		         $button.on('click', function () {
+		            $img.css({
+		               display: 'block',
+		               marginLeft: align === 'center' ? 'auto' : '0',
+		               marginRight: align === 'center' ? 'auto' : '0',
+		               textAlign: align
+		            });
+		            updateAlignContainerPosition(); // 정렬 후 위치 업데이트
+		            updateHandlePosition(); // 정렬 후 핸들 위치 업데이트
+		         });
+		         return $button;
+		      });
+		      $alignContainer.append(alignButtons);
+		      $('body').append($alignContainer);
+		   
+		      function updateAlignContainerPosition() {
+		         var imgOffset = $img.offset();
+		         $alignContainer.css({
+		            position: 'absolute',
+		            top: imgOffset.top - 30 + 'px',
+		            left: imgOffset.left + 'px',
+		            zIndex: 1000
+		         });
+		      }
+		   
+		      // 초기 위치 설정
+		      updateAlignContainerPosition();
+		   
+		      // 이미지 리사이즈 핸들러 설정
+		      $('.resize-handle').on('mousedown touchstart', function (e) {
+		         e.preventDefault();
+		   
+		         $(document).on('mousemove.resize touchmove.resize', function () {
+		            updateAlignContainerPosition(); // 이미지 크기 변경 후 위치 업데이트
+		            
+		         });
+		   
+		         $(document).on('mouseup.resize touchend.resize', function () {
+		            $(document).off('mousemove.resize touchmove.resize mouseup.resize touchend.resize');
+		         });
+		      });
+		      
+
+		       // 바깥 클릭 시 요소 제거
+		       $(document).on('click.removeElements', function (e) {
+		         if (!$(e.target).is($img) && !$(e.target).is($alignContainer) && !$(e.target).closest('.resize-handle').length) {
+		            $handle.remove();
+		            $alignContainer.remove();
+		            $(document).off('click.removeElements');
+		         }
+		      });
+
+		      // 마진값 변경 감지 및 스크롤 이벤트에 버튼과 핸들 제거
+		      var observer = new MutationObserver(function (mutationsList) {
+		         mutationsList.forEach(function (mutation) {
+		            if ($(mutation.target).hasClass('ql-tooltip') && $(mutation.target).css('margin') !== '') {
+		               $handle.remove();
+		               $alignContainer.remove();
+		               observer.disconnect(); // 감지 종료
+		            }
+		         });
+		      });
+		   
+		      // ql-tooltip 요소 감시
+		      var targetNode = document.querySelector('.ql-tooltip');
+		      if (targetNode) {
+		         observer.observe(targetNode, { attributes: true, attributeFilter: ['style'] });
+		      }
+		   });
+	    
+	    
+	    
+	    
+
+	  // 폼 제출 시 Quill 데이터 전송
+    $('#productAddForm').on('submit', function(e) {
+        var content = quill.root.innerHTML;  // Quill 데이터 가져오기
+        $('#pr_detail_desc').val(content);   // 숨겨진 input에 설정
+    });
+	});
 
 		    
 

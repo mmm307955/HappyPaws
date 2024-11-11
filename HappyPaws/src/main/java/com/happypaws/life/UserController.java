@@ -2,6 +2,7 @@ package com.happypaws.life;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.happypaws.svc.UserSVC;
 import com.happypaws.util.JwtCookieUtil;
+import com.happypaws.vo.AdVO;
+import com.happypaws.vo.MyPostVO;
 import com.happypaws.vo.UsersVO;
 
 @Controller
@@ -49,15 +53,18 @@ public class UserController {
 
     
     @GetMapping("/userDetail.do")
-    public String selectUserDetail(@RequestParam("us_id") String us_id, Model m) {
-    	System.out.println("us_id = " + us_id);
+    public String selectUserDetail(@RequestParam("us_id") String us_id, Model model) {
         UsersVO user = svc.user_detail(us_id);
-        System.out.println("조회된 사용자 정보: " + user); 
-        if (user != null) {
-            m.addAttribute("user", user); 
+
+        // us_is_del 값이 'Y'이면 탈퇴한 회원 알림 메시지 추가
+        if (user != null && "Y".equals(user.getUs_is_del())) {
+            model.addAttribute("alertMessage", "탈퇴한 회원입니다.");
         }
+
+        model.addAttribute("user", user);
         return "/WEB-INF/mypage/us_detail.jsp";  
     }
+
 
         
     @GetMapping("/userUpdate.do")
@@ -106,7 +113,7 @@ public class UserController {
         List<UsersVO> userList = svc.userSelectAll();
         m.addAttribute("userList", userList);
 
-        return "/WEB-INF/mypage/us_list.jsp";  // 수정된 목록 화면으로 이동
+        return "/WEB-INF/mypage/us_list.jsp"; // 수정된 목록 화면으로 이동
     }
 //    @GetMapping("/userDelete.do")
 //    public String showDeleteUserPage(HttpServletRequest request, Model m) {
@@ -241,12 +248,13 @@ public class UserController {
         svc.user_update(user);
 
         // 업데이트된 사용자 정보를 다시 가져와 모델에 추가
-        UsersVO updatedUser = svc.user_detail(user.getUs_id());
-        m.addAttribute("user", updatedUser);
+        List<UsersVO> userList = svc.userSelectAll(); // 전체 사용자 목록 가져오기
+        m.addAttribute("userList", userList); // Model에 목록 추가
         m.addAttribute("message", "정보가 성공적으로 업데이트되었습니다.");
 
-        return "/WEB-INF/mypage/us_mypage.jsp";  // 마이페이지로 이동
+        return "/WEB-INF/mypage/us_list.jsp";  // 수정된 목록 화면으로 이동
     }
+
 
     @RequestMapping("/logout")
 	public String logout(HttpServletResponse response, HttpSession session) {
@@ -254,8 +262,59 @@ public class UserController {
 		JwtCookieUtil.deleteJwtCookie(response);
 		return "redirect:/userList.do";
 	}
-
     
+    @GetMapping("/myPosts")
+    public String showMyPosts(HttpServletRequest request, Model model) {
+        // 쿠키에서 JWT를 통해 사용자 정보를 추출합니다.
+        UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
+
+        // 사용자 정보가 없거나 ID가 없는 경우 로그인 페이지로 리다이렉트
+        if (user == null || user.getUs_id() == null) {
+            model.addAttribute("message", "로그인이 필요합니다.");
+            return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
+        }
+
+        // 현재 사용자 ID의 게시물 목록 조회
+        List<MyPostVO> userPosts = svc.getPostsByUserId(user.getUs_id());
+
+        // 필터링된 게시물 목록을 모델에 추가
+        model.addAttribute("posts", userPosts);
+        model.addAttribute("user", user); // 사용자 정보를 모델에 추가
+
+        // 내 게시물 페이지로 이동
+        return "/WEB-INF/mypage/mypost.jsp";
+    }
+    
+    @GetMapping("/postDetail")
+    public String postDetail(@RequestParam("post_id") int postId, HttpServletRequest request, Model model) {
+        // 쿠키에서 JWT를 통해 사용자 정보를 추출
+        UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
+
+        // 사용자 정보가 없거나 ID가 없는 경우 로그인 페이지로 리다이렉트
+        if (user == null || user.getUs_id() == null) {
+            model.addAttribute("message", "로그인이 필요합니다.");
+            return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
+        }
+
+        // 현재 로그인한 사용자 ID를 저장
+        String currentUserId = user.getUs_id();
+
+        // `post_id`를 기반으로 게시물 정보를 조회
+        MyPostVO post = svc.getPostById(postId);
+
+        // 게시물이 존재하고, 현재 사용자가 게시물의 작성자인지 확인
+        if (post != null && post.getUs_id().equals(currentUserId)) {
+            model.addAttribute("post", post); // 모델에 게시물 정보 추가
+            return "/WEB-INF/mypage/postDetail.jsp"; // 게시물 상세 페이지로 이동
+        } else {
+            // 게시물이 없거나 접근 권한이 없는 경우 오류 메시지 추가
+            model.addAttribute("errorMessage", "해당 게시물을 찾을 수 없거나 접근 권한이 없습니다.");
+            return "/WEB-INF/mypage/error.jsp"; // 에러 페이지로 이동
+        }
+    }
+
+}
+
    
     
-}
+
