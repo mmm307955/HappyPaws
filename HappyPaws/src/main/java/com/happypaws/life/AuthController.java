@@ -139,6 +139,33 @@ public class AuthController {
 		return "redirect:/";
 	}
 
+	@GetMapping("/adminLogin")
+	public String adminLogin() {
+		return "/WEB-INF/auth/adminLogin.jsp";
+	}
+	
+	@PostMapping("/adminLogin")
+	public String adminLogin(UsersVO admin, HttpServletResponse response, Model model) {
+		String password = admin.getUs_password();
+		admin.setUs_sns("default");
+		admin = svc.login(admin);
+		if (admin == null) {
+			model.addAttribute("error", "id");
+		} else if (admin.getUs_is_del().equals("Y")) {
+			model.addAttribute("error", "del");
+		} else if (!admin.getUs_id().equals("admin")) {
+			model.addAttribute("error", "admin");
+		} else if (Argon2Util.verifyPassword(admin.getUs_password(), password)) {
+			admin.setUs_profile("/resources/profile_images/" + admin.getUs_profile());
+			JwtCookieUtil.createJwtCookie(response, admin);
+			return "redirect:/ad_myPage.do";
+		} else {
+			model.addAttribute("error", "password");
+		}
+
+		return "/WEB-INF/auth/adminLogin.jsp";
+	}
+
 	// ===== 회원가입 ===== //
 	@GetMapping("/join")
 	public String join() {

@@ -15,6 +15,10 @@ $(document).ready(function() {
     if (window.location.href.includes("pr_")) {
         $(".pr_-link").addClass("active");
     }
+    
+    if (window.location.href.includes("MIA")) {
+        $(".MIA-link").addClass("active");
+    }
    
     
 });

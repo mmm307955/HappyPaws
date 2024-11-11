@@ -81,7 +81,6 @@ header {
     align-items: center;
     padding: 10px 0;
     font-size: 20px;
-
 }
 
 /* 로고 스타일 */
@@ -147,7 +146,6 @@ header {
 /* 활성화된 링크 스타일 */
 .header-menu a.active {
     color: #ffcc00; /* 활성화된 링크의 색상 */
-
 }
 
 /* 로그인 버튼 */
@@ -168,7 +166,7 @@ header {
 .header-login-link {
     text-decoration: none;
     font-size: 20px;
-    padding: 5px 10px;
+    padding-left: 5px;
     transition: color 0.3s;
 }
 
@@ -205,6 +203,7 @@ footer a{
 	color: black;
 	text-decoration: none;
 }
+
 /*==================================================*/
 /* 페이지 CSS */
 .pagination {

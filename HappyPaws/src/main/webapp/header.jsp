@@ -7,7 +7,7 @@
 			<a href="/"><img src="/resources/images/HappyPawsLogo.png" alt="logo"/></a>
 		</div>
 		<div class="header-menu">
-		   	<a href="${pageContext.request.contextPath}/getLostPetList.do" >반려동물</a>
+		   	<a href="${pageContext.request.contextPath}/getLostPetList.do" class="MIA-link">반려동물</a>
 	        <a href="${pageContext.request.contextPath}/pr_list" class="pr_-link">반려용품</a>
 			<a href="${pageContext.request.contextPath}/board/notice_list" class="notice-link" >공지사항</a>
 	        <a href="${pageContext.request.contextPath}/board/qna_list" class="qna-link" >Q&amp;A</a>
@@ -21,7 +21,8 @@
 				</c:when>
 				<c:otherwise>
 					<img src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/images/favicon.ico';" alt="이미지를 불러오는데 실패하였습니다.">
-					<a href="${pageContext.request.contextPath}/us_mainmyPage.do"class="header-login-link">${user.us_nick}</a>님
+					<a href="${pageContext.request.contextPath}/us_mainmyPage.do" class="header-login-link">${user.us_nick}</a><b>님</b>
+					<a href="/auth/logout" class="header-login-link">로그아웃</a>
 				</c:otherwise>
 			</c:choose>
 		</div>
