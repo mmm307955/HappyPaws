@@ -46,19 +46,20 @@
         table-layout: auto;
     }
 
-
-
     th, td {
         border: 1px solid #ddd;
         padding: 8px;
          white-space: nowrap; 
         overflow: hidden;
-      
+          text-align: center;
     }
+    
      th {
         background-color: #FFD700;
         font-weight: bold;
-        border-radius: 8px;
+        border-radius: 19Spx;
+          padding: 10px 15px;
+           border: none;
     }
     
     tr:nth-child(even) {
@@ -108,7 +109,7 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
         <c:if test="${status.index >= startIndex && status.index < endIndex}">
         
          <tr>             
-              <td><input type="checkbox" name="userIds" value="${user.us_id} onclick="event.stopPropagation();"></td>
+              <td><input type="checkbox" name="userIds" value="${user.us_id}onclick="event.stopPropagation();"></td>
                  <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${status.index + 1}</td>
         <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_id}</td>
         <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_name}</td>

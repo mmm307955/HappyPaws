@@ -51,13 +51,13 @@
         cursor: pointer;
         transition: background-color 0.3s, color 0.3s;
     }
-      /* 기본 상태에서의 버튼 스타일 */
+      
     .button-container button:hover,
     .button-container input[type="submit"]:hover {
         background-color: #d0d0d0; /* 마우스 오버 시 색상 */
     }
 
-    /* 포커스 상태 스타일 (키보드 접근 시) */
+   
     .button-container button:focus,
     .button-container input[type="submit"]:focus {
         outline: 2px solid #005fcc; /* 파란색 테두리 */
@@ -65,17 +65,24 @@
         background-color: #d0d0d0;
     }
 
-    /* 클릭 시 (active 상태) 색상 변경 */
+ 
     .button-container button:active,
     .button-container input[type="submit"]:active {
         background-color: #a0a0a0;
         color: white;
     }
     
-
-
 </style>
 <script>
+    // 페이지 로드 시 alertMessage가 있으면 알림창을 띄우고, 목록으로 이동합니다.
+    window.onload = function() {
+        var alertMessage = "${alertMessage}";
+        if (alertMessage) {
+            alert(alertMessage);
+            window.location.href = "userList.do";
+        }
+    };
+
     function confirmDelete() {
         return confirm("정말로 회원 정보를 탈퇴하시겠습니까?");
     }

@@ -42,7 +42,7 @@
         .logout-btn {
             color: white;
             text-decoration: none;
-            background-color: #FF6347; /* 로그아웃 버튼 색상 */
+            background-color: #FF6347; 
             padding: 12px 20px;
             border-radius: 20px;
             display: inline-block;

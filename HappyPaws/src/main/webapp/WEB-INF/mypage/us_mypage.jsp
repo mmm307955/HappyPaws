@@ -91,14 +91,14 @@ input[name="us_password"] {
     box-sizing: border-box;
 }
         
-        /* 비밀번호 필드 내부 버튼 위치 조정 */
+       
         .password-container {
             position: relative;
             width: 100%;
         }
         .password-container input[type="password"] {
             width: 100%;
-            padding-right: 90px; /* 버튼 위치를 고려한 오른쪽 패딩 */
+            padding-right: 90px; 
         }
         .change-password-btn {
             position: absolute;
@@ -130,8 +130,8 @@ input[name="us_password"] {
         }
        .button-container {
     display: flex;
-    justify-content: center; /* 버튼을 중앙에 정렬 */
-    gap: 15px; /* 버튼 간 간격 조절 */
+    justify-content: center; 
+    gap: 15px;
     margin-top: 20px;
 }
 
