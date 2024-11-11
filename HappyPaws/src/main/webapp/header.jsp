@@ -7,7 +7,7 @@
 			<a href="/"><img src="/resources/images/HappyPawsLogo.png" alt="logo"/></a>
 		</div>
 		<div class="header-menu">
-		   	<a href="${pageContext.request.contextPath}/getLostPetList.do" class="MIA-link">반려동물</a>
+		   	<a href="${pageContext.request.contextPath}/MIA/getLostPetList" class="MIA-link">반려동물</a>
 	        <a href="${pageContext.request.contextPath}/pr_list" class="pr_-link">반려용품</a>
 			<a href="${pageContext.request.contextPath}/board/notice_list" class="notice-link" >공지사항</a>
 	        <a href="${pageContext.request.contextPath}/board/qna_list" class="qna-link" >Q&amp;A</a>
