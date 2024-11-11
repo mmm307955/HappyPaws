@@ -7,6 +7,7 @@ public class NewFamilyVO {
 	private String nf_id;
 	private String nf_title;
 	private String nf_ph;
+	private String nf_place;
 	private String nf_age;
 	private char nf_gender;
 	private String nf_category;
@@ -63,6 +64,14 @@ public class NewFamilyVO {
 
 	public void setNf_ph(String nf_ph) {
 		this.nf_ph = nf_ph;
+	}
+
+	public String getNf_place() {
+		return nf_place;
+	}
+
+	public void setNf_place(String nf_place) {
+		this.nf_place = nf_place;
 	}
 
 	public String getNf_age() {
@@ -228,11 +237,12 @@ public class NewFamilyVO {
 	@Override
 	public String toString() {
 		return "NewFamilyVO [nf_seq=" + nf_seq + ", nf_id=" + nf_id + ", nf_title=" + nf_title + ", nf_ph=" + nf_ph
-				+ ", nf_age=" + nf_age + ", nf_gender=" + nf_gender + ", nf_category=" + nf_category + ", nf_breed="
-				+ nf_breed + ", nf_content=" + nf_content + ", nf_date=" + nf_date + ", nf_cnt=" + nf_cnt + ", nf_ok="
-				+ nf_ok + ", nf_del=" + nf_del + ", nowPage=" + nowPage + ", searchCondition=" + searchCondition
-				+ ", searchKeyword=" + searchKeyword + ", category=" + category + ", uploadFile=" + uploadFile
-				+ ", nf_img=" + nf_img + ", start=" + start + ", listcnt=" + listcnt + ", us_profile=" + us_profile
-				+ ", us_nick=" + us_nick + ", commentCount=" + commentCount + "]";
+				+ ", nf_place=" + nf_place + ", nf_age=" + nf_age + ", nf_gender=" + nf_gender + ", nf_category="
+				+ nf_category + ", nf_breed=" + nf_breed + ", nf_content=" + nf_content + ", nf_date=" + nf_date
+				+ ", nf_cnt=" + nf_cnt + ", nf_ok=" + nf_ok + ", nf_del=" + nf_del + ", nowPage=" + nowPage
+				+ ", searchCondition=" + searchCondition + ", searchKeyword=" + searchKeyword + ", category=" + category
+				+ ", uploadFile=" + uploadFile + ", nf_img=" + nf_img + ", start=" + start + ", listcnt=" + listcnt
+				+ ", us_profile=" + us_profile + ", us_nick=" + us_nick + ", commentCount=" + commentCount + "]";
 	}
+	
 }

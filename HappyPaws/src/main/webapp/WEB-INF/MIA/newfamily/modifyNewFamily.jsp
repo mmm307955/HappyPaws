@@ -72,6 +72,11 @@
 					<div class="n_detail">
 						<table class="detail-table">
 							<tr class="detail-row">
+								<td class="label">분양 지역</td>
+								<td class="value"><input type="text" class="form-control"
+									name="nf_place" value="${newFamily.nf_place}" required></td>
+							</tr>
+							<tr class="detail-row">
 								<td class="label">나이</td>
 								<td class="value"><input type="text" class="form-control"
 									name="nf_age" value="${newFamily.nf_age}" required></td>

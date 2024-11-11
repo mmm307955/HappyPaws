@@ -23,8 +23,8 @@
 
 	<select id="getNfCommentList" resultType="nfComment">
 		SELECT *
-		FROM nfcomment
-		WHERE nf_seq = #{nf_seq}
+		FROM nfcomment, users
+		WHERE nf_seq = #{nf_seq} and nfc_id = us_id
 		ORDER BY nfc_seq DESC
 	</select>
 

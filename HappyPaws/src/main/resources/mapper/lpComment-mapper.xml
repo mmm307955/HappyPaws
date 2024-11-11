@@ -23,7 +23,7 @@
 	<select id="getLpCommentList" resultType="LpComment">
 		SELECT * 
 		FROM lpComment, users
-		WHERE lp_seq = #{lp_seq} 
+		WHERE lp_seq = #{lp_seq} and lpc_id = us_id
 		ORDER BY lpc_seq DESC
 	</select>
 

@@ -51,7 +51,7 @@
 				<c:forEach var="cmty" items="${cmtyList}">
 					<div class="cmty_view" data-seq="${cmty.cmty_seq}" data-count="${cmty.cmty_count}" data-nowpage="${paging.nowPage}" data-searchcondition="${searchCondition}" data-searchkeyword="${searchKeyword}" data-cmty_category="${param.cmty_category}">
 					    <h5>${cmty.cmty_category_kr}</h5>
-					    <h3>${cmty.cmty_title}<c:if test="${cmty.comment_count != 0}"> [${cmty.comment_count}]</c:if></h3>
+					    <h3>${cmty.cmty_title}<c:if test="${cmty.comment_count != 0}"><span style="color: #b9b9b9;"> [${cmty.comment_count}]</span></c:if></h3>
 					    <div class="cmty_content">${cmty.cmty_content}</div>
 					    <div class="cmty_meta">
 						    <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${cmty.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">

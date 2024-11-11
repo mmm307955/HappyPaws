@@ -21,6 +21,7 @@ pageContext.setAttribute("categories", categories);
             });
         });
     </script>
+<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
@@ -72,8 +73,8 @@ pageContext.setAttribute("categories", categories);
 							alt="Found Pet Image" class="pet-image"
 							>
 						</a>
-						<p>${findPet.fp_title}
-							<c:if test="${findPet.fp_ok == 'Y'}">
+						<p>${findPet.fp_title}</p>
+						<p>	<c:if test="${lostPet.lp_ok == 'Y'}">
 								<span style="color: red; font-weight: bold;">[찾았어요]</span>
 							</c:if>
 						</p>

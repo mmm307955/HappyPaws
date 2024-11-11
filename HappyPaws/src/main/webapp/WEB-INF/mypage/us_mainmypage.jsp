@@ -132,7 +132,7 @@
           <button onclick="location.href='/myPosts'">내 등록 게시물</button>
     </div>
     <div class="profile-picture">
-    <img src="resources/profile_images/cutecat.jpg" alt="프로필 이미지">
+    <img src="${user.us_profile}" alt="프로필 이미지">
 </div>
 <p style="font-weight: bold; color: #333; margin: 10px 0;">${user.us_nick}</p>
 

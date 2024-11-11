@@ -41,7 +41,7 @@
 					</div>
 					
 					<div class="n_title">
-					<input type="hidden" name="fp_id" value="admin"> 
+					<input type="hidden" name="fp_id" value="${user.us_id}"> 
 					<input type="text" class="form-control" name="fp_title" placeholder="제목을 입력하세요." required>
 					</div>
 					

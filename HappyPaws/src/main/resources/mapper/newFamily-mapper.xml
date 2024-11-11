@@ -8,11 +8,12 @@
 	<insert id="insertNewFamily">
 		INSERT INTO newfamily (nf_id, nf_title, nf_ph,
 		nf_img,
-		nf_age, nf_gender,
+		nf_place, nf_age, nf_gender,
 		nf_category, nf_breed, nf_content, nf_date,
 		nf_ok,
 		nf_del)
 		VALUES (#{nf_id}, #{nf_title}, #{nf_ph}, #{nf_img},
+		#{nf_place},
 		#{nf_age},
 		#{nf_gender},
 		#{nf_category}, #{nf_breed}, #{nf_content},
@@ -29,6 +30,7 @@
 		#{nf_ph},
 		nf_img =
 		#{nf_img},
+		nf_place = #{nf_place},
 		nf_age = #{nf_age},
 		nf_gender =
 		#{nf_gender},
@@ -120,6 +122,6 @@
 
 	<select id="countNfComment" resultType="int">
 		SELECT COUNT(*) FROM
-		nfComment WHERE nf_seq = #{nf_seq}
+		nfComment, users WHERE nf_seq = #{nf_seq} and nfc_id = us_id
 	</select>
 </mapper>

@@ -195,7 +195,7 @@ input[name="us_password"] {
                 <div class="profile-container">
                     <img id="profilePreview" src="${user.us_profile_file != null ? user.us_profile : '/resources/profile_images/cutecat.jpg'}" alt="프로필 사진">
                     <label class="add-photo-btn" for="profileImage">사진 추가</label>
-                    <input type="file" id="profileImage" class="file-input" name="profileImage" accept="image/*" onchange="previewImage(event)">
+                    <input type="file" id="profileImage" class="file-input" name="us_profile_file" accept="image/*" onchange="previewImage(event)">
                 </div>
                 
                  <div class="info-container">
@@ -246,9 +246,7 @@ input[name="us_password"] {
                 </table>
                 
            <div class="button-container">
-            <form action="us_myPage.do" method="post" style="display:inline;">
                 <button type="submit" class="submit-btn">정보 수정</button>
-            </form>
             <form action="userDelete.do" method="post" style="display:inline;" onsubmit="return confirm('정말로 탈퇴하시겠습니까?');">
                 <input type="hidden" name="us_id" value="${user.us_id}">
                 <button type="submit" class="delete-btn">탈퇴</button>

@@ -208,26 +208,30 @@ $(document).ready(function() {
 			</c:forEach>
 		</div>
 
+	<c:if test="${not empty user.us_id}">
 		<form action="insertFpComment" method="post" class="fpCommentwrite">
 			<div class="fpComment">
-				<input type="hidden" name="fpc_id" value="admin">
+				<input type="hidden" name="fpc_id" value="${user.us_id}">
 				<input type="hidden" name="fp_seq" value="${findPet.fp_seq}">
 				<input type="hidden" name="searchCondition" value="${searchCondition}">
 				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 				<input type="hidden" name="category" value="${category}">
 				<input type="hidden" name="nowPage" value="${nowPage}">
-				<strong>관리자</strong>
+				<strong>${user.us_nick}</strong>
 				<textarea id="fpc_content" name="fpc_content" required></textarea>
 				<div class="btn-container">
 					<button type="submit">등록</button>
 				</div>
 			</div>
 		</form>
-
+	</c:if>
+	
 		<section class="commandList">
 			<div class="btn-container">
+			<c:if test="${user.us_id == findPet.lp_id || user.us_id == 'admin'}">
 				<button id="fpMod" type="button">글 수정</button>
 				<button id="fpDel" type="button">글 삭제</button>
+			</c:if>
 				<button id="fpList" type="button">글 목록</button>
 			</div>
 		</section>

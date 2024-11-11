@@ -193,6 +193,7 @@ public class UserController {
     @PostMapping("/us_myPage.do")
     public String updateMyPage(
         HttpServletRequest request,
+        HttpServletResponse response,
         @ModelAttribute UsersVO user,
         @RequestParam(value = "us_profile_file", required = false) MultipartFile us_profile_file,
         @RequestParam(value = "postcode", required = false) String postcode,
@@ -221,7 +222,7 @@ public class UserController {
                 String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
 
                 // 파일 저장 경로 설정
-                String uploadDir = "src/main/resources/profile_images/";
+                String uploadDir = "c:/happyPaws/happyPaws/src/main/webapp/resources/profile_images/";
                 File uploadDirFile = new File(uploadDir);
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();
@@ -239,6 +240,8 @@ public class UserController {
                 m.addAttribute("message", "프로필 이미지 업로드 중 오류가 발생했습니다.");
                 return "/WEB-INF/mypage/us_mypage.jsp";
             }
+        } else {
+        	System.out.println("사진 파일이 없습니다.");
         }
 
         // 우편번호 설정
@@ -246,6 +249,11 @@ public class UserController {
 
         // 사용자 정보 업데이트
         svc.user_update(user);
+        
+        user = svc.user_detail(user.getUs_id());
+        JwtCookieUtil.createJwtCookie(response, user);
+        userFromCookie = JwtCookieUtil.extractJwtFromCookie(request);
+        request.getSession().setAttribute("user", userFromCookie);
 
         // 업데이트된 사용자 정보를 다시 가져와 모델에 추가
         List<UsersVO> userList = svc.userSelectAll(); // 전체 사용자 목록 가져오기
@@ -275,7 +283,13 @@ public class UserController {
         }
 
         // 현재 사용자 ID의 게시물 목록 조회
-        List<MyPostVO> userPosts = svc.getPostsByUserId(user.getUs_id());
+        List<MyPostVO> userPosts;
+        try {
+            userPosts = svc.getPostsByUserId(user.getUs_id());
+        } catch (Exception e) {
+            model.addAttribute("error", "게시물을 불러오는 중 오류가 발생했습니다.");
+            return "redirect:/auth/login"; // 에러 페이지로 리다이렉트
+        }
 
         // 필터링된 게시물 목록을 모델에 추가
         model.addAttribute("posts", userPosts);
@@ -284,34 +298,34 @@ public class UserController {
         // 내 게시물 페이지로 이동
         return "/WEB-INF/mypage/mypost.jsp";
     }
-    
-    @GetMapping("/postDetail")
-    public String postDetail(@RequestParam("post_id") int postId, HttpServletRequest request, Model model) {
-        // 쿠키에서 JWT를 통해 사용자 정보를 추출
-        UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
 
-        // 사용자 정보가 없거나 ID가 없는 경우 로그인 페이지로 리다이렉트
-        if (user == null || user.getUs_id() == null) {
-            model.addAttribute("message", "로그인이 필요합니다.");
-            return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
-        }
-
-        // 현재 로그인한 사용자 ID를 저장
-        String currentUserId = user.getUs_id();
-
-        // `post_id`를 기반으로 게시물 정보를 조회
-        MyPostVO post = svc.getPostById(postId);
-
-        // 게시물이 존재하고, 현재 사용자가 게시물의 작성자인지 확인
-        if (post != null && post.getUs_id().equals(currentUserId)) {
-            model.addAttribute("post", post); // 모델에 게시물 정보 추가
-            return "/WEB-INF/mypage/postDetail.jsp"; // 게시물 상세 페이지로 이동
-        } else {
-            // 게시물이 없거나 접근 권한이 없는 경우 오류 메시지 추가
-            model.addAttribute("errorMessage", "해당 게시물을 찾을 수 없거나 접근 권한이 없습니다.");
-            return "/WEB-INF/mypage/error.jsp"; // 에러 페이지로 이동
-        }
-    }
+//    @GetMapping("/postDetail")
+//    public String postDetail(@RequestParam("post_id") int postId, HttpServletRequest request, Model model) {
+//        // 쿠키에서 JWT를 통해 사용자 정보를 추출
+//        UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
+//
+//        // 사용자 정보가 없거나 ID가 없는 경우 로그인 페이지로 리다이렉트
+//        if (user == null || user.getUs_id() == null) {
+//            model.addAttribute("message", "로그인이 필요합니다.");
+//            return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
+//        }
+//
+//        // 현재 로그인한 사용자 ID를 저장
+//        String currentUserId = user.getUs_id();
+//
+//        // `post_id`를 기반으로 게시물 정보를 조회
+//        MyPostVO post = svc.getPostById(postId);
+//
+//        // 게시물이 존재하고, 현재 사용자가 게시물의 작성자인지 확인
+//        if (post != null && post.getUs_id().equals(currentUserId)) {
+//            model.addAttribute("post", post); // 모델에 게시물 정보 추가
+//            return "/WEB-INF/mypage/postDetail.jsp"; // 게시물 상세 페이지로 이동
+//        } else {
+//            // 게시물이 없거나 접근 권한이 없는 경우 오류 메시지 추가
+//            model.addAttribute("errorMessage", "해당 게시물을 찾을 수 없거나 접근 권한이 없습니다.");
+//            return "/WEB-INF/mypage/error.jsp"; // 에러 페이지로 이동
+//        }
+//    }
 
 }
 

@@ -25,7 +25,15 @@ pageContext.setAttribute("categories", categories);
                 location.href = "/MIA/insertNewFamily";
             });
         });
+        
+        $(document).ready(function() {
+            $("#lpIns2").click(function() {
+            	alert("로그인이 필요합니다");
+            });
+        });
+    </scrip
     </script>
+<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
@@ -47,7 +55,12 @@ pageContext.setAttribute("categories", categories);
 					</select> <input type="search" name="searchKeyword" value="${searchKeyword}"
 						placeholder="검색어를 입력해주세요">
 				</form>
-				<button id="nfIns">글쓰기</button>
+				<c:if test="${not empty user.us_id}">
+				<button id="lpIns">글쓰기</button>
+				</c:if>
+				<c:if test="${empty user.us_id}">
+				<button id="lpIns2">글쓰기</button>
+				</c:if>
 			</div>
 			
 			<div class="n_categoryform">
@@ -77,11 +90,12 @@ pageContext.setAttribute("categories", categories);
 							alt="New Family Image" class="pet-image"
 							>
 						</a>
-						<p>${newFamily.nf_title}
-							<c:if test="${newFamily.nf_ok == 'Y'}">
-								<span style="color: red; font-weight: bold;">[분양완료]</span>
+						<p>${newFamily.nf_title}</p>
+						<p>	<c:if test="${lostPet.lp_ok == 'Y'}">
+								<span style="color: red; font-weight: bold;">[분앙완료]</span>
 							</c:if>
 						</p>
+						<p>지역: ${newFamily.nf_place}</p>
 						<p>${newFamily.nf_date} 댓글:${newFamily.commentCount}</p>
 					</div>
 				</c:forEach>

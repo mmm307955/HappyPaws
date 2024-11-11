@@ -47,7 +47,7 @@
 					</div>
 
 					<div class="n_title">
-						<input type="hidden" name="nf_id" value="admin"> <input
+						<input type="hidden" name="nf_id" value="${user.us_id}"> <input
 							type="text" class="form-control" name="nf_title"
 							placeholder="제목을 입력하세요." required>
 					</div>
@@ -71,6 +71,11 @@
 
 					<div class="n_detail">
 						<table class="detail-table">
+							<tr class="detail-row">
+								<td class="label">분양 지역</td>
+								<td class="value"><input type="text" class="form-control"
+									name="nf_place" placeholder="분양 지역를 입력해주세요" required></td>
+							</tr>
 							<tr class="detail-row">
 								<td class="label">나이</td>
 								<td class="value"><input type="text" class="form-control"

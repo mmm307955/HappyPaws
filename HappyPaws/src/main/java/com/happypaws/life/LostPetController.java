@@ -151,7 +151,6 @@ public class LostPetController {
 		LostPetVO mlostpet = lostPetSVC.getLostPet(vo);
 
 		cvo.setLp_seq(seq);
-
 		List<LpCommentVO> mlpCommentlist = lpCommentSVC.getLpCommentList(cvo);
 
 		if (!(error == null || error.equals(""))) {
@@ -172,7 +171,6 @@ public class LostPetController {
 		model.addAttribute("category", vo.getCategory());
 		model.addAttribute("lostPet", mlostpet);
 		model.addAttribute("lpComment", mlpCommentlist);
-
 		return "/WEB-INF/MIA/lostPet/getLostPet.jsp";
 	}
 

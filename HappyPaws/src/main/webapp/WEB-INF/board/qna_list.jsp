@@ -59,7 +59,7 @@
 					    <c:forEach var="qna" items="${qnaList}">
 					    	<tr class="qna_view" data-seq="${qna.qna_seq}" data-count="${qna.qna_count}" data-nowpage="${paging.nowPage}" data-searchcondition="${searchCondition}" data-searchkeyword="${searchKeyword}">
 					        	<td>${qna.qna_seq}</td>
-					            <td>${qna.qna_title}<c:if test="${qna.comment_count != 0}"> [${qna.comment_count}]</c:if></td>
+					            <td>${qna.qna_title}<c:if test="${qna.comment_count != 0}"><span style="color: #b9b9b9"> [${qna.comment_count}]</span></c:if></td>
 					            <td>${qna.formattedQnaDate}</td>
 					            <td>
 					            	<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${qna.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">

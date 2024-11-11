@@ -54,6 +54,7 @@
             us_nick = #{us_nick},
             us_email = #{us_email},
             us_address = #{us_address},
+            us_profile = #{us_profile},
             us_is_del = #{us_is_del} 
             WHERE us_id = #{us_id}
     </update>

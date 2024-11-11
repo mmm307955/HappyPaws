@@ -84,10 +84,11 @@ public class UserDAO {
         return sql.selectList("com.happypaws.dao.UserDAO.findPostsByUserId", usId);
     }
     
- // `post_id`를 기반으로 특정 게시물을 조회하는 메서드
+ 
     public MyPostVO findPostById(int post_id) {
         return sql.selectOne("com.happypaws.dao.UserDAO.findPostById", post_id);
     }
+
 
 
 

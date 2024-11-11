@@ -5,6 +5,7 @@
 <html>
 <head>
 	<jsp:include page="${pageContext.request.contextPath}/head.jsp"/>
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <style>
         * {
             box-sizing: border-box;

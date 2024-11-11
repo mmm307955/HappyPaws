@@ -204,15 +204,18 @@ $(document).ready(function() {
 								<button id="close" type="button">닫기</button>
 							</div>
 						</div>
+					<c:if test="${user.us_id == lpComment.lpc_id || user.us_id == 'admin'}">
 						<div class="btn-container lpcMod3">
 							<button id="open" type="button">수정</button>
 							<button id="lpcDel" type="button">삭제</button>
 						</div>
+					</c:if>
 					</div>
 				</div>
 			</c:forEach>
 		</div>
 
+	
 		<form action="/MIA/insertLpComment" method="post" class="commentWrite">
 			<div class="comment">
 				<input type="hidden" name="lpc_id" value="${user.us_id}">
@@ -221,18 +224,29 @@ $(document).ready(function() {
 				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 				<input type="hidden" name="category" value="${category}">
 				<input type="hidden" name="nowPage" value="${nowPage}">
-				<strong>관리자</strong>
+				<strong>${user.us_nick}</strong>
+				<c:if test="${not empty user.us_id}">
 				<textarea id="lpc_content" name="lpc_content" required></textarea>
 				<div class="btn-container">
 					<button type="submit">등록</button>
 				</div>
+				</c:if>
+				<c:if test="${empty user.us_id}">
+				<textarea id="lpc_content" name="lpc_content" placeholder="로그인 후 입력이 가능합니다." required disabled></textarea>
+				<div class="btn-container">
+					<button type="submit" disabled>등록</button>
+				</div>
+				</c:if>
 			</div>
 		</form>
 
+	
 		<section class="commandList">
 			<div class="btn-container">
+			<c:if test="${user.us_id == lostPet.lp_id || user.us_id == 'admin'}">
 				<button id="lpMod" type="button">글 수정</button>
 				<button id="lpDel" type="button">글 삭제</button>
+			</c:if>
 				<button id="lpList" type="button">글 목록</button>
 			</div>
 		</section>

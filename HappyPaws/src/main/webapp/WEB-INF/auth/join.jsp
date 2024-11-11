@@ -14,8 +14,6 @@
 <body>
 	<%@include file="../../header.jsp"%>
 	<main>
-		<button type="button" onclick="document.joinForm.onsubmit = null">테스트를 위한 유효성 검사 제거하기</button>
-	
 		<form action="/auth/join" method="post" name="joinForm" onsubmit="return join_submit()" style="width: 300px;">
 			<div>
 				<input type="text" name="us_id" id="us_id" placeholder="아이디 입력" required autofocus>

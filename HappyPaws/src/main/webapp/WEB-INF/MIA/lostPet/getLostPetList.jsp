@@ -25,7 +25,14 @@ pageContext.setAttribute("categories", categories);
                 location.href = "/MIA/insertLostPet";
             });
         });
+        
+        $(document).ready(function() {
+            $("#lpIns2").click(function() {
+            	alert("로그인이 필요합니다");
+            });
+        });
     </script>
+<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
@@ -47,7 +54,12 @@ pageContext.setAttribute("categories", categories);
 					</select> <input type="search" name="searchKeyword" value="${searchKeyword}"
 						placeholder="검색어를 입력해주세요">
 				</form>
+				<c:if test="${not empty user.us_id}">
 				<button id="lpIns">글쓰기</button>
+				</c:if>
+				<c:if test="${empty user.us_id}">
+				<button id="lpIns2">글쓰기</button>
+				</c:if>
 			</div>
 
 			<div class="n_categoryform">
@@ -76,8 +88,8 @@ pageContext.setAttribute("categories", categories);
 							src="${pageContext.request.contextPath}/resources/MIA-img/lostPetImg/${lostPet.lp_img}"
 							alt="Lost Pet Image" class="pet-image">
 						</a>
-						<p>${lostPet.lp_title}
-							<c:if test="${lostPet.lp_ok == 'Y'}">
+						<p>${lostPet.lp_title}</p>
+						<p>	<c:if test="${lostPet.lp_ok == 'Y'}">
 								<span style="color: red; font-weight: bold;">[찾았어요]</span>
 							</c:if>
 						</p>

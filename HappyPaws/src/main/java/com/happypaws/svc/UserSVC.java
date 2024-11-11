@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.happypaws.dao.UserDAO;
 import com.happypaws.vo.MyPostVO;
@@ -69,14 +68,17 @@ public class UserSVC {
 		
 	}
 	
-	  public List<MyPostVO> getPostsByUserId(String usId) {
-	        return dao.findPostsByUserId(usId);
-	    }
 	  
-	  // `post_id`를 기반으로 게시물 정보를 조회하는 메서드
-	    public MyPostVO getPostById(int post_id) {
-	        return dao.findPostById(post_id);
-	    }
+	// 서비스 메소드 - 사용자 ID로 게시물 목록 조회
+	  public List<MyPostVO> getPostsByUserId(String us_id) {
+	      try {
+	          // DAO 메소드 호출하여 사용자 ID로 게시물 목록 조회
+	          return dao.findPostsByUserId(us_id);
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	          throw new RuntimeException("게시물 목록 조회 중 오류가 발생했습니다.");
+	      }
+	  }
 
 
 }

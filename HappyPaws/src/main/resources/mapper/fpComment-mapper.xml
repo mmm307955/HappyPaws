@@ -21,9 +21,9 @@
 
     <select id="getFpCommentList" resultType="fpComment">
         SELECT fpComment.*, users.us_profile, users.us_nick
-        FROM fpComment
+        FROM fpComment, users
         JOIN users ON fpComment.fpc_id = users.us_id
-        WHERE fp_seq = #{fp_seq} 
+        WHERE fp_seq = #{fp_seq} and fpc_id = us_id
         ORDER BY fpc_seq DESC
     </select>
 

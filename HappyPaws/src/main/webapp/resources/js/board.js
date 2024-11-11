@@ -304,6 +304,12 @@ $(document).ready(function(){
 	
 	//공지사항 글 삭제
 	$('.notice_delete').on('click', function() {
+		// 삭제 확인 경고문
+		const confirmed = confirm("공지를 삭제하시겠습니까?");
+		if (!confirmed) {
+			return; // 사용자가 취소를 선택하면 함수 종료
+		}
+		
 		var val = $(this).data('seq');
 		location.href = "/board/notice_delete?n_seq=" + val
 	});
@@ -414,6 +420,11 @@ $(document).ready(function(){
 
 	//QNA 글 삭제
 	$('.qna_delete').on('click', function() {
+		// 삭제 확인 경고문
+		const confirmed = confirm("Q&A글을 삭제하시겠습니까?");
+		if (!confirmed) {
+			return; // 사용자가 취소를 선택하면 함수 종료
+		}
 		var val = $(this).data('seq');
 		location.href = "/board/qna_delete?qna_seq=" + val
 	});
@@ -605,6 +616,13 @@ $(document).ready(function(){
 
 	//커뮤니티 글 삭제
 	$('.cmty_delete').on('click', function() {
+	
+		// 삭제 확인 경고문
+		const confirmed = confirm("글을 삭제하시겠습니까?");
+		if (!confirmed) {
+			return; // 사용자가 취소를 선택하면 함수 종료
+		}
+		
 		var val = $(this).data('seq');
 		location.href = "/board/cmty_delete?cmty_seq=" + val
 	});

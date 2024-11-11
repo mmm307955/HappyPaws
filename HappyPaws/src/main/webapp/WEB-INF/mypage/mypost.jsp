@@ -49,13 +49,6 @@
             background-color: #f1f1f1;
             cursor: pointer;
         }
-        /* 내용 줄임표 스타일 */
-        .ellipsis {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 150px; /* 원하는 최대 너비로 조정 */
-        }
         
         .search-container {
             display: flex;
@@ -85,7 +78,6 @@
             color: white;
         }
         
-        /* 반응형 스타일 */
         @media (max-width: 768px) {
             h2 {
                 font-size: 20px;
@@ -111,11 +103,24 @@
             }
         }
     </style>
-    <script>
-        function goToDetail(postId) {
-            location.href = 'postDetail?post_id=' + postId;
-        }
-    </script>
+   <script>
+   function goToDetail(postId, sourceTable) {
+	    let detailPage;
+	    if (sourceTable === 'community') {
+	        detailPage = 'communityDetail';
+	    } else if (sourceTable === 'qna') {
+	        detailPage = 'qnaDetail';
+	    } else if (sourceTable === 'notice') {
+	        detailPage = 'noticeDetail';
+	    } else {
+	        alert("유효하지 않은 게시물입니다."); // 잘못된 경우 경고 메시지
+	        return; // 함수 종료하여 페이지 이동 방지
+	    }
+	    location.href = detailPage + '?post_id=' + postId;
+	}
+
+</script>
+
 </head>
 <body>
 <div class="container">
@@ -126,27 +131,28 @@
                 <tr>
                     <th>번호</th>
                     <th>제목</th>
-                    <th>내용</th>
+                    <th>소스 테이블</th>
                     <th>작성일</th>
                 </tr>
             </thead>
-            <tbody>
-                <c:forEach var="post" items="${posts}">
-                    <tr onclick="goToDetail(${post.post_id})">
-                        <td>${post.post_id}</td>
-                        <td>${post.title}</td>
-                        <td class="ellipsis">${post.content}</td> <!-- 줄임표 스타일 추가 -->
-                        <td>${post.created_date}</td>
-                    </tr>
-                </c:forEach>
-            </tbody>
+           <tbody>
+    <c:forEach var="post" items="${posts}">
+        <tr onclick="goToDetail(${post.post_id}, '${post.source_table}')">
+            <td>${post.post_id}</td>
+            <td>${post.title}</td>
+            <td>${post.source_table}</td> 
+            <td>${post.created_date}</td>
+        </tr>
+    </c:forEach>
+</tbody>
+
         </table>
     </div>
     
     <div class="search-container">
         <select>
             <option value="title">제목</option>
-            <option value="content">내용</option>
+            <option value="source_table">소스 테이블</option>
         </select>
         <input type="text" placeholder="검색어 입력">
         <button>조회</button>
