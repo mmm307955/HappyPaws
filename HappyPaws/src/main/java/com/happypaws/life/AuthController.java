@@ -140,7 +140,11 @@ public class AuthController {
 	}
 
 	@GetMapping("/adminLogin")
-	public String adminLogin() {
+	public String adminLogin(HttpServletRequest request) {
+		if (JwtCookieUtil.extractJwtFromCookie(request) != null) {
+			return "redirect:/";
+		}
+
 		return "/WEB-INF/auth/adminLogin.jsp";
 	}
 	
@@ -168,7 +172,11 @@ public class AuthController {
 
 	// ===== 회원가입 ===== //
 	@GetMapping("/join")
-	public String join() {
+	public String join(HttpServletRequest request) {
+		if (JwtCookieUtil.extractJwtFromCookie(request) != null) {
+			return "redirect:/";
+		}
+
 		return "/WEB-INF/auth/join.jsp";
 	}
 
@@ -224,19 +232,27 @@ public class AuthController {
 
 	// ===== 아이디 찾기 ===== //
 	@GetMapping("/find_id")
-	public String findId() {
+	public String findId(HttpServletRequest request) {
+		if (JwtCookieUtil.extractJwtFromCookie(request) != null) {
+			return "redirect:/";
+		}
+
 		return "/WEB-INF/auth/find_id.jsp";
 	}
 
 	@PostMapping("/find_id")
 	public String findId(UsersVO user, Model model) {
-		model.addAttribute("find_id", svc.findId(user));
+		model.addAttribute("find_ids", svc.findId(user));
 		return "/WEB-INF/auth/find_id.jsp";
 	}
 
 	// ===== 비밀번호 찾기 ===== //
 	@GetMapping("/find_password")
-	public String findPassword() {
+	public String findPassword(HttpServletRequest request) {
+		if (JwtCookieUtil.extractJwtFromCookie(request) != null) {
+			return "redirect:/";
+		}
+
 		return "/WEB-INF/auth/find_password.jsp";
 	}
 

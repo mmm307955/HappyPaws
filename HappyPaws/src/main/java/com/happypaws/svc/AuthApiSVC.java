@@ -67,8 +67,6 @@ public class AuthApiSVC implements InitializingBean {
 	private String naverUserInfoUrl;
 
 	// ========== kakao ========== //
-
-	// ========== kakao ========== //
 	@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
 	private String kakaoClientId;
 	@Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
@@ -288,10 +286,8 @@ public class AuthApiSVC implements InitializingBean {
 
 		try {
 			SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
-            System.out.println("메시지 전송 성공: " + response.getMessageId());
 			return response.getMessageId();
 		} catch (Exception e) {
-            System.err.println("메시지 전송 실패: " + e.getMessage());
 			return null;
 		}
 	}

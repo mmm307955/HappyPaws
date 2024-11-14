@@ -1,5 +1,7 @@
 package com.happypaws.dao;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,8 +33,8 @@ public class AuthDAO {
 		return mybatis.insert("AuthDAO.join", user) > 0;
 	}
 
-	public String findId(UsersVO user) {
-		return mybatis.selectOne("AuthDAO.findId", user);
+	public List<String> findId(UsersVO user) {
+		return mybatis.selectList("AuthDAO.findId", user);
 	}
 
 	public boolean checkUser(UsersVO user) {
