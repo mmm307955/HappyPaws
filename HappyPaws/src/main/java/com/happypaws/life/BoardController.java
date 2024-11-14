@@ -28,6 +28,12 @@ public class BoardController {
 	@Autowired
 	private NoticeSVC notic_SVC;
 	
+	//관리자 인덱스이동
+	@RequestMapping(value="/admin",method = RequestMethod.GET)
+	public String admin_index() {
+		return "/WEB-INF/admin/admin_index.jsp";
+	}
+	
 	
 	@PostMapping("/upload")
 	@ResponseBody
@@ -53,9 +59,10 @@ public class BoardController {
 	}
 	
 	//공지사항-리스트 페이지이동
-	@RequestMapping(value="/board/notice_list",method = RequestMethod.GET)
+	@RequestMapping(value={"/board/notice_list","/admin/ad_notice_list"},method = RequestMethod.GET)
 	public String notice_list(NoticeVO vo ,PagingVO pv ,Model model , 
-			@RequestParam(value = "nowPage", required = false) String nowPage) {
+			@RequestParam(value = "nowPage", required = false) String nowPage,
+			HttpServletRequest request) {
 		
 		String cntPerPage = "10";
 		
@@ -75,8 +82,14 @@ public class BoardController {
 		model.addAttribute("searchCondition", vo.getSearchCondition());
 		model.addAttribute("noticeList", notic_SVC.notice_list(vo));
 		
+		String requestUri = request.getRequestURI();
 		
-		return "/WEB-INF/board/notice_list.jsp";
+		if(requestUri.equals("/admin/ad_notice_list")) {
+			return "/WEB-INF/admin/ad_board/ad_notice_list.jsp";
+		}else {
+			return "/WEB-INF/board/notice_list.jsp";
+		}
+		
 	}
 	
 	//공지사항-글쓰기 페이지이동
@@ -96,13 +109,20 @@ public class BoardController {
 	}
 	
 	//공지사항-상세보기
-	@RequestMapping(value="/board/notice_view",method = RequestMethod.GET)
-	public String notice_view(NoticeVO vo , Model model) {; 
+	@RequestMapping(value={"/board/notice_view","/admin/ad_notice_view"},method = RequestMethod.GET)
+	public String notice_view(NoticeVO vo , Model model , HttpServletRequest request) {; 
 		
 		model.addAttribute("noticeview",notic_SVC.notice_view(vo));
 		notic_SVC.notice_count(vo);
 		
-		return "/WEB-INF/board/notice_view.jsp";
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_notice_view")) {
+			return "/WEB-INF/admin/ad_board/ad_notice_view.jsp";
+		}else {
+			return "/WEB-INF/board/notice_view.jsp";
+		}
+	
 	}
 	
 	//공지사항-글수정페이지로

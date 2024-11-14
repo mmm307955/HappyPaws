@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.happypaws.svc.AdminProductSVC;
@@ -68,7 +70,7 @@ public class AdminProductController {
 					opt.setPr_opt_id(i + 1);
 					opt.setPr_opt_name(prOptNames.get(i)); // 옵션 이름 설정
 					opt.setPr_opt_stock(prOptStocks.get(i)); // 옵션 재고 설정
-					opt.setPr_opt_price(prOptPrices.get(i)); // 옵션 가격 설정
+					opt.setPr_opt_price(prOptPrices.get(i) + vo.getPr_price()); // 옵션 가격 설정
 					opt.setPr_opt_status(prOptStatuses.get(i));// 옵션 상태 설정
 					
 					svc.addProductOption(opt);
@@ -214,7 +216,7 @@ public class AdminProductController {
 				opt.setPr_opt_id(i + 1);
 				opt.setPr_opt_name(prOptNames.get(i)); // 옵션 이름 설정
 				opt.setPr_opt_stock(prOptStocks.get(i)); // 옵션 재고 설정
-				opt.setPr_opt_price(prOptPrices.get(i)); // 옵션 가격 설정
+				opt.setPr_opt_price(prOptPrices.get(i) + vo.getPr_price()); // 옵션 가격 설정
 				opt.setPr_opt_status(prOptStatuses.get(i));// 옵션 상태 설정
 				svc.addProductOption(opt);
 			}
@@ -299,5 +301,26 @@ public class AdminProductController {
 		}
 		return "HappyPawsLogo.png"; // 기본 이미지 경로
 	}
+	
+	@PostMapping("/productUpload")
+	@ResponseBody
+	public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+		String uploadDir = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/upload/";
+		
+	    String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+	    File targetFile = new File(uploadDir, fileName);
+	    
+	    try {
+	        file.transferTo(targetFile);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 
+	    // 클라이언트로 반환할 이미지 URL
+	    String fileUrl = "/resources/upload/" + fileName;
+	    
+	    Map<String, String> response = new HashMap<>();
+	    response.put("url", fileUrl);  // 이미지 URL을 클라이언트로 반환
+	    return response;
+	}
 }

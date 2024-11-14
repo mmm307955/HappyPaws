@@ -31,6 +31,9 @@
 		<a href="/MIA/getLostPetList">아이를 찾아주세요</a>
 		<a href="/MIA/getFindPetList">아이를 발견했어요</a>
 		<a href="/MIA/getNewFamilyList">새로운 가족을 찾아요</a>
+
+		<p>관리자 인덱스페이지 테스트</p>
+		<a href="/admin">관리자 인덱스</a>
 	</main>
 	<%@include file="./footer.jsp" %>
 </body>

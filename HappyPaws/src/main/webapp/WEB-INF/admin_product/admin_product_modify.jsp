@@ -251,7 +251,7 @@
 	        <br>
 	        <div class="option-stock_price">
 	        <label for="pr_opt_price">
-	            <input type="number" name="pr_opt_price" id="pr_opt_price" value="${option.pr_opt_price}" placeholder="옵션 가격 입력">
+	            <input type="number" name="pr_opt_price" id="pr_opt_price" value="${option.pr_opt_price - product.pr_price}" placeholder="옵션 가격 입력">
 	            </label>
 	            <label for="pr_opt_stock">
 	            <input type="number" name="pr_opt_stock" id="pr_opt_stock" value="${option.pr_opt_stock}" placeholder="재고 수량 입력">
@@ -376,7 +376,7 @@
 		  
 		        // 서버로 이미지 업로드
 		        $.ajax({
-		         url: '/upload',  // 이미지 업로드 서버 URL
+		         url: '/productUpload',  // 이미지 업로드 서버 URL
 		         type: 'POST',
 		         data: formData,
 		         processData: false,

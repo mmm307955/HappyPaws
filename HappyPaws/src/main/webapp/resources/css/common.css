@@ -1,49 +1,51 @@
-/* 기존 폰트! 1번부터 9번줄까지입니다.  */
-/* * { box-sizing: border-box; } */
-/* /* 전체 화면에 기본 스타일 */ 
-/* body, html { */
-/*     margin: 0; */
-/*     padding: 0; */
-/*     font-family: Arial, sans-serif; */
-/*     height: 100%;    */
-/* } */
+* { box-sizing: border-box; }
+/* 전체 화면에 기본 스타일 */
+/* 기본체 정의 */
+/* @font-face {
+    font-family: 'HakgyoansimDunggeunmisoTTF-R';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-R.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
 
 @font-face {
-    font-family: 'HakgyoansimDunggeunmisoTTF-R';
+    font-family: 'HakgyoansimDunggeunmisoTTF-B';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-B.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+} */
+@font-face {
+    font-family: 'NunNu';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-R.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'HakgyoansimDunggeunmisoTTF-R';
+    font-family: 'NunNu';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-B.woff2') format('woff2');
     font-weight: 700;
     font-style: normal;
 }
 
-
-* { box-sizing: border-box;
- font-family: 'HakgyoansimDunggeunmisoTTF-R' }
-/* 전체 화면에 기본 스타일 */
-
-
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'HakgyoansimDunggeunmisoTTF-R', Arial, sans-serif;
-    height: 100%;
+    font-family: 'NunNu', sans-serif;
+    /* font-family: 'HakgyoansimDunggeunmisoTTF-R', sans-serif; */
+    font-size: 18px;
+    height: 100%;   
 }
 
 body {
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     min-height: 100vh;    /* 뷰포트 전체 높이를 채움 */
 }
 
 .ql-editor {
     font-size: 18px;
-    font-family: 'HakgyoansimDunggeunmisoTTF-R', sans-serif;
+    font-family: 'NunNu', sans-serif;
     /* font-family: 'HakgyoansimDunggeunmisoTTF-R', sans-serif; */
 }
 
@@ -58,7 +60,6 @@ body {
 .ql-align-left {
     text-align: left;
 }
-
 
 /* 고정된 헤더 스타일 */
 header {
@@ -149,28 +150,16 @@ header {
 }
 
 /* 로그인 버튼 */
-.header-login-div {
+.login-link {
     margin-left: auto;      /* 로그인 링크를 오른쪽으로 이동 */
-}
-
-.header-login-div a {
-    display: inline;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 5px 10px;
+    transition: color 0.3s;
     font-weight: bold;
 }
 
-.header-login-div img {
-    height: 45px;
-    border-radius: 22px;
-}
-
-.header-login-link {
-    text-decoration: none;
-    font-size: 20px;
-    padding-left: 5px;
-    transition: color 0.3s;
-}
-
-.header-login-link:hover {
+.login-link:hover {
     color: #ffcc00;
 }
 
@@ -191,6 +180,7 @@ footer {
 	line-height: 1.5;
 	border-top: 1px solid #ccc;
 	margin-top: 40px;
+    clear: both;
 }
 
 footer p {
@@ -204,8 +194,7 @@ footer a{
 	text-decoration: none;
 }
 
-/*==================================================*/
-/* 페이지 CSS */
+/* 페이징 CSS */
 .pagination {
     padding-top: 0 !important; /* 상단 패딩 제거 */
     padding-bottom: 0 !important; /* 하단 패딩 제거 */
@@ -266,4 +255,43 @@ footer a{
     text-align: center !important;
     line-height: normal !important; /* 클릭된 버튼의 텍스트 위치 문제 해결 */
     padding: 0 !important; /* 추가 패딩 제거 */
+}
+
+/*관리자 css*/
+.admin-header-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 20px;
+}
+.admin-header-container .header-menu {
+    gap: 10px;
+}
+.admin-header-container .logo{
+    width: 200px;
+    text-align: center;
+}
+aside {
+    width: 200px;
+    padding: 20px;
+    box-sizing: border-box;
+    border-right: 1px solid #ddd;
+    min-height: 100vh;
+    font-size: 18px;
+    float: left;
+}
+aside h3 {
+    margin-top: 0;
+}
+aside ul {
+    list-style: none;
+    padding: 0;
+}
+aside li {
+    margin: 10px 0;
+}
+.admin-header-container main{
+    width: calc(100vh - 250px);
+    float: left;
+    padding-left: 20px;
 }
