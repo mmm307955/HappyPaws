@@ -150,16 +150,28 @@ header {
 }
 
 /* 로그인 버튼 */
-.login-link {
+.header-login-div {
     margin-left: auto;      /* 로그인 링크를 오른쪽으로 이동 */
-    text-decoration: none;
-    font-size: 20px;
-    padding: 5px 10px;
-    transition: color 0.3s;
+}
+
+.header-login-div a {
+    display: inline;
     font-weight: bold;
 }
 
-.login-link:hover {
+.header-login-div img {
+    height: 45px;
+    border-radius: 22px;
+}
+
+.header-login-link {
+    text-decoration: none;
+    font-size: 20px;
+    padding-left: 5px;
+    transition: color 0.3s;
+}
+
+.header-login-link:hover {
     color: #ffcc00;
 }
 
