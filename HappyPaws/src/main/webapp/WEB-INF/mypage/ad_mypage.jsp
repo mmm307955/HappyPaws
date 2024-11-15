@@ -49,17 +49,25 @@
             font-size: 16px;
             margin-top: 10px;
         }
-        
-        
     </style>
     <script>
         function validateForm() {
             var newPassword = document.getElementById("newPassword").value;
             var confirmPassword = document.getElementById("confirmPassword").value;
+            
+            // 비밀번호 정규식 (최소 8자, 영문자, 숫자, 특수문자 포함)
+            var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,64}$/;
+            
+            if (!passwordPattern.test(newPassword)) {
+                alert("비밀번호는 8자 이상이어야 하며, 영문자, 숫자, 특수문자를 포함해야 합니다.");
+                return false;
+            }
+
             if (newPassword !== confirmPassword) {
                 alert("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
                 return false;
             }
+
             return true;
         }
 
@@ -74,7 +82,7 @@
 <body>
 <%@include file="../../header.jsp" %>
     <main>
-    <h2>비밀번호변경</h2>
+    <h2>비밀번호 변경</h2>
     <div id="content">
         <!-- 서버에서 전달된 메시지 확인 -->
         <c:if test="${not empty message}">
@@ -117,7 +125,6 @@
     <div style="text-align: center; margin-top: 30px;">
         <a href="logout" class="logout-btn">로그아웃</a>
     </div>
-    
     </main>
   <%@include file="../../footer.jsp" %>  
 </body>

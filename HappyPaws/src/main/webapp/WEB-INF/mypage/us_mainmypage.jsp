@@ -4,6 +4,7 @@
 <head>
 <%@include file="../../head.jsp" %>
 <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>사용자 마이페이지-main</title>
 <style>
   body {
@@ -11,14 +12,14 @@
     background-color: #fefbf6;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* 컨테이너가 아래쪽으로 이동할 수 있도록 시작 지점 설정 */
+    align-items: flex-start; 
     height: 100vh;
     margin: 0;
-    padding-top: 10vh; /* 헤더와 컨테이너 사이의 여백 추가 */
+    padding-top: 10vh; 
 }
 
 .container {
-    width: 500px; /* 컨테이너 너비 */
+    width: 500px; 
     background-color: #fdf8e5;
     border-radius: 15px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
@@ -115,8 +116,36 @@
     margin: 10px 0;
 }
 
-</style>
+ /* 반응형 처리 */
+  @media (max-width: 768px) {
+    .profile-tabs {
+      gap: 8px;
+      justify-content: center;
+    }
 
+    .profile-tabs button {
+      flex-basis: 100%;
+      font-size: 12px;
+      padding: 6px 8px;
+    }
+
+    .profile-picture {
+      width: 100px;
+      height: 100px;
+    }
+
+    .edit-button {
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .logout-button {
+      font-size: 10px;
+      padding: 5px;
+    }
+  }
+
+</style>
 </head>
 <body>
 <%@include file="../../header.jsp" %>
@@ -128,15 +157,21 @@
     
     <div class="profile-tabs">
         <button>내 프로필</button>
-        <button>상품주문내역</button>
-          <button onclick="location.href='/myPosts'">내 등록 게시물</button>
+        <button onclick="location.href='/product/pr_order_list'">상품주문내역</button>
+        <button onclick="location.href='/myPosts'">내 등록 게시물</button>
     </div>
     <div class="profile-picture">
-    <img src="${user.us_profile}" alt="프로필 이미지">
-</div>
-<p style="font-weight: bold; color: #333; margin: 10px 0;">${user.us_nick}</p>
+        <img src="<c:choose>
+                      <c:when test="${user.us_profile == null}">
+                        /resources/profile_images/cutecat.jpg
+                      </c:when>
+                      <c:otherwise>
+                       ${user.us_profile}
+                      </c:otherwise>
+                  </c:choose>" alt="프로필 이미지">
+    </div>
+    <p style="font-weight: bold; color: #333; margin: 10px 0;">${user.us_nick}</p>
 
-   
     <button class="edit-button" onclick="location.href='/us_myPage.do'">내 정보 수정</button>
 </div>
 </main>

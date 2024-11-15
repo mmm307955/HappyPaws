@@ -15,24 +15,7 @@ pageContext.setAttribute("categories", categories);
 <title>행복한 발자국</title>
 <link rel="stylesheet" type="text/css"
     href="${pageContext.request.contextPath}/resources/css/MIA.css">
-<script>
-        function selNf(val, val2, val3, val4, nowpage) {
-            location.href = "/MIA/getNewFamily?nf_seq=" + val + '&searchCondition=' + val2 + '&searchKeyword=' + val3 + '&category=' + val4 + '&nowPage=' + nowpage;
-        }
-
-        $(document).ready(function() {
-            $("#nfIns").click(function() {
-                location.href = "/MIA/insertNewFamily";
-            });
-        });
-        
-        $(document).ready(function() {
-            $("#lpIns2").click(function() {
-            	alert("로그인이 필요합니다");
-            });
-        });
-    </scrip
-    </script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/newFamily.js"></script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
@@ -56,10 +39,10 @@ pageContext.setAttribute("categories", categories);
 						placeholder="검색어를 입력해주세요">
 				</form>
 				<c:if test="${not empty user.us_id}">
-				<button id="lpIns">글쓰기</button>
+				<button id="nfIns">글쓰기</button>
 				</c:if>
 				<c:if test="${empty user.us_id}">
-				<button id="lpIns2">글쓰기</button>
+				<button id="nfIns2">글쓰기</button>
 				</c:if>
 			</div>
 			
@@ -68,11 +51,11 @@ pageContext.setAttribute("categories", categories);
 					<form action="/MIA/getNewFamilyList" method="post"
 						style="display: inline;">
 						<input type="hidden" name="searchCondition"
-							value="${searchCondition}"> <input type="hidden"
-							name="searchKeyword" value="${searchKeyword}"> <input
-							type="hidden" name="category" value="${category}"> <input
-							type="hidden" name="nowPage" value="${paging.nowPage}"> <input
-							type="submit"
+							value="${searchCondition}"> 
+							<input type="hidden" name="searchKeyword" value="${searchKeyword}"> 
+							<input type="hidden" name="category" value="${category}"> 
+							<input type="hidden" name="nowPage" value="1"> 
+							<input type="submit"
 							value="<c:choose><c:when test="${category == ''}">전체</c:when><c:when test="${category == 'dog'}">강아지</c:when><c:when test="${category == 'cat'}">고양이</c:when><c:when test="${category == 'small'}">소동물</c:when><c:when test="${category == 'etc'}">기타</c:when></c:choose>">
 					</form>
 				</c:forEach>
@@ -91,7 +74,7 @@ pageContext.setAttribute("categories", categories);
 							>
 						</a>
 						<p>${newFamily.nf_title}</p>
-						<p>	<c:if test="${lostPet.lp_ok == 'Y'}">
+						<p>	<c:if test="${newFamily.nf_ok == 'Y'}">
 								<span style="color: red; font-weight: bold;">[분앙완료]</span>
 							</c:if>
 						</p>

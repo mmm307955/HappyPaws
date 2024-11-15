@@ -9,28 +9,7 @@
 <title>행복한 발자국</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const fileDOM = document.querySelector('#file2'); // 사진 업로드 input
-        const preview = document.querySelector('.new-family-image'); // 이미지 미리보기
-
-        fileDOM.addEventListener('change', () => {
-            const reader = new FileReader();
-            reader.onload = ({ target }) => {
-                preview.src = target.result; // 미리보기 이미지 업데이트
-            };
-            if (fileDOM.files[0]) {
-                reader.readAsDataURL(fileDOM.files[0]); // 선택된 파일의 데이터 URL 읽기
-            }
-        });
-
-        // 롤백 버튼 이벤트
-        document.getElementById('rollback').addEventListener('click', function() {
-            history.back();
-        });
-    });
-</script>
-
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/newFamily.js"></script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
@@ -53,20 +32,20 @@
 					</div>
 
 					<div class="n_ph">
-						<input type="text" class="form-control" name="nf_ph"
-							placeholder="연락처를 입력하세요" required>
+   						 <input type="text" class="form-control" name="nf_ph" id="nf_ph" placeholder="연락처를 입력하세요" required 
+   						 oninput="formatPhoneNumber(this)">
 					</div>
 
 					<div class="n_img">
+					<label for="file2" class="upload-btn" style="cursor: pointer;">
 						<img
 							src="${pageContext.request.contextPath}/resources/MIA-img/newFamilyImg/기본이미지.png"
 							alt="New Family Image" class="new-family-image">
 						<div class="img_save">
-							<label for="file2" class="upload-btn" style="cursor: pointer;">
 								<input id="file2" type="file" name="uploadFile" accept="image/*"
-								style="display: none;" /> <span>사진 첨부</span>
-							</label>
+								style="display: none;" required> <span>사진 첨부</span>
 						</div>
+						</label>
 					</div>
 
 					<div class="n_detail">
@@ -107,7 +86,7 @@
 						</table>
 
 					</div>
-					<div class="input-group mb-3">
+					<div class="n_content">
 						<textarea class="form-control" rows="5" name="nf_content"
 							placeholder="상세 설명을 입력하세요"></textarea>
 					</div>
@@ -116,7 +95,7 @@
 
 					<div class="btn-container">
 						<button id="submit" type="submit">글 등록</button>
-						<button id="rollback" type="button">취소</button>
+						<button id="rollback" type="button" onclick="history.back()">취소</button>
 					</div>
 				</form>
 			</div>

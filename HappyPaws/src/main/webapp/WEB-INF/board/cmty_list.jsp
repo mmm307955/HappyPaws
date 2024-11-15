@@ -36,7 +36,7 @@
 				
 			</form>
 			<c:set var="isLoggedIn" value="${not empty user.us_id}" />
-			<button id="cmty_write" data-logged-in="${isLoggedIn}">글쓰기</button>
+			<button class="cmty_write" data-logged-in="${isLoggedIn}">글쓰기</button>
 		</div>
 		<div id="c_category">
 			<ul>
@@ -49,13 +49,15 @@
 		<c:choose>
             <c:when test="${ not empty cmtyList}">
 				<c:forEach var="cmty" items="${cmtyList}">
-					<div class="cmty_view" data-seq="${cmty.cmty_seq}" data-count="${cmty.cmty_count}" data-nowpage="${paging.nowPage}" data-searchcondition="${searchCondition}" data-searchkeyword="${searchKeyword}" data-cmty_category="${param.cmty_category}">
-					    <h5>${cmty.cmty_category_kr}</h5>
-					    <h3>${cmty.cmty_title}<c:if test="${cmty.comment_count != 0}"><span style="color: #b9b9b9;"> [${cmty.comment_count}]</span></c:if></h3>
-					    <div class="cmty_content">${cmty.cmty_content}</div>
-					    <div class="cmty_meta">
-						    <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${cmty.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
-						    ${cmty.us_nick} / ${cmty.formattedCmtyDate}</div>
+					<div class="cmty_view" id="cmty_view" data-seq="${cmty.cmty_seq}" data-count="${cmty.cmty_count}" data-nowpage="${paging.nowPage}" data-searchcondition="${searchCondition}" data-searchkeyword="${searchKeyword}" data-cmty_category="${param.cmty_category}">
+					    <div class="text-content">
+						    <h5>${cmty.cmty_category_kr}</h5>
+						    <h3><span class="title-wrapper">${cmty.cmty_title}</span><c:if test="${cmty.comment_count != 0}"><span style="color: #b9b9b9">  [${cmty.comment_count}]</span></c:if></h3>
+						    <div class="cmty_content" style="display: none">${cmty.cmty_content}</div>
+						    <div class="cmty_meta">
+							    <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${cmty.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
+							    ${cmty.us_nick} / ${cmty.formattedCmtyDate}</div>
+					    </div>
 					</div>
 				</c:forEach>
 			</c:when>
@@ -63,23 +65,25 @@
 				<div>등록된 글이 없습니다.</div>
 			</c:otherwise>
 		</c:choose>
-		<ul class="pagination">
+	</div>
+	<ul class="pagination">
 			<c:if test="${paging.nowPage > 1 && paging.lastBtn > paging.viewBtnCnt}">
-				<li class="page-item"><a class="page-link" href="/board/cmty_list?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">&lt;</a></li>
+				<li class="page-item"><a class="page-link" href="/board/cmty_list?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&cmty_category=${param.cmty_category}">&lt;</a></li>
 			</c:if>
 			<c:forEach var="i" begin="${paging.startBtn}" end="${paging.endBtn}" step="1">
 				<c:choose>
 					<c:when test="${paging.nowPage==i}"><li class="page-item active"><a class="page-link" >${i}</a></li></c:when>
-					<c:otherwise><li class="page-item"><a class="page-link" href="/board/cmty_list?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">${i}</a></li></c:otherwise>
+					<c:otherwise><li class="page-item"><a class="page-link" href="/board/cmty_list?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&cmty_category=${param.cmty_category}">${i}</a></li></c:otherwise>
 				</c:choose>
 			</c:forEach>
 			<c:if test="${paging.nowPage < paging.lastBtn  && paging.lastBtn > paging.viewBtnCnt}">
-				<li class="page-item"><a class="page-link" href="/board/cmty_list?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}"> &gt;</a></li>
+				<li class="page-item"><a class="page-link" href="/board/cmty_list?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&cmty_category=${param.cmty_category}"> &gt;</a></li>
 			</c:if>
 		</ul>
-	</div>
 	</main>
 	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
+	
+	<button class="cmty_write ph_write" data-logged-in="${isLoggedIn}"><img src="/resources/images/edit-3.svg" alt="글쓰기"/></button>
 </body>
 
 </html>

@@ -3,6 +3,7 @@ package com.happypaws.dao;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,11 @@ public class NoticeDAO {
 	
 	@Autowired
 	private SqlSessionTemplate mybatis;
+	
+	//관리자 통계
+	public List<Map<String, Object>> getDaysTotalAmount(){
+		return mybatis.selectList("NoticeDAO.getDaysTotalAmount");
+	}
 	
 	//공지사항 -글쓰기
 	public int notice_insert(NoticeVO vo) {

@@ -66,4 +66,9 @@ public class FindPetSVC {
             findPet.setCommentCount(commentCount);
         }
     }
+    
+    // 비밀 번호 일치확인
+    public int verifyPassword(int fpSeq, String enteredPassword) {
+        return findPetDAO.verifyPassword(fpSeq, enteredPassword);
+    }
 }

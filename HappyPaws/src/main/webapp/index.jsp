@@ -3,17 +3,6 @@
 <html lang="ko">
 <head>
 	<%@include file="./head.jsp"%>
-	<style>
-		a {
-			display: block;
-			width: fit-content;
-		}
-
-		p {
-			margin-top: 1rem;
-			margin-bottom: 0;
-		}
-	</style>
 </head>
 <body>
 	<%@include file="./header.jsp"%>

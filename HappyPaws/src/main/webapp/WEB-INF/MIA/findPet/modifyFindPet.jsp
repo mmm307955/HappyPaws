@@ -1,42 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../MIA.jsp"%>
 <head>
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/css/MIA.css">
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const fileDOM = document.querySelector('#file2'); // 사진 업로드 input
-        const preview = document.querySelector('.find-pet-image'); // 이미지 미리보기
-
-        fileDOM.addEventListener('change', () => {
-            const reader = new FileReader();
-            reader.onload = ({ target }) => {
-                preview.src = target.result; // 미리보기 이미지 업데이트
-            };
-            if (fileDOM.files[0]) {
-                reader.readAsDataURL(fileDOM.files[0]); // 선택된 파일의 데이터 URL 읽기
-            }
-        });
-    });
-    
-    document.getElementById('rollback').addEventListener('click', function() {
-        history.back();
-    });
-});
-</script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/MIA.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/findPet.js"></script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 		<div class="n_write">
-			<h1>글 수정</h1>
 			<div class="n_writeform">
+				<h1>아이를 찾아주세요</h1>
 				<form action="/MIA/updateFindPet" method="post" enctype="multipart/form-data" name="boardform">
 					<input type="hidden" name="fp_seq" value="${findPet.fp_seq}">
 					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
-					<input type="hidden" name="searchCondition" value="${searchCondition}">
-					<input type="hidden" name="category" value="${category}">
+					<input type="hidden" name="searchCondition" value="${searchCondition}"> 
+					<input type="hidden" name="category" value="${category}"> 
 					<input type="hidden" name="nowPage" value="${nowPage}">
 					
 					<div class="n_title">
@@ -83,10 +62,6 @@
 								<td class="value"><input type="text" class="form-control" name="fp_breed" value="${findPet.fp_breed}" required></td>
 							</tr>
 							<tr class="detail-row">
-								<td class="label">사례금</td>
-								<td class="value"><input type="number" class="form-control" name="fp_reward" value="${findPet.fp_reward}" min="0" required></td>
-							</tr>
-							<tr class="detail-row">
 								<td class="label">발견 여부</td>
 								<td class="value">
 									<select class="form-control" name="fp_ok" required>
@@ -98,7 +73,7 @@
 						</table>
 					</div>
 
-					<div class="input-group mb-3">
+					<div class="n_content">
 						<textarea class="form-control" rows="5" name="fp_content" placeholder="상세 설명을 입력하세요">${findPet.fp_content}</textarea>
 					</div>
 

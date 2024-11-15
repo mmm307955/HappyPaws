@@ -5,6 +5,7 @@
 <head>
 <%@include file="../../head.jsp" %>
     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내정보 수정</title>
     <style>
         body {
@@ -59,15 +60,17 @@
         table {
             width: 100%;
             border-spacing: 10px;
+            table-layout: auto;
         }
         td.label {
-            width: 25%;
+            width: 30%;
             text-align: right;
             padding-right: 10px;
             font-weight: bold;
+             vertical-align: middle;
         }
         td.input-field {
-            width: 75%;
+            width: 70%;
         }
         input[type="text"],
         input[type="email"],
@@ -90,7 +93,6 @@ input[name="us_password"] {
     font-size: 14px;
     box-sizing: border-box;
 }
-        
        
         .password-container {
             position: relative;
@@ -116,7 +118,7 @@ input[name="us_password"] {
         .zipcode-container {
             display: flex;
             align-items: center;
-             gap: 5px;
+             gap: 40px;
         }
         .zipcode-container button {
             padding: 8px 12px;
@@ -126,7 +128,7 @@ input[name="us_password"] {
             background-color: #e0e0e0;
             border: 1px solid #ddd;
             cursor: pointer;
-             margin-left: 50px;
+             margin-left:50px;
         }
        .button-container {
     display: flex;
@@ -138,7 +140,7 @@ input[name="us_password"] {
 .submit-btn,
 .delete-btn,
 .logout-btn {
-    width: 120px; /* 버튼 너비 조정 */
+    width: 120px; 
     padding: 10px;
     background-color: #FFD700;
     border: none;
@@ -157,6 +159,39 @@ input[name="us_password"] {
         .logout-btn {
             color: black;
             background-color: #FF6347;
+        }
+        
+          /* 반응형 처리 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            table {
+                border-spacing: 5px;
+            }
+            td.label {
+                text-align: left;
+                width: 40%;
+                padding-right: 5px;
+
+            }
+            td.input-field {
+                width: 60%;
+            }
+            .zipcode-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .button-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .submit-btn,
+            .delete-btn,
+            .logout-btn {
+                width: 100%;
+            }
         }
     </style>
     <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
@@ -180,6 +215,27 @@ input[name="us_password"] {
                 }
             }).open();
         }
+        
+        function validateEmail(email) {
+           
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailRegex.test(email);
+        }
+
+        function validateForm() {
+            const emailField = document.querySelector('input[name="us_email"]');
+            const email = emailField.value;
+
+            if (!validateEmail(email)) {
+                alert("유효한 이메일 주소를 입력해주세요.");
+                emailField.focus();
+                return false; 
+            }
+
+            return confirm("정보를 수정하시겠습니까?"); 
+        }
+    </script>
+
     </script>
 </head>
 <body>
@@ -190,13 +246,21 @@ input[name="us_password"] {
             <c:if test="${not empty message}">
                 <script>alert("${message}");</script>
             </c:if>
-            <form action="us_myPage.do" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="us_is_del" value="${user.us_is_del != null ? user.us_is_del : 0}">
-                <div class="profile-container">
-                    <img id="profilePreview" src="${user.us_profile_file != null ? user.us_profile : '/resources/profile_images/cutecat.jpg'}" alt="프로필 사진">
-                    <label class="add-photo-btn" for="profileImage">사진 추가</label>
-                    <input type="file" id="profileImage" class="file-input" name="us_profile_file" accept="image/*" onchange="previewImage(event)">
-                </div>
+            <form action="/us_myPage.do" method="post" enctype="multipart/form-data">
+              <div class="profile-container">
+    <c:choose>
+        <c:when test="${not empty user.us_profile}">
+            <img id="profilePreview" src="<c:url value='${user.us_profile}' />" alt="프로필 사진">
+        </c:when>
+        <c:otherwise>
+            <img id="profilePreview" src="<c:url value='/resources/profile_images/cutecat.jpg' />" alt="기본 프로필 사진">
+        </c:otherwise>
+    </c:choose>
+    
+    <label class="add-photo-btn" for="profileImage">사진 추가</label>
+    <input type="file" id="profileImage" class="file-input" name="us_profile_file" accept="image/*" onchange="previewImage(event)">
+</div>
+
                 
                  <div class="info-container">
             <table class="info-table">
@@ -210,7 +274,8 @@ input[name="us_password"] {
                         <td class="label">비밀번호:</td>
                         <td class="input-field">
                             <div class="password-container">
-                                <input type="password" name="us_password" value="********" readonly>
+                                <input type="password" value="${user.us_password}" readonly>
+<!--                                 <input type="password" name="us_password" value="********" readonly> -->
                                 <button type="button" class="change-password-btn" onclick="location.href='/ad_myPage.do'">비밀번호 변경</button>
                             </div>
                         </td>
@@ -244,17 +309,21 @@ input[name="us_password"] {
                         <td class="input-field"><input type="text" name="us_date" value="${user.us_date}" readonly></td>
                     </tr>
                 </table>
-                
-           <div class="button-container">
-                <button type="submit" class="submit-btn">정보 수정</button>
-            <form action="userDelete.do" method="post" style="display:inline;" onsubmit="return confirm('정말로 탈퇴하시겠습니까?');">
-                <input type="hidden" name="us_id" value="${user.us_id}">
-                <button type="submit" class="delete-btn">탈퇴</button>
-            </form>
-            <button type="button" onclick="location.href='/logout'" class="logout-btn">로그아웃</button>
-        </div>
-
+             
+<div class="button-container">
+    <form action="/us_myPage.do" method="post" style="display:inline;" onsubmit="return confirmUpdate();">
+        <button type="submit" class="submit-btn">정보 수정</button>  
     </form>
+    <form action="userDelete.do" method="post" style="display:inline;" onsubmit="return confirm('정말로 탈퇴하시겠습니까?');">
+        <input type="hidden" name="us_id" value="${user.us_id}">
+         
+        <button type="submit" class="delete-btn">탈퇴</button>
+         <button type="button" onclick="location.href='/logout'" class="logout-btn">로그아웃</button>
+    </form>
+</div>
+
+           
+        </div>
 </div>
 
 

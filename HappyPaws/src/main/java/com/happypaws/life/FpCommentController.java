@@ -6,7 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.happypaws.svc.FpCommentSVC;
 import com.happypaws.vo.FpCommentVO;
@@ -94,5 +97,15 @@ public class FpCommentController {
         fpCommentSVC.deleteFpComment(vo);
         return "redirect:/MIA/getFindPet?fp_seq=" + vo.getFp_seq() + "&searchCondition=" + searchCondition
                 + "&searchKeyword=" + searchKeyword + "&category=" + category + "&nowPage=" + nowPage;
+    }
+    
+    //비밀번호 확인
+    @PostMapping("/verifyFpcPassword")
+    @ResponseBody
+    public int verifyFpcPassword(@RequestParam("fpc_seq") int fpcSeq,
+                                 @RequestParam("password") String enteredPassword) {
+        int isValid = fpCommentSVC.verifyFpcPassword(fpcSeq, enteredPassword);
+       
+        return isValid;
     }
 }

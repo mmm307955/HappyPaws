@@ -10,109 +10,50 @@
 <title>행복한 발자국</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lostPet.js"></script>
 <script>
-$(document).ready(function() {
-    function setupEventHandlers() {
-        $("#lpMod").click(function() {
-            document.fm.action = "/MIA/updateLostPet";
-            document.fm.method = "get";
-            document.fm.lp_seq.value = "${lostPet.lp_seq}";
-            document.fm.nowPage.value = "${nowPage}" || 1;
-            document.fm.searchCondition.value = "${searchCondition}";
-            document.fm.searchKeyword.value = "${searchKeyword}";
-            document.fm.category.value = "${category}";
-            document.fm.submit();
-        });
+$(document).on('click', '#lpcMod', function() {
+    let lpCommentDiv = $(this).closest(".comment");
+    let content = $.trim(lpCommentDiv.find("textarea").val());
+    let lp_seq = lpCommentDiv.find("input[name='lp_seq']").val();
+    let lpc_seq = lpCommentDiv.find("input[name='lpc_seq']").val();
 
-        $("#lpDel").click(function() {
-            let con_test = confirm("정말로 삭제하시겠습니까?");
-            if (con_test) {
-                let s = document.fm.lp_seq.value;
-                location.href = "/MIA/deleteLostPet?lp_seq=" + s;
-            }
-        });
-
-        $("#lpList").click(function() {
-            document.hideFrm.action = "/MIA/getLostPetList";
-            document.hideFrm.method = "post";
-            document.hideFrm.nowPage.value = "${nowPage}" || 1;
-            document.hideFrm.searchCondition.value = "${searchCondition}";
-            document.hideFrm.searchKeyword.value = "${searchKeyword}";
-            document.hideFrm.category.value = "${category}";
-            document.hideFrm.submit();
-        });
-
-        $(document).on('click', '#open', function() {
-        	let lpCommentDiv = $(this).closest(".lpComment");
-            let lpcMod1 = lpCommentDiv.find(".lpcMod1");
-            let lpcMod2 = lpCommentDiv.find(".lpcMod2");
-            let lpcMod3 = lpCommentDiv.find(".lpcMod3");
-        	lpcMod1.hide();
-            lpcMod2.show();
-            lpcMod3.hide();
-        });
-        
-        $(document).on('click', '#close', function() {
-        	let lpCommentDiv = $(this).closest(".lpComment");
-            let lpcMod1 = lpCommentDiv.find(".lpcMod1");
-            let lpcMod2 = lpCommentDiv.find(".lpcMod2");
-            let lpcMod3 = lpCommentDiv.find(".lpcMod3");
-        	lpcMod1.show();
-            lpcMod2.hide();
-            lpcMod3.show();
-        });
-        
-        $(document).on('click', '#lpcMod', function() {
-            let lpCommentDiv = $(this).closest(".lpComment");
-            let lpcMod1 = lpCommentDiv.find(".lpcMod1");
-            let lpcMod2 = lpCommentDiv.find(".lpcMod2");
-            let textarea = lpCommentDiv.find("textarea");
-
-                // 댓글 내용 확인
-                let content = $.trim(textarea.val());
-                let lp_seq = lpCommentDiv.find("input[name='lp_seq']").val();
-                let lpc_seq = lpCommentDiv.find("input[name='lpc_seq']").val();
-
-                if (content === '') {
-                    alert("댓글 내용을 입력해야 합니다.");
-                    textarea.focus(); // 텍스트 영역에 포커스
-                    return;
-                }
-
-                if (lp_seq && lpc_seq) {
-                    location.href = "/MIA/updateLpComment?lp_seq=" + lp_seq +
-                        "&lpc_seq=" + lpc_seq +
-                        "&lpc_content=" + encodeURIComponent(content) +
-                        "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
-                        "&searchCondition=" + encodeURIComponent("${searchCondition}") +
-                        "&category=" + encodeURIComponent("${category}") +
-                        "&nowPage=" + "${nowPage}";
-                } else {
-                    console.error("수정할 수 없는 댓글입니다.");
-                }            
-        });
-
-        $(document).on('click', '#lpcDel', function() {
-            let con_test = confirm("정말로 삭제하시겠습니까?");
-            if (con_test) {
-                let lp_seq = $(this).closest(".lpComment").find("input[name='lp_seq']").val();
-                let lpc_seq = $(this).closest(".lpComment").find("input[name='lpc_seq']").val();
-
-                if (lp_seq && lpc_seq) {
-                    location.href = "/MIA/deleteLpComment?lp_seq=" + lp_seq +
-                        "&lpc_seq=" + lpc_seq +
-                        "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
-                        "&searchCondition=" + encodeURIComponent("${searchCondition}") +
-                        "&category=" + encodeURIComponent("${category}") +
-                        "&nowPage=" + "${nowPage}";
-                } else {
-                    console.error("삭제할 수 없는 댓글입니다.");
-                }
-            }
-        });
+    if (!content) {
+        alert("댓글 내용을 입력해야 합니다.");
+        lpCommentDiv.find("textarea").focus();
+        return;
     }
 
-    setupEventHandlers();
+    if (lp_seq && lpc_seq) {
+        location.href = "/MIA/updateLpComment?lp_seq=" + lp_seq +
+            "&lpc_seq=" + lpc_seq +
+            "&lpc_content=" + encodeURIComponent(content) +
+            "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
+            "&searchCondition=" + encodeURIComponent("${searchCondition}") +
+            "&category=" + encodeURIComponent("${category}") +
+            "&nowPage=" + "${nowPage}";
+    } else {
+        console.error("수정할 수 없는 댓글입니다.");
+    }
+});
+
+// 댓글 삭제
+$(document).on('click', '#lpcDel', function() {
+    if (confirm("정말로 삭제하시겠습니까?")) {
+        let lp_seq = $(this).closest(".comment").find("input[name='lp_seq']").val();
+        let lpc_seq = $(this).closest(".comment").find("input[name='lpc_seq']").val();
+
+        if (lp_seq && lpc_seq) {
+            location.href = "/MIA/deleteLpComment?lp_seq=" + lp_seq +
+                "&lpc_seq=" + lpc_seq +
+                "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
+                "&searchCondition=" + encodeURIComponent("${searchCondition}") +
+                "&category=" + encodeURIComponent("${category}") +
+                "&nowPage=" + "${nowPage}";
+        } else {
+            console.error("삭제할 수 없는 댓글입니다.");
+        }
+    }
 });
 </script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
@@ -120,7 +61,7 @@ $(document).ready(function() {
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
-		<div class="n_write">
+		<div class="n_view">
 			<div class="n_viewform">
 				<h1>아이를 찾아주세요</h1>
 				<div class="n_title">
@@ -173,22 +114,24 @@ $(document).ready(function() {
 			</div>
 		</div>
 
-		<form name="hideFrm" style="display: none;">
+		<form name="hideFrm">
 			<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 			<input type="hidden" name="searchCondition" value="${searchCondition}">
 			<input type="hidden" name="category" value="${category}">
-			<input type="hidden" name="nowPage" value="${nowPage}">
+			<input type="hidden"  name="nowPage" value="${nowPage}">
 		</form>
 
 		<div class="commentlist">
 			<c:forEach var="lpComment" items="${lpComment}">
 				<div class="comment">
+				<form name="cfm" style="display: none;">
 					<input type="hidden" name="lp_seq" value="${lpComment.lp_seq}">
 					<input type="hidden" name="lpc_seq" value="${lpComment.lpc_seq}">
 					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 					<input type="hidden" name="searchCondition" value="${searchCondition}">
 					<input type="hidden" name="category" value="${category}">
 					<input type="hidden" name="nowPage" value="${nowPage}">
+				</form>
 					<div>
 						<strong><c:out value="${lpComment.us_nick}" /></strong>
 						<span><c:out value="${lpComment.lpc_date}" /></span>
@@ -197,6 +140,7 @@ $(document).ready(function() {
 						<p class="lpcMod1">
 							<c:out value="${lpComment.lpc_content}" />
 						</p>
+						
 						<div class="lpcMod2" style="display: none">
 							<textarea name="lpc_content" required>${lpComment.lpc_content}</textarea>
 							<div class="btn-container">
@@ -204,6 +148,7 @@ $(document).ready(function() {
 								<button id="close" type="button">닫기</button>
 							</div>
 						</div>
+						
 					<c:if test="${user.us_id == lpComment.lpc_id || user.us_id == 'admin'}">
 						<div class="btn-container lpcMod3">
 							<button id="open" type="button">수정</button>

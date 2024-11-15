@@ -14,7 +14,6 @@
 		WHERE lp_seq = #{lp_seq} AND lpc_seq = #{lpc_seq}
 	</update>
 
-
 	<delete id="deleteLpComment">
 		DELETE FROM lpComment 
 		WHERE lp_seq = #{lp_seq} AND lpc_seq = #{lpc_seq}

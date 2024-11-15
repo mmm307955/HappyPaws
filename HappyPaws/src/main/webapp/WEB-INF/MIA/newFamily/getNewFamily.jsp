@@ -10,142 +10,59 @@
 <title>행복한 발자국</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/newFamily.js"></script>
 <script>
-	$(document).ready(function() {
-		function setupEventHandlers() {
-			$("#nfMod").click(function() {
-				document.fm.action = "/MIA/updateNewFamily";
-				document.fm.method = "get";
-				document.fm.nf_seq.value = "${newFamily.nf_seq}";
-				document.fm.nowPage.value = "${nowPage}" || 1;
-				document.fm.searchCondition.value = "${searchCondition}";
-				document.fm.searchKeyword.value = "${searchKeyword}";
-				document.fm.category.value = "${category}";
-				document.fm.submit();
-			});
+// 댓글 수정 완료
+$(document).on('click', '#nfcMod', function() {
+    let nfCommentDiv = $(this).closest(".nfComment");
+    let content = $.trim(nfCommentDiv.find("textarea").val());
+    let nf_seq = nfCommentDiv.find("input[name='nf_seq']").val();
+    let nfc_seq = nfCommentDiv.find("input[name='nfc_seq']").val();
 
-			$("#nfDel").click(function() {
-				let con_test = confirm("정말로 삭제하시겠습니까?");
-				if (con_test) {
-					let s = document.fm.nf_seq.value;
-					location.href = "/MIA/deleteNewFamily?nf_seq=" + s;
-				}
-			});
+    if (!content) {
+        alert("댓글 내용을 입력해야 합니다.");
+        nfCommentDiv.find("textarea").focus();
+        return;
+    }
 
-			$("#nfList").click(function() {
-				document.hideFrm.action = "/MIA/getNewFamilyList";
-				document.hideFrm.method = "post";
-				document.hideFrm.nowPage.value = "${nowPage}" || 1;
-				document.hideFrm.searchCondition.value = "${searchCondition}";
-				document.hideFrm.searchKeyword.value = "${searchKeyword}";
-				document.hideFrm.category.value = "${category}";
-				document.hideFrm.submit();
-			});
+    if (nf_seq && nfc_seq) {
+        location.href = "/MIA/updateNfComment?nf_seq=" + nf_seq +
+            "&nfc_seq=" + nfc_seq +
+            "&nfc_content=" + encodeURIComponent(content) +
+            "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
+            "&searchCondition=" + encodeURIComponent("${searchCondition}") +
+            "&category=" + encodeURIComponent("${category}") +
+            "&nowPage=" + "${nowPage}";
+    } else {
+        console.error("수정할 수 없는 댓글입니다.");
+    }
+});
 
-			$(document).on('click', '#open', function() {
-				let nfCommentDiv = $(this).closest( ".nfComment");
-				let nfcMod1 = nfCommentDiv.find(".nfcMod1");
-				let nfcMod2 = nfCommentDiv.find(".nfcMod2");
-				let nfcMod3 = nfCommentDiv.find(".nfcMod3");
-				nfcMod1.hide();
-				nfcMod2.show();
-				nfcMod3.hide();
-			});
+// 댓글 삭제
+$(document).on('click', '#nfcDel', function() {
+    if (confirm("정말로 삭제하시겠습니까?")) {
+        let nf_seq = $(this).closest(".nfComment").find("input[name='nf_seq']").val();
+        let nfc_seq = $(this).closest(".nfComment").find("input[name='nfc_seq']").val();
 
-			$(document).on('click', '#close', function() {
-				let nfCommentDiv = $(this).closest(".nfComment");
-				let nfcMod1 = nfCommentDiv.find(".nfcMod1");
-				let nfcMod2 = nfCommentDiv.find(".nfcMod2");
-				let nfcMod3 = nfCommentDiv.find(".nfcMod3");
-				nfcMod1.show();
-				nfcMod2.hide();
-				nfcMod3.show();
-			});
-
-			$(document).on('click', '#nfcMod', function() {
-				let nfCommentDiv = $(this).closest(".nfComment");
-				let nfcMod1 = nfCommentDiv.find(".nfcMod1");
-				let nfcMod2 = nfCommentDiv.find(".nfcMod2");
-				let textarea = nfCommentDiv.find("textarea");
-
-				// 댓글 내용 확인
-				let content = $.trim(textarea.val());
-				let nf_seq = nfCommentDiv.find("input[name='nf_seq']").val();
-				let nfc_seq = nfCommentDiv.find("input[name='nfc_seq']").val();
-
-				if (content === '') {
-					alert("댓글 내용을 입력해야 합니다.");
-					textarea.focus(); // 텍스트 영역에 포커스
-					return;
-				}
-
-				if (nf_seq && nfc_seq) {
-					location.href = "/MIA/updateNfComment?nf_seq="
-						+ nf_seq
-						+ "&nfc_seq="
-						+ nfc_seq
-						+ "&nfc_content="
-						+ encodeURIComponent(content)
-						+ "&searchKeyword="
-						+ encodeURIComponent("${searchKeyword}")
-						+ "&searchCondition="
-						+ encodeURIComponent("${searchCondition}")
-						+ "&category="
-						+ encodeURIComponent("${category}")
-						+ "&nowPage="
-						+ "${nowPage}";
-				} else {
-					console.error("수정할 수 없는 댓글입니다.");
-				}
-			});
-
-			$(document).on('click', '#nfcDel', function() {
-				let con_test = confirm("정말로 삭제하시겠습니까?");
-				if (con_test) {
-					let nf_seq = $(this)
-							.closest(".nfComment")
-							.find("input[name='nf_seq']")
-							.val();
-					let nfc_seq = $(this)
-							.closest(".nfComment")
-							.find("input[name='nfc_seq']")
-							.val();
-
-					if (nf_seq && nfc_seq) {
-						location.href = "/MIA/deleteNfComment?nf_seq="
-								+ nf_seq
-								+ "&nfc_seq="
-								+ nfc_seq
-								+ "&searchKeyword="
-								+ encodeURIComponent("${searchKeyword}")
-								+ "&searchCondition="
-								+ encodeURIComponent("${searchCondition}")
-								+ "&category="
-								+ encodeURIComponent("${category}")
-								+ "&nowPage="
-								+ "${nowPage}";
-					} else {
-						console.error("삭제할 수 없는 댓글입니다.");
-					}
-				}
-			});
-		}
-
-		setupEventHandlers();
-
-		if ($("#pet_gender").text() == 'M') {
-			$("#pet_gender").text("남");
-		} else {
-			$("#pet_gender").text("여");
-		}
-	});
+        if (nf_seq && nfc_seq) {
+            location.href = "/MIA/deleteNfComment?nf_seq=" + nf_seq +
+                "&nfc_seq=" + nfc_seq +
+                "&searchKeyword=" + encodeURIComponent("${searchKeyword}") +
+                "&searchCondition=" + encodeURIComponent("${searchCondition}") +
+                "&category=" + encodeURIComponent("${category}") +
+                "&nowPage=" + "${nowPage}";
+        } else {
+            console.error("삭제할 수 없는 댓글입니다.");
+        }
+    }
+});
 </script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
-		<div class="n_write">
+		<div class="n_view">
 			<div class="n_viewform">
 				<h1>아이를 찾아주세요</h1>
 				<div class="n_title">

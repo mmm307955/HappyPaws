@@ -2,6 +2,8 @@ package com.happypaws.life;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -45,6 +47,7 @@ public class LostPetController {
 
 	@RequestMapping(value = "/insertLostPet", method = RequestMethod.POST)
 	public String insertLostPet(LostPetVO vo) throws IllegalStateException, IOException {
+		System.out.println(vo.getUploadFile());
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
 
@@ -114,10 +117,13 @@ public class LostPetController {
 
 		// 데이터베이스 업데이트
 		lostPetSVC.updateLostPet(vo);
-
+		String encodedCategory = URLEncoder.encode(vo.getCategory(), StandardCharsets.UTF_8.toString());
+		String encodedKeyword = URLEncoder.encode(vo.getSearchKeyword(), StandardCharsets.UTF_8.toString());
+		String encodedCondition = URLEncoder.encode(vo.getSearchCondition(), StandardCharsets.UTF_8.toString());
+		
 		return "redirect:/MIA/getLostPet?lp_seq=" + vo.getLp_seq() + "&nowPage=" + vo.getNowPage() + "&category="
-				+ vo.getCategory() + "&searchKeyword=" + vo.getSearchKeyword() + "&searchCondition="
-				+ vo.getSearchCondition();
+				+ encodedCategory + "&searchKeyword=" + encodedKeyword + "&searchCondition="
+				+ encodedCondition;
 	}
 
 	// 글 삭제

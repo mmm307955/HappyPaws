@@ -40,7 +40,7 @@
 	            </div>
 			</form>
 			<c:set var="isLoggedIn" value="${not empty user.us_id}" />
-			<button id="qna_write" data-logged-in="${isLoggedIn}">글쓰기</button>
+			<button class="qna_write" data-logged-in="${isLoggedIn}">글쓰기</button>
 		</div>
 		<table>
 			<caption style="display:none;">Q&amp;A</caption>
@@ -59,7 +59,7 @@
 					    <c:forEach var="qna" items="${qnaList}">
 					    	<tr class="qna_view" data-seq="${qna.qna_seq}" data-count="${qna.qna_count}" data-nowpage="${paging.nowPage}" data-searchcondition="${searchCondition}" data-searchkeyword="${searchKeyword}">
 					        	<td>${qna.qna_seq}</td>
-					            <td>${qna.qna_title}<c:if test="${qna.comment_count != 0}"><span style="color: #b9b9b9"> [${qna.comment_count}]</span></c:if></td>
+					            <td><div class="title-wrapper">${qna.qna_title}</div><c:if test="${qna.comment_count != 0}"> <span style="color: #b9b9b9"> [${qna.comment_count}]</span></c:if></td>
 					            <td>${qna.formattedQnaDate}</td>
 					            <td>
 					            	<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${qna.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
@@ -76,6 +76,7 @@
 				</c:choose>
 			</tbody>
 		</table>
+	</div>
 		<ul class="pagination">
 			<c:if test="${paging.nowPage > 1 && paging.lastBtn > paging.viewBtnCnt}">
 				<li class="page-item"><a class="page-link" href="/board/qna_list?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">이전</a></li>
@@ -90,8 +91,9 @@
 				<li class="page-item"><a class="page-link" href="/board/qna_list?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">이후</a></li>
 			</c:if>
 		</ul>
-	</div>
 	</main>
 	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
+	
+	<button class="qna_write ph_write" data-logged-in="${isLoggedIn}"><img src="/resources/images/edit-3.svg" alt="글쓰기"/></button>
 </body>
 </html>

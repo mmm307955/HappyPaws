@@ -2,7 +2,11 @@ package com.happypaws.life;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,8 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.happypaws.svc.NoticeSVC;
+import com.happypaws.svc.QnaSVC;
 import com.happypaws.util.PagingVO;
 import com.happypaws.vo.NoticeVO;
+import com.happypaws.vo.QnaCmtVO;
+import com.happypaws.vo.QnaVO;
 
 @Controller
 public class BoardController {
@@ -28,9 +35,43 @@ public class BoardController {
 	@Autowired
 	private NoticeSVC notic_SVC;
 	
+	@Autowired
+	private QnaSVC qna_SVC;
+	
 	//관리자 인덱스이동
 	@RequestMapping(value="/admin",method = RequestMethod.GET)
-	public String admin_index() {
+	public String admin_index(NoticeVO vo , Model model , PagingVO pv , QnaVO qnavo , QnaCmtVO cmtvo) {
+		
+		//관리자 차트
+		List<Map<String, Object>> getDaysTotalAmount = notic_SVC.getDaysTotalAmount();
+		System.out.println(getDaysTotalAmount);
+		
+        model.addAttribute("getDaysTotalAmount", getDaysTotalAmount);
+		
+        
+		//공지사항
+		String cntPerPage = "6";
+		if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
+		if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
+		
+		int total = notic_SVC.countNotice(vo);
+		int qna_total = qna_SVC.countQna(qnavo);
+		
+		pv = new PagingVO(total, Integer.parseInt("1"), Integer.parseInt(cntPerPage));
+		pv = new PagingVO(qna_total, Integer.parseInt("1"), Integer.parseInt(cntPerPage));
+				
+		vo.setStart(pv.getStart());
+		vo.setListcnt(Integer.parseInt(cntPerPage));
+		
+		model.addAttribute("noticeList", notic_SVC.notice_list(vo));
+		
+		pv = new PagingVO(qna_total, Integer.parseInt("1"), Integer.parseInt(cntPerPage));
+		qnavo.setStart(pv.getStart());
+		qnavo.setListcnt(Integer.parseInt(cntPerPage));
+	
+		model.addAttribute("qnaList", qna_SVC.qna_list(qnavo));
+		//공지사항 끝
+		
 		return "/WEB-INF/admin/admin_index.jsp";
 	}
 	
@@ -95,7 +136,7 @@ public class BoardController {
 	//공지사항-글쓰기 페이지이동
 	@RequestMapping(value="/board/notice_write",method = RequestMethod.GET)
 	public String notice_write() {
-		return "/WEB-INF/board/notice_write.jsp";
+		return "/WEB-INF/admin/ad_board/notice_write.jsp";
 	}
 	
 	//공기사항 - 글쓰기
@@ -131,15 +172,27 @@ public class BoardController {
 
 		model.addAttribute("noticeview", notic_SVC.notice_view(vo));
 
-		return "/WEB-INF/board/notice_modify.jsp";
+		return "/WEB-INF/admin/ad_board/notice_modify.jsp";
 	}
 	
 	//공지사항 - 글수정
 	@RequestMapping(value = "/board/notice_modify", method = RequestMethod.POST)
-	public String notice_update(NoticeVO vo, Model model) {
+	public String notice_update(NoticeVO vo, Model model ,HttpServletRequest request) throws UnsupportedEncodingException  {
 		
 		notic_SVC.notice_update(vo);
-		return "redirect:/board/notice_list";
+		
+		String nowPage = request.getParameter("nowPage");
+		
+		if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
+		if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
+		
+		String encodedKeyword = URLEncoder.encode(vo.getSearchKeyword(), StandardCharsets.UTF_8.toString());
+		String encodedCondition = URLEncoder.encode(vo.getSearchCondition(), StandardCharsets.UTF_8.toString());
+				
+		return "redirect:/admin/ad_notice_view?n_seq="+vo.getN_seq() +
+		"&nowPage=" + (nowPage != null ? nowPage : "1") +
+		"&searchKeyword=" + encodedKeyword +
+        "&searchCondition=" + encodedCondition;
 	}
 	
 	//공지사항 삭제하기
@@ -147,6 +200,6 @@ public class BoardController {
 	public String notice_delete(NoticeVO vo, Model model) {
 		
 		notic_SVC.notice_delete(vo);
-		return "redirect:/board/notice_list";
+		return "redirect:/admin/ad_notice_list";
 	}
 }

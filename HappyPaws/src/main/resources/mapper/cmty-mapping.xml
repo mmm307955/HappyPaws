@@ -7,7 +7,7 @@
 	<select id="cmty_list" resultType="com.happypaws.vo.CommunityVO">
 		SELECT COMMUNITY.* , (SELECT COUNT(*) 
          FROM cmty_comment 
-         WHERE cmty_comment.cmty_seq = COMMUNITY.cmty_seq) AS comment_count,
+         WHERE cmty_comment.cmty_seq = COMMUNITY.cmty_seq and cmty_cmt_del ='N') AS comment_count,
          users.us_profile,
     	 users.us_nick
 		FROM COMMUNITY LEFT JOIN USERS ON COMMUNITY.CMTY_ID = USERS.US_ID 

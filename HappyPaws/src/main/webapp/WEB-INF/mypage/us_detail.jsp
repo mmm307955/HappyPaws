@@ -54,13 +54,13 @@
       
     .button-container button:hover,
     .button-container input[type="submit"]:hover {
-        background-color: #d0d0d0; /* 마우스 오버 시 색상 */
+        background-color: #d0d0d0; 
     }
 
    
     .button-container button:focus,
     .button-container input[type="submit"]:focus {
-        outline: 2px solid #005fcc; /* 파란색 테두리 */
+        outline: 2px solid #005fcc; 
         outline-offset: 2px;
         background-color: #d0d0d0;
     }
@@ -121,15 +121,18 @@
     </table>
    
     <div class="button-container">
-        <button onclick="location.href='userUpdate.do?us_id=${user.us_id}'">수정</button>
-        <form action="userDelete.do" method="post" onsubmit="return confirmDelete()" style="display:inline;">
-            <input type="hidden" name="us_id" value="${user.us_id}">
-            <input type="submit" value="탈퇴">
-        </form>
-        <button onclick="location.href='userList.do'">목록으로</button>
-    </div>
-</div>
+    <button onclick="location.href='userUpdate.do?us_id=${user.us_id}'">수정</button>
+    
+    
+   <form action="userDelete.do" method="post" onsubmit="return confirmDelete()" style="display:inline;">
+    <input type="hidden" name="us_id" value="${user.us_id}">
+    <input type="submit" value="탈퇴">
+</form>
 
+    
+    <button onclick="location.href='userList.do'">목록으로</button>
+</div>
+</div>
 
 </main>
 <%@include file="../../footer.jsp" %> 

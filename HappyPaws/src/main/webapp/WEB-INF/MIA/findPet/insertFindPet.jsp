@@ -4,59 +4,52 @@
 <head>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const fileDOM = document.querySelector('#file2'); // 사진 업로드 input
-        const preview = document.querySelector('.find-pet-image'); // 이미지 미리보기
-
-        fileDOM.addEventListener('change', () => {
-            const reader = new FileReader();
-            reader.onload = ({ target }) => {
-                preview.src = target.result; // 미리보기 이미지 업데이트
-            };
-            if (fileDOM.files[0]) {
-                reader.readAsDataURL(fileDOM.files[0]); // 선택된 파일의 데이터 URL 읽기
-            }
-        });
-
-        // 롤백 버튼 이벤트
-        document.getElementById('rollback').addEventListener('click', function() {
-            history.back();
-        });
-    });
-</script>
-
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/findPet.js"></script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 		<div class="n_write">
-			<h1>아이를 찾아주세요</h1>
 			<div class="n_writeform">
+				<h1>아이를 찾아주세요</h1>
 				<form action="/MIA/insertFindPet" method="post" enctype="multipart/form-data" name="boardform">
 					
 					<div class="n_write_header">
 						<span class="left">글 작성</span>
 					</div>
 					
+					<c:if test="${empty user.us_id}">
 					<div class="n_title">
+					<input id="fp_id" type="text" class="form-control" name="fp_id" placeholder="닉네임을 입력하세요."  value="${user.us_id}"> 
+					
+					<input type="password" class="form-control" name="fp_code" placeholder="비밀번호를 입력하세요."  value="${user.us_id}">
+					</div>
+					</c:if>
+					
+					<c:if test="${not empty user.us_id}">
 					<input type="hidden" name="fp_id" value="${user.us_id}"> 
+					<input type="hidden" name="fp_code" value="${user.us_id}"> 
+					</c:if>
+					
+					<div class="n_title">
+					<input type="hidden" name="fp_login" value="Y">
 					<input type="text" class="form-control" name="fp_title" placeholder="제목을 입력하세요." required>
 					</div>
 					
 					<div class="n_ph">
-					<input type="text" class="form-control" name="fp_ph" placeholder="연락처를 입력하세요" required>
+   						 <input type="text" class="form-control" name="fp_ph" id="fp_ph" placeholder="연락처를 입력하세요" required 
+   						 oninput="formatPhoneNumber(this)">
 					</div>
 					
 					<div class="n_img">
+					<label for="file2" class="upload-btn" style="cursor: pointer;">
 						<img src="${pageContext.request.contextPath}/resources/MIA-img/findPetImg/기본이미지.png" class="find-pet-image">
 						<div class="img_save">
-							<label for="file2" class="upload-btn" style="cursor: pointer;">
-								<input id="file2" type="file" name="uploadFile" accept="image/*"
-								style="display: none;" /> <span>사진 첨부</span>
-							</label>
+						<input id="file2" type="file" name="uploadFile" accept="image/*" style="display: none;" required> 
+						<span>사진 첨부</span>
 						</div>
+					</label>
 					</div>
 
 					<div class="n_detail">
@@ -86,20 +79,16 @@
 								<td class="value"><input type="text" class="form-control"
 									name="fp_breed" placeholder="품종 입력" required></td>
 							</tr>
-							<tr class="detail-row">
-								<td class="label">사례금</td>
-								<td class="value"><input type="number" class="form-control"
-									name="fp_reward" placeholder="숫자만 입력해주세요" min="0" required></td>
-							</tr>
 						</table>
 
 					</div>
-					<div class="input-group mb-3">
+					<div class="n_content">
 						<textarea class="form-control" rows="5" name="fp_content"
 							placeholder="상세 설명을 입력하세요"></textarea>
+					
 					</div>
-					<input type="hidden" name="fp_ok" value="N"> <input
-						type="hidden" name="fp_del" value="N">
+					<input type="hidden" name="fp_ok" value="N"> 
+					<input type="hidden" name="fp_del" value="N">
 
 					<div class="btn-container">
 						<button id="submit" type="submit">글 등록</button>

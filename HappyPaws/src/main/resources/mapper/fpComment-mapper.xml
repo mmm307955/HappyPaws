@@ -4,8 +4,8 @@
 
 <mapper namespace="FpCommentDAO">
     <insert id="insertFpComment">
-        INSERT INTO fpComment(fp_seq, fpc_id, fpc_content, fpc_date)
-        VALUES(#{fp_seq}, #{fpc_id}, #{fpc_content}, #{fpc_date})
+        INSERT INTO fpComment(fp_seq, fpc_id, fpc_code, fpc_content, fpc_date, fpc_login)
+        VALUES(#{fp_seq}, #{fpc_id}, #{fpc_code}, #{fpc_content}, #{fpc_date}, #{fpc_login})
     </insert>
 
     <update id="updateFpComment">
@@ -20,11 +20,18 @@
     </delete>
 
     <select id="getFpCommentList" resultType="fpComment">
-        SELECT fpComment.*, users.us_profile, users.us_nick
-        FROM fpComment, users
-        JOIN users ON fpComment.fpc_id = users.us_id
-        WHERE fp_seq = #{fp_seq} and fpc_id = us_id
+        SELECT *
+		FROM fpComment
+		LEFT JOIN users ON fpComment.fpc_id = users.us_id
+        WHERE fp_seq = #{fp_seq}
         ORDER BY fpc_seq DESC
+    </select>
+
+	<select id="verifyFpcPassword" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM fpComment
+        WHERE fpc_seq = #{fpcSeq}
+        AND fpc_code = #{enteredPassword}
     </select>
 
 </mapper>

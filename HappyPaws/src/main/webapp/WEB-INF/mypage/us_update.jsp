@@ -33,7 +33,7 @@
             height: 120px;
             border-radius: 50%;
             background-color: #ddd;
-           background-image: url('<c:url value="resources/profile_images/cutecat.jpg"/>'); /* 기본 이미지 경로 */
+           background-image: url('<c:url value="/resources/profile_images/cutecat.jpg"/>'); /* 기본 이미지 경로 */
 
             background-size: cover;
             background-position: center;
@@ -88,7 +88,7 @@
         .zipcode-container {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 1px;
 }
 
 .zipcode-container button {
@@ -100,8 +100,6 @@
     cursor: pointer;
     box-sizing: border-box;
 }
-
-        
     </style>
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
@@ -121,8 +119,23 @@
     <main>
     <div class="container">
         <h3>회원정보 수정</h3>
-        <div class="profile-image"></div> <!-- 기본 이미지가 가운데로 정렬됨 -->
-        <form action="userUpdate.do" method="post" onsubmit="return confirm('수정하시겠습니까?')">
+                
+            <c:if test="${not empty message}">
+                <div class="alert alert-success">
+                    ${message}
+                </div>
+            </c:if>
+         <c:choose>
+        <c:when test="${not empty user.us_profile}">
+            <div class="profile-image" style="background-image: url('<c:url value='/resources/profile_images/${user.us_profile}' />');"></div>
+        </c:when>
+        <c:otherwise>
+            <div class="profile-image" style="background-image: url('<c:url value='/resources/profile_images/cutecat.jpg' />');"></div>
+        </c:otherwise>
+    </c:choose>
+
+       <form action="${pageContext.request.contextPath}/userUpdate.do" method="post" onsubmit="return confirm('수정하시겠습니까?')">
+
             <table>
                 <tr>
                     <td>아이디:</td>

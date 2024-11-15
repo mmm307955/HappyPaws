@@ -15,23 +15,8 @@ pageContext.setAttribute("categories", categories);
 <title>행복한 발자국</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
-<script>
-        function selLp(val, val2, val3, val4, nowpage) {
-            location.href = "/MIA/getLostPet?lp_seq=" + val + '&searchCondition=' + val2 + '&searchKeyword=' + val3 + '&category=' + val4 + '&nowPage=' + nowpage;
-        }
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lostPet.js"></script>
 
-        $(document).ready(function() {
-            $("#lpIns").click(function() {
-                location.href = "/MIA/insertLostPet";
-            });
-        });
-        
-        $(document).ready(function() {
-            $("#lpIns2").click(function() {
-            	alert("로그인이 필요합니다");
-            });
-        });
-    </script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
@@ -70,7 +55,7 @@ pageContext.setAttribute("categories", categories);
 							value="${searchCondition}"> <input type="hidden"
 							name="searchKeyword" value="${searchKeyword}"> <input
 							type="hidden" name="category" value="${category}"> <input
-							type="hidden" name="nowPage" value="${paging.nowPage}"> <input
+							type="hidden" name="nowPage" value="1"> <input
 							type="submit"
 							value="<c:choose><c:when test="${category == ''}">전체</c:when><c:when test="${category == 'dog'}">강아지</c:when><c:when test="${category == 'cat'}">고양이</c:when><c:when test="${category == 'small'}">소동물</c:when><c:when test="${category == 'etc'}">기타</c:when></c:choose>">
 					</form>

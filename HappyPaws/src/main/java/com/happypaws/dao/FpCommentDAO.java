@@ -2,7 +2,9 @@ package com.happypaws.dao;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +45,13 @@ public class FpCommentDAO {
     // 댓글 삭제
     public void deleteFpComment(FpCommentVO vo) {
         mybatis.delete("FpCommentDAO.deleteFpComment", vo);
+    }
+    
+    // 비밀 번호 일치확인
+    public int verifyFpcPassword(int fpcSeq, String enteredPassword) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("fpcSeq", fpcSeq);
+        params.put("enteredPassword", enteredPassword);
+        return mybatis.selectOne("FpCommentDAO.verifyFpcPassword", params);
     }
 }

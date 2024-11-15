@@ -70,28 +70,36 @@ public class UserDAO {
         sql.update("com.happypaws.dao.UserDAO.updatePassword", user);
     }
     
-    public void updateUserToDeleted(String us_id) {
-        // MyBatis를 사용하여 us_is_del 필드를 'Y'로 업데이트
-        Map<String, Object> params = new HashMap<>();
-        params.put("us_id", us_id);
-        params.put("us_is_del", "Y");
-
-        sql.update("com.happypaws.dao.UserDAO.updateUserToDeleted", params);
+    public boolean updateUserToDeleted(String us_id) {
+        int affectedRows = sql.update("com.happypaws.dao.UserDAO.updateUserToDeleted", us_id);
+        return affectedRows > 0;  
     }
+
 
 
     public List<MyPostVO> findPostsByUserId(String usId) {
         return sql.selectList("com.happypaws.dao.UserDAO.findPostsByUserId", usId);
     }
     
- 
-    public MyPostVO findPostById(int post_id) {
-        return sql.selectOne("com.happypaws.dao.UserDAO.findPostById", post_id);
+    // 사용자 ID와 검색 조건으로 게시물 조회
+    public List<MyPostVO> searchPostsByUserId(String us_id, String searchField, String searchQuery) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("us_id", us_id);
+        params.put("searchField", searchField);
+        params.put("searchQuery", searchQuery);
+        
+        return sql.selectList("com.happypaws.dao.UserDAO.searchPostsByUserId", params);
+      
     }
+
+    // 단일 게시물 조회
+    public MyPostVO findPostById(int postId) {
+        return sql.selectOne("com.happypaws.dao.UserDAO.findPostById", postId);
+    }
+}
+
 
 
 
 
 	
-
-}

@@ -62,28 +62,34 @@ public class UserSVC {
 		 dao.updatePassword(adminId, newPassword);
     }
 
-	public void updateUserToDeleted(String us_id) {
-		  dao.updateUserToDeleted(us_id); 
-
-		
+	public boolean updateUserToDeleted(String us_id) {
+	    return dao.updateUserToDeleted(us_id); 
 	}
 	
 	  
-	// 서비스 메소드 - 사용자 ID로 게시물 목록 조회
-	  public List<MyPostVO> getPostsByUserId(String us_id) {
-	      try {
-	          // DAO 메소드 호출하여 사용자 ID로 게시물 목록 조회
-	          return dao.findPostsByUserId(us_id);
-	      } catch (Exception e) {
-	          e.printStackTrace();
-	          throw new RuntimeException("게시물 목록 조회 중 오류가 발생했습니다.");
-	      }
-	  }
+	// 서비스 메소드 - 사용자 ID와 검색 조건으로 게시물 목록 조회
+		 // 검색 조건이 없는 경우 전체 게시물 조회
+	    public List<MyPostVO> getPostsByUserId(String usId) {
+	        try {
+	            return dao.findPostsByUserId(usId);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException("전체 게시물 조회 중 오류가 발생했습니다.", e);
+	        }
+	    }
 
+	    // 검색 조건이 있는 경우 게시물 조회
+	    public List<MyPostVO> searchPostsByUserId(String usId, String searchField, String searchQuery) {
+	        try {
+	            return dao.searchPostsByUserId(usId, searchField, "%" + searchQuery + "%");
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException("검색된 게시물 조회 중 오류가 발생했습니다.", e);
+	        }
+	    }
 
-}
+		}
 
-	
 
 	
 	

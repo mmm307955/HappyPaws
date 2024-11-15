@@ -40,9 +40,9 @@ $(document).ready(function(){
 				container: [
 				  [{ 'header': [1, 2, false] }],
 				  ['bold', 'italic', 'underline'],
-				  ['image','code-block'],
+				  ['image'],
 				  [{ 'align': [] }],
-				  [{ list: 'ordered' }, { list: 'bullet' }],
+				  [{ list: 'ordered' }],
 				],
 				handlers: {
 					image: imageHandler  // 커스텀 이미지 핸들러
@@ -290,6 +290,13 @@ $(document).ready(function(){
 	});
 
 	//공지사항 목록 페이지로
+	$("#ad_notice_list").click(function(){
+		document.hideFrm.action="/board/notice_list";
+		document.hideFrm.method="get";
+		document.hideFrm.submit();
+	});
+
+	//공지사항 목록 페이지로
 	$("#notice_list").click(function(){
 		document.hideFrm.action="/board/notice_list";
 		document.hideFrm.method="get";
@@ -299,7 +306,14 @@ $(document).ready(function(){
 	//공지사항 글 수정페이지로
 	$('.notice_modify').on('click', function() {
         var val = $(this).data('seq');
-        location.href = "/board/notice_modify?n_seq=" + val // URL을 변경합니다.
+		var nowPage = $('input[name="nowPage"]').val();
+		var searchKeyword = $('input[name="searchKeyword"]').val();
+		var searchCondition = $('input[name="searchCondition"]').val();
+
+        location.href = "/board/notice_modify?n_seq=" + val + // URL을 변경합니다.
+				"&nowPage=" + nowPage +
+				"&searchKeyword=" + encodeURIComponent(searchKeyword) +
+				"&searchCondition=" + searchCondition;
     });
 	
 	//공지사항 글 삭제
@@ -398,7 +412,14 @@ $(document).ready(function(){
 	//QNA 글 수정페이지로
 	$('.qna_modify').on('click', function() {
 		var val = $(this).data('seq');
-		location.href = "/board/qna_modify?qna_seq=" + val // URL을 변경합니다.
+		var nowPage = $('input[name="nowPage"]').val();
+		var searchKeyword = $('input[name="searchKeyword"]').val();
+		var searchCondition = $('input[name="searchCondition"]').val();
+
+		location.href = "/board/qna_modify?qna_seq=" + val +// URL을 변경합니다.
+				"&nowPage=" + nowPage +
+                "&searchKeyword=" + encodeURIComponent(searchKeyword) +
+                "&searchCondition=" + searchCondition;
 	});
 
 	//QNA-글쓰기 전송할때 quill에디터 내용 가져오기
@@ -408,7 +429,7 @@ $(document).ready(function(){
 	});
 
 	//QNA 페이지로
-	$("#qna_write").click(function(event){
+	$(".qna_write").click(function(event){
 		var isLoggedIn = $(this).data('logged-in') === true;
 		if (!isLoggedIn) {
 			event.preventDefault(); // 기본 동작 중단
@@ -561,7 +582,16 @@ $(document).ready(function(){
 	//커뮤니티 글 수정페이지로
 	$('.cmty_modify').on('click', function() {
 		var val = $(this).data('seq');
-		location.href = "/board/cmty_modify?cmty_seq=" + val // URL을 변경합니다.
+		var nowPage = $('input[name="nowPage"]').val();
+		var searchKeyword = $('input[name="searchKeyword"]').val();
+		var searchCondition = $('input[name="searchCondition"]').val();
+		var cmty_category = $('input[name="cmty_category"]').val();
+
+		location.href = "/board/cmty_modify?cmty_seq=" + val +
+                    "&nowPage=" + nowPage +
+                    "&searchKeyword=" + encodeURIComponent(searchKeyword) +
+                    "&searchCondition=" + searchCondition +
+                    "&cmty_category=" + cmty_category;
 	});
 
 	//커뮤니티-글쓰기 전송할때 quill에디터 내용 가져오기
@@ -571,7 +601,7 @@ $(document).ready(function(){
 	});
 
 	//커뮤니티 글쓰기페이지로
-	$("#cmty_write").click(function(event){
+	$(".cmty_write").click(function(event){
 		var isLoggedIn = $(this).data('logged-in') === true;
 		if (!isLoggedIn) {
 			event.preventDefault(); // 기본 동작 중단
@@ -606,6 +636,7 @@ $(document).ready(function(){
 
         // 새 파라미터 추가 또는 변경
         urlParams.set('cmty_category', cmty_category);
+		urlParams.set('nowPage', "1");
 
         // 새로운 URL 생성
         const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
@@ -841,8 +872,10 @@ $(document).ready(function(){
 					class: 'firstimg'
 				});
 
+				var $imgWrapper = $('<div>', { class: 'img-wrapper' }).append($firstImgElement);
+
 				// cmty_view 요소의 맨 처음에 이미지 추가
-				$element.prepend($firstImgElement);
+				$element.append($imgWrapper);
 			}
 		});
 
@@ -852,6 +885,9 @@ $(document).ready(function(){
 			var originalContent = $contentElement.html();
 			$contentElement.html(extractFirstParagraph(originalContent));
 		});
+
+		$('.cmty_content').css("display","block");
+
 	});
 
 	// img 태그를 삭제하고 첫 번째 글만 반환하는 jQuery 함수
@@ -863,7 +899,7 @@ $(document).ready(function(){
 
 		// 첫 번째 글만 반환
 		var firstParagraph = $tempDiv.find('p').first();
-		return firstParagraph.length ? firstParagraph.prop('outerHTML') : '';
+		return firstParagraph.length ? '<div class="title-wrapper">'+firstParagraph.prop('outerHTML')+'</div>' : '';
 	}
 });
 
@@ -891,7 +927,7 @@ function loadComments() {
 							</span>
 							<div>
 								${comment.qna_cmt_id === us_id ? `<button class="updateComment" data-qna_cmt_seq="${comment.qna_cmt_seq}">수정</button>` : ''}
-								${comment.qna_cmt_id === us_id ? `<button class="deleteComment" data-qna_cmt_seq="${comment.qna_cmt_seq}">삭제</button>` : ''}
+								${comment.qna_cmt_id === us_id || us_id =="admin" ? `<button class="deleteComment" data-qna_cmt_seq="${comment.qna_cmt_seq}">삭제</button>` : ''}
 							</div>
 						</div>
 						<div class="comment-body">
@@ -965,7 +1001,7 @@ function renderComments(commentMap, parentSeq, depth, us_id) {
                     </span>
                     <div>
                         ${comment.cmty_cmt_id === us_id && comment.cmty_cmt_del === 'N' ? `<button class="c_comment-udate" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">수정</button>` : ''}
-						${comment.cmty_cmt_id === us_id && comment.cmty_cmt_del === 'N' ? `<button class="c_comment-delete" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">삭제</button>` : ''}
+						${comment.cmty_cmt_id === us_id && comment.cmty_cmt_del === 'N'|| us_id =="admin" ? `<button class="c_comment-delete" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">삭제</button>` : ''}
                         ${us_id && comment.cmty_cmt_del === 'N' ? `<button class="c_comment" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">답글</button>` : ''}
                     </div>
                 </div>

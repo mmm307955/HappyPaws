@@ -13,7 +13,7 @@
 	<div class="n_write">
 		<h1>Q&amp;A</h1>
 		<div class="n_write_form">
-			<form action="/board/qna_modify" id="qnaForm" enctype="multipart/form-data" method="post" >
+			<form action="/board/qna_modify?nowPage=${param.nowPage}" id="qnaForm" enctype="multipart/form-data" method="post" >
 				<div class="n_write_header">
 					<span class="left">Q&amp;A 수정</span>
 				</div>
@@ -21,6 +21,10 @@
 				<input type="hidden" name="qna_id" value="${qnaview.qna_id}">
 				<input type="hidden" name="qna_content" id="qna_content">
 				<input type="hidden" name="qna_seq" value="${qnaview.qna_seq}">
+				
+				<input type="hidden" name="searchKeyword" value="${param.searchKeyword}">
+	 			<input type="hidden" name="searchCondition" value="${param.searchCondition}">
+	  
 				<div id="editor">
 					${qnaview.qna_content}
 				</div>
@@ -31,6 +35,5 @@
 		</div>
 	</div>
 	</main>
-	<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </body>
 </html>

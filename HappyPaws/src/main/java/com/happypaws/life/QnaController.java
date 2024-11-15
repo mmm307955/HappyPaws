@@ -1,10 +1,14 @@
 package com.happypaws.life;
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.happypaws.svc.QnaSVC;
 import com.happypaws.util.PagingVO;
-import com.happypaws.vo.CmtyCommentVO;
 import com.happypaws.vo.QnaCmtVO;
 import com.happypaws.vo.QnaVO;
 import com.happypaws.vo.UsersVO;
@@ -29,11 +32,10 @@ public class QnaController {
 	private QnaSVC qna_SVC;
 	
 	//QNA-리스트 페이지이동
-	@RequestMapping(value="/board/qna_list",method = RequestMethod.GET)
+	@RequestMapping(value={"/board/qna_list","/admin/ad_qna_list"},method = RequestMethod.GET)
 	public String qna_list(QnaVO vo , QnaCmtVO cmtvo,PagingVO pv ,Model model , 
 			@RequestParam(value = "nowPage", required = false) String nowPage,
-			@RequestParam(value = "message", required = false) String message
-			) {
+			HttpServletRequest request) {
 		
 		String cntPerPage = "10";
 		
@@ -49,64 +51,127 @@ public class QnaController {
 		vo.setStart(pv.getStart());
 		vo.setListcnt(Integer.parseInt(cntPerPage));
 		
-		model.addAttribute("message", message);
 		model.addAttribute("searchKeyword", vo.getSearchKeyword());
 		model.addAttribute("searchCondition", vo.getSearchCondition());
 		model.addAttribute("qnaList", qna_SVC.qna_list(vo));
 		
+		String requestUri = request.getRequestURI();
 		
-		return "/WEB-INF/board/qna_list.jsp";
+		if(requestUri.equals("/admin/ad_qna_list")) {
+			return "/WEB-INF/admin/ad_board/ad_qna_list.jsp";
+		}else {
+			return "/WEB-INF/board/qna_list.jsp";
+		}
+		
 	}
 	
 	//QNA-상세보기
-	@RequestMapping(value = "/board/qna_view", method = RequestMethod.GET)
-	public String qna_view(QnaVO vo, Model model) {
+	@RequestMapping(value = {"/board/qna_view","/admin/ad_qna_view"}, method = RequestMethod.GET)
+	public String qna_view(QnaVO vo, Model model , HttpServletRequest request) {
 		
 		model.addAttribute("qnaview", qna_SVC.qna_view(vo));
 		qna_SVC.qna_count(vo);
-
-		return "/WEB-INF/board/qna_view.jsp";
+		
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_qna_view")) {
+			return "/WEB-INF/admin/ad_board/ad_qna_view.jsp";
+		}else {
+			return "/WEB-INF/board/qna_view.jsp";
+		}
+		
 	}
 	
 	//QNA-글수정페이지로
-	@RequestMapping(value = "/board/qna_modify", method = RequestMethod.GET)
-	public String qna_modify(QnaVO vo, Model model) {
+	@RequestMapping(value = {"/board/qna_modify","/admin/ad_qna_modify"}, method = RequestMethod.GET)
+	public String qna_modify(QnaVO vo, Model model, HttpServletRequest request) {
 		
 		model.addAttribute("qnaview", qna_SVC.qna_view(vo));
+		String requestUri = request.getRequestURI();
 		
-		return "/WEB-INF/board/qna_modify.jsp";
+		if(requestUri.equals("/admin/ad_qna_modify")) {
+			return "/WEB-INF/admin/ad_board/ad_qna_modify.jsp";
+		}else {
+			return "/WEB-INF/board/qna_modify.jsp";
+		}
+		
 	}
 	
 	//QNA - 글수정
-	@RequestMapping(value = "/board/qna_modify", method = RequestMethod.POST)
-	public String qna_update(QnaVO vo, Model model) {
+	@RequestMapping(value = {"/board/qna_modify","/admin/ad_qna_modify"}, method = RequestMethod.POST)
+	public String qna_update(QnaVO vo, Model model, HttpServletRequest request) throws UnsupportedEncodingException {
 		
 		qna_SVC.qna_update(vo);
-		return "redirect:/board/qna_list";
+		
+		String nowPage = request.getParameter("nowPage");
+		String requestUri = request.getRequestURI();
+		
+		if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
+		if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
+		
+		String encodedKeyword = URLEncoder.encode(vo.getSearchKeyword(), StandardCharsets.UTF_8.toString());
+		String encodedCondition = URLEncoder.encode(vo.getSearchCondition(), StandardCharsets.UTF_8.toString());
+		
+		
+		if(requestUri.equals("/admin/ad_qna_modify")) {
+			return "redirect:/admin/ad_qna_view?qna_seq="+vo.getQna_seq()+
+					"&nowPage=" + (nowPage != null ? nowPage : "1") +
+					"&searchKeyword=" + encodedKeyword +
+		            "&searchCondition=" + encodedCondition;
+		}else {
+			return "redirect:/board/qna_view?qna_seq="+vo.getQna_seq()+
+			"&nowPage=" + (nowPage != null ? nowPage : "1") +
+			"&searchKeyword=" + encodedKeyword +
+            "&searchCondition=" + encodedCondition;
+		}
+		
 	}
 	
 	//QNA-글쓰기 페이지이동
-	@RequestMapping(value="/board/qna_write",method = RequestMethod.GET)
-	public String qna_write() {
-		return "/WEB-INF/board/qna_write.jsp";
+	@RequestMapping(value={"/board/qna_write","/admin/ad_qna_write"},method = RequestMethod.GET)
+	public String qna_write(HttpServletRequest request) {
+		
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_qna_write")) {
+			return "/WEB-INF/admin/ad_board/ad_qna_write.jsp";
+		}else {
+			return "/WEB-INF/board/qna_write.jsp";
+		}
+	
 	}
 	
 	
 	//QNA - 글쓰기
-	@RequestMapping(value="/board/qna_insert", method = RequestMethod.POST)
-	public String qna_insert(QnaVO vo) {
+	@RequestMapping(value={"/board/qna_insert","/admin/ad_qna_insert"}, method = RequestMethod.POST)
+	public String qna_insert(QnaVO vo , HttpServletRequest request) {
+		
+		String requestUri = request.getRequestURI();
 		
 		qna_SVC.qna_insert(vo);
 		
-		return "redirect:/board/qna_list";
+		if(requestUri.equals("/admin/ad_qna_insert")) {
+			return "redirect:/admin/ad_qna_list";
+		}else {
+			return "redirect:/board/qna_list";
+		}
+		
 	}
 	
 	//QNA 삭제하기
-	@RequestMapping(value = "/board/qna_delete", method = RequestMethod.GET)
-	public String qna_delete(QnaVO vo, Model model) {
+	@RequestMapping(value = {"/board/qna_delete","/admin/ad_qna_delete"}, method = RequestMethod.GET)
+	public String qna_delete(QnaVO vo, Model model , HttpServletRequest request) {
 		
 		qna_SVC.qna_delete(vo);
-		return "redirect:/board/qna_list";
+		
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_qna_delete")) {
+			return "redirect:/admin/ad_qna_list";
+		}else {
+			return "redirect:/board/qna_list";
+		}
+		
 	}
 	
     // 댓글 추가

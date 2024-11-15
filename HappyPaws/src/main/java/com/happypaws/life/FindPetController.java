@@ -2,7 +2,11 @@ package com.happypaws.life;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,9 +15,11 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.happypaws.svc.FindPetSVC;
@@ -57,6 +63,17 @@ public class FindPetController {
         return "redirect:/MIA/getFindPetList";
     }
 
+    //비밀번호 확인
+    @PostMapping("/verifyPassword")
+    @ResponseBody
+    public int verifyPassword(@RequestParam("fp_seq") int fpSeq,
+                                              @RequestParam("password") String enteredPassword) {
+        int isValid = findPetSVC.verifyPassword(fpSeq, enteredPassword);
+       
+        return isValid;
+    }
+
+    
     // 글 수정
     @RequestMapping(value = "/updateFindPet", method = RequestMethod.GET)
     public String updateView(@RequestParam(value = "error", required = false) String error,
@@ -67,14 +84,7 @@ public class FindPetController {
         vo.setFp_seq(seq);
         FindPetVO mfindPet = findPetSVC.getFindPet(vo);
 
-        if (!(error == null || error.equals(""))) {
-            cntChk = 0;
-        } else if (cntChk <= 0) {
-            findPetSVC.updateFindPetCnt(mfindPet);
-        } else {
-            cntChk = 0;
-        }
-
+        model.addAttribute("nowPage", vo.getNowPage());
         model.addAttribute("searchKeyword", vo.getSearchKeyword());
         model.addAttribute("searchCondition", vo.getSearchCondition());
         model.addAttribute("category", vo.getCategory());
@@ -111,10 +121,13 @@ public class FindPetController {
 
         // 데이터베이스 업데이트
         findPetSVC.updateFindPet(vo);
-
+        String encodedCategory = URLEncoder.encode(vo.getCategory(), StandardCharsets.UTF_8.toString());
+		String encodedKeyword = URLEncoder.encode(vo.getSearchKeyword(), StandardCharsets.UTF_8.toString());
+		String encodedCondition = URLEncoder.encode(vo.getSearchCondition(), StandardCharsets.UTF_8.toString());
+        
         return "redirect:/MIA/getFindPet?fp_seq=" + vo.getFp_seq() + "&nowPage=" + vo.getNowPage() + "&category="
-                + vo.getCategory() + "&searchKeyword=" + vo.getSearchKeyword() + "&searchCondition="
-                + vo.getSearchCondition();
+		+ encodedCategory + "&searchKeyword=" + encodedKeyword + "&searchCondition="
+		+ encodedCondition;
     }
 
     // 글 삭제
@@ -146,7 +159,7 @@ public class FindPetController {
 
         vo.setFp_seq(seq);
         FindPetVO mfindPet = findPetSVC.getFindPet(vo);
-
+        
         cvo.setFp_seq(seq);
 
         List<FpCommentVO> mfpCommentList = fpCommentSVC.getFpCommentList(cvo);
@@ -208,5 +221,37 @@ public class FindPetController {
         model.addAttribute("findPetList", findPetList);
 
         return "/WEB-INF/MIA/findPet/getFindPetList.jsp";
+    }
+    
+    // 비회원 글 삭제
+    @RequestMapping(value = "/deleteFindPetCheck", method = RequestMethod.GET)
+    public String deleteCheck(@RequestParam(value = "error", required = false) String error,
+                             @RequestParam(value = "fp_seq") int seq, FindPetVO vo, Model model) {
+
+        vo.setFp_seq(seq);
+        FindPetVO mfindPet = findPetSVC.getFindPet(vo);
+
+        model.addAttribute("findPet", mfindPet);
+        return "/WEB-INF/MIA/findPet/deleteFindPetCheck.jsp";
+    }
+    
+    
+    
+    // 비회원 글 수정 
+    @RequestMapping(value = "/updateFindPetCheck", method = RequestMethod.GET)
+    public String updateCheck(@RequestParam(value = "error", required = false) String error,
+                             @RequestParam(value = "fp_seq") int seq, FindPetVO vo, Model model,
+                             @RequestParam(value = "nowPage", required = false) String nowPage,
+                             @RequestParam(value = "category", required = false) String category) {
+
+        vo.setFp_seq(seq);
+        FindPetVO mfindPet = findPetSVC.getFindPet(vo);
+
+        model.addAttribute("nowPage", vo.getNowPage());
+        model.addAttribute("searchKeyword", vo.getSearchKeyword());
+        model.addAttribute("searchCondition", vo.getSearchCondition());
+        model.addAttribute("category", vo.getCategory());
+        model.addAttribute("findPet", mfindPet);
+        return "/WEB-INF/MIA/findPet/modifyFindPetCheck.jsp";
     }
 }

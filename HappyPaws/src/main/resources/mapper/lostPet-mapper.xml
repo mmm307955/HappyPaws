@@ -53,14 +53,39 @@
 
 	<select id="getLostPet" resultType="lostPet">
 		SELECT * 
-		FROM lostpet , users
+		FROM lostpet, users
 		WHERE lp_seq = #{lp_seq} and lp_id = us_id
 	</select>
 
 	<select id="getLostPetList" resultType="lostPet">
 		SELECT * 
+		FROM lostpet
+		WHERE lp_del='N'
+		<if test="category != null and category != ''">
+			AND lp_category = #{category}
+		</if>
+		<if test="searchCondition == 'TITLE' ">
+			AND lp_title LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'CONTENT' ">
+			AND lp_content LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'ID' ">
+			AND lp_id LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'TITLE,CONTENT' ">
+			AND (lp_title LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			lp_content LIKE
+			CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+		ORDER BY lp_seq DESC
+		LIMIT #{listcnt} OFFSET #{start}
+	</select>
+
+	<select id="getLostPetListAdmin" resultType="lostPet">
+		SELECT * 
 		FROM lostpet, users
-		WHERE lp_del='N'and lp_id = us_id
+		WHERE lp_id = us_id
 		<if test="category != null and category != ''">
 			AND lp_category = #{category}
 		</if>
@@ -85,6 +110,27 @@
 
 	<select id="countLostPet" resultType="int">
 		SELECT COUNT(*) FROM lostpet WHERE lp_del='N'
+		<if test="category != null and category != ''">
+			AND lp_category = #{category}
+		</if>
+		<if test="searchCondition == 'TITLE' ">
+			AND lp_title LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'CONTENT' ">
+			AND lp_content LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'ID' ">
+			AND lp_id LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
+		<if test="searchCondition == 'TITLE,CONTENT' ">
+			AND (lp_title LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			lp_content LIKE
+			CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+	</select>
+
+	<select id="countLostPetAdmin" resultType="int">
+		SELECT COUNT(*) FROM lostpet WHERE 1=1
 		<if test="category != null and category != ''">
 			AND lp_category = #{category}
 		</if>

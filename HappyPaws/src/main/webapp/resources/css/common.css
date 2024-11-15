@@ -1,19 +1,5 @@
 * { box-sizing: border-box; }
-/* 전체 화면에 기본 스타일 */
-/* 기본체 정의 */
-/* @font-face {
-    font-family: 'HakgyoansimDunggeunmisoTTF-R';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-R.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
-}
 
-@font-face {
-    font-family: 'HakgyoansimDunggeunmisoTTF-B';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-B.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
-} */
 @font-face {
     font-family: 'NunNu';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimDunggeunmisoTTF-R.woff2') format('woff2');
@@ -71,7 +57,7 @@ header {
     display: flex;
     justify-content: center;
     position: relative;
-    margin-top: 20px;
+    padding-top: 20px;
     border-bottom: 1px solid #ccc;
 }
 
@@ -149,32 +135,6 @@ header {
     color: #ffcc00; /* 활성화된 링크의 색상 */
 }
 
-/* 로그인 버튼 */
-.header-login-div {
-    margin-left: auto;      /* 로그인 링크를 오른쪽으로 이동 */
-}
-
-.header-login-div a {
-    display: inline;
-    font-weight: bold;
-}
-
-.header-login-div img {
-    height: 45px;
-    border-radius: 22px;
-}
-
-.header-login-link {
-    text-decoration: none;
-    font-size: 20px;
-    padding-left: 5px;
-    transition: color 0.3s;
-}
-
-.header-login-link:hover {
-    color: #ffcc00;
-}
-
 /* 컨테이너  */
 main {
 	width:1000px;
@@ -206,7 +166,33 @@ footer a{
 	text-decoration: none;
 }
 
-/* 페이징 CSS */
+/* 로그인 버튼 */
+.header-login-div {
+    margin-left: auto;      /* 로그인 링크를 오른쪽으로 이동 */
+}
+
+.header-login-div a {
+    display: inline;
+    font-weight: bold;
+}
+
+.header-login-div img {
+    height: 45px;
+    border-radius: 22px;
+}
+
+.header-login-link {
+    text-decoration: none;
+    font-size: 20px;
+    padding-left: 5px;
+    transition: color 0.3s;
+}
+
+.header-login-link:hover {
+    color: #ffcc00;
+}
+
+/* 페이지 CSS */
 .pagination {
     padding-top: 0 !important; /* 상단 패딩 제거 */
     padding-bottom: 0 !important; /* 하단 패딩 제거 */
@@ -216,7 +202,7 @@ footer a{
     padding: 0 !important; /* 패딩 제거 */
     margin: 0 auto !important; /* 위아래 여백 설정 */
     text-align: center !important;
-    width: 100px !important;
+    width:fit-content  !important;
     margin-top: 20px !important;
 }
 
@@ -269,6 +255,7 @@ footer a{
     padding: 0 !important; /* 추가 패딩 제거 */
 }
 
+
 /*관리자 css*/
 .admin-header-container {
     display: flex;
@@ -284,16 +271,19 @@ footer a{
     text-align: center;
 }
 aside {
+    position: fixed;
     width: 200px;
     padding: 20px;
     box-sizing: border-box;
     border-right: 1px solid #ddd;
     min-height: 100vh;
     font-size: 18px;
-    float: left;
+    margin-top: -44px;
+    background-color: #fff;
+    z-index: 50;
 }
 aside h3 {
-    margin-top: 0;
+    margin-top: 25px;
 }
 aside ul {
     list-style: none;
@@ -302,8 +292,62 @@ aside ul {
 aside li {
     margin: 10px 0;
 }
-.admin-header-container main{
-    width: calc(100vh - 250px);
-    float: left;
-    padding-left: 20px;
+
+/* 반응형 스타일 */
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    /* 메뉴 토글 버튼 보이기 */
+    .menu-toggle {
+        display: block;
+        font-size: 18px;
+        margin-right:10px; 
+        margin-left: 10px;
+    }
+     .menu-toggle img {
+     	width: 30px;
+     }
+    
+    /* 헤더 메뉴 숨기기 */
+    .header-menu {
+        max-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 87px;
+        right: 0px;
+        background-color: #ffffffe6;
+        padding: 10px;
+        transition: max-height 0.5s ease; /* 부드러운 전환 효과 */
+    }
+    .header-menu.show {
+        max-height: 350px; /* 메뉴가 완전히 열렸을 때의 최대 높이 설정 (충분히 큰 값으로 설정) */
+    }
+
+    /* 메뉴 항목 스타일 */
+    .header-menu a {
+        text-align: center;
+        color: #333;
+    }
+    
+    .header-menu a::before {
+	    bottom: 54%;            /* a 태그 바로 위에 위치 */
+	    left: 61%;
+	}
+    /* 메뉴 보이기 */
+    .header-menu.show {
+        display: flex;
+    }
+
+    header{
+        border-bottom: 2px solid #adb5bd;
+    }
+    main{
+        width:100%;
+    }
+    
 }

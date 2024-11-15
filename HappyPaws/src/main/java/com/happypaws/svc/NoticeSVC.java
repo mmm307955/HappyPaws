@@ -1,6 +1,7 @@
 package com.happypaws.svc;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,11 @@ public class NoticeSVC {
 	
 	@Autowired
 	private NoticeDAO dao;
-
+	
+	//관리자 통계
+	public List<Map<String, Object>> getDaysTotalAmount(){
+		return dao.getDaysTotalAmount();
+	}
 	public int notice_insert(NoticeVO vo) {
 		return dao.notice_insert(vo);
 	}

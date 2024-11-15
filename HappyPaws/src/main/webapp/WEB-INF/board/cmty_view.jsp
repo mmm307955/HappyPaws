@@ -70,7 +70,7 @@
 	</script>
 	
 	<form name="hideFrm" style="display:none;">
-	  <input type="hidden" name="nowPage" value="${param.nowPage}">
+	  <input type="hidden" name="nowPage" value="${empty param.nowPage ? 1 : param.nowPage}">
 	  <input type="hidden" name="searchKeyword" value="${param.searchKeyword}">
 	  <input type="hidden" name="searchCondition" value="${param.searchCondition}">
 	  <input type="hidden" name="cmty_category" value="${param.cmty_category}">

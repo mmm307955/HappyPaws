@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,16 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.happypaws.svc.UserSVC;
 import com.happypaws.util.JwtCookieUtil;
-import com.happypaws.vo.AdVO;
 import com.happypaws.vo.MyPostVO;
 import com.happypaws.vo.UsersVO;
 
@@ -34,10 +33,10 @@ public class UserController {
     private UserSVC svc;
     
     @GetMapping("/userList.do")
-    public String userSelectAll(
+    public void userSelectAll(
             @RequestParam(value = "searchType", required = false) String searchType,
             @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
-            Model m) {
+            HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         List<UsersVO> userList;
         if (searchType != null && !searchType.isEmpty() && searchKeyword != null && !searchKeyword.isEmpty()) {
@@ -46,9 +45,8 @@ public class UserController {
             userList = svc.userSelectAll();
         }
 
-        System.out.println("조회된 데이터: " + userList);
-        m.addAttribute("userList", userList);
-        return "/WEB-INF/mypage/us_list.jsp";
+        request.setAttribute("userList", userList);
+        request.getRequestDispatcher("/WEB-INF/mypage/us_list.jsp").forward(request, response);
     }
 
     
@@ -68,53 +66,62 @@ public class UserController {
 
         
     @GetMapping("/userUpdate.do")
-    public String updateForm(HttpServletRequest request, Model m) {
-        // 쿠키에서 사용자 정보를 추출
-        UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
+    public String updateForm(@RequestParam("us_id") String usId, HttpServletRequest request, Model m) {
+        // 로그인한 관리자의 정보를 추출
+        UsersVO loggedInUser = JwtCookieUtil.extractJwtFromCookie(request);
         
-        // 사용자 정보가 없을 경우 로그인 페이지로 리다이렉트
-        if (user == null || user.getUs_id() == null) {
+        // 관리자 로그인 여부 확인
+        if (loggedInUser == null || loggedInUser.getUs_id() == null) {
             m.addAttribute("message", "로그인이 필요합니다.");
             return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
         }
 
-        // 사용자 정보를 모델에 추가
+        // 요청된 회원 ID로 사용자 정보를 조회 (관리자 권한으로 조회)
+        UsersVO user = svc.getUserById(usId);
+        
+        // 조회된 사용자 정보가 없을 경우 오류 메시지 표시
+        if (user == null) {
+            m.addAttribute("message", "해당 회원 정보를 찾을 수 없습니다.");
+            return "redirect:/user/list"; // 사용자 목록 페이지로 리다이렉트
+        }
+
+        // 조회된 사용자 정보를 모델에 추가
         m.addAttribute("user", user);
         return "/WEB-INF/mypage/us_update.jsp";  
     }
 
-    @PostMapping("/userUpdate.do")
-    public String updateUser(HttpServletRequest request, UsersVO vo, Model m) {
-        // 쿠키에서 사용자 정보를 추출
-        UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
 
-        // 사용자 정보가 없을 경우 로그인 페이지로 리다이렉트
-        if (user == null || user.getUs_id() == null) {
-            m.addAttribute("message", "로그인이 필요합니다.");
+    @RequestMapping(value = "/userUpdate.do", method = RequestMethod.POST)
+    public String updateUser(@RequestParam("us_id") String usId, HttpServletRequest request, UsersVO vo, RedirectAttributes redirectAttributes) {
+
+        // 로그인한 관리자의 정보를 추출
+        UsersVO loggedInUser = JwtCookieUtil.extractJwtFromCookie(request);
+
+        // 관리자 로그인 여부 확인
+        if (loggedInUser == null || loggedInUser.getUs_id() == null) {
+            redirectAttributes.addFlashAttribute("message", "로그인이 필요합니다.");
             return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
         }
 
-        // 기존 사용자 정보 가져오기
-        UsersVO existingUser = svc.user_detail(user.getUs_id());
+        // 수정하려는 회원의 기존 정보 가져오기
+        UsersVO existingUser = svc.user_detail(usId);
 
-        // 비밀번호가 null이거나 빈 문자열이면 기존 비밀번호 유지
-        if (vo.getUs_password() == null || vo.getUs_password().isEmpty()) {
-            vo.setUs_password(existingUser.getUs_password());
+        // 요청된 회원 ID가 존재하지 않으면 오류 메시지 반환
+        if (existingUser == null) {
+            redirectAttributes.addFlashAttribute("message", "해당 회원 정보를 찾을 수 없습니다.");
+            return "redirect:/user/list"; // 사용자 목록 페이지로 리다이렉트
         }
 
-        // us_id 설정: JWT에서 가져온 사용자 ID로 설정
-        vo.setUs_id(user.getUs_id());
+        // us_id 설정: 수정할 회원의 ID로 설정
+        vo.setUs_id(usId);
 
-        // 사용자 정보 업데이트
+        // 사용자 정보 업데이트 (비밀번호 제외)
         svc.user_update(vo);
-        m.addAttribute("message", "수정이 완료되었습니다.");
+        redirectAttributes.addFlashAttribute("message", "수정이 완료되었습니다.");
 
-        // 업데이트된 사용자 목록 가져오기
-        List<UsersVO> userList = svc.userSelectAll();
-        m.addAttribute("userList", userList);
-
-        return "/WEB-INF/mypage/us_list.jsp"; // 수정된 목록 화면으로 이동
+        return "redirect:/userList.do"; // 수정된 목록 화면으로 이동
     }
+
 //    @GetMapping("/userDelete.do")
 //    public String showDeleteUserPage(HttpServletRequest request, Model m) {
 //        // 쿠키에서 사용자 정보를 추출
@@ -135,21 +142,34 @@ public class UserController {
 //    }
 
     @PostMapping("/userDelete.do")
-    public String deleteUser(HttpServletRequest request, Model m) {
+    public String updateUserToDeleted(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         // 쿠키에서 사용자 정보를 추출
         UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
         
         // 사용자 정보가 없을 경우 로그인 페이지로 리다이렉트
         if (user == null || user.getUs_id() == null) {
-            m.addAttribute("message", "로그인이 필요합니다.");
+            redirectAttributes.addFlashAttribute("alertMessage", "로그인이 필요합니다.");
             return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
         }
+
+        // form에서 전달된 us_id 확인
+        String us_id = request.getParameter("us_id");
+
+        // 사용자 아이디가 "admin"인 경우 탈퇴를 수행하지 않도록 체크
+        if ("admin".equals(us_id)) {
+            redirectAttributes.addFlashAttribute("alertMessage", "관리자는 탈퇴할 수 없습니다.");
+            return "redirect:/userList.do";
+        }
         
-        // 실제 삭제 대신, 탈퇴 처리로 us_is_del 값을 'Y'로 변경
-        svc.updateUserToDeleted(user.getUs_id()); // 'Y'로 업데이트하는 메서드 호출
         
-        // 탈퇴 완료 메시지를 모델에 추가
-        m.addAttribute("message", "회원 탈퇴가 완료되었습니다.");
+        System.out.println("탈퇴 처리 결과: " + us_id);
+        
+        boolean isDeleted = svc.updateUserToDeleted(us_id);
+        if (isDeleted) {
+            redirectAttributes.addFlashAttribute("alertMessage", "회원 탈퇴가 완료되었습니다.");
+        } else {
+            redirectAttributes.addFlashAttribute("alertMessage", "회원 탈퇴 처리 중 오류가 발생했습니다.");
+        }
 
         // 탈퇴 완료 페이지로 이동
         return "redirect:/userList.do";
@@ -157,21 +177,24 @@ public class UserController {
 
     @GetMapping("/us_mainmyPage.do")
     public String us_mainMyPage(HttpServletRequest request, Model m) {
-        // 쿠키에서 사용자 정보를 추출합니다.
+        // 쿠키에서 사용자 정보 추출
         UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
-        
-        // 쿠키에서 사용자 정보를 가져오지 못했을 경우 로그인 페이지로 리다이렉트
+
+        // 로그인 확인
         if (user == null || user.getUs_id() == null) {
             m.addAttribute("message", "로그인이 필요합니다.");
-            return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
+            return "redirect:/auth/login";
         }
-        
-        // 사용자 정보를 모델에 추가하여 JSP에서 사용할 수 있도록 합니다.
-        m.addAttribute("user", user);
-        
-        // 메인 마이페이지로 이동
-        return "/WEB-INF/mypage/us_mainmypage.jsp";  
+
+        // 최신 사용자 정보 조회 및 모델에 추가
+        UsersVO updatedUser = svc.user_detail(user.getUs_id());
+        updatedUser.setUs_profile("/resources/profile_images/" + updatedUser.getUs_profile());
+        m.addAttribute("user", updatedUser);
+
+        // 마이페이지로 이동
+        return "/WEB-INF/mypage/us_mainmypage.jsp";
     }
+    
     @GetMapping("/us_myPage.do")
     public String us_myPage(HttpServletRequest request, Model m) {
         // 쿠키에서 사용자 정보를 추출합니다.
@@ -182,10 +205,12 @@ public class UserController {
             m.addAttribute("message", "로그인이 필요합니다.");
             return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
         }
-        
+       String us_id= user.getUs_id();
+       user=svc.user_detail(us_id);
+		user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
         // 사용자 정보를 모델에 추가하여 JSP에서 사용할 수 있도록 합니다.
         m.addAttribute("user", user);
-        
+       
         // 마이페이지로 이동
         return "/WEB-INF/mypage/us_mypage.jsp";  
     }
@@ -194,45 +219,36 @@ public class UserController {
     public String updateMyPage(
         HttpServletRequest request,
         HttpServletResponse response,
-        @ModelAttribute UsersVO user,
-        @RequestParam(value = "us_profile_file", required = false) MultipartFile us_profile_file,
+        UsersVO user,
         @RequestParam(value = "postcode", required = false) String postcode,
         Model m) {
-        
-        // 쿠키에서 사용자 정보를 추출합니다.
+
         UsersVO userFromCookie = JwtCookieUtil.extractJwtFromCookie(request);
-        
-        // 쿠키에서 사용자 정보를 가져오지 못했을 경우 로그인 페이지로 리다이렉트
+
         if (userFromCookie == null || userFromCookie.getUs_id() == null) {
             m.addAttribute("message", "로그인이 필요합니다.");
-            return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
+            return "redirect:/auth/login";
         }
 
-        // JWT에서 추출한 사용자 ID를 설정하여 사용자 정보를 업데이트합니다.
         user.setUs_id(userFromCookie.getUs_id());
 
-        // 프로필 이미지 처리
-        if (us_profile_file != null && !us_profile_file.isEmpty()) {
+        System.out.println("user"+user);
+        if (user.getUs_profile_file() != null && !user.getUs_profile_file().isEmpty()) {
             try {
-                // 원래 파일 이름에서 확장자 추출
-                String originalFilename = us_profile_file.getOriginalFilename();
+                String originalFilename = user.getUs_profile_file().getOriginalFilename();
                 String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-                // 고유한 파일 이름 생성 (UUID 사용)
-                String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
+                String uniqueFileName = userFromCookie.getUs_id() + fileExtension;
 
-                // 파일 저장 경로 설정
-                String uploadDir = "c:/happyPaws/happyPaws/src/main/webapp/resources/profile_images/";
+                String uploadDir = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/profile_images/";
                 File uploadDirFile = new File(uploadDir);
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();
                 }
 
-                // 파일 저장
                 File outputFile = new File(uploadDir + uniqueFileName);
-                us_profile_file.transferTo(outputFile);
+                user.getUs_profile_file().transferTo(outputFile);
 
-                // UsersVO에 프로필 이미지 파일 이름 설정
                 user.setUs_profile(uniqueFileName);
 
             } catch (IOException e) {
@@ -240,39 +256,37 @@ public class UserController {
                 m.addAttribute("message", "프로필 이미지 업로드 중 오류가 발생했습니다.");
                 return "/WEB-INF/mypage/us_mypage.jsp";
             }
-        } else {
-        	System.out.println("사진 파일이 없습니다.");
         }
 
         // 우편번호 설정
-        user.setPostcode(postcode); // UsersVO에 우편번호 설정
+        user.setPostcode(postcode); 
 
         // 사용자 정보 업데이트
         svc.user_update(user);
-        
-        user = svc.user_detail(user.getUs_id());
-        JwtCookieUtil.createJwtCookie(response, user);
-        userFromCookie = JwtCookieUtil.extractJwtFromCookie(request);
-        request.getSession().setAttribute("user", userFromCookie);
 
-        // 업데이트된 사용자 정보를 다시 가져와 모델에 추가
-        List<UsersVO> userList = svc.userSelectAll(); // 전체 사용자 목록 가져오기
-        m.addAttribute("userList", userList); // Model에 목록 추가
-        m.addAttribute("message", "정보가 성공적으로 업데이트되었습니다.");
+        // 세션 및 쿠키에 최신 사용자 정보 설정
+        UsersVO updatedUser = svc.user_detail(user.getUs_id());
+        JwtCookieUtil.createJwtCookie(response, updatedUser);
+        request.getSession().setAttribute("user", updatedUser);
 
-        return "/WEB-INF/mypage/us_list.jsp";  // 수정된 목록 화면으로 이동
+        // 메인 마이페이지로 리다이렉트
+        return "redirect:/us_mainmyPage.do";
     }
-
-
     @RequestMapping("/logout")
-	public String logout(HttpServletResponse response, HttpSession session) {
-		session.removeAttribute("user");
-		JwtCookieUtil.deleteJwtCookie(response);
-		return "redirect:/userList.do";
-	}
+   	public String logout(HttpServletResponse response, HttpSession session) {
+   		session.removeAttribute("user");
+   		JwtCookieUtil.deleteJwtCookie(response);
+   		return "redirect:/userList.do";
+   	}
     
     @GetMapping("/myPosts")
-    public String showMyPosts(HttpServletRequest request, Model model) {
+    public String showMyPosts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false) String searchField,
+            @RequestParam(required = false) String searchQuery,
+            HttpServletRequest request,
+            Model model) {
+
         // 쿠키에서 JWT를 통해 사용자 정보를 추출합니다.
         UsersVO user = JwtCookieUtil.extractJwtFromCookie(request);
 
@@ -282,17 +296,46 @@ public class UserController {
             return "redirect:/auth/login"; // 로그인 페이지로 리다이렉트
         }
 
-        // 현재 사용자 ID의 게시물 목록 조회
-        List<MyPostVO> userPosts;
+        // 사용자 ID에 해당하는 게시물 조회
+        List<MyPostVO> userPosts = new ArrayList<>();
         try {
-            userPosts = svc.getPostsByUserId(user.getUs_id());
+            if (searchField != null && searchQuery != null && !searchQuery.trim().isEmpty()) {
+                // 검색 조건에 따라 게시물 필터링
+                userPosts = svc.searchPostsByUserId(user.getUs_id(), searchField, searchQuery);
+               
+            } else {
+                // 검색 조건이 없으면 전체 게시물 조회
+                userPosts = svc.getPostsByUserId(user.getUs_id());
+            }
+
+            if (userPosts == null || userPosts.isEmpty()) {
+                model.addAttribute("message", "등록된 게시물이 없습니다.");
+            }
         } catch (Exception e) {
             model.addAttribute("error", "게시물을 불러오는 중 오류가 발생했습니다.");
             return "redirect:/auth/login"; // 에러 페이지로 리다이렉트
         }
 
-        // 필터링된 게시물 목록을 모델에 추가
-        model.addAttribute("posts", userPosts);
+        // 페이지네이션 처리
+        int pageSize = 10;
+        int totalPosts = userPosts.size();
+        int totalPages = (int) Math.ceil((double) totalPosts / pageSize);
+
+        // 현재 페이지의 게시물 리스트 추출
+        int fromIndex = Math.max(0, (page - 1) * pageSize);
+        int toIndex = Math.min(page * pageSize, totalPosts);
+
+        List<MyPostVO> currentPagePosts = new ArrayList<>();
+        if (fromIndex < toIndex) {
+            currentPagePosts = userPosts.subList(fromIndex, toIndex);
+        }
+
+        // 모델에 데이터 추가
+        model.addAttribute("currentPagePosts", currentPagePosts); // 현재 페이지 게시물
+        model.addAttribute("currentPage", page); // 현재 페이지
+        model.addAttribute("totalPages", totalPages); // 총 페이지 수
+        model.addAttribute("searchField", searchField); // 검색 필드
+        model.addAttribute("searchQuery", searchQuery); // 검색어
         model.addAttribute("user", user); // 사용자 정보를 모델에 추가
 
         // 내 게시물 페이지로 이동
@@ -328,7 +371,3 @@ public class UserController {
 //    }
 
 }
-
-   
-    
-

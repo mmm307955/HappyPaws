@@ -2,7 +2,9 @@ package com.happypaws.dao;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,11 @@ public class FindPetDAO {
         return mybatis.selectList("FindPetDAO.getFindPetList", vo);
     }
 
+    // 관리자 글 목록 조회
+    public List<FindPetVO> getFindPetListAdmin(FindPetVO vo) {
+        return mybatis.selectList("FindPetDAO.getFindPetListAdmin", vo);
+    }
+    
     // 전체 페이지 수 조회
     public int countFindPet(FindPetVO vo) {
         return mybatis.selectOne("FindPetDAO.countFindPet", vo);
@@ -71,5 +78,13 @@ public class FindPetDAO {
     // 댓글 수 조회
     public int countFpComment(int fp_seq) {
         return mybatis.selectOne("FindPetDAO.countFpComment", fp_seq);
+    }
+    
+    // 비밀 번호 일치확인
+    public int verifyPassword(int fpSeq, String enteredPassword) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("fpSeq", fpSeq);
+        params.put("enteredPassword", enteredPassword);
+        return mybatis.selectOne("FindPetDAO.verifyPassword", params);
     }
 }

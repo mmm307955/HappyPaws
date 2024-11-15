@@ -9,26 +9,7 @@
 <title>행복한 발자국</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const fileDOM = document.querySelector('#file2'); // 사진 업로드 input
-    const preview = document.querySelector('.lost-pet-image'); // 이미지 미리보기
-
-    fileDOM.addEventListener('change', () => {
-        const reader = new FileReader();
-        reader.onload = ({ target }) => {
-            preview.src = target.result; // 미리보기 이미지 업데이트
-        };
-        if (fileDOM.files[0]) {
-            reader.readAsDataURL(fileDOM.files[0]); // 선택된 파일의 데이터 URL 읽기
-        }
-    });
-    
-    document.getElementById('rollback').addEventListener('click', function() {
-        history.back();
-    });
-});
-</script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lostPet.js"></script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
@@ -41,10 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
 					enctype="multipart/form-data" name="boardform">
 					<input type="hidden" name="lp_seq" value="${lostPet.lp_seq}">
 					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
-					<input type="hidden" name="searchCondition"
-						value="${searchCondition}"> <input type="hidden"
-						name="category" value="${category}"> <input type="hidden"
-						name="nowPage" value="${nowPage}">
+					<input type="hidden" name="searchCondition" value="${searchCondition}"> 
+					<input type="hidden" name="category" value="${category}"> 
+					<input type="hidden" name="nowPage" value="${nowPage}">
 
 					<div class="n_title">
 						<input type="text" class="form-control" name="lp_title"
@@ -52,8 +32,8 @@ document.addEventListener("DOMContentLoaded", function () {
 					</div>
 
 					<div class="n_ph">
-						<input type="text" class="form-control" name="lp_ph"
-							value="${lostPet.lp_ph}" placeholder="연락처를 입력하세요." required>
+						<input type="text" class="form-control" name="lp_ph" value="${lostPet.lp_ph}" placeholder="연락처를 입력하세요." required 
+						oninput="formatPhoneNumber(this)">
 					</div>
 
 					<div class="n_img">
@@ -117,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						</table>
 					</div>
 
-					<div class="input-group mb-3">
+					<div class="n_content">
 						<textarea class="form-control" rows="5" name="lp_content"
 							placeholder="상세 설명을 입력하세요">${lostPet.lp_content}</textarea>
 					</div>

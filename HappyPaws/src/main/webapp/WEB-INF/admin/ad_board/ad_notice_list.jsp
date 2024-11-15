@@ -12,10 +12,9 @@
 	
 </head>
 <body>
-	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/admin/admin_header.jsp" />
+	<jsp:include page="/WEB-INF/admin/admin_header.jsp" />
 	<main>
 	<div class="n_list">
-		<h1>공지사항</h1>
 		<div class="n_seachform">
 			<form>
 				<label style="display: none;"><select name="searchCondition" >
@@ -56,7 +55,7 @@
 					        <c:if test="${notice.n_chk == 'Y'}">
 					            <tr class="ad_notice_view important-notice" data-seq="${notice.n_seq}" data-count="${notice.n_count}" data-nowpage="${paging.nowPage}" data-searchcondition="${searchCondition}" data-searchkeyword="${searchKeyword}">
 					                <td>공지</td>
-					                <td>${notice.n_title}</td> <!-- 중요 공지사항임을 표시 -->
+					                <td><div class="title-wrapper">${notice.n_title}</div></td> <!-- 중요 공지사항임을 표시 -->
 					                <td>${notice.formattedNoticeDate}</td>
 					                <td>
 					                	<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${notice.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
@@ -71,7 +70,7 @@
 					        <c:if test="${notice.n_chk != 'Y'}">
 					            <tr class="ad_notice_view" data-seq="${notice.n_seq}" data-count="${notice.n_count}" data-nowpage="${paging.nowPage}" data-searchcondition="${searchCondition}" data-searchkeyword="${searchKeyword}">
 					                <td>${notice.n_seq}</td>
-					                <td>${notice.n_title}</td>
+					                <td><div class="title-wrapper">${notice.n_title}</div></td>
 					                <td>${notice.formattedNoticeDate}</td>
 					                <td>
 					                	<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${notice.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필" >
@@ -89,7 +88,8 @@
 				</c:choose>
 			</tbody>
 		</table>
-		<ul class="pagination">
+	</div>
+	<ul class="pagination">
 			<c:if test="${paging.nowPage > 1 && paging.lastBtn > paging.viewBtnCnt}">
 				<li class="page-item"><a class="page-link" href="/admin/ad_notice_list?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">이전</a></li>
 			</c:if>
@@ -103,8 +103,6 @@
 				<li class="page-item"><a class="page-link" href="/admin/ad_notice_list?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">이후</a></li>
 			</c:if>
 		</ul>
-	</div>
 	</main>
-	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
 </html>

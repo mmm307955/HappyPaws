@@ -64,9 +64,8 @@
 
 	<select id="getNewFamilyList" resultType="newFamily">
 		SELECT *
-		FROM newfamily, users
-		WHERE nf_del = 'N' and nf_id = us_id
-
+		FROM newfamily
+		WHERE nf_del = 'N'
 		<if test="category != null and category != ''">
 			AND nf_category = #{category}
 		</if>
@@ -83,7 +82,6 @@
 			AND (nf_title LIKE CONCAT('%', #{searchKeyword}, '%') OR
 			nf_content LIKE CONCAT('%', #{searchKeyword}, '%'))
 		</if>
-		AND us_id = #{nf_seq}
 		ORDER BY nf_seq DESC
 		LIMIT #{listcnt} OFFSET
 		#{start}

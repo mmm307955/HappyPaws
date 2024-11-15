@@ -30,19 +30,15 @@
 			</div>
 			
 			<div class="n_buttons">
-			    <div style="flex-grow: 1; text-align: center; margin-left: 140px;">
+			    <div style="flex-grow: 1; text-align: center;">
 			        <button id="notice_list">글 목록</button>
-			    </div>
-			    <div>
-			        <button class="notice_modify" data-seq="${noticeview.n_seq}">수정</button>
-			        <button class="notice_delete" data-seq="${noticeview.n_seq}">삭제</button>
 			    </div>
 			</div>
 		</div>
 		</div>
 	
 	<form name="hideFrm" style="display:none;">
-	  <input type="hidden" name="nowPage" value="${param.nowPage}">
+	  <input type="hidden" name="nowPage" value="${empty param.nowPage ? 1 : param.nowPage}">
 	  <input type="hidden" name="searchKeyword" value="${param.searchKeyword}">
 	  <input type="hidden" name="searchCondition" value="${param.searchCondition}">
   	</form>

@@ -11,11 +11,10 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/notice.css">
 </head>
 <body>
-	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/admin/admin_header.jsp" />
+	<jsp:include page="/WEB-INF/admin/admin_header.jsp" />
 	<main>
 	<div class="n_view">
 		<div class="n_viewform">
-			<h1>공지사항</h1>
 			<div class="n_title">
 				<span class="title">${noticeview.n_title}</span>
 				<span class="author" >
@@ -32,7 +31,7 @@
 			
 			<div class="n_buttons">
 			    <div style="flex-grow: 1; text-align: center; margin-left: 140px;">
-			        <button id="notice_list">글 목록</button>
+			        <button id="ad_notice_list">글 목록</button>
 			    </div>
 			    <div>
 			        <button class="notice_modify" data-seq="${noticeview.n_seq}">수정</button>
@@ -43,12 +42,11 @@
 		</div>
 	
 	<form name="hideFrm" style="display:none;">
-	  <input type="hidden" name="nowPage" value="${param.nowPage}">
+	  <input type="hidden" name="nowPage" value="${empty param.nowPage ? 1 : param.nowPage}">
 	  <input type="hidden" name="searchKeyword" value="${param.searchKeyword}">
 	  <input type="hidden" name="searchCondition" value="${param.searchCondition}">
   	</form>
   	
   	</main>
-  	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 </body>
 </html>

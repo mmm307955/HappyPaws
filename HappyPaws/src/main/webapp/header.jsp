@@ -20,11 +20,19 @@
 					<a href="/auth/login" class="header-login-link">로그인</a>
 				</c:when>
 				<c:otherwise>
-					<img src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="이미지를 불러오는데 실패하였습니다.">
+					<img src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/cutecat.jpg';" alt="이미지를 불러오는데 실패하였습니다.">
 					<a href="${pageContext.request.contextPath}/us_mainmyPage.do" class="header-login-link">${user.us_nick}</a><b>님</b>
 					<a href="/auth/logout" class="header-login-link">로그아웃</a>
 				</c:otherwise>
 			</c:choose>
 		</div>
+		<div class="menu-toggle"><img src="/resources/images/menu.svg" alt="리스트"/></div>
    </div>
+   <script>
+		$(document).ready(function() {
+			 $(".menu-toggle").click(function() {
+			        $(".header-menu").toggleClass("show"); // "show" 클래스 토글로 메뉴 열고 닫기
+			   });
+		});
+	</script>
 </header>

@@ -33,4 +33,9 @@ public class FpCommentSVC {
     public void deleteFpComment(FpCommentVO vo) {
         fpCommentDAO.deleteFpComment(vo);
     }
+    
+    // 비밀 번호 일치확인
+    public int verifyFpcPassword(int fpcSeq, String enteredPassword) {
+        return fpCommentDAO.verifyFpcPassword(fpcSeq, enteredPassword);
+    }
 }

@@ -14,7 +14,7 @@
 	<div class="n_write">
 		<h1>커뮤니티</h1>
 		<div class="n_write_form">
-			<form action="/board/cmty_modify" id="cmtyForm" enctype="multipart/form-data" method="post" >
+			<form action="/board/cmty_modify?nowPage=${param.nowPage}&view_cmty_category=${param.cmty_category}" id="cmtyForm" enctype="multipart/form-data" method="post" >
 				<div class="n_write_header">
 					<span class="left">커뮤니티 수정</span>
 				</div>
@@ -30,6 +30,10 @@
 				<input type="hidden" name="cmty_id" value="${cmtyview.cmty_id}">
 				<input type="hidden" name="cmty_content" id="cmty_content">
 				<input type="hidden" name="cmty_seq" value="${cmtyview.cmty_seq}">
+				
+				<input type="hidden" name="searchKeyword" value="${param.searchKeyword}">
+				<input type="hidden" name="searchCondition" value="${param.searchCondition}">
+				
 				<div id="editor">
 					${cmtyview.cmty_content}
 				</div>

@@ -1,10 +1,14 @@
 package com.happypaws.life;
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +33,13 @@ public class CmtyController {
 	private CmtySVC cmty_SVC;
 	
 	//커뮤니티-리스트 페이지이동
-	@RequestMapping(value="/board/cmty_list",method = RequestMethod.GET)
+	@RequestMapping(value={"/board/cmty_list","/admin/ad_cmty_list"},method = RequestMethod.GET)
 	public String cmty_list(CommunityVO vo ,PagingVO pv ,Model model , 
-			@RequestParam(value = "nowPage", required = false) String nowPage
+			@RequestParam(value = "nowPage", required = false) String nowPage,
+			HttpServletRequest request
 	) {
 		
-		String cntPerPage = "8";
+		String cntPerPage = "10";
 			
 		if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
 		if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
@@ -51,63 +56,125 @@ public class CmtyController {
 		model.addAttribute("searchKeyword", vo.getSearchKeyword());
 		model.addAttribute("searchCondition", vo.getSearchCondition());
 		model.addAttribute("cmtyList", cmty_SVC.cmty_list(vo));
-			
-		return "/WEB-INF/board/cmty_list.jsp";
+		
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_cmty_list")) {
+			return "/WEB-INF/admin/ad_board/ad_cmty_list.jsp";
+		}else {
+			return "/WEB-INF/board/cmty_list.jsp";
+		}
 	}
 
 	// 커뮤니티-상세보기
-	@RequestMapping(value = "/board/cmty_view", method = RequestMethod.GET)
-	public String cmty_view(CommunityVO vo , Model model) {
+	@RequestMapping(value = {"/board/cmty_view","/admin/ad_cmty_view"}, method = RequestMethod.GET)
+	public String cmty_view(CommunityVO vo , Model model , HttpServletRequest request) {
 	
-		
 		model.addAttribute("cmtyview", cmty_SVC.cmty_view(vo));
 		
 		cmty_SVC.cmty_count(vo);
 		
-		return "/WEB-INF/board/cmty_view.jsp";
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_cmty_view")) {
+			return "/WEB-INF/admin/ad_board/ad_cmty_view.jsp";
+		}else {
+			return "/WEB-INF/board/cmty_view.jsp";
+		}
+		
 	}
 	
 	//커뮤니티-글수정페이지로
-	@RequestMapping(value = "/board/cmty_modify", method = RequestMethod.GET)
-	public String cmty_modify(CommunityVO vo, Model model) {
+	@RequestMapping(value = {"/board/cmty_modify","/admin/ad_cmty_modify"}, method = RequestMethod.GET)
+	public String cmty_modify(CommunityVO vo, Model model , HttpServletRequest request) {
 		
 		model.addAttribute("cmtyview", cmty_SVC.cmty_view(vo));
 		
-		return "/WEB-INF/board/cmty_modify.jsp";
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_cmty_modify")) {
+			return "/WEB-INF/admin/ad_board/ad_cmty_modify.jsp";
+		}else {
+			return "/WEB-INF/board/cmty_modify.jsp";
+		}
+		
 	}
 	
 	//커뮤니티 - 글수정
-	@RequestMapping(value = "/board/cmty_modify", method = RequestMethod.POST)
-	public String cmty_update(CommunityVO vo, Model model) {
+	@RequestMapping(value = {"/board/cmty_modify","/admin/ad_cmty_modify"}, method = RequestMethod.POST)
+	public String cmty_update(CommunityVO vo, Model model , HttpServletRequest request) throws UnsupportedEncodingException {
 		
 		cmty_SVC.cmty_update(vo);
-		return "redirect:/board/cmty_list";
+		
+		String nowPage = request.getParameter("nowPage");
+		String view_cmty_category = request.getParameter("view_cmty_category");
+		String requestUri = request.getRequestURI();
+		
+		if (vo.getSearchCondition() == null) vo.setSearchCondition("TITLE");
+		if (vo.getSearchKeyword() == null) vo.setSearchKeyword("");
+		
+		String encodedKeyword = URLEncoder.encode(vo.getSearchKeyword(), StandardCharsets.UTF_8.toString());
+		String encodedCondition = URLEncoder.encode(vo.getSearchCondition(), StandardCharsets.UTF_8.toString());
+		
+		if(requestUri.equals("/admin/ad_cmty_modify")) {
+	        return "redirect:/admin/ad_cmty_view?cmty_seq="+vo.getCmty_seq() +
+	        	   "&cmty_category=" + view_cmty_category +
+	               "&nowPage=" + (nowPage != null ? nowPage : "1") +
+	               "&searchKeyword=" + encodedKeyword +
+	               "&searchCondition=" + encodedCondition;
+	    } else {
+	        return "redirect:/board/cmty_view?cmty_seq="+vo.getCmty_seq() +
+	        	   "&cmty_category=" + view_cmty_category +
+	               "&nowPage=" + (nowPage != null ? nowPage : "1") +
+	               "&searchKeyword=" + encodedKeyword +
+	               "&searchCondition=" + encodedCondition;
+	    }
+		
 	}
 	
 	//커뮤니티-글쓰기 페이지이동
-	@RequestMapping(value="/board/cmty_write",method = RequestMethod.GET)
-	public String cmty_write() {
-		return "/WEB-INF/board/cmty_write.jsp";
+	@RequestMapping(value={"/board/cmty_write","/admin/ad_cmty_write"},method = RequestMethod.GET)
+	public String cmty_write(HttpServletRequest request) {
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_cmty_view")) {
+			return "/WEB-INF/admin/ad_board/ad_cmty_write.jsp";
+		}else {
+			return "/WEB-INF/board/cmty_write.jsp";
+		}
 	}
 	
 	
 	//커뮤니티 - 글쓰기
-	@RequestMapping(value="/board/cmty_insert", method = RequestMethod.POST)
-	public String cmty_insert(CommunityVO vo) {
+	@RequestMapping(value={"/board/cmty_insert","/admin/ad_cmty_insert"}, method = RequestMethod.POST)
+	public String cmty_insert(CommunityVO vo , HttpServletRequest request) {
 		
 		cmty_SVC.cmty_insert(vo);
 		
-		return "redirect:/board/cmty_list";
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_cmty_insert")) {
+			return "redirect:/admin/ad_cmty_list?cmty_category=all";
+		}else {
+			return "redirect:/board/cmty_list?cmty_category=all";
+		}
+		
 	}
 	
 	//커뮤니티 삭제하기
-	@RequestMapping(value = "/board/cmty_delete", method = RequestMethod.GET)
-	public String cmty_delete(CommunityVO vo, Model model) {
+	@RequestMapping(value = {"/board/cmty_delete","/admin/ad_cmty_delete"}, method = RequestMethod.GET)
+	public String cmty_delete(CommunityVO vo, Model model ,  HttpServletRequest request) {
 		
 		cmty_SVC.cmty_delete(vo);
-		return "redirect:/board/cmty_list";
+		String requestUri = request.getRequestURI();
+		
+		if(requestUri.equals("/admin/ad_cmty_delete")) {
+			return "redirect:/admin/ad_cmty_list";
+		}else {
+			return "redirect:/board/cmty_list";
+		}
+		
 	}
-	
 	
     //커뮤니티 댓글추가
 	@RequestMapping(value = "/board/c_addComment", method = RequestMethod.POST)

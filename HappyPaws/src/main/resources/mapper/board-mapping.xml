@@ -53,4 +53,12 @@
 		<if test="searchCondition == 'CONTENT' "> AND N_CONTENT LIKE CONCAT('%',#{searchKeyword},'%') </if>
 	</select>
 	
+	 <select id="getDaysTotalAmount" resultType="map">
+        SELECT DATE(PROR_DATE) AS `date`, SUM(PROR_TOTAL_AMT) AS `total_amount`
+        FROM products_orders
+        GROUP BY DATE(PROR_DATE)
+        ORDER BY DATE(PROR_DATE) DESC
+        LIMIT 7
+    </select>
+	
 </mapper>

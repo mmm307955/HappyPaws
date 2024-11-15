@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
@@ -29,14 +28,32 @@
         margin-bottom: 15px; 
     }
     .search-bar select, .search-bar input[type="text"] {
-        padding: 5px;
-        margin-right: 10px;
-        font-size: 1em;
-    }
-     .search-bar input[type="submit"] {
-        padding: 5px 10px;
-        font-size: 1em;
-    }
+    padding: 5px;
+    margin-right: 10px;
+    font-size: 1em;
+    border: 2px solid #FFD700; 
+    border-radius: 20px; 
+    outline: none; 
+    background-color: white; 
+}
+
+.search-bar input[type="submit"] {
+    padding: 5px 10px;
+    font-size: 1em;
+    border: 2px solid #FFD700; 
+    border-radius: 20px; 
+    background-color: white; 
+    cursor: pointer; 
+}
+
+.search-bar select {
+    border: 2px solid #FFD700; 
+    border-radius: 20px; 
+    outline: none; 
+    background-color: white; 
+}
+
+
       table {
         width: 100%;
        
@@ -68,17 +85,39 @@
     tr:hover {
         background-color: #ddd;
     }
-    .pagination {
-     	display: flex;
+     .pagination {
+        display: flex;
         justify-content: center;
+        align-items: center;
         margin-top: 20px;
+        font-size: 14px;
     }
-    .pagination button {
-        padding: 5px 10px;
-        font-size: 1em;
-        margin: 2px;
+
+    .pagination a, .pagination span {
+        display: inline-block;
+        padding: 8px 12px;
+        margin: 0 3px;
+        text-decoration: none;
+        color: #333;
+        border-radius: 50%;
+        border: 1px solid #ddd;
+        cursor: pointer;
+    }
+    .pagination a:hover {
+        background-color: #f0f0f0;
+    }
+    .pagination .current-page {
+        background-color: #FFD700;
+        color: #333;
+        font-weight: bold;
+        border: 1px solid #FFD700;
+    }
+    .pagination .disabled {
+        color: #ccc;
+        cursor: default;
     }
 </style>
+
 <script>
 if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
 </script>
@@ -136,11 +175,42 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
     </div>
      <div class="pagination">
     <c:set var="totalPages" value="${(fn:length(userList) + itemsPerPage - 1) / itemsPerPage}" />
-    <c:forEach begin="1" end="${totalPages}" var="page">
-        <button onclick="location.href='userList.do?page=${page}'" <c:if test="${page == currentPage}">disabled</c:if>>${page}</button>
-    </c:forEach>
+   
+        <c:choose>
+            <c:when test="${currentPage > 1}">
+                <a href="userList.do?page=${currentPage - 1}">&laquo;</a>
+            </c:when>
+            <c:otherwise>
+                <span class="disabled">&laquo;</span>
+            </c:otherwise>
+        </c:choose>
+
+      
+        <c:forEach begin="1" end="${totalPages}" var="page">
+            <c:choose>
+               
+                <c:when test="${page == currentPage}">
+                    <span class="current-page">${page}</span>
+                </c:when>
+               
+                <c:otherwise>
+                    <a href="userList.do?page=${page}">${page}</a>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+
+       
+        <c:choose>
+            <c:when test="${currentPage < totalPages}">
+                <a href="userList.do?page=${currentPage + 1}">&raquo;</a>
+            </c:when>
+            <c:otherwise>
+                <span class="disabled">&raquo;</span>
+            </c:otherwise>
+        </c:choose>
+    </div>
 </div>
-</div>
+
 </main>
 <%@include file="../../footer.jsp" %>  
 </body>

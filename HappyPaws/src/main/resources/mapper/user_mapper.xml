@@ -40,22 +40,20 @@
 <!--     <delete id="us_is_del" parameterType="String"> -->
 <!--         DELETE FROM USERS WHERE US_ID = #{us_id} -->
 <!--     </delete> -->
-    <update id="updateUserToDeleted" parameterType="map">
+   <update id="updateUserToDeleted" parameterType="String">
     UPDATE users
-    SET us_is_del = #{us_is_del}
+    SET us_is_del = 'Y'
     WHERE us_id = #{us_id}
 </update>
         
     <!--사용자 정보 업데이트 -->
-     <update id="user_update">
+    <update id="user_update">
         UPDATE users SET
-            us_password = #{us_password},
             us_name = #{us_name},
             us_nick = #{us_nick},
             us_email = #{us_email},
             us_address = #{us_address},
-            us_profile = #{us_profile},
-            us_is_del = #{us_is_del} 
+            us_profile = #{us_profile}
             WHERE us_id = #{us_id}
     </update>
     
@@ -78,7 +76,8 @@
     </select>
     
     
-     <select id="myPage" parameterType="String" resultType="com.happypaws.vo.UsersVO">
+    
+    <select id="myPage" parameterType="String" resultType="com.happypaws.vo.UsersVO">
         SELECT * FROM users WHERE us_id = #{us_id}
     </select>
     
@@ -86,29 +85,68 @@
     <select id="getUserById" parameterType="string" resultType="com.happypaws.vo.UsersVO">
         SELECT * FROM users WHERE us_id = #{us_id}
     </select>
-
     <!-- 비밀번호 업데이트 -->
     <update id="updatePassword" parameterType="com.happypaws.vo.UsersVO">
         UPDATE users SET us_password = #{us_password} WHERE us_id = #{us_id}
     </update>
     
-    
-<select id="findPostsByUserId" parameterType="string" resultType="com.happypaws.vo.MyPostVO">
-    SELECT *
-    FROM user_posts
-    WHERE us_id = #{usId}
-</select>
-
-
-    <!-- `post_id`를 기반으로 특정 게시물 조회 쿼리 -->
-    <select id="findPostById" parameterType="int" resultType="com.happypaws.vo.MyPostVO">
-        SELECT post_id, title, content, created_date, us_id
-        FROM user_posts
-        WHERE post_id = #{post_id}
+<!-- 사용자 ID로 전체 게시물 조회 -->
+    <select id="findPostsByUserId" parameterType="string" resultType="com.happypaws.vo.MyPostVO">
+        SELECT post_id, title, source_table, created_date
+        FROM (
+            SELECT n_seq AS post_id, n_title AS title, 'NOTICE' AS source_table, n_date AS created_date
+            FROM notice WHERE n_id = #{usId}
+            UNION ALL
+            SELECT cmty_seq AS post_id, cmty_title AS title, 'COMMUNITY' AS source_table, cmty_date AS created_date
+            FROM community WHERE cmty_id = #{usId}
+            UNION ALL
+            SELECT qna_seq AS post_id, qna_title AS title, 'QNA' AS source_table, qna_date AS created_date
+            FROM qna WHERE qna_id = #{usId}
+        ) AS posts
+        ORDER BY created_date DESC
     </select>
 
+    <!-- 사용자 ID와 검색 조건으로 게시물 조회 -->
+    <select id="searchPostsByUserId" parameterType="map" resultType="com.happypaws.vo.MyPostVO">
+        SELECT post_id, title, source_table, created_date
+        FROM (
+            SELECT n_seq AS post_id, n_title AS title, 'NOTICE' AS source_table, n_date AS created_date
+            FROM notice WHERE n_id = #{us_id}
+            UNION ALL
+            SELECT cmty_seq AS post_id, cmty_title AS title, 'COMMUNITY' AS source_table, cmty_date AS created_date
+            FROM community WHERE cmty_id = #{us_id}
+            UNION ALL
+            SELECT qna_seq AS post_id, qna_title AS title, 'QNA' AS source_table, qna_date AS created_date
+            FROM qna WHERE qna_id = #{us_id}
+        ) AS posts
+        WHERE 
+        <choose>
+            <when test="searchField == 'title'">
+                title LIKE #{searchQuery}
+            </when>
+            <when test="searchField == 'source_table'">
+                source_table LIKE #{searchQuery}
+            </when>
+            <otherwise>
+                1=1 -- 기본 조건
+            </otherwise>
+        </choose>
+        ORDER BY created_date DESC
+    </select>
 
-
-    
-
+    <!-- 단일 게시물 조회 -->
+    <select id="findPostById" parameterType="int" resultType="com.happypaws.vo.MyPostVO">
+        SELECT post_id, title, source_table, created_date
+        FROM (
+            SELECT n_seq AS post_id, n_title AS title, 'NOTICE' AS source_table, n_date AS created_date
+            FROM notice WHERE n_seq = #{postId}
+            UNION ALL
+            SELECT cmty_seq AS post_id, cmty_title AS title, 'COMMUNITY' AS source_table, cmty_date AS created_date
+            FROM community WHERE cmty_seq = #{postId}
+            UNION ALL
+            SELECT qna_seq AS post_id, qna_title AS title, 'QNA' AS source_table, qna_date AS created_date
+            FROM qna WHERE qna_seq = #{postId}
+        ) AS posts
+        ORDER BY created_date DESC
+    </select>
 </mapper>

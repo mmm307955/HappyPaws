@@ -2,6 +2,8 @@ package com.happypaws.life;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,10 +114,13 @@ public class NewFamilyController {
 
 		// 데이터베이스 업데이트
 		newFamilySVC.updateNewFamily(vo);
-
+		String encodedCategory = URLEncoder.encode(vo.getCategory(), StandardCharsets.UTF_8.toString());
+		String encodedKeyword = URLEncoder.encode(vo.getSearchKeyword(), StandardCharsets.UTF_8.toString());
+		String encodedCondition = URLEncoder.encode(vo.getSearchCondition(), StandardCharsets.UTF_8.toString());
+		
 		return "redirect:/MIA/getNewFamily?nf_seq=" + vo.getNf_seq() + "&nowPage=" + vo.getNowPage() + "&category="
-				+ vo.getCategory() + "&searchKeyword=" + vo.getSearchKeyword() + "&searchCondition="
-				+ vo.getSearchCondition();
+		+ encodedCategory + "&searchKeyword=" + encodedKeyword + "&searchCondition="
+		+ encodedCondition;
 	}
 
 	// 글 삭제
