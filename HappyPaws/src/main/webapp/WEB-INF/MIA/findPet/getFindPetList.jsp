@@ -45,12 +45,9 @@
 						</label>
 		            </div>
 				</form>
-				<c:if test="${not empty user.us_id}">
+				
 					<button id="fpIns">글쓰기</button>
-				</c:if>
-				<c:if test="${empty user.us_id}">
-					<button id="fpIns2">글쓰기</button>
-				</c:if>
+	
 			</div>
 
             <div class="n_categoryform">
