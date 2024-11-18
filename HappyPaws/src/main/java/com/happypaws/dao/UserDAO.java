@@ -1,19 +1,17 @@
 package com.happypaws.dao;
 
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+
 import com.happypaws.vo.MyPostVO;
 import com.happypaws.vo.UsersVO;
-import com.sun.jdi.connect.spi.Connection;
 
 
 @Component

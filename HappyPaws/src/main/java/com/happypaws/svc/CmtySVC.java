@@ -9,7 +9,6 @@ import com.happypaws.dao.CmtyDAO;
 import com.happypaws.vo.CmtyCommentVO;
 import com.happypaws.vo.CmtyupVO;
 import com.happypaws.vo.CommunityVO;
-import com.happypaws.vo.QnaVO;
 
 @Service
 public class CmtySVC {
