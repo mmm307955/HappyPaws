@@ -7,7 +7,7 @@
  * 
  * 함수 내의 주석이 있는 '주소 입력' 부분만 변경하면 되도록 코드를 작성하였습니다. 문제나 궁금한 점이 생기시면 찾아와주세요.
  * 
- * 추후 주석은 fetch 함수 위의 주석을 제외하고는 모두 지울 예정입니다.
+ * 추후 주석은 fetch 함수 위나 전역변수 선언 위의 주석을 제외하고는 모두 지울 예정입니다.
  */
 
 // 공지사항
@@ -39,10 +39,6 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 		titleCell.textContent = item.cmty_title;
 		row.appendChild(titleCell);
 
-		const authorCell = document.createElement('td');
-		authorCell.textContent = item.cmty_id;
-		row.appendChild(authorCell);
-
 		tbody.appendChild(row);
 		row.addEventListener('click', () => location.href = "주소 입력" + item.cmty_seq); // 글 상세 정보 보기 서블릿 링크
 	});
@@ -67,22 +63,30 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 		nameCell.textContent = item.pr_name;
 		row.appendChild(nameCell);
 
-		const priceCell = document.createElement('td');
-		priceCell.textContent = item.pr_price;
-		row.appendChild(priceCell);
-
 		tbody.appendChild(row);
 		row.addEventListener('click', () => location.href = "주소 입력" + item.pr_id); // 글 상세 정보 보기 서블릿 링크
 	});
 }).catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
 
+// 애완동물 분류
+const categoryList = {
+	'dog': '강아지',
+	'cat': '고양이',
+	'small': '소동물',
+	'etc': '기타'
+}
+
 // 아이를 찾아주세요
 fetch('주소 입력').then(response => response.json()).then(data => { // ajax 서블릿 링크
-	let tbody = document.querySelector("#findPet-article tbody");
+	let tbody = document.querySelector("#lostPet-article tbody");
 	tbody.innerHTML = '';
 
 	data.forEach(item => {
 		const row = document.createElement('tr');
+
+		const categoryCell = document.createElement('td');
+		categoryCell.textContent = categoryList(item.lp_category);
+		row.appendChild(categoryCell);
 
 		const imgCell = document.createElement('td');
         const img = document.createElement('img');
@@ -104,41 +108,17 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 	});
 }).catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
 
-// 아이를 발견했어요
-fetch('주소 입력').then(response => response.json()).then(data => { // ajax 서블릿 링크
-	let tbody = document.querySelector("#findPet-article tbody");
-	tbody.innerHTML = '';
-
-	data.forEach(item => {
-		const row = document.createElement('tr');
-
-		const imgCell = document.createElement('td');
-        const img = document.createElement('img');
-		img.src = item.fp_img;
-		img.alt = item.fp_title;
-		imgCell.appendChild(img);
-		row.appendChild(imgCell);
-
-		const titleCell = document.createElement('td');
-		titleCell.textContent = item.fp_title;
-		row.appendChild(titleCell);
-
-		const placeCell = document.createElement('td');
-		placeCell.textContent = item.fp_place;
-		row.appendChild(placeCell);
-
-		tbody.appendChild(row);
-		row.addEventListener('click', () => location.href = "주소 입력" + item.fp_seq); // 글 상세 정보 보기 서블릿 링크
-	});
-}).catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
-
 // 새로운 가족을 찾아요
 fetch('주소 입력').then(response => response.json()).then(data => { // ajax 서블릿 링크
-	let tbody = document.querySelector("#findPet-article tbody");
+	let tbody = document.querySelector("#newFamily-article tbody");
 	tbody.innerHTML = '';
 
 	data.forEach(item => {
 		const row = document.createElement('tr');
+
+		const categoryCell = document.createElement('td');
+		categoryCell.textContent = categoryList(item.nf_category);
+		row.appendChild(categoryCell);
 
 		const imgCell = document.createElement('td');
         const img = document.createElement('img');

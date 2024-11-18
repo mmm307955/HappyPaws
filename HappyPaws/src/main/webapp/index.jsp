@@ -21,17 +21,9 @@
 					<section>
 						<table>
 							<colgroup>
-								<col style="width: 15%;">
-								<col style="width: 65%;">
-								<col style="width: 20%;">
+								<col>
+								<col>
 							</colgroup>
-							<thead>
-								<tr>
-									<th>분류</th>
-									<th>제목</th>
-									<th>작성자</th>
-								</tr>
-							</thead>
 							<tbody><!-- Contents Area --></tbody>
 						</table>
 					</section>
@@ -41,24 +33,16 @@
 					<section>
 						<table>
 							<colgroup>
-								<col style="width: 20%;">
-								<col style="width: 55%;">
-								<col style="width: 25%;">
+								<col>
+								<col>
 							</colgroup>
-							<thead>
-								<tr>
-									<th>사진</th>
-									<th>제목</th>
-									<th>가격</th>
-								</tr>
-							</thead>
 							<tbody><!-- Contents Area --></tbody>
 						</table>
 					</section>
 				</article>
 			</section>
 			<section id="right-contents" class="contents">
-				<article id="findPet-article">
+				<article id="lostPet-article">
 					<a href="MIA/getLostPetList"><p>아이를 찾아주세요</p></a>
 					<section>
 						<table>
@@ -66,34 +50,8 @@
 								<col>
 								<col>
 								<col>
-							</colgroup>
-							<thead>
-								<tr>
-									<th>사진</th>
-									<th>제목</th>
-									<th>지역</th>
-								</tr>
-							</thead>
-							<tbody><!-- Contents Area --></tbody>
-						</table>
-					</section>
-				</article>
-				<article id="lostPet-article">
-					<a href="MIA/getFindPetList"><p>아이를 발견했어요</p></a>
-					<section>
-						<table>
-							<colgroup>
-								<col>
-								<col>
 								<col>
 							</colgroup>
-							<thead>
-								<tr>
-									<th>사진</th>
-									<th>제목</th>
-									<th>지역</th>
-								</tr>
-							</thead>
 							<tbody><!-- Contents Area --></tbody>
 						</table>
 					</section>
@@ -107,13 +65,6 @@
 								<col>
 								<col>
 							</colgroup>
-							<thead>
-								<tr>
-									<th>사진</th>
-									<th>제목</th>
-									<th>지역</th>
-								</tr>
-							</thead>
 							<tbody><!-- Contents Area --></tbody>
 						</table>
 					</section>
