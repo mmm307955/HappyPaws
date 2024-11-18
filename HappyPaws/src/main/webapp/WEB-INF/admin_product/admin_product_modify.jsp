@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -171,6 +172,11 @@
 		    margin-left: 7px;
 		}
 		
+		.ql-editor{
+		min-height:200px;
+		overflow-y : auto;
+		}
+		
     </style>
 </head>
 <body>
@@ -185,19 +191,26 @@
 	
     <div class="title">상품 수정</div>
    
-<img id="image-preview" src="${pageContext.request.contextPath}/resources/upload/${product.pr_thumbnail}" alt="이미지 미리보기" onerror="this.src='../../../resources/images/HappyPawsLogo.png';" style="display: ${product.pr_thumbnail != null ? 'block' : 'none'};">
+<%-- <img id="image-preview" src="${pageContext.request.contextPath}/resources/upload/${product.pr_thumbnail}" alt="이미지 미리보기" onerror="this.src='../../../resources/images/HappyPawsLogo.png';" style="display: ${product.pr_thumbnail != null ? 'block' : 'none'};"> --%>
 
 	
 	<!-- 기존 이미지 경로를 저장하는 hidden 필드 -->
 	<input type="hidden" name="existingThumbnail" value="${product.pr_thumbnail}">
 
     
-    <!-- 파일 업로드 필드 -->
-    <div class="form-group" style="text-align:center">
-    <label for="pr_thumbnail_file">
-        <input type="file" id="pr_thumbnail_file" name="pr_thumbnail_file" accept="image/*">
-    </label>
-    </div>
+    <div class="form-group" style="text-align: center">
+	    <label for="pr_thumbnail_file" style="display: block; cursor: pointer;">
+	        <div class="image-upload">
+	            <img id="image-preview"  
+	            	src="${pageContext.request.contextPath}/resources/upload/${product.pr_thumbnail}" 
+	                alt="이미지 미리보기" 
+	                onerror="this.src='../../../resources/images/HappyPawsLogo.png';" 
+	                style="display: block; max-width: 100%; max-height: 300px;">
+	        </div>
+	        <input type="file" id="pr_thumbnail_file" name="pr_thumbnail_file" accept="image/*" style="display: none;">
+	    </label>
+	</div>
+
 
     <div class="form-group">
     	<div class="pr_name_status">
@@ -251,7 +264,7 @@
 	        <br>
 	        <div class="option-stock_price">
 	        <label for="pr_opt_price">
-	            <input type="number" name="pr_opt_price" id="pr_opt_price" value="${option.pr_opt_price - product.pr_price}" placeholder="옵션 가격 입력">
+	            <input type="number" name="pr_opt_price" id="pr_opt_price" value="${option.pr_opt_price - product.pr_price}" placeholder="옵션 추가금 입력">
 	            </label>
 	            <label for="pr_opt_stock">
 	            <input type="number" name="pr_opt_stock" id="pr_opt_stock" value="${option.pr_opt_stock}" placeholder="재고 수량 입력">
@@ -282,7 +295,9 @@
 		<input type="hidden" id="option_count" name="option_count" value="1">
 		
 		<div class="buttons">
-				<button type="button" onclick="cancel(${nowPage}, '${searchCondition}', '${searchKeyword}')">취소</button>
+<%-- 				<button type="button" onclick="cancel(${nowPage}, '${searchCondition}', '${searchKeyword}')">취소</button> --%>
+				<button type="button" onclick="cancel(${nowPage}, '${searchCondition}', '${searchKeyword}', '${param.category}')">취소</button>
+
 				<button type="submit">수정</button>
 			    <button onclick="deleteProduct('${product.pr_id }',${nowPage}, '${searchCondition}', '${searchKeyword}', '${param.category}')">삭제</button>
 		</div>
@@ -292,9 +307,13 @@
 </main>
 <jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 <script>
-		function cancel(nowPage, searchCondition, searchKeyword) {
-			
-		    location.href = "/ad_manageProductList?nowPage=" + nowPage + "&searchCondition=" + searchCondition + "&searchKeyword=" + searchKeyword;
+
+		function cancel(nowPage, searchCondition, searchKeyword,category) {
+// 		    location.href = "/ad_manageProductList?nowPage=" + nowPage + "&searchCondition=" + searchCondition + "&searchKeyword=" + searchKeyword;
+			 location.href = "/ad_manageProductList?nowPage=" + nowPage + 
+             "&searchCondition=" + searchCondition + 
+             "&searchKeyword=" + searchKeyword + 
+             "&category=" + category;
 		}
 		
 		
@@ -376,7 +395,7 @@
 		  
 		        // 서버로 이미지 업로드
 		        $.ajax({
-		         url: '/productUpload',  // 이미지 업로드 서버 URL
+		         url: '/upload',  // 이미지 업로드 서버 URL
 		         type: 'POST',
 		         data: formData,
 		         processData: false,

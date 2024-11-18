@@ -14,7 +14,7 @@
 		<a href="/ad_myPage.do?ad_id=${ad_id}">마이페이지-관리자</a>
 	
 		<p>관리자 상품 관리 - 민지</p>
-		<a href="ad_manageProductList">상품 관리 페이지</a>
+		<a href="/ad_manageProductList">상품 관리 페이지</a>
 
 		<p>유기동물 페이지 - 현승</p>
 		<a href="/MIA/getLostPetList">아이를 찾아주세요</a>

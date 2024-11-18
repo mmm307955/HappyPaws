@@ -181,6 +181,11 @@ options input[type="number"] {
 	cursor: pointer;
 	margin-left: 7px;
 }
+
+.ql-editor{
+		min-height:200px;
+		overflow-y : auto;
+		}
 </style>
 </head>
 <body>
@@ -189,21 +194,54 @@ options input[type="number"] {
 	<main>
 		<div class="container">
 			<div class="title">상품 등록</div>
-			<form action="ad_manageProductAdd" method="POST"
-				enctype="multipart/form-data" id="productAddForm">
+			<form action="ad_manageProductAdd" method="POST" enctype="multipart/form-data" id="productAddForm">
+
+<!-- 				이미지 업로드 영역 -->
+<!-- 				<div class="image-upload"> -->
+<!-- 					<img id="image-preview" -->
+<!-- 						src="../../resources/images/HappyPawsLogo.png" alt="이미지 미리보기"> -->
+<!-- 				</div> -->
+<!-- 				파일 업로드 필드 -->
+<!-- 				<div class="form-group" style="text-align: center"> -->
+<!-- 					<label for="pr_thumbnail_file"> <input type="file" -->
+<!-- 						id="pr_thumbnail_file" name="pr_thumbnail_file" accept="image/*"> -->
+<!-- 					</label> -->
+<!-- 				</div> -->
 
 				<!-- 이미지 업로드 영역 -->
-				<div class="image-upload">
-					<img id="image-preview"
-						src="../../resources/images/HappyPawsLogo.png" alt="이미지 미리보기">
-				</div>
-				<!-- 파일 업로드 필드 -->
 				<div class="form-group" style="text-align: center">
-					<label for="pr_thumbnail_file"> <input type="file"
-						id="pr_thumbnail_file" name="pr_thumbnail_file" accept="image/*">
-					</label>
-				</div>
-
+			    <label for="pr_thumbnail_file" style="display: block; cursor: pointer;">
+			        <div class="image-upload">
+			            <span id="upload-text">클릭해서 이미지 업로드</span>
+			            <img id="image-preview" src="../../resources/images/HappyPawsLogo.png" alt="이미지 미리보기" style="display: none;">
+			        </div>
+			        <input type="file" id="pr_thumbnail_file" name="pr_thumbnail_file" accept="image/*" style="display: none;">
+			    </label>
+			</div>
+			
+			<script>
+			    const fileInput = document.getElementById('pr_thumbnail_file');
+			    const imagePreview = document.getElementById('image-preview');
+			    const uploadText = document.getElementById('upload-text');
+			
+			    fileInput.addEventListener('change', function(event) {
+			        const file = event.target.files[0];
+			        if (file) {
+			            const reader = new FileReader();
+			            reader.onload = function(e) {
+			                imagePreview.src = e.target.result;
+			                imagePreview.style.display = 'block'; // 이미지 표시
+			                uploadText.style.display = 'none'; // 텍스트 숨김
+			            }
+			            reader.readAsDataURL(file);
+			        } else {
+			            imagePreview.style.display = 'none';
+			            uploadText.style.display = 'block';
+			        }
+			    });
+			</script><br>
+			
+			
 				<div class="form-group">
 					<div class="pr_name_status">
 						<label for="pr_name"> 상품명 <br> <input type="text"
@@ -254,7 +292,7 @@ options input[type="number"] {
 						<br>
 						<div class="option-stock_price">
 							<label for="pr_opt_price"> <input type="number"
-								name="pr_opt_price" value="" placeholder="옵션 가격 입력" required>
+								name="pr_opt_price" value="" placeholder="옵션 추가금 입력" required>
 							</label> <label for="pr_opt_stock"> <input type="number"
 								name="pr_opt_stock" value="" placeholder="재고 수량 입력" required>
 							</label>
@@ -531,7 +569,8 @@ options input[type="number"] {
 	    });
 		});
 
-		
+		</script>
+		<script>
 		
 	function cancel() {
 	    location.href = "/ad_manageProductList";

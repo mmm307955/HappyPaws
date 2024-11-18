@@ -274,7 +274,7 @@ input[name="us_password"] {
                         <td class="label">비밀번호:</td>
                         <td class="input-field">
                             <div class="password-container">
-                                <input type="password" value="${user.us_password}" readonly>
+                                <input type="password" value="******" readonly>
 <!--                                 <input type="password" name="us_password" value="********" readonly> -->
                                 <button type="button" class="change-password-btn" onclick="location.href='/ad_myPage.do'">비밀번호 변경</button>
                             </div>
