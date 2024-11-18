@@ -16,7 +16,7 @@ pageContext.setAttribute("categories", categories);
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 		<div class="n_list">
-			<h2><a href="/MIA/getLostPetList">아이를 찾아주세요 </a>/ <span style="color: red;"> 아이를 발견했어요 </span> /  <a href="/MIA/getNewFamilyList">새로운 가족을 찾아요</a></h2>
+			<h2><a href="/MIA/getLostPetListAdmin">아이를 찾아주세요 </a>/ <span style="color: red;"> 아이를 발견했어요 </span> /  <a href="/MIA/getNewFamilyListAdmin">새로운 가족을 찾아요</a></h2>
 
 			<div class="n_seachform">
 				<form>
@@ -50,29 +50,33 @@ pageContext.setAttribute("categories", categories);
 				</c:forEach>
 			</div>
 			
-			<div class="n_listform">
-				<c:forEach items="${findPetList}" var="findPet">
-					<div class="n_list_item"
-						onclick="selFp(${findPet.fp_seq}, '${searchCondition}', '${searchKeyword}', '${category}', ${paging.nowPage})"
-						style="cursor: pointer;">
-						<a
-							href="/MIAgetFindPet?fp_seq=${findPet.fp_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
-							<img
-							src="${pageContext.request.contextPath}/resources/MIA-img/findPetImg/${findPet.fp_img}"
-							alt="Found Pet Image" class="pet-image"
-							>
-						</a>
-						<p>${findPet.fp_title}</p>
-						<p>	<c:if test="${lostPet.lp_ok == 'Y'}">
-								<span style="color: red; font-weight: bold;">[찾았어요]</span>
-							</c:if>
-						</p>
-						<p>지역: ${findPet.fp_place}</p>
-						<p>사례금: ${findPet.formattedReward}원</p>
-						<p>${findPet.fp_date} 댓글:${findPet.commentCount}</p>
-					</div>
-				</c:forEach>
-			</div>
+			<table>
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>등록일</th>
+						<th>작성자</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="notice" items="${noticeList}">
+				        <c:if test="${notice.n_chk == 'Y'}">
+					    	<tr class="n_list_item" onclick="selFp(${findPet.fp_seq}, '${searchCondition}', '${searchKeyword}', '${category}', ${paging.nowPage})" style="cursor: pointer;">
+					        	<td>${findPet.fp_seq}</td>
+					            <td><div class="title-wrapper">${findPet.fp_title}</div></td>
+					            <td>${findPet.fp_date}</td>
+					            <td>
+					            	<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${findPet.us_profile}" 
+					            	onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
+					               	${findPet.us_nick}
+								</td>
+							</tr>
+						</c:if>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
 
 			<ul class="pagination">
 				<c:if

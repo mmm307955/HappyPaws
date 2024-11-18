@@ -496,9 +496,19 @@
 	                url: '${pageContext.request.contextPath}/product/get_order_detail',
 	                type: 'GET',
 	                data: { pror_master_id: orderId },
-	                success: function(order) {
-	                    if (!order.merchant_uid) {
-	                        alert('주문 정보를 찾을 수 없습니다.');
+	                success: function(response) {
+	                    console.log("주문 상세 정보:", response); // 전체 응답 데이터 확인
+	                    console.log("merchant_uid 값:", response.merchant_uid); // merchant_uid 값 확인
+
+	                    // merchant_uid 체크
+	                    if (!response.merchant_uid) {
+	                        alert('결제 정보(merchant_uid)를 찾을 수 없습니다.');
+	                        return;
+	                    }
+
+	                    // 주문 상태 체크
+	                    if (response.pror_status !== 'paid' || response.pror_deli_stat !== 'preparation') {
+	                        alert('배송준비 상태의 주문만 취소가 가능합니다.');
 	                        return;
 	                    }
 
@@ -506,42 +516,23 @@
 	                    $.ajax({
 	                        url: '${pageContext.request.contextPath}/product/payCancel',
 	                        type: 'POST',
-	                        data: { 
-	                            merchant_uid: order.merchant_uid
-	                        },
-	                        success: function(response) {
-	                            if (response.success) {
-	                                // 결제 취소 성공 시 주문 상태 업데이트
-	                                $.ajax({
-	                                    url: '${pageContext.request.contextPath}/product/update_order_status',
-	                                    type: 'POST',
-	                                    contentType: 'application/json',
-	                                    data: JSON.stringify({
-	                                        pror_master_id: orderId,
-	                                        pror_status: 'cancelled'
-	                                    }),
-	                                    success: function(statusResponse) {
-	                                        if (statusResponse === 'success') {
-	                                            alert('주문이 취소되었습니다.');
-	                                            location.reload();
-	                                        } else {
-	                                            alert('주문 상태 업데이트에 실패했습니다.');
-	                                        }
-	                                    },
-	                                    error: function() {
-	                                        alert('주문 상태 업데이트 중 오류가 발생했습니다.');
-	                                    }
-	                                });
+	                        data: { merchant_uid: response.merchant_uid },
+	                        success: function(cancelResponse) {
+	                            if (cancelResponse.success) {
+	                                alert('주문이 취소되었습니다.');
+	                                location.reload();
 	                            } else {
-	                                alert('결제 취소에 실패했습니다: ' + (response.message || '알 수 없는 오류'));
+	                                alert(cancelResponse.message || '주문 취소에 실패했습니다.');
 	                            }
 	                        },
 	                        error: function(xhr) {
+	                            console.error('결제 취소 오류:', xhr);
 	                            alert('결제 취소 중 오류가 발생했습니다.');
 	                        }
 	                    });
 	                },
-	                error: function() {
+	                error: function(xhr) {
+	                    console.error('주문 정보 조회 오류:', xhr);
 	                    alert('주문 정보를 불러오는데 실패했습니다.');
 	                }
 	            });

@@ -191,4 +191,12 @@ public class ProductDAO {
         int count = mybatis.selectOne("ProductDAO.checkReviewExists", vo);
         return count > 0;
     }
+    
+    public String getUserEmail(String us_id) {
+        return mybatis.selectOne("ProductDAO.getUserEmail", us_id);
+    }
+    
+    public ProductVO getOrderByMerchantUid(String merchantUid) {
+        return mybatis.selectOne("ProductDAO.getOrderByMerchantUid", merchantUid);
+    }
 }

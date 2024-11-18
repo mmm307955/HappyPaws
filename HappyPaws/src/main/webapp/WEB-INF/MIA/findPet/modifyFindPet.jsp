@@ -27,7 +27,9 @@
 					</div>
 
 					<div class="n_img">
-						<img src="${pageContext.request.contextPath}/resources/MIA-img/findPetImg/${findPet.fp_img}" class="find-pet-image">
+						<img src="${pageContext.request.contextPath}/resources/MIA-img/findPetImg/${findPet.fp_img}"
+						onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/MIA-img/default.png';"
+						class="find-pet-image">
 						<div class="img_save">
 							<label for="file2" class="upload-btn" style="cursor: pointer;">
 								<input id="file2" type="file" name="uploadFile" accept="image/*" style="display: none;" />

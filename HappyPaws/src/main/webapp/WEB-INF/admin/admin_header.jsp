@@ -26,7 +26,7 @@ main{
 	    </div>
 	    <div class="header-menu">
 	    	<a href="${pageContext.request.contextPath}/admin">메인</a>
-		    <a href="/userList.do">회원관리</a>
+		    <a href="/userList.do" class="user-link">회원관리</a>
 		    <a href="/ad_manageProductList" class="ad_manage-link">상품관리</a>
 		    <a href="#">유기동물</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_notice_list" class="notice-link">공지사항</a>
@@ -75,7 +75,10 @@ main{
                 	        "</ul>"
                 );
             } else {
-                $(".home-link").addClass("active");
+                $(".user-link").addClass("active");
+                $("aside").html(
+                	"<h3>회원관리</h3>"
+                );
             }
             
             

@@ -222,4 +222,12 @@ public class ProductSVC {
     public boolean checkReviewExists(ProductVO vo) {
         return dao.checkReviewExists(vo);
     }
+    
+    public String getUserEmail(String us_id) {
+        return dao.getUserEmail(us_id);
+    }
+    
+    public ProductVO getOrderByMerchantUid(String merchantUid) {
+        return dao.getOrderByMerchantUid(merchantUid);
+    }
 }

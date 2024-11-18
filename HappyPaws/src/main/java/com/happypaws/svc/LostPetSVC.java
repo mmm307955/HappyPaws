@@ -38,6 +38,10 @@ public class LostPetSVC {
         return lostPetDAO.getLostPetList(vo);
     }
 
+    public List<LostPetVO> getLostPetListAdmin(LostPetVO vo) {
+        return lostPetDAO.getLostPetListAdmin(vo);
+    }
+    
     public int countLostPet(LostPetVO vo) {
         return lostPetDAO.countLostPet(vo);
     }

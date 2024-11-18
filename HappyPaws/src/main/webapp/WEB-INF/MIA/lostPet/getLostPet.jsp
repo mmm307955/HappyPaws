@@ -71,7 +71,12 @@ $(document).on('click', '#lpcDel', function() {
 							<span style="color: red; font-weight: bold;">[찾았어요]</span>
 						</c:if>
 					</span>
-					<span class="author">작성자: ${lostPet.us_nick}</span>
+					
+					<span class="author">
+					 <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${lostPet.us_profile}" 
+					 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" 
+					 alt="프로필">
+					작성자: ${lostPet.us_nick}</span>
 				</div>
 				<div class="n_second">
 					<span class="cnt">조회수: ${lostPet.lp_cnt}</span>
@@ -80,7 +85,9 @@ $(document).on('click', '#lpcDel', function() {
 
 				<div class="n_third">
 					<div class="ph">연락처: ${lostPet.lp_ph}</div>
-					<img src="${pageContext.request.contextPath}/resources/MIA-img/lostPetImg/${lostPet.lp_img}" alt="Lost Pet Image" class="lost-pet-image">
+					<img src="${pageContext.request.contextPath}/resources/MIA-img/lostPetImg/${lostPet.lp_img}" 
+					onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/MIA-img/default.png';"
+					alt="Lost Pet Image" class="lost-pet-image">
 					<table class="detail-table">
 						<tr class="detail-row">
 							<td class="label">실종 장소</td>
@@ -133,7 +140,12 @@ $(document).on('click', '#lpcDel', function() {
 					<input type="hidden" name="nowPage" value="${nowPage}">
 				</form>
 					<div>
-						<strong><c:out value="${lpComment.us_nick}" /></strong>
+						<strong>
+						 <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${lpComment.us_profile}" 
+						 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" 
+						 alt="프로필">
+						<c:out value="${lpComment.us_nick}" />
+						</strong>
 						<span><c:out value="${lpComment.lpc_date}" /></span>
 					</div>
 					<div>
@@ -169,7 +181,11 @@ $(document).on('click', '#lpcDel', function() {
 				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 				<input type="hidden" name="category" value="${category}">
 				<input type="hidden" name="nowPage" value="${nowPage}">
-				<strong>${user.us_nick}</strong>
+				<strong>
+				 <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${user.us_profile}" 
+				 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" 
+				 alt="프로필">
+				${user.us_nick}</strong>
 				<c:if test="${not empty user.us_id}">
 				<textarea id="lpc_content" name="lpc_content" required></textarea>
 				<div class="btn-container">

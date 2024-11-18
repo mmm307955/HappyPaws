@@ -749,13 +749,18 @@
 		    
 			// pr_cart.jsp의 processOrder 
 			function processOrder(items) {
-			    // 배송정보 입력 모달 표시
 			    const shippingModal = new bootstrap.Modal(document.getElementById('shippingModal'));
 			    shippingModal.show();
 			
-			    // 배송정보 폼 제출 처리
 			    $('#shippingForm').off('submit').on('submit', function(e) {
 			        e.preventDefault();
+			        
+			        const productTotalAmount = items.reduce((sum, item) => sum + (item.pr_opt_price * item.pror_qtt), 0); // 실제계산
+			        const shippingCost = 3000; // 고정 배송비
+			        
+			        // 테스트용 결제 금액과 고정 배송비 설정
+			        const payAmount = 1; // 테스트용 1원 결제
+			     	// const payAmount = productTotalAmount + shippingCost; // 실제 환경
 			        
 			        const shippingData = {
 			            pror_recipient: $('#recipient').val(),
@@ -763,20 +768,20 @@
 			            pror_addr: $('#addr').val(),
 			            pror_addr_detail: $('#addr_detail').val(),
 			            pror_zipcode: $('#zipcode').val(),
-			            pror_pay_method: 'card'
+			            pror_pay_method: 'card',
+			            pror_ship_cost: shippingCost,  // 고정 배송비
+			            pror_total_amt: payAmount      // 실제 결제 금액 (1원)
 			        };
 			
 			        const modal = bootstrap.Modal.getInstance(document.getElementById('shippingModal'));
 			        modal.hide();
 			        
-			        // 결제 처리 시작
 			        const today = new Date();
 			        const merchantUid = 'PR_' + today.getTime();
 			        
-			        // 상품명 정리 (공백, 개행문자 제거)
 			        const firstItemName = items[0].pr_name.replace(/[\n\t\r\s]+/g, ' ').trim();
 			        const productName = items.length > 1 ? 
-			            `${firstItemName} 외 ${items.length - 1}건` : 
+			            firstItemName + " 외 " + (items.length - 1) + "건" :
 			            firstItemName;
 			
 			        const paymentData = {
@@ -784,16 +789,14 @@
 			            pay_method: 'card',
 			            merchant_uid: merchantUid,
 			            name: productName,
-			            amount: 1, // 테스트용 1원
+			            amount: payAmount,  // 테스트용 1원 결제
 			            buyer_email: '${user.us_email}',
 			            buyer_name: shippingData.pror_recipient,
 			            buyer_tel: shippingData.pror_phone,
 			            buyer_addr: `${shippingData.pror_addr} ${shippingData.pror_addr_detail}`.trim(),
-			            buyer_postcode: shippingData.pror_zipcode,
-			            m_redirect_url: '${pageContext.request.contextPath}/product/pr_order_list'
+			            buyer_postcode: shippingData.pror_zipcode
 			        };
 			
-			        // 모바일 체크
 			        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 			
 			        if (isMobile) {
@@ -801,6 +804,7 @@
 			        } else {
 			            IMP.request_pay(paymentData, function(rsp) {
 			                if (rsp.success) {
+			                    // 각 상품의 개별 금액과 수량 정보 설정
 			                    const finalOrderData = items.map(item => ({
 			                        ...item,
 			                        ...shippingData,
@@ -811,7 +815,9 @@
 			                        error_msg: rsp.error_msg,
 			                        status: rsp.status,
 			                        paid_at: rsp.paid_at,
-			                        receipt_url: rsp.receipt_url
+			                        receipt_url: rsp.receipt_url,
+			                        pror_item_qtt: item.pror_qtt,         // 주문 수량
+			                        pror_item_amt: item.pror_product_amt  // 개별 상품의 총 금액
 			                    }));
 			
 			                    $.ajax({

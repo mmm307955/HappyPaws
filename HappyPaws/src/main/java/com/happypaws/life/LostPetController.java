@@ -226,5 +226,52 @@ public class LostPetController {
 
 		return "/WEB-INF/MIA/lostPet/getLostPetList.jsp";
 	}
+	
+	// 관리자 글 목록
+		@RequestMapping("/getLostPetListAdmin")
+		public String getLostPetListAdminPost(PagingVO pv, LostPetVO vo, Model model,
+				@RequestParam(value = "nowPage", required = false, defaultValue = "1") Integer nowPage,
+				@RequestParam(value = "category", required = false, defaultValue = "") String category) {
+			// 페이지당 항목 수 설정
+			int cntPerPage = 8;
 
+			// 검색 조건과 키워드가 없을 때 기본값 설정
+			if (vo.getSearchCondition() == null) {
+				vo.setSearchCondition("TITLE");
+			}
+			if (vo.getSearchKeyword() == null) {
+				vo.setSearchKeyword("");
+			}
+
+			// 전체 항목 개수 조회
+			int total = lostPetSVC.countLostPet(vo);
+
+			// 페이징 객체 생성
+			pv = new PagingVO(total, nowPage, cntPerPage);
+			vo.setStart(pv.getStart());
+			vo.setListcnt(cntPerPage);
+
+			// 분실 반려동물 목록 조회
+			List<LostPetVO> lostPetList = lostPetSVC.getLostPetList(vo);
+
+			// 댓글 수 설정
+			lostPetSVC.countLpComment(lostPetList);
+
+			// 사례금 포맷 적용
+			NumberFormat numberFormat = NumberFormat.getInstance(Locale.KOREA);
+			for (LostPetVO lostPet : lostPetList) {
+				lostPet.setFormattedReward(numberFormat.format(lostPet.getLp_reward()));
+			}
+
+			// 모델에 필요한 데이터 추가
+			model.addAttribute("paging", pv);
+			model.addAttribute("nowPage", nowPage);
+			model.addAttribute("searchKeyword", vo.getSearchKeyword());
+			model.addAttribute("searchCondition", vo.getSearchCondition());
+			model.addAttribute("category", category);
+			model.addAttribute("lostPetList", lostPetList);
+
+			return "/WEB-INF/MIA/lostPet/getLostPetListAdmin.jsp";
+		}
+	
 }

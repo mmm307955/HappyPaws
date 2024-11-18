@@ -242,7 +242,9 @@
 	<select id="getProductOrder" resultType="product">
 	    SELECT 
 	        o.*,
-	        u.US_EMAIL as us_email
+	        u.US_EMAIL as us_email,
+	        o.MERCHANT_UID as merchant_uid,  <!-- 별칭 추가 -->
+	        o.IMP_UID as imp_uid            <!-- 별칭 추가 -->
 	    FROM PRODUCTS_ORDERS o
 	    JOIN USERS u ON o.US_ID = u.US_ID
 	    WHERE o.PROR_MASTER_ID = #{pror_master_id}
@@ -465,6 +467,25 @@
 	    WHERE US_ID = #{us_id}
 	    AND PROR_ITEM_ID = #{pror_item_id}
 	    AND PRC_STATUS = 'Y'
+	</select>
+	
+	<select id="getUserEmail" resultType="string">
+	    SELECT US_EMAIL 
+	    FROM USERS 
+	    WHERE US_ID = #{us_id}
+	</select>
+	
+	<!-- merchant_uid로 주문 조회 -->
+	<select id="getOrderByMerchantUid" resultType="product">
+	    SELECT 
+	        o.*,
+	        u.US_EMAIL,
+	        o.MERCHANT_UID,
+	        o.IMP_UID 
+	    FROM PRODUCTS_ORDERS o
+	    JOIN USERS u ON o.US_ID = u.US_ID
+	    WHERE o.MERCHANT_UID = #{merchant_uid}
+	    LIMIT 1
 	</select>
 	
 </mapper>

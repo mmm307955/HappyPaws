@@ -918,6 +918,9 @@ public class ProductController {
 	        response.put("pror_product_amt", order.getPror_product_amt());
 	        response.put("pror_pay_method", order.getPror_pay_method());
 	        response.put("pror_email", order.getUs_email());
+	        // merchant_uid와 imp_uid 추가
+	        response.put("merchant_uid", order.getMerchant_uid());
+	        response.put("imp_uid", order.getImp_uid());
 
 	        // 주문 상품 목록 설정
 	        response.put("items", orderItems);
@@ -1137,6 +1140,9 @@ public class ProductController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("success", false, "message", "로그인이 필요합니다."));
             }
+            
+            // 사용자 이메일 조회
+            String userEmail = svc.getUserEmail(user.getUs_id());
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             String orderDate = sdf.format(new Date());
@@ -1144,12 +1150,29 @@ public class ProductController {
             // 주문 마스터 정보 설정
             ProductVO masterVO = new ProductVO();
             masterVO.setUs_id(user.getUs_id());
-            masterVO.setUs_email(user.getUs_email());
+            masterVO.setUs_email(userEmail);
             masterVO.setPror_date(orderDate);
             masterVO.setPror_status("paid");
             masterVO.setPror_deli_stat("preparation");
             
-            // 첫 번째 아이템의 배송 정보 설정
+            // 상품 총액 계산 (모든 상품의 가격 * 수량 합계)
+            int productTotalAmount = 0;
+            for (ProductVO item : orderItems) {
+                productTotalAmount += (item.getPr_opt_price() * item.getPror_item_qtt());
+                
+                // 각 주문 상품의 수량과 금액 정보 설정
+                item.setPror_item_qtt(item.getPror_item_qtt());  // 주문 수량
+                item.setPror_item_amt(item.getPr_opt_price() * item.getPror_item_qtt());  // 개별 상품 금액
+            }
+            
+            // 배송비 설정
+            int shippingCost = 3000;  // 고정 배송비
+            masterVO.setPror_ship_cost(shippingCost);
+            
+            // 상품 총액 설정 (순수 상품 가격의 합)
+            masterVO.setPror_product_amt(productTotalAmount);
+            
+            // 첫 번째 아이템의 정보 설정
             if (!orderItems.isEmpty()) {
                 ProductVO firstItem = orderItems.get(0);
                 masterVO.setPror_recipient(firstItem.getPror_recipient());
@@ -1160,6 +1183,8 @@ public class ProductController {
                 masterVO.setPror_pay_method("card");
                 masterVO.setMerchant_uid(firstItem.getMerchant_uid());
                 masterVO.setImp_uid(firstItem.getImp_uid());
+                // JSP에서 넘어온 실제 결제금액(1원) 사용
+                masterVO.setPror_total_amt(firstItem.getPror_total_amt());
             }
 
             // 주문 처리
@@ -1189,8 +1214,37 @@ public class ProductController {
     
     @PostMapping("/payCancel")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> cancelPayment(@RequestParam String merchant_uid) {
+    public ResponseEntity<Map<String, Object>> cancelPayment(@RequestParam String merchant_uid, HttpSession session) {
         try {
+            // 세션 체크
+            UsersVO user = (UsersVO) session.getAttribute("user");
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of(
+                            "success", false,
+                            "message", "로그인이 필요합니다."
+                        ));
+            }
+
+            // merchant_uid로 주문 정보 조회
+            ProductVO order = svc.getOrderByMerchantUid(merchant_uid);
+            if (order == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of(
+                            "success", false,
+                            "message", "주문 정보를 찾을 수 없습니다."
+                        ));
+            }
+
+            // 주문 상태 확인
+            if (!order.getPror_status().equals("paid") || !order.getPror_deli_stat().equals("preparation")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of(
+                            "success", false,
+                            "message", "배송준비 상태의 주문만 취소가 가능합니다."
+                        ));
+            }
+
             // 포트원 토큰 발급 요청
             String token = getPortOneToken();
             
@@ -1214,13 +1268,32 @@ public class ProductController {
             
             Map<String, Object> responseBody = response.getBody();
             int code = (int) responseBody.get("code");
-            String message = (String) responseBody.get("message");
             
-            return ResponseEntity.ok(Map.of(
-                "success", code == 0,
-                "message", message
-            ));
-            
+            if (code == 0) {
+                // 결제 취소 성공 시 DB 업데이트
+                order.setPror_status("cancelled");
+                int result = svc.updateOrderStatus(order);
+                
+                if (result > 0) {
+                    return ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "message", "주문이 성공적으로 취소되었습니다."
+                    ));
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Map.of(
+                            "success", false,
+                            "message", "주문 상태 업데이트에 실패했습니다."
+                        ));
+                }
+            } else {
+                String message = (String) responseBody.get("message");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of(
+                        "success", false,
+                        "message", "결제 취소 실패: " + message
+                    ));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -38,9 +38,8 @@
 
 					<div class="n_img">
 					<label for="file2" class="upload-btn" style="cursor: pointer;">
-						<img
-							src="${pageContext.request.contextPath}/resources/MIA-img/newFamilyImg/기본이미지.png"
-							alt="New Family Image" class="new-family-image">
+						<img src="${pageContext.request.contextPath}/resources/MIA-img/default.png;"
+						alt="New Family Image" class="new-family-image">
 						<div class="img_save">
 								<input id="file2" type="file" name="uploadFile" accept="image/*"
 								style="display: none;" required> <span>사진 첨부</span>

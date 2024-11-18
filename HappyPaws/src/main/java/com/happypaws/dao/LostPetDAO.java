@@ -53,6 +53,11 @@ public class LostPetDAO {
         return mybatis.selectList("LostPetDAO.getLostPetList", vo);
     }
 
+    //관리자 글목록 조회
+    public List<LostPetVO> getLostPetListAdmin(LostPetVO vo) {
+        return mybatis.selectList("LostPetDAO.getLostPetListAdmin", vo);
+    }
+    
     // 전체 페이지 수 조회
     public int countLostPet(LostPetVO vo) {
         return mybatis.selectOne("LostPetDAO.countLostPet", vo);

@@ -10,14 +10,14 @@
 	<main>
 		<img src="/resources/images/HappyPawsLogo.png" alt="logo">
 		<div id="hero-img">
-			<span>안녕하세요 행복한 발자국입니다</span>
+			<span>안녕하세요, 행복한 발자국입니다.</span>
 			<img src="/resources/images/index.png" alt="메인 이미지">
 		</div>
 		<section id="notice-section"><!-- Contents Area --></section>
 		<div id="contents-bundle">
 			<section id="left-contents" class="contents">
 				<article id="community-article">
-					<a href="/board/cmty_list"><p>커뮤니티</p></a>
+					<a href="/board/cmty_list?cmty_category=all"><p>커뮤니티</p></a>
 					<section>
 						<table>
 							<colgroup>

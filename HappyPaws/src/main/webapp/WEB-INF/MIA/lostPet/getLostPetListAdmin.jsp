@@ -22,67 +22,79 @@ pageContext.setAttribute("categories", categories);
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 		<div class="n_list">
-			<h2><span style="color: red;">아이를 찾아주세요 </span>/ <a href="/MIA/getFindPetList">아이를 발견했어요</a> /  <a href="/MIA/getNewFamilyList">새로운 가족을 찾아요</a></h2>
-			
-			<div class="n_seachform">
-				<form>
-					<select name="searchCondition">
-						<option value="TITLE"
-							${searchCondition == 'TITLE' ? 'selected' : ''}>제목</option>
-						<option value="CONTENT"
-							${searchCondition == 'CONTENT' ? 'selected' : ''}>내용</option>
-						<option value="CONTENT"
-							${searchCondition == 'ID' ? 'selected' : ''}>작성자</option>
-						<option value="CONTENT"
-							${searchCondition == 'TITLE,CONTENT' ? 'selected' : ''}>제목+내용</option>
-					</select> <input type="search" name="searchKeyword" value="${searchKeyword}"
-						placeholder="검색어를 입력해주세요">
-				</form>
-				<c:if test="${not empty user.us_id}">
-				<button id="lpIns">글쓰기</button>
-				</c:if>
-				<c:if test="${empty user.us_id}">
-				<button id="lpIns2">글쓰기</button>
-				</c:if>
+			<div class="c_category">
+				<ul>
+			    	<li><span>아이를 찾아주세요</span></li>
+			    	<li><a href="/MIA/getFindPetList">아이를 발견했어요</a></li>
+				    <li><a href="/MIA/getNewFamilyList">새로운 가족을 찾아요</a></li>
+				</ul>
 			</div>
 
-			<div class="n_categoryform">
-				<c:forEach var="category" items="${categories}">
-					<form action="/MIA/getLostPetList" method="post"
-						style="display: inline;">
-						<input type="hidden" name="searchCondition"
-							value="${searchCondition}"> <input type="hidden"
-							name="searchKeyword" value="${searchKeyword}"> <input
-							type="hidden" name="category" value="${category}"> <input
-							type="hidden" name="nowPage" value="${paging.nowPage}"> <input
-							type="submit"
-							value="<c:choose><c:when test="${category == ''}">전체</c:when><c:when test="${category == 'dog'}">강아지</c:when><c:when test="${category == 'cat'}">고양이</c:when><c:when test="${category == 'small'}">소동물</c:when><c:when test="${category == 'etc'}">기타</c:when></c:choose>">
-					</form>
-				</c:forEach>
+            <div class="n_seachform">
+    			<form>
+        			<label style="display: none;">
+        				<select name="searchCondition">
+							<option value="TITLE" ${searchCondition == 'TITLE' ? 'selected' : ''} >제목</option>
+							<option value="CONTENT" ${searchCondition == 'CONTENT' ? 'selected' : ''}>내용</option>
+						</select>
+					</label>
+	                <div class="custom-select-display">
+	                    <span></span>
+	                    <i class="fas fa-chevron-down"></i>
+	                </div>
+	                <div class="custom-options">
+	                    <div data-value="TITLE">제목</div>
+	                    <div data-value="CONTENT">내용</div>
+	                </div>
+        			<label class="search-bar">
+	    	        	<input type="search" name="searchKeyword" value="${searchKeyword}" placeholder="검색어를 입력해주세요">
+        	    		<button type="submit" class="searchIcon">
+            	    	<img src="${pageContext.request.contextPath}/resources/images/searchicon.png" alt="검색" title="검색">
+            			</button>
+	        		</label>
+			    </form>
+    			<button class="write_button" id="lpIns">글쓰기</button>
 			</div>
 
-			<div class="n_listform">
-				<c:forEach items="${lostPetList}" var="lostPet">
-					<div class="n_list_item"
-						onclick="selLp(${lostPet.lp_seq}, '${searchCondition}', '${searchKeyword}', '${category}', ${paging.nowPage})"
-						style="cursor: pointer;">
-						<a
-							href="/MIA/getLostPet?lp_seq=${lostPet.lp_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
-							<img
-							src="${pageContext.request.contextPath}/resources/MIA-img/lostPetImg/${lostPet.lp_img}"
-							alt="Lost Pet Image" class="pet-image">
-						</a>
-						<p>${lostPet.lp_title}</p>
-						<p>	<c:if test="${lostPet.lp_ok == 'Y'}">
-								<span style="color: red; font-weight: bold;">[찾았어요]</span>
-							</c:if>
-						</p>
-						<p>지역: ${lostPet.lp_place}</p>
-						<p>사례금: ${lostPet.formattedReward}원</p>
-						<p>${lostPet.lp_date}댓글:${lostPet.commentCount}</p>
-					</div>
-				</c:forEach>
-			</div>
+
+            <div class="n_categoryform">
+                <c:forEach var="category" items="${categories}">
+                    <form action="/MIA/getFindPetList" method="post" style="display: inline;">
+                        <input type="hidden" name="searchCondition" value="${searchCondition}">
+                        <input type="hidden" name="searchKeyword" value="${searchKeyword}">
+                        <input type="hidden" name="category" value="${category}">
+                        <input type="hidden" name="nowPage" value="1">
+                        <input class="category" type="submit" value="<c:choose><c:when test="${category == ''}">전체</c:when><c:when test="${category == 'dog'}">강아지</c:when><c:when test="${category == 'cat'}">고양이</c:when><c:when test="${category == 'small'}">소동물</c:when><c:when test="${category == 'etc'}">기타</c:when></c:choose>">
+                    </form>
+                </c:forEach>
+            </div>
+
+			<table>
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>등록일</th>
+						<th>작성자</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${lostPetList}" var="lostPet">
+				        <c:if test="${notice.n_chk == 'Y'}">
+					    	<tr class="n_list_item" onclick="sellp(${lostPet.lp_seq}, '${searchCondition}', '${searchKeyword}', '${category}', ${paging.nowPage})" style="cursor: pointer;">
+					        	<td>${lostPet.lp_seq}</td>
+					            <td><div class="title-wrapper">${lostPet.lp_title}</div></td>
+					            <td>${lostPet.lp_date}</td>
+					            <td>
+					            	<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${lostPet.us_profile}" 
+					            	onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
+					               	${lostPet.us_nick}
+								</td>
+							</tr>
+						</c:if>
+					</c:forEach>
+				</tbody>
+			</table>
 
 			<ul class="pagination">
 				<c:if

@@ -157,7 +157,10 @@ $(document).on('click', '[id^="closeFpcDelCheck_"]', function () {
 						</c:if>
 					</span>
 					<c:if test="${not empty findPet.us_nick}">
-					<span class="author">작성자: ${findPet.us_nick}</span>
+					<span class="author">
+					<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${findPet.us_profile}" 
+					onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
+					작성자: ${findPet.us_nick}</span>
 					</c:if>
 					<c:if test="${empty findPet.us_nick}">
 					<span class="author">작성자: ${findPet.fp_id}</span>
@@ -170,7 +173,9 @@ $(document).on('click', '[id^="closeFpcDelCheck_"]', function () {
 
 				<div class="n_third">
 					<div class="ph">연락처: ${findPet.fp_ph}</div>
-					<img src="${pageContext.request.contextPath}/resources/MIA-img/findPetImg/${findPet.fp_img}" alt="Find Pet Image" class="find-pet-image">
+					<img src="${pageContext.request.contextPath}/resources/MIA-img/findPetImg/${findPet.fp_img}"
+					onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/MIA-img/default.png';" 
+					alt="Find Pet Image" class="find-pet-image">
 					<table class="detail-table">
 						<tr class="detail-row">
 							<td class="label">발견 장소</td>
@@ -220,7 +225,10 @@ $(document).on('click', '[id^="closeFpcDelCheck_"]', function () {
             </form>
             <div>
                 <c:if test="${not empty fpComment.us_nick}">
-                    <strong><c:out value="${fpComment.us_nick}" /></strong>
+                    <strong>
+                    <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${fpComment.us_profile}" 
+                    onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
+                    <c:out value="${fpComment.us_nick}" /></strong>
                 </c:if>
                 <c:if test="${empty fpComment.us_nick}">
                     <strong><c:out value="${fpComment.fpc_id}" /></strong>
@@ -283,7 +291,10 @@ $(document).on('click', '[id^="closeFpcDelCheck_"]', function () {
 				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 				<input type="hidden" name="category" value="${category}">
 				<input type="hidden" name="nowPage" value="${nowPage}">
-				<strong>${user.us_nick}</strong>
+				<strong>
+				<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${user.us_profile}" 
+				onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
+				${user.us_nick}</strong>
 				<textarea id="fpc_content" name="fpc_content" required></textarea>
 				<div class="btn-container">
 					<button type="submit">등록</button>

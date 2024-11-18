@@ -70,7 +70,12 @@ $(document).on('click', '#nfcDel', function() {
 							test="${newFamily.nf_ok == 'Y'}">
 							<span style="color: red; font-weight: bold;">[찾았어요]</span>
 						</c:if>
-					</span> <span class="author">작성자: ${newFamily.us_nick}</span>
+					</span>
+					 <span class="author">
+					 <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${newFamily.us_profile}" 
+					 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" 
+					 alt="프로필">
+					 작성자: ${newFamily.us_nick}</span>
 				</div>
 				<div class="n_second">
 					<span class="cnt">조회수: ${newFamily.nf_cnt}</span> <span
@@ -79,9 +84,9 @@ $(document).on('click', '#nfcDel', function() {
 
 				<div class="n_third">
 					<div class="ph">연락처: ${newFamily.nf_ph}</div>
-					<img
-						src="${pageContext.request.contextPath}/resources/MIA-img/newFamilyImg/${newFamily.nf_img}"
-						alt="New Family Image" class="new-family-image">
+					<img src="${pageContext.request.contextPath}/resources/MIA-img/newFamilyImg/${newFamily.nf_img}"
+					onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/MIA-img/default.png';"
+					alt="New Family Image" class="new-family-image">
 					<table class="detail-table">
 						<tr class="detail-row">
 							<td class="label">분양 지역</td>
@@ -137,7 +142,11 @@ $(document).on('click', '#nfcDel', function() {
 						name="category" value="${category}"> <input type="hidden"
 						name="nowPage" value="${nowPage}">
 					<div>
-						<strong><c:out value="${nfComment.us_nick}" /></strong> <span><c:out
+						<strong>
+						<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${nfComment.us_profile}" 
+						onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" 
+						alt="프로필">
+						<c:out value="${nfComment.us_nick}" /></strong> <span><c:out
 								value="${nfComment.nfc_date}" /></span>
 					</div>
 					<div>
@@ -171,7 +180,11 @@ $(document).on('click', '#nfcDel', function() {
 				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 				<input type="hidden" name="category" value="${category}"> <input
 					type="hidden" name="nowPage" value="${nowPage}"> 
-					<strong>${user.us_nick}</strong>
+					<strong>
+					<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${user.us_profile}" 
+					onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" 
+					alt="프로필">
+					${user.us_nick}</strong>
 		<c:if test="${not empty user.us_id}">
 				<textarea id="nfc_content" name="nfc_content" required></textarea>
 				<div class="btn-container">
