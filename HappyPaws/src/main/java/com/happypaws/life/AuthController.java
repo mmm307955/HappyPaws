@@ -72,7 +72,7 @@ public class AuthController {
 	}
 
 	@RequestMapping("/login/{divider}")
-	public String naverLogin(@RequestParam(value = "code", required = false) String code,
+	public String snsLogin(@RequestParam(value = "code", required = false) String code,
 			@RequestParam(value = "state") String state,
 			@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "error_description", required = false) String errorDescription,
@@ -273,10 +273,29 @@ public class AuthController {
 	}
 
 	@RequestMapping("/logout")
-	public String logout(HttpServletResponse response, HttpSession session) {
+	public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		session.removeAttribute("user");
+		String us_sns = JwtCookieUtil.extractJwtFromCookie(request).getUs_sns();
 		JwtCookieUtil.deleteJwtCookie(response);
+
+		switch (us_sns) {
+		case "naver":
+			return "redirect:" + apiSvc.requestNaverLogoutUri();
+		case "kakao":
+			return "redirect:" + apiSvc.requestKakaoLogoutUri(request);
+		}
 		return "redirect:/";
+	}
+	
+	@RequestMapping("/logout/{divider}")
+	public String snsLogout(@RequestParam(value = "state") String state,
+			@PathVariable String divider, HttpSession session, Model model) {
+		if (session.getAttribute("oauthState").equals(state)) {
+			model.addAttribute("logoutMassage", divider + "에서 정상적으로 로그아웃 처리되었습니다.");
+		} else {
+			model.addAttribute("logoutMassage", divider + "에서 정상적으로 로그아웃 처리되지 않았습니다.");
+		}
+		return "/WEB-INF/auth/successLogout.jsp";
 	}
 
 	@GetMapping("/error")

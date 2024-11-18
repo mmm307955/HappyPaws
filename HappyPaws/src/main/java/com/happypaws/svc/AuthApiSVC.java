@@ -65,6 +65,10 @@ public class AuthApiSVC implements InitializingBean {
 	private String naverTokenUri;
 	@Value("${spring.security.oauth2.client.provider.naver.user-info-uri}")
 	private String naverUserInfoUrl;
+	@Value("${spring.security.oauth2.client.provider.naver.logout-uri}")
+	private String naverLogoutUri;
+	@Value("${spring.security.oauth2.client.provider.naver.logout-returl}")
+	private String naverLogoutReturl;
 
 	// ========== kakao ========== //
 	@Value("${spring.security.oauth2.client.registration.kakao.client-id}")
@@ -79,6 +83,10 @@ public class AuthApiSVC implements InitializingBean {
 	private String kakaoTokenUri;
 	@Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
 	private String kakaoUserInfoUri;
+	@Value("${spring.security.oauth2.client.provider.kakao.logout-uri}")
+	private String kakaoLogoutUri;
+	@Value("${spring.security.oauth2.client.provider.kakao.logout-redirect-uri}")
+	private String kakaoLogoutRedirectUri;
 
 	// ========== coolsms ========== //
 	private DefaultMessageService messageService;
@@ -262,6 +270,23 @@ public class AuthApiSVC implements InitializingBean {
 		}
 	}
 
+	// ========== method by logout divider ========== //
+	public String requestNaverLogoutUri() {
+		String logoutUri = "/";
+		return logoutUri;
+	}
+	
+	public String requestKakaoLogoutUri(HttpServletRequest request) {
+		String state = UUID.randomUUID().toString();
+		request.getSession().setAttribute("oauthState", state);
+		
+		String logoutUri = kakaoLogoutUri;
+		logoutUri += "?client_id=" + kakaoClientId;
+		logoutUri += "&logout_redirect_uri=" + kakaoLogoutRedirectUri;
+		logoutUri += "&state=" + state;
+		return logoutUri;
+	}
+	
 	// ========== cool sms methods ========== //
 	@Override
 	public void afterPropertiesSet() {

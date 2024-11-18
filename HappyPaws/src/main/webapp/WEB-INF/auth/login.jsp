@@ -52,11 +52,11 @@
 		</div>
 
 		<div class="auth-links">
-			<a href="/auth/join" target="_blank">회원가입</a>
+			<a href="/auth/join">회원가입</a>
 			<span>|</span>
-			<a href="/auth/find_id" target="_blank">아이디 찾기</a>
+			<a href="/auth/find_id">아이디 찾기</a>
 			<span>|</span>
-			<a href="/auth/find_password" target="_blank">비밀번호 찾기</a>
+			<a href="/auth/find_password">비밀번호 찾기</a>
 		</div>
 
 		<div class="sns-login coarse">

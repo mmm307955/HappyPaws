@@ -1,4 +1,8 @@
 /* common */
+body {
+	display: flex;
+}
+
 main {
 	text-align: center;
 	background: white;
