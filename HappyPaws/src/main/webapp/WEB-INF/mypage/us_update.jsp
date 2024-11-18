@@ -8,7 +8,6 @@
     <title>회원정보 수정</title>
     <style>
          body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
@@ -115,7 +114,7 @@
     </script>
 </head>
 <body>
-    <%@include file="../../header.jsp" %>
+    <jsp:include page="/WEB-INF/admin/admin_header.jsp" />
     <main>
     <div class="container">
         <h3>회원정보 수정</h3>

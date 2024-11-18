@@ -282,8 +282,16 @@ aside {
     background-color: #fff;
     z-index: 50;
 }
+
+aside a{
+	color: black;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
 aside h3 {
     margin-top: 25px;
+    text-align: left;
 }
 aside ul {
     list-style: none;
@@ -291,6 +299,7 @@ aside ul {
 }
 aside li {
     margin: 10px 0;
+    text-align: left;
 }
 
 /* 반응형 스타일 */

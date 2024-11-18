@@ -180,7 +180,7 @@
     </style>
 </head>
 <body>
-	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<jsp:include page="/WEB-INF/admin/admin_header.jsp" />
 	<main>
 	<div class="container">
 	<form action="ad_manageProductModify" method="POST" enctype="multipart/form-data" id="productAddForm">
@@ -189,7 +189,7 @@
 	<input type="hidden" name="searchCondition" value="${param.searchCondition}">
 	<input type="hidden" name="searchKeyword" value="${param.searchKeyword}">
 	
-    <div class="title">상품 수정</div>
+<!--     <div class="title">상품 수정</div> -->
    
 <%-- <img id="image-preview" src="${pageContext.request.contextPath}/resources/upload/${product.pr_thumbnail}" alt="이미지 미리보기" onerror="this.src='../../../resources/images/HappyPawsLogo.png';" style="display: ${product.pr_thumbnail != null ? 'block' : 'none'};"> --%>
 

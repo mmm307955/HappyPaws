@@ -163,52 +163,6 @@ td {
     transform: translateX(-30%); /* X축 기준으로 중앙 정렬 */
 }
 
-/*페이지 CSS*/
-.pagination {
-	display: flex; /* Flexbox를 사용하여 정렬 */
-	list-style: none; /* 기본 리스트 스타일 제거 */
-	padding: 0; /* 패딩 제거 */
-	margin: 0 auto; /* 위아래 여백 설정 */
-	text-align: center;
-	width: 100px;
-	margin-top: 20px;
-}
-
-.pagination .page-item {
-	margin: 0 5px; /* 페이지 아이템 간 여백 */
-	width: 30px;
-	height: 30px;
-	position: relative;
-}
-
-.pagination .page-link {
-	text-decoration: none; /* 링크의 기본 밑줄 제거 */
-	color: black; /* 기본 링크 색상 */
-	width: 100%; /* 전체 너비 사용 */
-	height: 100%; /* 전체 높이 사용 */
-	display: flex; /* Flexbox 사용 */
-	justify-content: center; /* 수평 중앙 정렬 */
-	align-items: center; /* 수직 중앙 정렬 */
-	border-radius: 50%; /* 동그라미 모양 만들기 */
-}
-
-.pagination .page-link:hover {
-	color: black;
-	font-weight: bold;
-}
-
-.pagination .active {
-	position: relative; /* 부모 요소의 위치를 기준으로 설정 */
-}
-
-.pagination .active a {
-	color: black; /* 글자색을 흰색으로 설정 */
-	background-color: #ffeb994d; /* 배경색을 노란색으로 설정 */
-	border-radius: 50%; /* 동그라미 모양을 만들기 위해 반경을 설정 */
-	border: 2px solid #fcd11e;
-	display: inline-block; /* 인라인 블록으로 설정 */
-	text-align: center; /* 중앙 정렬 */
-}
 
 .tdCenter {
 	text-align: center;
@@ -327,16 +281,15 @@ td {
 
 </head>
 <body>
-	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
-<%-- 	<jsp:include page="${pageContext.request.contextPath}/admin_aside.jsp" /> --%>
+	<jsp:include page="/WEB-INF/admin/admin_header.jsp" />
 	<main>
 
 		<!-- Main Content -->
 		<div class="main-content">
-			<h1>
+	<!-- 		<h1>
 				<a href="ad_manageProductList"
 					style="text-decoration: none; color: black;">상품 관리</a>
-			</h1>
+			</h1> -->
 
 <!-- 		<div class="product-search"> -->
 <!-- 			<!-- 검색 및 카테고리 필터 --> 
@@ -527,7 +480,7 @@ td {
 <!-- 				<tfoot></tfoot> -->
 			</table>
 			
-			<a href="ad_manageProductAdd" >상품 등록하기</a>
+			<!-- <a href="ad_manageProductAdd" >상품 등록하기</a> -->
 
 			<!--  페이징처리와 목록, 검색 유지 기능 처리 -->
 			<ul class="pagination">

@@ -24,6 +24,7 @@ public class ProductVO {
 	private int prc_rating;
 	private String prc_start_date;
 	private String prc_status;
+	private String prc_review_deadline;
 	// PRODUCTS_QNA 테이블 컬럼들
 	private int prq_no;
 	private String prq_desc;
@@ -36,21 +37,32 @@ public class ProductVO {
 	private int prsc_quantity;
 	private int prsc_price;
     // PRODUCTS_ORDERS 테이블 컬럼들
-    private int pror_no;                 
-    private String pror_date;           
-    private String pror_status;          
-    private String pror_deli_stat;       
-    private int pror_qtt;              
-    private String pror_addr;           
-    private String pror_addr_detail;     
-    private String pror_zipcode;         
-    private String pror_recipient;       
-    private String pror_phone;          
-    private int pror_total_amt;         
-    private int pror_ship_cost;          
-    private int pror_product_amt;     
-    private String pror_pay_method;      
-    private int pror_coupon_amt;         
+	private String us_email;
+    private int pror_master_id;          // 주문 마스터 번호
+    private String pror_date;            // 주문 일시
+    private String pror_status;          // 주문 상태
+    private String pror_deli_stat;       // 배송 상태
+    private String pror_recipient;       // 수령인
+    private String pror_phone;           // 연락처
+    private String pror_addr;            // 배송지 주소
+    private String pror_addr_detail;     // 상세주소
+    private String pror_zipcode;         // 우편번호
+    private int pror_total_amt;          // 총 결제금액
+    private int pror_ship_cost;          // 배송비
+    private int pror_product_amt;        // 상품 총액
+    private int pror_coupon_amt;         // 쿠폰 할인액
+    private String pror_pay_method;      // 결제 수단
+    private String pror_user_email;     // 주문자 이메일
+    private String pror_user_id;     // 주문자 아이디
+    private String merchant_uid;
+    private String imp_uid;
+    // PRODUCTS_ORDER_ITEMS 테이블 컬럼들
+    private int pror_item_id;            // 주문상품 번호
+    private int pror_item_qtt;           // 주문 수       
+    private int pror_item_amt;           // 상품별 총 금액
+    // PRODUCTS_WISHLIST 테이블 컬럼들
+    private int prwl_no;          // 위시리스트 번호
+    private String prwl_date;
 	// 페이징, 검색 처리
 	private String searchKeyword = "";
 	private int rowFirst;
@@ -62,7 +74,21 @@ public class ProductVO {
 	// 리뷰 개수를 저장할 필드 추가
 	private int reviewCount; 
 	// 평균 평점
-	private double avgRating; 
+	private double avgRating;
+	// 기간 정렬(pr_order_list에 사용)
+	private String startDate;
+	private String endDate;
+	// 결제 api 관련 필드
+	private boolean success;          // 결제 성공 여부
+	private String error_code;        // 결제 실패 코드
+	private String error_msg;         // 결제 실패 메시지 
+	private String paid_at;           // 결제 시각
+	private String status;            // 결제 상태 (ready, paid, failed)
+	private String pay_method;        // 결제수단 구분코드
+	private String pg_provider;       // PG사 구분코드
+	private String pg_tid;           // PG사 거래번호
+	private String receipt_url;      // 영수증 URL
+	private String custom_data;      // 커스텀 데이터
 	
 	public int getPr_id() {
 		return pr_id;
@@ -224,6 +250,14 @@ public class ProductVO {
 		this.prc_status = prc_status;
 	}
 
+	public String getPrc_review_deadline() {
+		return prc_review_deadline;
+	}
+
+	public void setPrc_review_deadline(String prc_review_deadline) {
+		this.prc_review_deadline = prc_review_deadline;
+	}
+
 	public int getPrq_no() {
 		return prq_no;
 	}
@@ -272,6 +306,14 @@ public class ProductVO {
 		this.prq_date = prq_date;
 	}
 	
+	public int getPrsc_no() {
+		return prsc_no;
+	}
+
+	public void setPrsc_no(int prsc_no) {
+		this.prsc_no = prsc_no;
+	}
+	
 	public int getPrsc_quantity() {
 		return prsc_quantity;
 	}
@@ -287,15 +329,199 @@ public class ProductVO {
 	public void setPrsc_price(int prsc_price) {
 		this.prsc_price = prsc_price;
 	}
-
-	public int getPrsc_no() {
-		return prsc_no;
+	
+	public String getUs_email() {
+		return us_email;
 	}
 
-	public void setPrsc_no(int prsc_no) {
-		this.prsc_no = prsc_no;
+	public void setUs_email(String us_email) {
+		this.us_email = us_email;
+	}
+
+	public int getPror_master_id() {
+		return pror_master_id;
+	}
+
+	public void setPror_master_id(int pror_master_id) {
+		this.pror_master_id = pror_master_id;
+	}
+
+	public String getPror_date() {
+		return pror_date;
+	}
+
+	public void setPror_date(String pror_date) {
+		this.pror_date = pror_date;
+	}
+
+	public String getPror_status() {
+		return pror_status;
+	}
+
+	public void setPror_status(String pror_status) {
+		this.pror_status = pror_status;
+	}
+
+	public String getPror_deli_stat() {
+		return pror_deli_stat;
+	}
+
+	public void setPror_deli_stat(String pror_deli_stat) {
+		this.pror_deli_stat = pror_deli_stat;
+	}
+
+	public String getPror_recipient() {
+		return pror_recipient;
+	}
+
+	public void setPror_recipient(String pror_recipient) {
+		this.pror_recipient = pror_recipient;
+	}
+
+	public String getPror_phone() {
+		return pror_phone;
+	}
+
+	public void setPror_phone(String pror_phone) {
+		this.pror_phone = pror_phone;
+	}
+
+	public String getPror_addr() {
+		return pror_addr;
+	}
+
+	public void setPror_addr(String pror_addr) {
+		this.pror_addr = pror_addr;
+	}
+
+	public String getPror_addr_detail() {
+		return pror_addr_detail;
+	}
+
+	public void setPror_addr_detail(String pror_addr_detail) {
+		this.pror_addr_detail = pror_addr_detail;
+	}
+
+	public String getPror_zipcode() {
+		return pror_zipcode;
+	}
+
+	public void setPror_zipcode(String pror_zipcode) {
+		this.pror_zipcode = pror_zipcode;
+	}
+
+	public int getPror_total_amt() {
+		return pror_total_amt;
+	}
+
+	public void setPror_total_amt(int pror_total_amt) {
+		this.pror_total_amt = pror_total_amt;
+	}
+
+	public int getPror_ship_cost() {
+		return pror_ship_cost;
+	}
+
+	public void setPror_ship_cost(int pror_ship_cost) {
+		this.pror_ship_cost = pror_ship_cost;
+	}
+
+	public int getPror_product_amt() {
+		return pror_product_amt;
+	}
+
+	public void setPror_product_amt(int pror_product_amt) {
+		this.pror_product_amt = pror_product_amt;
+	}
+
+	public int getPror_coupon_amt() {
+		return pror_coupon_amt;
+	}
+
+	public void setPror_coupon_amt(int pror_coupon_amt) {
+		this.pror_coupon_amt = pror_coupon_amt;
+	}
+
+	public String getPror_pay_method() {
+		return pror_pay_method;
+	}
+
+	public void setPror_pay_method(String pror_pay_method) {
+		this.pror_pay_method = pror_pay_method;
 	}
 	
+	public String getPror_user_email() {
+		return pror_user_email;
+	}
+
+	public void setPror_user_email(String pror_user_email) {
+		this.pror_user_email = pror_user_email;
+	}
+
+	public String getPror_user_id() {
+		return pror_user_id;
+	}
+
+	public void setPror_user_id(String pror_user_id) {
+		this.pror_user_id = pror_user_id;
+	}
+	
+	public String getMerchant_uid() {
+		return merchant_uid;
+	}
+
+	public void setMerchant_uid(String merchant_uid) {
+		this.merchant_uid = merchant_uid;
+	}
+
+	public String getImp_uid() {
+		return imp_uid;
+	}
+
+	public void setImp_uid(String imp_uid) {
+		this.imp_uid = imp_uid;
+	}
+
+	public int getPror_item_id() {
+		return pror_item_id;
+	}
+
+	public void setPror_item_id(int pror_item_id) {
+		this.pror_item_id = pror_item_id;
+	}
+
+	public int getPror_item_qtt() {
+		return pror_item_qtt;
+	}
+
+	public void setPror_item_qtt(int pror_item_qtt) {
+		this.pror_item_qtt = pror_item_qtt;
+	}
+
+	public int getPror_item_amt() {
+		return pror_item_amt;
+	}
+	
+	public int getPrwl_no() {
+		return prwl_no;
+	}
+
+	public void setPrwl_no(int prwl_no) {
+		this.prwl_no = prwl_no;
+	}
+
+	public String getPrwl_date() {
+		return prwl_date;
+	}
+
+	public void setPrwl_date(String prwl_date) {
+		this.prwl_date = prwl_date;
+	}
+
+	public void setPror_item_amt(int pror_item_amt) {
+		this.pror_item_amt = pror_item_amt;
+	}
+
 	public String getSearchKeyword() {
 		return searchKeyword;
 	}
@@ -352,123 +578,99 @@ public class ProductVO {
 		this.avgRating = avgRating;
 	}
 
-	public int getPror_no() {
-		return pror_no;
+	public String getStartDate() {
+		return startDate;
 	}
 
-	public void setPror_no(int pror_no) {
-		this.pror_no = pror_no;
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
 	}
 
-	public String getPror_date() {
-		return pror_date;
+	public String getEndDate() {
+		return endDate;
 	}
 
-	public void setPror_date(String pror_date) {
-		this.pror_date = pror_date;
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
-	public String getPror_status() {
-		return pror_status;
+	public boolean isSuccess() {
+		return success;
 	}
 
-	public void setPror_status(String pror_status) {
-		this.pror_status = pror_status;
+	public void setSuccess(boolean success) {
+		this.success = success;
 	}
 
-	public String getPror_deli_stat() {
-		return pror_deli_stat;
+	public String getError_code() {
+		return error_code;
 	}
 
-	public void setPror_deli_stat(String pror_deli_stat) {
-		this.pror_deli_stat = pror_deli_stat;
+	public void setError_code(String error_code) {
+		this.error_code = error_code;
 	}
 
-	public int getPror_qtt() {
-		return pror_qtt;
+	public String getError_msg() {
+		return error_msg;
 	}
 
-	public void setPror_qtt(int pror_qtt) {
-		this.pror_qtt = pror_qtt;
+	public void setError_msg(String error_msg) {
+		this.error_msg = error_msg;
 	}
 
-	public String getPror_addr() {
-		return pror_addr;
+	public String getPaid_at() {
+		return paid_at;
 	}
 
-	public void setPror_addr(String pror_addr) {
-		this.pror_addr = pror_addr;
+	public void setPaid_at(String paid_at) {
+		this.paid_at = paid_at;
 	}
 
-	public String getPror_addr_detail() {
-		return pror_addr_detail;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setPror_addr_detail(String pror_addr_detail) {
-		this.pror_addr_detail = pror_addr_detail;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
-	public String getPror_zipcode() {
-		return pror_zipcode;
+	public String getPay_method() {
+		return pay_method;
 	}
 
-	public void setPror_zipcode(String pror_zipcode) {
-		this.pror_zipcode = pror_zipcode;
+	public void setPay_method(String pay_method) {
+		this.pay_method = pay_method;
 	}
 
-	public String getPror_recipient() {
-		return pror_recipient;
+	public String getPg_provider() {
+		return pg_provider;
 	}
 
-	public void setPror_recipient(String pror_recipient) {
-		this.pror_recipient = pror_recipient;
+	public void setPg_provider(String pg_provider) {
+		this.pg_provider = pg_provider;
 	}
 
-	public String getPror_phone() {
-		return pror_phone;
+	public String getPg_tid() {
+		return pg_tid;
 	}
 
-	public void setPror_phone(String pror_phone) {
-		this.pror_phone = pror_phone;
+	public void setPg_tid(String pg_tid) {
+		this.pg_tid = pg_tid;
 	}
 
-	public int getPror_total_amt() {
-		return pror_total_amt;
+	public String getReceipt_url() {
+		return receipt_url;
 	}
 
-	public void setPror_total_amt(int pror_total_amt) {
-		this.pror_total_amt = pror_total_amt;
+	public void setReceipt_url(String receipt_url) {
+		this.receipt_url = receipt_url;
 	}
 
-	public int getPror_ship_cost() {
-		return pror_ship_cost;
+	public String getCustom_data() {
+		return custom_data;
 	}
 
-	public void setPror_ship_cost(int pror_ship_cost) {
-		this.pror_ship_cost = pror_ship_cost;
-	}
-
-	public int getPror_product_amt() {
-		return pror_product_amt;
-	}
-
-	public void setPror_product_amt(int pror_product_amt) {
-		this.pror_product_amt = pror_product_amt;
-	}
-
-	public String getPror_pay_method() {
-		return pror_pay_method;
-	}
-
-	public void setPror_pay_method(String pror_pay_method) {
-		this.pror_pay_method = pror_pay_method;
-	}
-
-	public int getPror_coupon_amt() {
-		return pror_coupon_amt;
-	}
-
-	public void setPror_coupon_amt(int pror_coupon_amt) {
-		this.pror_coupon_amt = pror_coupon_amt;
+	public void setCustom_data(String custom_data) {
+		this.custom_data = custom_data;
 	}
 }

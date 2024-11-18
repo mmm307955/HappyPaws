@@ -21,9 +21,17 @@ public class AdminController {
     private AdSVC svc;
 
     // 관리자 마이페이지 이동
-    @GetMapping("/ad_myPage.do")
+    @GetMapping({"/ad_myPage.do",  "/us_myPage2.do"})
     public String ad_myPage(HttpServletRequest request, Model model) {
-        return "/WEB-INF/mypage/ad_mypage.jsp";
+    	
+    	String requestUri = request.getRequestURI();
+    	
+    	if(requestUri.equals("/us_myPage2.do")) {
+    		 return "/WEB-INF/mypage/us_mypage2.jsp";
+    	}else {
+    		 return "/WEB-INF/mypage/ad_mypage.jsp";
+    	}
+       
     }
 
     // 비밀번호 변경 처리

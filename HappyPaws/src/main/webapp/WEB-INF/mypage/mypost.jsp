@@ -11,7 +11,6 @@
     <title>내 등록 게시물</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             background-color: #f9f9f9;
         }
         .container {

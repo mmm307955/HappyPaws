@@ -53,12 +53,80 @@
 		<if test="searchCondition == 'CONTENT' "> AND N_CONTENT LIKE CONCAT('%',#{searchKeyword},'%') </if>
 	</select>
 	
+	<!-- 차트 통계 / 판매량 7일 -->
 	 <select id="getDaysTotalAmount" resultType="map">
-        SELECT DATE(PROR_DATE) AS `date`, SUM(PROR_TOTAL_AMT) AS `total_amount`
-        FROM products_orders
-        GROUP BY DATE(PROR_DATE)
-        ORDER BY DATE(PROR_DATE) DESC
-        LIMIT 7
+        WITH RECURSIVE dates AS (
+		    SELECT CURDATE() AS `date`
+		    UNION ALL
+		    SELECT DATE_SUB(`date`, INTERVAL 1 DAY)
+		    FROM dates
+		    WHERE `date` > DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+		)
+		SELECT 
+		    d.`date`,
+		    IFNULL(SUM(po.PROR_TOTAL_AMT), 0) AS `total_amount`
+		FROM 
+		    dates d
+		LEFT JOIN 
+		    products_orders po 
+		ON 
+		    DATE(po.PROR_DATE) = d.`date`
+		GROUP BY 
+		    d.`date`
+		ORDER BY 
+		    d.`date`
     </select>
+	
+	<!-- 전체 7일  -->
+	<select id="info" resultType="com.happypaws.vo.InfoVO" >
+		WITH RECURSIVE dates AS (
+		    SELECT CURDATE() AS `date`
+		    UNION ALL
+		    SELECT DATE_SUB(`date`, INTERVAL 1 DAY)
+		    FROM dates
+		    WHERE `date` > DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+		)
+		SELECT 
+		    DATE_FORMAT(d.`date`, '%m-%d') AS `date`,
+		    IFNULL(SUM(po.PROR_TOTAL_AMT), 0) AS `total_amount`,
+		    (
+		        SELECT COUNT(*) 
+		        FROM community c 
+		        WHERE DATE(c.cmty_date) = d.`date`
+		    ) AS `community_count`,
+		    (
+		        SELECT COUNT(*) 
+		        FROM users u 
+		        WHERE DATE(u.us_date) = d.`date`
+		    ) AS `users_count`
+		FROM 
+		    dates d
+		LEFT JOIN 
+		    products_orders po 
+		ON 
+		    DATE(po.PROR_DATE) = d.`date`
+		GROUP BY 
+		    d.`date`
+		UNION ALL
+		SELECT 
+		    '합계' AS `date`, 
+		    SUM(IFNULL(po.PROR_TOTAL_AMT, 0)) AS `total_amount`,
+		    (
+		        SELECT COUNT(*) 
+		        FROM community c 
+		        WHERE DATE(c.cmty_date) BETWEEN DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND CURDATE()
+		    ) AS `community_count`,
+		    (
+		        SELECT COUNT(*) 
+		        FROM users u 
+		        WHERE DATE(u.us_date) BETWEEN DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND CURDATE()
+		    ) AS `users_count`
+		FROM 
+		    products_orders po
+		WHERE 
+		    DATE(po.PROR_DATE) BETWEEN DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND CURDATE()
+		ORDER BY 
+		    `date`
+	</select>
 	
 </mapper>

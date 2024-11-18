@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,145 +8,170 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>사용자 마이페이지-main</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #fefbf6;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; 
-    height: 100vh;
-    margin: 0;
-    padding-top: 10vh; 
+/* 전체 스타일 초기화 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #fefbf6;
+  overflow-x: hidden; /* 수평 스크롤 방지 */
+  font-size: 16px; /* 기본 폰트 크기 설정 */
+}
+
+/* 헤더 스타일 */
+header {
+  width: 100%;
+  max-width: 1200px;
+  background-color: #fdf8e5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  flex-wrap: wrap; /* 작은 화면에서 요소들이 줄바꿈 되도록 처리 */
+}
+
+/* 컨테이너 */
 .container {
-    width: 500px; 
-    background-color: #fdf8e5;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    padding: 50px;
-    margin: 80px auto;
+  width: 90%;
+  max-width: 500px;
+  background-color: #fdf8e5;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 2rem;
+  margin: 2rem auto;
 }
 
-.title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-}
-
+/* 프로필 탭 */
 .profile-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 70px;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  overflow-x: auto; /* 넘칠 경우 스크롤 허용 */
 }
 
 .profile-tabs button {
-    background-color: #ffffff;
-    border: 2px solid #000;
-    border-radius: 10px;
-    padding: 8px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    flex-grow: 1;
-    white-space: nowrap;
+  background-color: #ffffff;
+  border: 2px solid #000;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
+/* 프로필 사진 */
 .profile-picture {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background-color: #ccc;
-    margin: 0 auto 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 20vw;
+  height: 20vw;
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .profile-picture img {
-    max-width: 100%;
-    border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지 비율을 유지하며 컨테이너에 맞춤 */
+  border-radius: 50%;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
-}
-
-.form-group input {
-    width: calc(100% - 40px);
-    padding: 10px;
-    border: none;
-    border-bottom: 1px solid #f9d500;
-    background-color: transparent;
-    font-size: 14px;
-    outline: none;
-    text-align: left;
-    display: inline-block;
-}
-
+/* 수정 버튼 */
 .edit-button {
-    width: 80%;
-    background-color: #ffd600;
-    color: #000;
-    border: none;
-    border-radius: 20px;
-    padding: 12px;
-    font-size: 16px;
-    cursor: pointer;
-    margin: 10px 0;
+  width: 80%;
+  max-width: 300px;
+  background-color: #ffd600;
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  padding: 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin: 1rem auto;
 }
 
-.logout-button {
-    width: 60px;
-    background-color: #f0e68c;
-    color: #333;
-    border: none;
-    border-radius: 20px;
-    padding: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    margin: 10px 0;
-}
-
- /* 반응형 처리 */
-  @media (max-width: 768px) {
-    .profile-tabs {
-      gap: 8px;
-      justify-content: center;
-    }
-
-    .profile-tabs button {
-      flex-basis: 100%;
-      font-size: 12px;
-      padding: 6px 8px;
-    }
-
-    .profile-picture {
-      width: 100px;
-      height: 100px;
-    }
-
-    .edit-button {
-      font-size: 14px;
-      padding: 10px;
-    }
-
-    .logout-button {
-      font-size: 10px;
-      padding: 5px;
-    }
+/* 반응형 처리 */
+@media screen and (max-width: 768px) {
+  header {
+    padding: 0.5rem 1rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
   }
 
+  .container {
+    width: 95%; /* 화면에 맞게 확장 */
+    padding: 1.5rem;
+  }
+
+  .profile-tabs {
+    gap: 0.5rem;
+    flex-wrap: wrap; /* 버튼이 화면을 벗어나지 않도록 감싸기 */
+  }
+
+  .profile-tabs button {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .profile-picture {
+    width: 25vw;
+    height: 25vw;
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .edit-button {
+    width: 90%;
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile-picture {
+    width: 30vw;
+    height: 30vw;
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  .edit-button {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .profile-tabs button {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+
 </style>
+
 </head>
 <body>
 <%@include file="../../header.jsp" %>
@@ -161,14 +187,7 @@
         <button onclick="location.href='/myPosts'">내 등록 게시물</button>
     </div>
     <div class="profile-picture">
-        <img src="<c:choose>
-                      <c:when test="${user.us_profile == null}">
-                        /resources/profile_images/cutecat.jpg
-                      </c:when>
-                      <c:otherwise>
-                       ${user.us_profile}
-                      </c:otherwise>
-                  </c:choose>" alt="프로필 이미지">
+        <img src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="프로필 이미지">
     </div>
     <p style="font-weight: bold; color: #333; margin: 10px 0;">${user.us_nick}</p>
 

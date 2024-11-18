@@ -7,7 +7,7 @@ public class ProductPagingVO {
 	private int btnTotalCount; 
 	private int btnCurTotal = 5;  
 	private int rowTotalCount; 
-	private int rowSizePerPage = 6; 
+	private int rowSizePerPage = 9; 
 	private int rowFirst; 
 	private int rowLast;
 
@@ -35,7 +35,7 @@ public class ProductPagingVO {
         this.btnFirst = Math.max(1, this.btnLast - this.btnCurTotal + 1);
 
         // 데이터 인덱스 계산
-        this.rowFirst = (this.btnCur - 1) * this.rowSizePerPage;
+        this.rowFirst = Math.max(0, (this.btnCur - 1) * this.rowSizePerPage);
         this.rowLast = Math.min(this.rowFirst + this.rowSizePerPage - 1, this.rowTotalCount - 1);
     }
 

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -63,56 +64,18 @@
 							<th>회원가입 수</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>11-14</td>
-							<td>250,000</td>
-							<td>12</td>
-							<td>5</td>
-						</tr>
-						<tr>
-							<td>11-13</td>
-							<td>200,000</td>
-							<td>15</td>
-							<td>8</td>
-						</tr>
-						<tr>
-							<td>11-12</td>
-							<td>180,000</td>
-							<td>10</td>
-							<td>6</td>
-						</tr>
-						<tr>
-							<td>11-11</td>
-							<td>220,000</td>
-							<td>8</td>
-							<td>7</td>
-						</tr>
-						<tr>
-							<td>11-10</td>
-							<td>195,000</td>
-							<td>11</td>
-							<td>4</td>
-						</tr>
-						<tr>
-							<td>11-09</td>
-							<td>205,000</td>
-							<td>14</td>
-							<td>9</td>
-						</tr>
-						<tr>
-							<td>11-08</td>
-							<td>230,000</td>
-							<td>13</td>
-							<td>5</td>
-						</tr>
-						<tr>
-							<td>합계</td>
-							<td>1,480,000</td>
-							<td>83</td>
-							<td>44</td>
-						</tr>
-					</tbody>
+					<c:choose>
+		            	<c:when test="${ not empty info}">
+		            		<c:forEach var="info" items="${info}">
+		            			<tr>
+		            				<td>${info.date}</td>
+		            				<td><fmt:formatNumber value="${info.total_amount}"  pattern="#,###"/></td>
+		            				<td><fmt:formatNumber value="${info.community_count}"  pattern="#,###"/></td>
+		            				<td><fmt:formatNumber value="${info.users_count}"  pattern="#,###"/></td>
+		            			</tr>
+		            		</c:forEach>
+		            	</c:when>
+		            </c:choose>
 				</table>
 			</div>		
 		</div>

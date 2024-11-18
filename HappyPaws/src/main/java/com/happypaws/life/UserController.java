@@ -194,7 +194,7 @@ public class UserController {
         // 마이페이지로 이동
         return "/WEB-INF/mypage/us_mainmypage.jsp";
     }
-    
+    	
     @GetMapping("/us_myPage.do")
     public String us_myPage(HttpServletRequest request, Model m) {
         // 쿠키에서 사용자 정보를 추출합니다.

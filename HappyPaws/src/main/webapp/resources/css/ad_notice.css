@@ -40,6 +40,10 @@ th:nth-child(2),td:nth-child(2) {
     width: 25%;
 }
 
+.stats tr:last-child{
+	border-top: 2px solid black;
+}
+
 td:last-child{
     max-width: 0;
     padding: 0px;

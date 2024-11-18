@@ -13,6 +13,10 @@ main{
 
 }
 
+#c_category{
+	margin-left: 0px;
+}
+
 </style>
 <header>
 	<div class="admin-header-container">
@@ -22,13 +26,13 @@ main{
 	    </div>
 	    <div class="header-menu">
 	    	<a href="${pageContext.request.contextPath}/admin">메인</a>
-		    <a href="#">회원관리</a>
-		    <a href="#">상품관리</a>
+		    <a href="/userList.do">회원관리</a>
+		    <a href="/ad_manageProductList" class="ad_manage-link">상품관리</a>
 		    <a href="#">유기동물</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_notice_list" class="notice-link">공지사항</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_qna_list" class="qna-link" >Q&amp;A</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_cmty_list?cmty_category=all" class="cmty-link">커뮤니티</a>
-		    <a href="#">마이페이지</a>
+		    <a href="/ad_myPage.do">관리자 비밀번호변경</a>
 	    </div>
        	
        	<div id="session-info" data-user-id="${user.us_id}" style="display: none"></div>
@@ -61,8 +65,15 @@ main{
             		"</div>"
                 );
                 
-            } else if (window.location.href.includes("qna")) {
-                $(".qna-link").addClass("active");
+            } else if (window.location.href.includes("ad_manage")) {
+                $(".ad_manage-link").addClass("active");
+                $("aside").html(
+                		 "<h3>상품관리</h3>" +
+                	        "<ul>" +
+                	        "<li><a href='/ad_manageProductList'>상품 리스트</a></li>" +  // 링크 끝에 ">" 추가
+                	        "<li><a href='/ad_manageProductAdd'>상품 등록하기</a></li>" +  // 링크 끝에 ">" 추가
+                	        "</ul>"
+                );
             } else {
                 $(".home-link").addClass("active");
             }
@@ -81,6 +92,8 @@ main{
                     }
                 });
             }
+            
+            
             
         });                   
         

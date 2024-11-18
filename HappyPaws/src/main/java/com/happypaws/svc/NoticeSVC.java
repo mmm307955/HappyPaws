@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.happypaws.dao.NoticeDAO;
+import com.happypaws.vo.InfoVO;
 import com.happypaws.vo.NoticeVO;
 
 @Service
@@ -19,6 +20,12 @@ public class NoticeSVC {
 	public List<Map<String, Object>> getDaysTotalAmount(){
 		return dao.getDaysTotalAmount();
 	}
+	
+	//관리자 7일 데이터
+	public List<InfoVO> info() {
+		return dao.info();
+	}
+	
 	public int notice_insert(NoticeVO vo) {
 		return dao.notice_insert(vo);
 	}

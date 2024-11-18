@@ -189,11 +189,9 @@ options input[type="number"] {
 </style>
 </head>
 <body>
-
-	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
+	<jsp:include page="/WEB-INF/admin/admin_header.jsp" />
 	<main>
 		<div class="container">
-			<div class="title">상품 등록</div>
 			<form action="ad_manageProductAdd" method="POST" enctype="multipart/form-data" id="productAddForm">
 
 <!-- 				이미지 업로드 영역 -->

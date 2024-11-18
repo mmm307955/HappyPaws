@@ -9,9 +9,6 @@
 <title>회원관리 목록</title>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-    }
     #content {
         width: 100%;
         margin: 0 auto;
@@ -123,7 +120,7 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
 </script>
 </head>
 <body>
-<%@include file="../../header.jsp" %>
+<jsp:include page="/WEB-INF/admin/admin_header.jsp" />
 <main>
 <div id="content">
     <h3>회원관리 목록</h3>
@@ -212,7 +209,7 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
 </div>
 
 </main>
-<%@include file="../../footer.jsp" %>  
+
 </body>
 
 </html>

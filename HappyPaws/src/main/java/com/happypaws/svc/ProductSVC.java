@@ -1,9 +1,11 @@
 package com.happypaws.svc;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.happypaws.dao.ProductDAO;
 import com.happypaws.vo.ProductVO;
@@ -12,6 +14,8 @@ import com.happypaws.vo.ProductVO;
 public class ProductSVC {
 	@Autowired
 	private ProductDAO dao;
+	
+	private final String uploadPath = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/upload/";
 	
 	public int getProductListCount(ProductVO vo) {
 		return dao.getProductListCount(vo);
@@ -89,28 +93,133 @@ public class ProductSVC {
 	    return dao.checkCartDuplicate(vo);
 	}
 	
-	// 주문 등록
-	public int setProductOrder(ProductVO vo) {
-		return dao.setProductOrder(vo);
-	}
-
-	// 주문 상세 조회 
-	public ProductVO getProductOrder(int pror_no) {
-		return dao.getProductOrder(pror_no);
-	}
-
-	// 사용자별 주문 목록 조회
-	public List<ProductVO> getProductOrderList(String us_id) {
-		return dao.getProductOrderList(us_id);
-	}
-
-	// 주문 상태 업데이트
-	public int updateOrderStatus(ProductVO vo) {
-		return dao.updateOrderStatus(vo); 
-	}
+    // 주문 등록 (트랜잭션 처리를 위해 @Transactional 추가)
+    @Transactional
+    public int setProductOrder(ProductVO masterVO, List<ProductVO> orderItems) {
+        try {
+            // 1. 주문 마스터 등록
+            int result = dao.setProductOrder(masterVO);
+            if (result <= 0) return 0;
+            
+            // 2. 주문 상세 등록 및 재고 감소
+            for (ProductVO item : orderItems) {
+                item.setPror_master_id(masterVO.getPror_master_id());
+                item.setUs_id(masterVO.getUs_id());
+                
+                // 주문 상세 등록
+                result = dao.setProductOrderItem(item);
+                if (result <= 0) return 0;
+                
+                // 재고 감소
+                result = dao.updateProductStock(item);
+                if (result <= 0) return 0;
+                
+                // 상품 상태 업데이트
+                result = dao.updateProductStatus(item.getPr_id());
+                if (result <= 0) return 0;
+                
+                // 장바구니에서 주문된 상품 제거
+                dao.deleteCartAfterOrder(item);
+            }
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;  // 트랜잭션 롤백을 위해 예외 다시 throw
+        }
+    }
+    
+    // 주문 조회
+    public ProductVO getProductOrder(int prorMasterId) {
+        return dao.getProductOrder(prorMasterId);
+    }
+    
+    // 사용자별 주문 목록 조회
+    public List<ProductVO> getProductOrderList(ProductVO vo) {
+        return dao.getProductOrderList(vo);
+    }
+    
+    // 주문 상태 업데이트
+    public int updateOrderStatus(ProductVO vo) {
+        return dao.updateOrderStatus(vo);
+    }
 
 	// 주문 완료된 상품 장바구니에서 제거
 	public int deleteCartAfterOrder(ProductVO vo) {
 		return dao.deleteCartAfterOrder(vo);
 	}	
+	
+    // 구매 이력 확인 (리뷰 작성 권한 확인용)
+	public boolean canWriteReview(ProductVO vo) {
+	    // 구매 이력 확인 (paid 상태인 주문만)
+	    int purchaseCount = dao.checkPurchaseHistory(vo);
+	    // 리뷰 작성 이력 확인
+	    int reviewCount = dao.checkReviewHistory(vo);
+	    
+	    return purchaseCount > 0 && reviewCount == 0;
+	}
+	
+	public int checkPurchaseHistory(ProductVO vo) {
+	    return dao.checkPurchaseHistory(vo);
+	}
+	
+	public int checkReviewHistory(ProductVO vo) {
+	    return dao.checkReviewHistory(vo);
+	}
+	
+	public ProductVO getPurchaseInfo(ProductVO vo) {
+	    return dao.getPurchaseInfo(vo);
+	}
+	
+	public int getOrderListCount(ProductVO vo) {
+	    return dao.getOrderListCount(vo);
+	}
+	
+    // 주문 상품 목록 조회
+    public List<ProductVO> getOrderItems(int prorMasterId) {
+        return dao.getOrderItems(prorMasterId);
+    }
+    
+    public int getProductStock(int pr_id, String pr_opt_name) {
+        return dao.getProductStock(pr_id, pr_opt_name);
+    }
+    
+    public ProductVO getExistingReview(ProductVO vo) {
+        return dao.getExistingReview(vo);
+    }
+    
+    // 위시리스트 관련 메서드 추가
+    public int addToWishlist(ProductVO vo) {
+        return dao.addToWishlist(vo);
+    }
+
+    public int removeFromWishlist(ProductVO vo) {
+        return dao.removeFromWishlist(vo);
+    }
+
+    public int checkWishlistDuplicate(ProductVO vo) {
+        return dao.checkWishlistDuplicate(vo);
+    }
+
+    public List<ProductVO> getWishlist(ProductVO vo) {
+        List<ProductVO> wishlist = dao.getWishlist(vo);
+        // 이미지 존재 여부 체크
+        for (ProductVO item : wishlist) {
+            if (item.getPr_thumbnail() != null && !item.getPr_thumbnail().isEmpty()) {
+                String imagePath = uploadPath + item.getPr_thumbnail();
+                item.setImageExists(new File(imagePath).exists());
+            } else {
+                item.setImageExists(false);
+            }
+        }
+        return wishlist;
+    }
+
+    // 위시리스트 페이징을 위한 카운트 조회
+    public int getWishlistCount(String us_id) {
+        return dao.getWishlistCount(us_id);
+    }
+    
+    public boolean checkReviewExists(ProductVO vo) {
+        return dao.checkReviewExists(vo);
+    }
 }

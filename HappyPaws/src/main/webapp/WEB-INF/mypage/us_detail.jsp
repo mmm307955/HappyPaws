@@ -8,9 +8,6 @@
 <meta charset="UTF-8">
 <title>회원상세보기</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-    }
     #content {
         width: 80%;
         margin: 0 auto;
@@ -89,7 +86,7 @@
 </script>
 </head>
 <body>
-<%@include file="../../header.jsp" %>
+<jsp:include page="/WEB-INF/admin/admin_header.jsp" />
 <main>
 <div id="content">
     <h2>회원 상세 정보</h2>
@@ -135,6 +132,6 @@
 </div>
 
 </main>
-<%@include file="../../footer.jsp" %> 
+
 </body>
 </html>

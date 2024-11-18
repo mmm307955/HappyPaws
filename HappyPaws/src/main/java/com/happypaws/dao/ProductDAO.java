@@ -1,6 +1,8 @@
 package com.happypaws.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,24 +95,100 @@ public class ProductDAO {
     public int setProductOrder(ProductVO vo) {
         return mybatis.insert("ProductDAO.setProductOrder", vo);
     }
-
-    // 주문 상세 조회 
-    public ProductVO getProductOrder(int pror_no) {
-        return mybatis.selectOne("ProductDAO.getProductOrder", pror_no);
+    
+    // 주문 상세 등록
+    public int setProductOrderItem(ProductVO vo) {
+        return mybatis.insert("ProductDAO.setProductOrderItem", vo);
+    }
+    
+    // 주문 조회 (마스터 + 상세)
+    public ProductVO getProductOrder(int prorMasterId) {
+        List<ProductVO> results = mybatis.selectList("ProductDAO.getProductOrder", prorMasterId);
+        return results != null && !results.isEmpty() ? results.get(0) : null;
     }
 
     // 사용자별 주문 목록 조회
-    public List<ProductVO> getProductOrderList(String us_id) {
-        return mybatis.selectList("ProductDAO.getProductOrderList", us_id);
+    public List<ProductVO> getProductOrderList(ProductVO vo) {
+        return mybatis.selectList("ProductDAO.getProductOrderList", vo);
     }
 
     // 주문 상태 업데이트
     public int updateOrderStatus(ProductVO vo) {
-        return mybatis.update("ProductDAO.updateOrderStatus", vo); 
+        return mybatis.update("ProductDAO.updateOrderStatus", vo);
     }
 
     // 주문 완료된 상품 장바구니에서 제거
     public int deleteCartAfterOrder(ProductVO vo) {
         return mybatis.delete("ProductDAO.deleteCartAfterOrder", vo);
+    }
+    
+    // 상품 구매 이력 확인 (리뷰 작성 권한 확인용)
+    public int checkPurchaseHistory(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.checkPurchaseHistory", vo);
+    }
+
+    public int checkReviewHistory(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.checkReviewHistory", vo);
+    }
+    
+    public ProductVO getPurchaseInfo(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.getPurchaseInfo", vo);
+    }
+    
+    public int getOrderListCount(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.getOrderListCount", vo);
+    }
+    
+    public List<ProductVO> getOrderItems(int prorMasterId) {
+        return mybatis.selectList("ProductDAO.getOrderItems", prorMasterId);
+    }
+    
+    public int updateProductStock(ProductVO vo) {
+        return mybatis.update("ProductDAO.updateProductStock", vo);
+    }
+
+    public int updateProductStatus(int pr_id) {
+        return mybatis.update("ProductDAO.updateProductStatus", pr_id);
+    }
+    
+    public int getProductStock(int pr_id, String pr_opt_name) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("pr_id", pr_id);
+        params.put("pr_opt_name", pr_opt_name);
+        return mybatis.selectOne("ProductDAO.getProductStock", params);
+    }
+    
+    public ProductVO getExistingReview(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.getExistingReview", vo);
+    }
+    
+    // 위시리스트 추가
+    public int addToWishlist(ProductVO vo) {
+        return mybatis.insert("ProductDAO.addToWishlist", vo);
+    }
+
+    // 위시리스트 삭제
+    public int removeFromWishlist(ProductVO vo) {
+        return mybatis.delete("ProductDAO.removeFromWishlist", vo);
+    }
+
+    // 위시리스트 중복 체크
+    public int checkWishlistDuplicate(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.checkWishlistDuplicate", vo);
+    }
+
+    // 위시리스트 조회
+    public List<ProductVO> getWishlist(ProductVO vo) {
+        return mybatis.selectList("ProductDAO.getWishlist", vo);
+    }
+
+    // 위시리스트 카운트 조회
+    public int getWishlistCount(String us_id) {
+        return mybatis.selectOne("ProductDAO.getWishlistCount", us_id);
+    }
+    
+    public boolean checkReviewExists(ProductVO vo) {
+        int count = mybatis.selectOne("ProductDAO.checkReviewExists", vo);
+        return count > 0;
     }
 }

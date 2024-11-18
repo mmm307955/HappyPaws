@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내정보 수정</title>
-    <style>
+   <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -118,7 +118,7 @@ input[name="us_password"] {
         .zipcode-container {
             display: flex;
             align-items: center;
-             gap: 40px;
+             gap: 18px;
         }
         .zipcode-container button {
             padding: 8px 12px;
@@ -128,7 +128,7 @@ input[name="us_password"] {
             background-color: #e0e0e0;
             border: 1px solid #ddd;
             cursor: pointer;
-             margin-left:50px;
+             margin-left: 50px;
         }
        .button-container {
     display: flex;
@@ -162,7 +162,7 @@ input[name="us_password"] {
         }
         
           /* 반응형 처리 */
-        @media (max-width: 768px) {
+        @media (max-width: 576px) {
             .container {
                 padding: 15px;
                 margin: 10px;
@@ -194,6 +194,8 @@ input[name="us_password"] {
             }
         }
     </style>
+
+
     <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
     <script>
         function confirmUpdate() {
@@ -248,14 +250,7 @@ input[name="us_password"] {
             </c:if>
             <form action="/us_myPage.do" method="post" enctype="multipart/form-data">
               <div class="profile-container">
-    <c:choose>
-        <c:when test="${not empty user.us_profile}">
-            <img id="profilePreview" src="<c:url value='${user.us_profile}' />" alt="프로필 사진">
-        </c:when>
-        <c:otherwise>
-            <img id="profilePreview" src="<c:url value='/resources/profile_images/cutecat.jpg' />" alt="기본 프로필 사진">
-        </c:otherwise>
-    </c:choose>
+  			<img id="profilePreview" src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="프로필 이미지">
     
     <label class="add-photo-btn" for="profileImage">사진 추가</label>
     <input type="file" id="profileImage" class="file-input" name="us_profile_file" accept="image/*" onchange="previewImage(event)">
@@ -276,7 +271,7 @@ input[name="us_password"] {
                             <div class="password-container">
                                 <input type="password" value="******" readonly>
 <!--                                 <input type="password" name="us_password" value="********" readonly> -->
-                                <button type="button" class="change-password-btn" onclick="location.href='/ad_myPage.do'">비밀번호 변경</button>
+                                <button type="button" class="change-password-btn" onclick="location.href='/us_myPage2.do'">비밀번호 변경</button>
                             </div>
                         </td>
                     </tr>

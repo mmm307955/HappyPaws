@@ -142,6 +142,10 @@ public class AuthController {
 	@GetMapping("/adminLogin")
 	public String adminLogin(HttpServletRequest request) {
 		if (JwtCookieUtil.extractJwtFromCookie(request) != null) {
+			if (JwtCookieUtil.extractJwtFromCookie(request).getUs_id().equals("admin")) {
+				return "redirect:/admin";
+			}
+			
 			return "redirect:/";
 		}
 
@@ -162,7 +166,7 @@ public class AuthController {
 		} else if (Argon2Util.verifyPassword(admin.getUs_password(), password)) {
 			admin.setUs_profile("/resources/profile_images/" + admin.getUs_profile());
 			JwtCookieUtil.createJwtCookie(response, admin);
-			return "redirect:/ad_myPage.do";
+			return "redirect:/admin";
 		} else {
 			model.addAttribute("error", "password");
 		}

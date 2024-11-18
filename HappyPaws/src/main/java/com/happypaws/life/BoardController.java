@@ -38,6 +38,7 @@ public class BoardController {
 	@Autowired
 	private QnaSVC qna_SVC;
 	
+	
 	//관리자 인덱스이동
 	@RequestMapping(value="/admin",method = RequestMethod.GET)
 	public String admin_index(NoticeVO vo , Model model , PagingVO pv , QnaVO qnavo , QnaCmtVO cmtvo) {
@@ -48,6 +49,8 @@ public class BoardController {
 		
         model.addAttribute("getDaysTotalAmount", getDaysTotalAmount);
 		
+        //관리자 7일 통계
+        model.addAttribute("info",notic_SVC.info());
         
 		//공지사항
 		String cntPerPage = "6";

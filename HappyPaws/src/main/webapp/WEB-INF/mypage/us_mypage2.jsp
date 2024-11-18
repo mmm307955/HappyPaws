@@ -77,7 +77,7 @@
     </script>
 </head>
 <body>
-<jsp:include page="/WEB-INF/admin/admin_header.jsp" />
+<%@include file="../../header.jsp" %>
     <main>
     <h2>비밀번호 변경</h2>
     <div id="content">
@@ -123,5 +123,6 @@
         <a href="logout" class="logout-btn">로그아웃</a>
     </div>
     </main>
+  <%@include file="../../footer.jsp" %>  
 </body>
 </html>

@@ -9,6 +9,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.happypaws.vo.InfoVO;
 import com.happypaws.vo.NoticeVO;
 
 @Repository
@@ -20,6 +21,11 @@ public class NoticeDAO {
 	//관리자 통계
 	public List<Map<String, Object>> getDaysTotalAmount(){
 		return mybatis.selectList("NoticeDAO.getDaysTotalAmount");
+	}
+	
+	//관리자 7일 데이터
+	public List<InfoVO> info() {
+		return mybatis.selectList("NoticeDAO.info");
 	}
 	
 	//공지사항 -글쓰기

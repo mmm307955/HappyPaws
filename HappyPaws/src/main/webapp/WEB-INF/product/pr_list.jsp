@@ -277,17 +277,26 @@
 		.detail-page-item.active .detail-page-link {
 		    color: #fff;
 		}
+		
+		.wishlist-btn {
+		    background: #6c757d;
+		    color: white;
+		}
+		
+		.wishlist-btn:hover {
+		    background: #495057;
+		}
+		
+		.cart-btn {
+		    background: #5e5a14;
+		    color: white;
+		}
+		
+		.cart-btn:hover {
+		    background: #454311;
+		}
     </style>
 	<script>
-	    function validateSearch() {
-	        var keyword = document.getElementsByName('searchKeyword')[0].value.trim();
-	        if (keyword === '') {
-	            alert('검색어를 입력해주세요.');
-	            return false;
-	        }
-	        return true;
-	    }
-	
 	    $(document).ready(function() {
 	        // search-icon 클릭 이벤트 추가
 	        $('.search-button').click(function(e) {
@@ -300,6 +309,64 @@
 	                return validateSearch();
 	            }
 	        });
+	        
+	        // 위시리스트 버튼 클릭 이벤트
+	        $('.product-button.wishlist-btn').click(function(e) {
+	            e.preventDefault();
+	            
+	            // 로그인 체크
+	            if ('${user}' === '') {
+	                if (confirm('로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?')) {
+	                    window.location.href = '${pageContext.request.contextPath}/auth/login';
+	                }
+	                return;
+	            }
+	            
+	            const $product = $(this).closest('.product-card');
+	            const productId = $product.data('product-id'); // 상품 ID 가져오기
+	            const $thumbnail = $product.find('.thumbnail-item');
+	            
+	            // 썸네일 경로 가져오기
+	            let thumbnailPath = '';
+	            if ($thumbnail.length > 0) {
+	                // 이미지가 있는 경우
+	                thumbnailPath = $thumbnail.attr('src').split('/').pop(); // 파일명만 추출
+	            } else {
+	                // 이미지가 없는 경우 기본 이미지 설정
+	                thumbnailPath = 'no-image.jpg';
+	            }
+	            
+	            const productData = {
+	                pr_id: productId,
+	                pr_name: $product.find('.product-title').text().trim(),
+	                pr_thumbnail: thumbnailPath,
+	                pr_opt_name: "기본", // 리스트에서는 기본 옵션으로 설정
+	                pr_opt_price: parseInt($product.find('.product-price').text().replace(/[^0-9]/g, ''))
+	            };
+	            
+	            $.ajax({
+	                url: '${pageContext.request.contextPath}/product/add_to_wishlist',
+	                type: 'POST',
+	                contentType: 'application/json',
+	                data: JSON.stringify(productData),
+	                success: function(response) {
+	                    if (response === 'success') {
+	                        alert('위시리스트에 추가되었습니다.');
+	                    }
+	                },
+	                error: function(xhr) {
+	                    if (xhr.status === 401) {
+	                        if (confirm('로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?')) {
+	                            window.location.href = '${pageContext.request.contextPath}/auth/login';
+	                        }
+	                    } else if (xhr.status === 409) {
+	                        alert('이미 위시리스트에 있는 상품입니다.');
+	                    } else {
+	                        alert('위시리스트 추가 중 오류가 발생했습니다.');
+	                    }
+	                }
+	            });
+	        });
 	    });
 	</script>
 </head>
@@ -308,46 +375,55 @@
     <section>
 		<div class="top">
 		    <div class="top-controls">
-		        <button class="control-button">주문내역</button>
-		        <a href="pr_cart" class="control-button" style="text-decoration: none;">장바구니</a>
+		        <a href="/product/pr_order_list" class="control-button">주문내역/위시리스트</a>
+		        <a href="/product/pr_cart" class="control-button">장바구니</a>
 		    </div>
 		</div>
     </section>
     <main>
 		<div class="search-container">
-		    <form action="pr_list" method="get" onsubmit="return validateSearch()">
+		    <form action="/product/pr_list" method="get" onsubmit="return validateSearch()">
 		        <input type="text" name="searchKeyword" class="search-input" placeholder="검색어를 입력해주세요." value="${searchKeyword}">
 		        <input type="hidden" name="sortType" value="${sortType}">
+		        <c:if test="${not empty category}">
+		            <input type="hidden" name="category" value="${category}">
+		        </c:if>
 		        <button type="submit" class="search-button" style="border: none; background: none; cursor: pointer;">
 		            <span class="search-icon">🔍</span>
 		        </button>
 		    </form>
 		</div>
 		<nav class="nav-menu">
-		    <a href="pr_list" class="${empty category ? 'active' : ''}">전체보기</a>
-		    <a href="pr_list?category=식품" class="${category eq '식품' ? 'active' : ''}">식품</a>
-		    <a href="pr_list?category=위생" class="${category eq '위생' ? 'active' : ''}">위생</a>
-		    <a href="pr_list?category=미용" class="${category eq '미용' ? 'active' : ''}">미용</a>
-		    <a href="pr_list?category=의류" class="${category eq '의류' ? 'active' : ''}">의류</a>
-		    <a href="pr_list?category=놀이" class="${category eq '놀이' ? 'active' : ''}">놀이</a>
+		    <a href="/product/pr_list?sortType=${sortType}${not empty searchKeyword ? '&searchKeyword='.concat(searchKeyword) : ''}" 
+		       class="${empty category ? 'active' : ''}">전체보기</a>
+		    <a href="/product/pr_list?category=식품&sortType=${sortType}${not empty searchKeyword ? '&searchKeyword='.concat(searchKeyword) : ''}" 
+		       class="${category eq '식품' ? 'active' : ''}">식품</a>
+		    <a href="/product/pr_list?category=위생&sortType=${sortType}${not empty searchKeyword ? '&searchKeyword='.concat(searchKeyword) : ''}" 
+		       class="${category eq '위생' ? 'active' : ''}">위생</a>
+		    <a href="/product/pr_list?category=미용&sortType=${sortType}${not empty searchKeyword ? '&searchKeyword='.concat(searchKeyword) : ''}" 
+		       class="${category eq '미용' ? 'active' : ''}">미용</a>
+		    <a href="/product/pr_list?category=의류&sortType=${sortType}${not empty searchKeyword ? '&searchKeyword='.concat(searchKeyword) : ''}" 
+		       class="${category eq '의류' ? 'active' : ''}">의류</a>
+		    <a href="/product/pr_list?category=놀이&sortType=${sortType}${not empty searchKeyword ? '&searchKeyword='.concat(searchKeyword) : ''}" 
+		       class="${category eq '놀이' ? 'active' : ''}">놀이</a>
 		</nav>
 		<div class="filter-container">
 		    <form>
-		        <select class="filter-select" onchange="location.href='pr_list?searchKeyword=${searchKeyword}&sortType=' + this.value">
-		            <option value="latest" ${sortType == 'latest' ? 'selected' : ''}>최신순</option>
-		            <option value="rating" ${sortType == 'rating' ? 'selected' : ''}>평점순</option>
-		            <option value="price_low" ${sortType == 'price_low' ? 'selected' : ''}>낮은가격순</option>
-		            <option value="price_high" ${sortType == 'price_high' ? 'selected' : ''}>높은가격순</option>
-		        </select>
+				<select class="filter-select" onchange="location.href='/product/pr_list?searchKeyword=${searchKeyword}${not empty category ? '&category='.concat(category) : ''}&sortType=' + this.value">
+				    <option value="latest" ${sortType == 'latest' ? 'selected' : ''}>최신순</option>
+				    <option value="rating" ${sortType == 'rating' ? 'selected' : ''}>평점순</option>
+				    <option value="price_low" ${sortType == 'price_low' ? 'selected' : ''}>낮은가격순</option>
+				    <option value="price_high" ${sortType == 'price_high' ? 'selected' : ''}>높은가격순</option>
+				</select>
 		    </form>
 		</div>
         <ul class="product-grid">
         	<c:forEach var="plist" items="${productList}">
-	            <li class="product-card">
-	                <a href="pr_detail?pr_id=${plist.pr_id}" class="product-top">
+	            <li class="product-card" data-product-id="${plist.pr_id}">
+	                <a href="/product/pr_detail?pr_id=${plist.pr_id}" class="product-top">
 		                <div class="product-thumbnail" data-thumbnail="${plist.pr_thumbnail}">
 	               			<c:if test="${plist.imageExists}">
-							    <img class="thumbnail-item" src="${pageContext.request.contextPath}/getImage/${plist.pr_thumbnail}" 
+							    <img class="thumbnail-item" src="${pageContext.request.contextPath}/product/getImage/${plist.pr_thumbnail}" 
 							    alt="${plist.pr_thumbnail}">
 	                		</c:if>
 						    <c:if test="${!plist.imageExists}">
@@ -360,10 +436,10 @@
 	                    </div>
 	                </a>
 					<div class="product-bottom">
-					    <a href="pr_detail?pr_id=${plist.pr_id}&tab=reviews" class="rating-link">
+					    <a href="/product/pr_detail?pr_id=${plist.pr_id}&tab=reviews" class="rating-link">
 					        <div class="product-rating">★<fmt:formatNumber value="${plist.avgRating}" pattern="#.#"/> 리뷰 ${plist.reviewCount}</div>
 					    </a>
-					    <a href="pr_cart" class="product-button">장바구니</a>
+					    <button class="product-button wishlist-btn">위시리스트</button>
 					</div>
 	            </li>
             </c:forEach>
@@ -371,10 +447,10 @@
 		<div class="detail-pagination">
 		    <c:if test="${paging.btnCur > 1}">
 		        <div class="detail-page-item">
-		            <a class="detail-page-link" href="pr_list?btnCur=1&searchKeyword=${searchKeyword}&sortType=${sortType}">＜＜</a>
+		            <a class="detail-page-link" href="/product/pr_list?btnCur=1&searchKeyword=${searchKeyword}&sortType=${sortType}">＜＜</a>
 		        </div>
 		        <div class="detail-page-item">
-		            <a class="detail-page-link" href="pr_list?btnCur=${paging.btnCur-1}&searchKeyword=${searchKeyword}&sortType=${sortType}">＜</a>
+		            <a class="detail-page-link" href="/product/pr_list?btnCur=${paging.btnCur-1}&searchKeyword=${searchKeyword}&sortType=${sortType}">＜</a>
 		        </div>
 		    </c:if>
 		    <c:forEach var="i" begin="${paging.btnFirst}" end="${paging.btnLast}" step="1">
@@ -386,17 +462,17 @@
 		            </c:when>
 		            <c:otherwise>
 		                <div class="detail-page-item">
-		                    <a class="detail-page-link" href="pr_list?btnCur=${i}&searchKeyword=${searchKeyword}&sortType=${sortType}">${i}</a>
+		                    <a class="detail-page-link" href="/product/pr_list?btnCur=${i}&searchKeyword=${searchKeyword}&sortType=${sortType}">${i}</a>
 		                </div>
 		            </c:otherwise>
 		        </c:choose>
 		    </c:forEach>
 		    <c:if test="${paging.btnCur < paging.btnTotalCount}">
 		        <div class="detail-page-item">
-		            <a class="detail-page-link" href="pr_list?btnCur=${paging.btnCur+1}&searchKeyword=${searchKeyword}&sortType=${sortType}">＞</a>
+		            <a class="detail-page-link" href="/product/pr_list?btnCur=${paging.btnCur+1}&searchKeyword=${searchKeyword}&sortType=${sortType}">＞</a>
 		        </div>
 		        <div class="detail-page-item">
-		            <a class="detail-page-link" href="pr_list?btnCur=${paging.btnTotalCount}&searchKeyword=${searchKeyword}&sortType=${sortType}">＞＞</a>
+		            <a class="detail-page-link" href="/product/pr_list?btnCur=${paging.btnTotalCount}&searchKeyword=${searchKeyword}&sortType=${sortType}">＞＞</a>
 		        </div>
 		    </c:if>
 		</div>
