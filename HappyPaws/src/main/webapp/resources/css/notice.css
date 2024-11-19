@@ -228,7 +228,7 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 @media (max-width: 768px) {
     .n_list table {
-        width: 100%;
+        width: 96%;
     }
     .n_list table th:nth-child(3) , .n_list table td:nth-child(3) {
         display: none;
@@ -430,17 +430,18 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .comment-id {
-    font-size: 15px;
+    font-size: 13px;
     color: #555;
     display: flex;
     align-items: center;
 }
 
 .comment-date {
-    width: 150px; /* 날짜 너비 설정 */
-    text-align: right; /* 날짜를 오른쪽 정렬 */
-    font-size: 14px;
+    width: inherit; /* 날짜 너비 설정 */
+    text-align: left; /* 날짜를 왼쪽 정렬 */
+    font-size: 12px;
     color: #888;
+    margin-left: 5px;
 
 }
 
@@ -539,6 +540,11 @@ input[type="search"]::-webkit-search-results-decoration {
     border-radius: 10px;
 }
 
+.comment-header .c_comment:hover{
+    color: #ffcc00;
+    cursor: pointer;
+}
+
 /* 게시글 스타일 */
 .cmty_view {
     display: flex;                /* Flexbox로 텍스트와 이미지를 좌우로 배치 */
@@ -615,6 +621,51 @@ input[type="search"]::-webkit-search-results-decoration {
     object-fit: cover;            /* 이미지 비율을 유지하면서 맞추기 */
 }
 
+
+/*테스트 댓글 반응*/
+.cmt_abs{
+    position: absolute;
+    right: 0px;
+    background-color: #fff;
+}
+.comment-actions {
+    position: relative;
+    display: inline-block;
+}
+
+.action-toggle {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.action-menu {
+    width: 81px;
+    position: absolute;
+    top: 25px;
+    left: -45px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    z-index: 100;
+    display: none;
+}
+
+.action-menu span {
+    display: inline-block;
+    margin: 5px 0;
+    cursor: pointer;
+    color: #333;
+    white-space: nowrap;
+}
+
+.action-menu span:hover {
+    text-decoration: underline;
+    color: #ffcc00;
+}
 
 @media (max-width: 768px) {
     .cmty_view .firstimg {

@@ -21,39 +21,42 @@
     .search-bar {
         display: flex;
         justify-content: center;
-        margin-top: 15px; 
-        margin-bottom: 15px; 
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
-    .search-bar select, .search-bar input[type="text"] {
-    padding: 5px;
-    margin-right: 10px;
-    font-size: 1em;
-    border: 2px solid #FFD700; 
-    border-radius: 20px; 
-    outline: none; 
-    background-color: white; 
-}
 
-.search-bar input[type="submit"] {
-    padding: 5px 10px;
-    font-size: 1em;
-    border: 2px solid #FFD700; 
-    border-radius: 20px; 
-    background-color: white; 
-    cursor: pointer; 
-}
+    .search-bar select,
+    .search-bar input[type="search"],
+    .search-bar input[type="submit"] {
+        padding: 7px 20px;
+        margin-right: 10px;
+        font-size: 1em;
+        border: 2px solid #FFD700; 
+        border-radius: 20px; 
+        outline: none; 
+        background-color: white; 
+        cursor: pointer; 
+        box-shadow: none;
+        height: 40px;
+    }
 
-.search-bar select {
-    border: 2px solid #FFD700; 
-    border-radius: 20px; 
-    outline: none; 
-    background-color: white; 
-}
+    .search-bar select {
+        padding: 7px 40px;
+        margin-right: 10px;
+        font-size: 1em;
+        border: 2px solid #FFD700;
+        border-radius: 20px;
+        outline: none;
+        background-color: white;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: auto;
+    }
 
 
       table {
         width: 100%;
-       
         margin: 0 auto;
         border-collapse: collapse;
         margin-top: 10px;
@@ -130,34 +133,31 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
     <c:set var="endIndex" value="${startIndex + itemsPerPage}" scope="request"/>
     
 
-        <table>
-        <tr>
-        <th><input type="checkbox" onclick="toggleSelectAll(this)"></th>
-            <th>번호</th>
-            <th>아이디</th>
-            <th>이름</th>
-            <th>닉네임</th>
-            <th>이메일</th>
-            <th>주소</th>
-            <th>가입일</th>
-        </tr>
-        <c:forEach var="user" items="${userList}" varStatus="status">
-        <c:if test="${status.index >= startIndex && status.index < endIndex}">
-        
-         <tr>             
-              <td><input type="checkbox" name="userIds" value="${user.us_id}onclick="event.stopPropagation();"></td>
-                 <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${status.index + 1}</td>
-        <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_id}</td>
-        <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_name}</td>
-        <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_nick}</td>
-        <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_email}</td>
-        <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_address}</td>
-        <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_date}</td>
+       <table>
+    <tr>
+        <th>번호</th>
+        <th>아이디</th>
+        <th>이름</th>
+        <th>닉네임</th>
+        <th>이메일</th>
+        <th>주소</th>
+        <th>가입일</th>
     </tr>
-    </c:if>
-</c:forEach>
+    <c:forEach var="user" items="${userList}" varStatus="status">
+        <c:if test="${status.index >= startIndex && status.index < endIndex}">
+            <tr>
+                <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${status.index + 1}</td>
+                <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_id}</td>
+                <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_name}</td>
+                <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_nick}</td>
+                <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_email}</td>
+                <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_address}</td>
+                <td onclick="location.href='userDetail.do?us_id=${user.us_id}'">${user.us_date}</td>
+            </tr>
+        </c:if>
+    </c:forEach>
+</table>
 
-    </table>
     
       <div class="search-bar">
         <form action="userList.do" method="get">
@@ -166,7 +166,7 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
                 <option value="us_name">이름</option>
                 <option value="us_email">이메일</option>
             </select>
-            <input type="text" name="searchKeyword" placeholder="검색어 입력">
+            <input type="search" name="searchKeyword" placeholder="검색어 입력">
             <input type="submit" value="조회">
         </form>
     </div>

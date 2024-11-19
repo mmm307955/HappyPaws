@@ -15,6 +15,7 @@
 * {
 	box-sizing: border-box;
 	text-align: center;
+	vertical-align: middle;
 }
 
 body {
@@ -125,6 +126,10 @@ body {
         text-align: center;
     }
     
+    .n_seachform{
+    border-bottom:none;
+    }
+    
      .product-search input[type="search"] {
         padding: 12px;
         font-size: 16px;
@@ -233,8 +238,10 @@ td {
         justify-content: center;
         gap: 10px;
         margin-top: 15px;
-        margin-bottom: 25px;
-    }
+        margin-bottom: 0;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 60px;
+     } 
     
 
     .category button {
@@ -273,6 +280,8 @@ td {
 	.n_seachform {
 	border-bottom : transparent;
 	}
+	
+
     
     
    
@@ -496,21 +505,16 @@ td {
 							<li class="page-item active"><a class="page-link">${i}</a></li>
 						</c:when>
 						<c:otherwise>
-							<li class="page-item">
-<!-- 							<a class="page-link"  -->
-<%-- 							href="ad_manageProductList?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">${i}</a> --%>
-								<li class="page-item"><a class="page-link" 
+							<li class="page-item"><a class="page-link" 
 								href="ad_manageProductList?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">${i}</a></li>
-
-								
-								</li>
+							</li>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
 				<c:if
 					test="${paging.nowPage < paging.lastBtn  && paging.lastBtn > paging.viewBtnCnt}">
-					<li class="page-item"><li class="page-item"><a class="page-link"
-    href="ad_manageProductList?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">이후</a></li></li>
+					<a class="page-link"
+    href="ad_manageProductList?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}">이후</a>
 				</c:if>
 			</ul>
 

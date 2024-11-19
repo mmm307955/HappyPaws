@@ -38,7 +38,7 @@ public class JwtCookieUtil {
 
 		Cookie jwtCookie = new Cookie(TOKEN_NAME, token);
 		jwtCookie.setHttpOnly(true);
-		jwtCookie.setSecure(true);
+		jwtCookie.setSecure(false);
 		jwtCookie.setMaxAge((int) EXPIRATION_TIME / 1000);
 		jwtCookie.setPath("/");
 		response.addCookie(jwtCookie);

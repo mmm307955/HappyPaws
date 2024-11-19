@@ -115,25 +115,39 @@ input[name="us_password"] {
             cursor: pointer;
             font-size: 12px;
         }
-        .zipcode-container {
-            display: flex;
-            align-items: center;
-             gap: 18px;
-        }
-        .zipcode-container button {
-            padding: 8px 12px;
-            font-size: 12px;
-            margin-right: 0px;
-            border-radius: 5px;
-            background-color: #e0e0e0;
-            border: 1px solid #ddd;
-            cursor: pointer;
-             margin-left: 50px;
-        }
+   .zipcode-container {
+    display: flex;
+    align-items: center;
+    width: 100%; 
+     gap: 0px;
+}
+
+.zipcode-container input[type="text"] {
+    width: 100%; 
+    height: 40px; 
+    padding: 8px; 
+    font-size: 14px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
+    margin-left: 0; 
+}
+
+.zipcode-btn {
+    padding: 5px 10px; 
+    font-size: 14px; 
+    border-radius: 5px;
+    background-color: #e0e0e0;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    height: 40px; 
+    box-sizing: border-box; 
+}
+
        .button-container {
     display: flex;
     justify-content: center; 
-    gap: 15px;
+    gap: 17px;
     margin-top: 20px;
 }
 
@@ -209,14 +223,25 @@ input[name="us_password"] {
             };
             reader.readAsDataURL(event.target.files[0]);
         }
-        function openZipSearch() {
+        function openZipcodeSearch() {
             new daum.Postcode({
                 oncomplete: function(data) {
-                    document.getElementById('postcode').value = data.zonecode;
-                    document.getElementById('address').value = data.address;
+                    var fullAddr = data.address; 
+                    var extraAddr = ''; 
+                    
+                    if (data.addressType === 'R') { 
+                        if (data.bname !== '') extraAddr += data.bname;
+                        if (data.buildingName !== '') extraAddr += (extraAddr !== '' ? ', ' : '') + data.buildingName;
+                        fullAddr += (extraAddr !== '' ? ' (' + extraAddr + ')' : '');
+                    }
+
+                    // 입력 필드에 값 설정
+                    document.getElementById('postcode').value = data.zonecode; 
+                    document.getElementById('address').value = fullAddr; 
                 }
             }).open();
         }
+
         
         function validateEmail(email) {
            
@@ -287,14 +312,18 @@ input[name="us_password"] {
                         <td class="label">이메일:</td>
                         <td class="input-field"><input type="email" name="us_email" value="${user.us_email}" required></td>
                     </tr>
-                    <tr>
-                        <td colspan="2">
-                            <div class="zipcode-container">
-                                <button type="button" onclick="openZipSearch()">우편번호 찾기</button>
-                                <input type="text" id="postcode" name="postcode" readonly value="${user.postcode}">
-                            </div>
-                        </td>
-                    </tr>
+            <tr>
+    <td class="label">
+        <button type="button" class="zipcode-btn" onclick="openZipcodeSearch()">우편번호 찾기</button>
+    </td>
+    <td class="input-field">
+        <div class="zipcode-container">
+            <input type="text" id="postcode" name="postcode" readonly value="${user.postcode}">
+        </div>
+    </td>
+</tr>
+
+
                     <tr>
                         <td class="label">주소:</td>
                         <td class="input-field"><input type="text" id="address" name="us_address" value="${user.us_address}" required></td>

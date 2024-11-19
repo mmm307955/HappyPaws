@@ -32,7 +32,7 @@
             height: 120px;
             border-radius: 50%;
             background-color: #ddd;
-           background-image: url('<c:url value="/resources/profile_images/cutecat.jpg"/>'); /* 기본 이미지 경로 */
+           background-image: url('<c:url value="/resources/profile_images/cutecat.jpg"/>');
 
             background-size: cover;
             background-position: center;
@@ -60,7 +60,7 @@
         
           input[name="us_id"],
     input[name="us_password"] {
-        background-color: #e0e0e0; /* 취소 버튼 배경색과 동일하게 설정 */
+        background-color: #e0e0e0;
     }
         
         .submit-btn {
@@ -142,7 +142,7 @@
                 </tr>
                 <tr>
                     <td>비밀번호:</td>
-                    <td><input type="password" name="us_password" value="${user.us_password}" readonly></td>
+                    <td><input type="password" value="******" readonly></td>
                 </tr>
                 <tr>
                     <td>이름:</td>

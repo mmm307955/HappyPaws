@@ -22,37 +22,47 @@ main{
 	<div class="admin-header-container">
 		<!-- 로고 -->
 		<div class="logo">
-			<a href="/admin"><img src="${pageContext.request.contextPath}/resources/images/HappyPawsLogo.png" alt="로고"/></a>
+			<a href="/"><img src="${pageContext.request.contextPath}/resources/images/HappyPawsLogo.png" alt="로고"/></a>
 	    </div>
 	    <div class="header-menu">
-	    	<a href="${pageContext.request.contextPath}/admin">메인</a>
+	    	<a href="${pageContext.request.contextPath}/admin" class="main-link">메인</a>
 		    <a href="/userList.do" class="user-link">회원관리</a>
 		    <a href="/ad_manageProductList" class="ad_manage-link">상품관리</a>
 		    <a href="#">유기동물</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_notice_list" class="notice-link">공지사항</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_qna_list" class="qna-link" >Q&amp;A</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_cmty_list?cmty_category=all" class="cmty-link">커뮤니티</a>
-		    <a href="/ad_myPage.do">관리자 비밀번호변경</a>
+		    <a href="/ad_myPage.do" class="mypage-link">관리자 비밀번호변경</a>
 	    </div>
        	
        	<div id="session-info" data-user-id="${user.us_id}" style="display: none"></div>
+       	
+       	<div class="header-login-div" style="margin-right: 50px;">
+			<img src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/cutecat.jpg';" alt="이미지를 불러오는데 실패하였습니다.">
+			<b>${user.us_nick}님</b>
+			<a href="/auth/logout" class="header-login-link logout">로그아웃</a>
+		</div>
+		
    </div>
 </header>
 <aside>
 	<h3>메인</h3>
 	 <script>
         $(document).ready(function() {
-            if (window.location.href.includes("notice_")) {
+        	if (window.location.href.endsWith("/admin")){
+            	$(".main-link").addClass("active");
+            }
+        	else if (window.location.href.includes("/notice_")) {
                 $(".notice-link").addClass("active");
                 $("aside").html(
                 	'<h3>공지사항</h3>'
                 );
-            } else if (window.location.href.includes("qna_")) {
+            } else if (window.location.href.includes("/qna_")) {
                 $(".qna-link").addClass("active");
                 $("aside").html(
                     '<h3>Q&amp;A</h3>'
                 );
-            } else if (window.location.href.includes("cmty_")) {
+            } else if (window.location.href.includes("/cmty_")) {
                 $(".cmty-link").addClass("active");
                 $("aside").html(
                     "<h3>커뮤니티</h3>"+
@@ -65,7 +75,7 @@ main{
             		"</div>"
                 );
                 
-            } else if (window.location.href.includes("ad_manage")) {
+            } else if (window.location.href.includes("/ad_manage")) {
                 $(".ad_manage-link").addClass("active");
                 $("aside").html(
                 		 "<h3>상품관리</h3>" +
@@ -74,10 +84,15 @@ main{
                 	        "<li><a href='/ad_manageProductAdd'>상품 등록하기</a></li>" +  // 링크 끝에 ">" 추가
                 	        "</ul>"
                 );
-            } else {
+            } else if (window.location.href.includes("/user")) {
                 $(".user-link").addClass("active");
                 $("aside").html(
                 	"<h3>회원관리</h3>"
+                );
+            } else if (window.location.href.endsWith("/ad_myPage.do")){
+            	$(".mypage-link").addClass("active");
+            	$("aside").html(
+                    	"<h3>비밀번호 변경</h3>"
                 );
             }
             

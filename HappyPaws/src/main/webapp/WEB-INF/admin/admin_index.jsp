@@ -50,6 +50,7 @@
 	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/admin/admin_header.jsp" />
 	<main>
 		<div>
+			<div class="admin_title"><h4>최근7일 매출</h4> <h4>일자별 요약</h4></div>
 			<div class="section">
 				<div id="chart_div" style="width: 100%; height: 100%;"></div>
 			</div>
@@ -79,7 +80,8 @@
 				</table>
 			</div>		
 		</div>
-		<div>
+		<div style="margin-top: 10px;">
+			<div class="admin_title"><h4>공지사항</h4> <h4>Q&amp;A</h4></div>
 			<div class="section notice">
 				<table>
 				<thead>

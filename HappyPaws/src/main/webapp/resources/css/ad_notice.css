@@ -44,6 +44,10 @@ th:nth-child(2),td:nth-child(2) {
 	border-top: 2px solid black;
 }
 
+thead > tr{
+	border-top: none !important;
+}
+
 td:last-child{
     max-width: 0;
     padding: 0px;
@@ -59,6 +63,11 @@ td:last-child{
     max-width: 87%;
     display: inline-block;
     vertical-align: bottom;
+}
+
+.admin_title h4{
+	display: inline-block;
+    width: 49%;
 }
 
 th, td {

@@ -116,11 +116,6 @@
 		    flex: 3;
 		}
 		
-		.pr_name_status select {
-		    flex: 1;
-		    margin-left: 7px;
-		    margin-top: 23px;
-		}
 		
 		.option-stock_price button {
 		    padding: 10px;
@@ -138,6 +133,13 @@
 	    border-radius: 5px;
 	    box-sizing: border-box;
 	    margin-left: 10px;
+		}
+		
+		.pr_name_status select {
+		    flex: 1;
+		    margin-left: 7px;
+		    height: 49px;
+		    margin-top: 26px;
 		}
 		
 		 .add-option,  .remove-option {
@@ -162,6 +164,7 @@
 		
 		#pr_opt_status{
 		margin : 0;
+		height: 49px;
 		}
 		#pr_opt_name, #pr_name{
 		width: 450px;
@@ -217,14 +220,16 @@
 	    	<label for="pr_name">
 		        상품명   <br>
 		        <input type="text" id="pr_name" name="pr_name" value="${product.pr_name}" >   
-	        </label>
+	        </label><br>
 	        <label for="pr_status">
 	        <select id="pr_status" name="pr_status">
 			    <option value="available" <c:if test="${product.pr_status == 'available'}">selected</c:if>>판매중</option>
 			    <option value="out_of_stock" <c:if test="${product.pr_status == 'out_of_stock'}">selected</c:if>>일시품절</option>
 			    <option value="discontinued" <c:if test="${product.pr_status == 'discontinued'}">selected</c:if>>품절</option>
 			</select>
+			<br>
 			</label>
+			<br>
 		</div>
     </div>
 
@@ -412,7 +417,6 @@
 		            setTimeout(function () {
 		               $('#editor img').each(function () {
 		                  if ($(this).attr('src') === imageUrl) {
-		                     $(this).css('max-width', '450px');
 		                     $(this).css('width', '100%'); // 초기 width 설정
 		                  }
 		               });

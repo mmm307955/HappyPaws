@@ -7,9 +7,9 @@
 <head>
 <%@include file="../../head.jsp" %>
     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내 등록 게시물</title>
-    <style>
+   <style>
         body {
             background-color: #f9f9f9;
         }
@@ -40,6 +40,11 @@
             padding: 8px;
             text-align: center;
         }
+        
+         td.title-column {
+            text-align: left; /* 제목만 왼쪽 정렬 */
+        }
+        
         th {
             background-color: #FFD700;
             font-weight: bold;
@@ -56,22 +61,41 @@
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    margin: 20px auto; 
-    width: fit-content; 
+    margin: 20px auto;
+    gap: 10px;
+    width: 100%;
 }
 
 .search-container select,
-.search-container input[type="text"],
 .search-container button {
-    padding: 5px;
-    margin: 5px;
+    padding: 7px 20px;
+    margin: 0;
     border: 2px solid #FFD700;
     border-radius: 20px; 
     outline: none;
     background-color: white; 
+    height: 40px; 
+    width: auto; 
+    font-size: 14px;
+    text-align: center; 
+    cursor: pointer; 
 }
 
+.search-container input[type="search"] {
+    padding: 10px 20px; 
+    border: 2px solid #FFD700; 
+    border-radius: 20px; 
+    outline: none; 
+    background-color: white; 
+    font-size: 14px; 
+    width: auto; 
+}
 
+.search-container input[type="search"]::placeholder {
+    padding-left: 6px; 
+    color: #aaa; 
+    font-size: 16px; 
+}
 
         .pagination {
             display: flex;
@@ -129,7 +153,8 @@
                 padding: 5px;
             }
         }
-    </style>
+</style>
+
     <script>
         function goToDetail(postId, sourceTable) {
             let detailPage;
@@ -147,15 +172,14 @@
     </script>
 </head>
 <body>
- <%@include file="../../header.jsp" %>
- <main>
+<%@include file="../../header.jsp" %>
+<main>
 <div class="container">
     <h2>내 등록 게시물</h2>
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>번호</th>
                     <th>제목</th>
                     <th>등록게시판</th>
                     <th>작성일</th>
@@ -166,8 +190,7 @@
                     <c:when test="${not empty currentPagePosts}">
                         <c:forEach var="post" items="${currentPagePosts}">
                             <tr onclick="goToDetail(${post.post_id}, '${post.source_table}')">
-                                <td>${post.post_id}</td>
-                                <td>${post.title}</td>
+                                <td class="title-column">${post.title}</td>
                                 <td>${post.source_table}</td>
                                 <td>${post.created_date}</td>
                             </tr>
@@ -175,7 +198,7 @@
                     </c:when>
                     <c:otherwise>
                         <tr>
-                            <td colspan="4">등록된 게시물이 없습니다.</td>
+                            <td colspan="3">등록된 게시물이 없습니다.</td>
                         </tr>
                     </c:otherwise>
                 </c:choose>
@@ -184,16 +207,15 @@
     </div>
 
     <div class="search-container">
-    <form action="/myPosts" method="get"> <!-- GET 방식으로 서버에 검색 요청 -->
-        <select name="searchField">
-            <option value="title" <c:if test="${param.searchField == 'title'}">selected</c:if>>제목</option>
-            <option value="source_table" <c:if test="${param.searchField == 'source_table'}">selected</c:if>>등록게시판</option>
-        </select>
-        <input type="text" name="searchQuery" placeholder="검색어 입력" value="<c:out value='${param.searchQuery}'/>">
-        <button type="submit">조회</button>
-    </form>
-</div>
-
+        <form action="/myPosts" method="get"> <!-- GET 방식으로 서버에 검색 요청 -->
+            <select name="searchField">
+                <option value="title" <c:if test="${param.searchField == 'title'}">selected</c:if>>제목</option>
+                <option value="source_table" <c:if test="${param.searchField == 'source_table'}">selected</c:if>>등록게시판</option>
+            </select>
+            <input type="search" name="searchQuery" placeholder="검색어 입력" value="<c:out value='${param.searchQuery}'/>">
+            <button type="submit">조회</button>
+        </form>
+    </div>
 
     <div class="pagination">
         <c:if test="${currentPage > 1}">
@@ -214,7 +236,7 @@
         </c:if>
     </div>
 </div>
- </main>
-    <%@include file="../../footer.jsp" %> 
+</main>
+<%@include file="../../footer.jsp" %>
 </body>
 </html>

@@ -415,7 +415,6 @@ options input[type="number"] {
 			            setTimeout(function () {
 			               $('#editor img').each(function () {
 			                  if ($(this).attr('src') === imageUrl) {
-			                     $(this).css('max-width', '450px');
 			                     $(this).css('width', '100%'); // 초기 width 설정
 			                  }
 			               });

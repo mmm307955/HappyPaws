@@ -871,11 +871,17 @@ function loadComments() {
 							<span class="comment-id">
 								<img class="us_profile" alt="프로필"src="${contextPath}/resources/profile_images/${comment.us_profile}" onerror="this.onerror=null; this.src='${contextPath}/resources/profile_images/default.jpg';">
 								 ${comment.us_nick}
-								<span class="comment-date">(${comment.qna_cmt_date})</span>
+								<span class="comment-date">${comment.qna_cmt_date}</span>
 							</span>
-							<div>
-								${comment.qna_cmt_id === us_id ? `<button class="updateComment" data-qna_cmt_seq="${comment.qna_cmt_seq}">수정</button>` : ''}
-								${comment.qna_cmt_id === us_id || us_id =="admin" ? `<button class="deleteComment" data-qna_cmt_seq="${comment.qna_cmt_seq}">삭제</button>` : ''}
+							<div class="comment-actions">
+								${(comment.qna_cmt_id === us_id || us_id === "admin") ? `
+									<span class="action-toggle">&middot;&middot;&middot;</span>
+									<div class="action-menu" style="display: none;">
+										${comment.qna_cmt_id === us_id || us_id === "admin" ? `<span class="updateComment" data-qna_cmt_seq="${comment.qna_cmt_seq}">수정</span>` : ''}
+										${(comment.qna_cmt_id === us_id || us_id === "admin") ? `<span class="deleteComment" data-qna_cmt_seq="${comment.qna_cmt_seq}">삭제</span>` : ''}
+									</div>
+									`: ''
+								}
 							</div>
 						</div>
 						<div class="comment-body">
@@ -887,6 +893,36 @@ function loadComments() {
         }
     });
 }
+document.addEventListener('click', function (event) {
+    // 클릭한 요소가 .action-toggle 클래스인지 확인
+    const toggleButton = event.target.closest('.action-toggle');
+    
+    let menu = null;
+    if (toggleButton) {
+        menu = toggleButton.nextElementSibling;
+    }
+
+    // 모든 메뉴 숨기기
+    document.querySelectorAll('.action-menu').forEach(function(menu) {
+        menu.style.display = 'none';
+    });
+
+    // 클릭한 버튼의 메뉴 보이기
+    if (menu) {
+        menu.style.display = 'block';
+    }
+});
+
+// 클릭이 메뉴 외부라면 메뉴 닫기
+document.addEventListener('click', function (event) {
+	const isMenuClick = event.target.closest('.comment-actions');
+	if (!isMenuClick) {
+		document.querySelectorAll('.action-menu').forEach(menu => {
+			menu.style.display = 'none';
+		});
+	}
+});
+
 
 function c_loadComments() {
 	const cmty_seq = $('#cmty_comment').val();
@@ -945,12 +981,19 @@ function renderComments(commentMap, parentSeq, depth, us_id) {
                         ${comment.cmty_cmt_parent_seq ? '<i data-feather="corner-down-right"></i>' : ''}
 						<img class="us_profile" src="${contextPath}/resources/profile_images/${comment.us_profile}" onerror="this.onerror=null; this.src='${contextPath}/resources/profile_images/default.jpg';" alt="프로필" >
                         ${comment.us_nick}
-                        <span class="comment-date">(${comment.cmty_cmt_date})</span>
+                        <span class="comment-date">${comment.cmty_cmt_date}</span>
                     </span>
-                    <div>
-                        ${comment.cmty_cmt_id === us_id && comment.cmty_cmt_del === 'N' ? `<button class="c_comment-udate" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">수정</button>` : ''}
-						${comment.cmty_cmt_id === us_id && comment.cmty_cmt_del === 'N'|| us_id =="admin" ? `<button class="c_comment-delete" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">삭제</button>` : ''}
-                        ${us_id && comment.cmty_cmt_del === 'N' ? `<button class="c_comment" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">답글</button>` : ''}
+                    <div class="cmt_abs">
+						${(comment.cmty_cmt_id === us_id && comment.cmty_cmt_del === 'N') || us_id === "admin" ? `
+						<div class="comment-actions">
+							<span class="action-toggle">&middot;&middot;&middot;</span>
+							<div class="action-menu" style="display: none;">
+								${(comment.cmty_cmt_id === us_id && comment.cmty_cmt_del === 'N') || us_id === "admin" ? `<span class="c_comment-udate" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">수정</span>` : ''}
+								${(comment.cmty_cmt_id === us_id && comment.cmty_cmt_del === 'N') || us_id === "admin" ? `<span class="c_comment-delete" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">삭제</span>` : ''}
+							</div>
+						</div>
+						` : ''}
+                        ${us_id && comment.cmty_cmt_del === 'N' ? `<span class="c_comment" data-cmty_cmt_seq="${comment.cmty_cmt_seq}">답글</span>` : ''}
                     </div>
                 </div>
                 <div class="comment-body">

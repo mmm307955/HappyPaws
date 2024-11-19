@@ -79,7 +79,7 @@
 <body>
 <jsp:include page="/WEB-INF/admin/admin_header.jsp" />
     <main>
-    <h2>비밀번호 변경</h2>
+    
     <div id="content">
         <!-- 서버에서 전달된 메시지 확인 -->
         <c:if test="${not empty message}">
@@ -96,7 +96,7 @@
         </c:if>
 
         <form action="updateAdminInfo.do" method="post" onsubmit="return validateForm()">
-            <h3>비밀번호 변경</h3>
+            
             <table>
                 <tr>
                     <td>현재 비밀번호:</td>

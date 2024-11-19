@@ -309,7 +309,15 @@ aside li {
     cursor: pointer;
 }
 
+.header-menu .logout{
+    	display: none;
+ }
+
 @media (max-width: 768px) {
+    .logo img{
+        height: 40px;
+        margin-top: -6px;
+    }
     /* 메뉴 토글 버튼 보이기 */
     .menu-toggle {
         display: block;
@@ -328,14 +336,15 @@ aside li {
         flex-direction: column;
         width: 100%;
         position: absolute;
-        top: 87px;
+        top: 73px;
         right: 0px;
-        background-color: #ffffffe6;
+        background-color: #fffffff5;
         padding: 6px;
         transition: max-height 0.5s ease; /* 부드러운 전환 효과 */
+        border-bottom: 2px solid #adb5bd;
     }
     .header-menu.show {
-        max-height: 350px; /* 메뉴가 완전히 열렸을 때의 최대 높이 설정 (충분히 큰 값으로 설정) */
+        max-height: inherit; /* 메뉴가 완전히 열렸을 때의 최대 높이 설정 (충분히 큰 값으로 설정) */
     }
 
     /* 메뉴 항목 스타일 */
@@ -360,4 +369,26 @@ aside li {
         width:100%;
     }
     
+    .header-login-div b{
+    	font-size: 16px;
+    }
+    
+    .header-login-div .header-login-link{
+    	font-size: 16px;
+    }
+    
+    .header-login-div .logout{
+    	display: none;
+    }
+    .header-menu .logout{
+    	display: block;
+    	font-weight: bold;
+    	color:rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    }
+    .header-login-div img{
+    	margin-top: -10px;
+    }
+    footer p:nth-child(2) {
+    	font-size: 11px;
+	}
 }
