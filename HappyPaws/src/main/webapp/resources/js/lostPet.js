@@ -40,16 +40,12 @@ $(document).ready(function() {
         });
 
         // 글 작성 페이지 이동
-        $("#lpIns").click(function() {
+        $(".lpIns").click(function() {
             location.href = "/MIA/insertLostPet";
-        });
-
-        // 로그인 필요 알림
-        $("#lpIns2").click(function() {
-            alert("로그인이 필요합니다");
         });
     }
 
+    // 이벤트 핸들러 초기화 호출
     setupEventHandlers();
 
     // 글 상세 보기

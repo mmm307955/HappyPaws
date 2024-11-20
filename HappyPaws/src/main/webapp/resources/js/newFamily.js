@@ -39,14 +39,10 @@ $(document).ready(function() {
         });
 
         // 무료분양 등록 버튼
-        $("#nfIns").click(function() {
+        $(".nfIns").click(function() {
             location.href = "/MIA/insertNewFamily";
         });
 
-        // 로그인 필요 알림
-        $("#nfIns2").click(function() {
-            alert("로그인이 필요합니다");
-        });
     }
 
     setupEventHandlers();

@@ -86,6 +86,14 @@
 		LIMIT #{listcnt} OFFSET
 		#{start}
 	</select>
+	
+	<select id="getNewFamilyListIndex" resultType="newFamily">
+		SELECT *
+		FROM newfamily
+		WHERE nf_del = 'N'
+		ORDER BY nf_seq DESC
+		LIMIT 3
+	</select>
 
 	<select id="countNewFamily" resultType="int">
 		SELECT COUNT(*) FROM newfamily WHERE nf_del = 'N'

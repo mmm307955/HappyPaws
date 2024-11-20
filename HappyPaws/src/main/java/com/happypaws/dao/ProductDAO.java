@@ -199,4 +199,29 @@ public class ProductDAO {
     public ProductVO getOrderByMerchantUid(String merchantUid) {
         return mybatis.selectOne("ProductDAO.getOrderByMerchantUid", merchantUid);
     }
+    
+    public ProductVO getNextPurchaseInfo(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.getNextPurchaseInfo", vo);
+    }
+    
+    public int getDeliveredOrderCount(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.getDeliveredOrderCount", vo);
+    }
+
+    public int getReviewCount(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.getReviewCount", vo);
+    }
+    
+    public ProductVO getReviewById(int prc_no) {
+        return mybatis.selectOne("ProductDAO.getReviewById", prc_no);
+    }
+    
+    public int deleteExistingReview(ProductVO vo) {
+        return mybatis.delete("ProductDAO.deleteExistingReview", vo);
+    }
+    
+    // 인덱스 페이지에 보여주기
+    public List<ProductVO> productIndex() {
+        return mybatis.selectList("ProductDAO.productIndex");
+    }
 }

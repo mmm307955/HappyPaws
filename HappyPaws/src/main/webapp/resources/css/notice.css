@@ -152,7 +152,8 @@ input[type="search"]::-webkit-search-results-decoration {
         height: 50px;
         width: 50px;
         border-radius: 50%;
-      }
+        box-shadow: 2px 4px 8px rgba(0,0,0,0.3);
+     }
 }
 /*공지 테이블*/
 .n_list table {

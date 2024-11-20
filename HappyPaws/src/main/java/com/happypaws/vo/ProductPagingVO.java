@@ -7,7 +7,7 @@ public class ProductPagingVO {
 	private int btnTotalCount; 
 	private int btnCurTotal = 5;  
 	private int rowTotalCount; 
-	private int rowSizePerPage = 9; 
+	private int rowSizePerPage = 6; 
 	private int rowFirst; 
 	private int rowLast;
 

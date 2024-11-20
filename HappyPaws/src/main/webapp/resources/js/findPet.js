@@ -58,13 +58,8 @@ $(document).ready(function () {
         });
 
         // 글 작성 페이지 이동
-        $("#fpIns").click(function () {
+        $(".fpIns").click(function () {
             location.href = "/MIA/insertFindPet";
-        });
-
-        // 로그인 필요 알림
-        $("#fpIns2").click(function () {
-            alert("로그인이 필요합니다");
         });
     }
 

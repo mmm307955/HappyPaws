@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 	<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 	<script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
@@ -19,7 +19,7 @@
 			<div class="n_title">
 				<span class="title">${cmtyview.cmty_title}</span>
 				<span class="author" >
-					<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${cmtyview.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';">
+					<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${cmtyview.us_profile}" onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
 					${cmtyview.us_nick}
 				</span>
 			</div>
@@ -36,13 +36,13 @@
 			    <span>댓글쓰기</span>
 			    <c:if test="${not empty user.us_id}">
 			    <div class="comment-input">
-				    <textarea id="commentContent" placeholder="댓글을 입력하세요"></textarea>
+				    <label><textarea id="commentContent" placeholder="댓글을 입력하세요"></textarea></label>
 				    <button id="cmty_comment" value="${param.cmty_seq}">댓글 등록</button>
 			    </div>
 			    </c:if>
 			    <c:if test="${empty user.us_id}">
 				<div class="comment-input">
-				    <textarea id="commentContent" placeholder="로그인후 입력이 가능합니다." disabled></textarea>
+				    <label><textarea id="commentContent" placeholder="로그인후 입력이 가능합니다." disabled></textarea></label>
 				    <button id="cmty_comment" value="${param.cmty_seq}" disabled>댓글 등록</button>
 			    </div>
 				</c:if>

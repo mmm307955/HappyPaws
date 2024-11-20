@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 	<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
@@ -16,7 +16,7 @@
 				<div class="n_write_header">
 					<span class="left">Q&amp;A 작성</span>
 				</div>
-				<input type="text" name="qna_title" placeholder="제목을 입력해주세요.">
+				<label><input type="text" name="qna_title" placeholder="제목을 입력해주세요."></label>
 				<input type="hidden" name="qna_id" value="${user.us_id}">
 				<input type="hidden" name="qna_content" id="qna_content">
 				<div id="editor"></div>

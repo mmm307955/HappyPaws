@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 	<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -28,7 +28,6 @@
         ]);
 
         var options = {
-          title: '매출 차트',
           vAxis: {minValue: 0},
           backgroundColor: {
               fill: 'transparent' // 투명 배경 설정
@@ -52,11 +51,11 @@
 		<div>
 			<div class="admin_title"><h4>최근7일 매출</h4> <h4>일자별 요약</h4></div>
 			<div class="section">
-				<div id="chart_div" style="width: 100%; height: 100%;"></div>
+				<div id="chart_div" style="width: 100%; height: 100%;" role="img" aria-label="매출 차트: 각 날짜별 판매량을 보여주는 차트입니다."></div>
 			</div>
 			<div class="section stats">
 				<table>
-					<caption style="display:none;">Q&amp;A</caption>
+					<caption style="display:none;">일자별 요약</caption>
 					<thead>
 						<tr>
 							<th>날짜</th>
@@ -84,6 +83,7 @@
 			<div class="admin_title"><h4>공지사항</h4> <h4>Q&amp;A</h4></div>
 			<div class="section notice">
 				<table>
+				<caption style="display:none;">공지사항</caption>
 				<thead>
 					<tr>
 						<th>번호</th>

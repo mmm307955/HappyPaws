@@ -53,5 +53,9 @@ public class NoticeSVC {
 	public int countNotice(NoticeVO vo) {
 		return dao.countNotice(vo);
 	}
+
+	public NoticeVO notice_index() {
+		return dao.notice_index();
+	}
 	
 }

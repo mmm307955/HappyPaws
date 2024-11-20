@@ -24,6 +24,15 @@
 				    <li><a href="/MIA/getNewFamilyList">새로운 가족을 찾아요</a></li>
 				</ul>
 			</div>
+			
+			<div class="c_category_ph">
+				<ul>
+			    	<li><a href="/MIA/getLostPetList">찾아주세요</a></li>
+			    	<li><span>발견했어요</span> </li>
+				    <li><a href="/MIA/getNewFamilyList">가족을 찾아요</a></li>
+				</ul>
+			</div>
+			
 			<div class="n_seachform">
 				<form>
 					<label style="display: none;"><select name="searchCondition" >
@@ -45,9 +54,7 @@
 						</label>
 		            </div>
 				</form>
-				
-					<button id="fpIns">글쓰기</button>
-	
+				<button class="fpIns">글쓰기</button>
 			</div>
 
             <div class="n_categoryform">
@@ -104,5 +111,7 @@
         </div>
     </main>
     <jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
+    
+    <button class="fpIns ph_write"><img src="/resources/images/edit-3.svg" alt="글쓰기"/></button>
 </body>
 </html>

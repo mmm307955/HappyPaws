@@ -60,12 +60,6 @@
 		WHERE P.PR_ID = #{pr_id}
 	</select>
 	
-	<select id="getProductReviewCount" resultType="int">
-		SELECT COUNT(*) 
-		FROM VW_ACTIVE_PRODUCTS_COMMENTS 
-		WHERE PR_ID = #{pr_id} 
-	</select>
-	
 	<select id="getProductReviewRating" resultType="product">
 		SELECT * 
 		FROM VW_ACTIVE_PRODUCTS_COMMENTS 
@@ -106,8 +100,9 @@
 	    AND pc.PRC_STATUS = 'Y'
 	</select>
 	
-	<insert id="setProductReview" parameterType="product">
-	    REPLACE INTO PRODUCTS_COMMENTS
+	<!-- 새 리뷰 추가 -->
+	<insert id="setProductReview" parameterType="product" useGeneratedKeys="true" keyProperty="prc_no">
+	    INSERT INTO PRODUCTS_COMMENTS
 	    (US_ID, PR_ID, PROR_ITEM_ID, PR_OPT_ID, PR_OPT_NAME, 
 	     PRC_DESC, PRC_IMAGE, PRC_RATING, PRC_START_DATE, PRC_STATUS,
 	     PROR_MASTER_ID, PRC_REVIEW_DEADLINE)
@@ -349,9 +344,14 @@
 	    AND i.PR_ID = #{pr_id}
 	    AND o.PROR_STATUS = 'paid'
 	    AND o.PROR_DELI_STAT = 'delivered'
-	    AND <![CDATA[ 
-	        STR_TO_DATE(o.PROR_DATE, '%Y/%m/%d') >= DATE_SUB(CURDATE(), INTERVAL 8 DAY)
-	    ]]>
+	    AND <![CDATA[ STR_TO_DATE(o.PROR_DATE, '%Y/%m/%d') >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) ]]>
+	    AND o.PROR_MASTER_ID NOT IN (
+	        SELECT DISTINCT pc.PROR_MASTER_ID
+	        FROM PRODUCTS_COMMENTS pc
+	        WHERE pc.US_ID = #{us_id}
+	        AND pc.PR_ID = #{pr_id}
+	        AND pc.PRC_STATUS = 'Y'
+	    )
 	    ORDER BY o.PROR_DATE DESC
 	    LIMIT 1
 	</select>
@@ -428,8 +428,16 @@
 	<insert id="addToWishlist">
 	    INSERT INTO PRODUCTS_WISHLIST 
 	    (US_ID, PR_ID, PR_NAME, PR_THUMBNAIL, PR_OPT_NAME, PR_OPT_PRICE, PRWL_DATE)
-	    VALUES 
-	    (#{us_id}, #{pr_id}, #{pr_name}, #{pr_thumbnail}, #{pr_opt_name}, #{pr_opt_price}, #{prwl_date})
+	    SELECT 
+	        #{us_id}, 
+	        p.PR_ID, 
+	        p.PR_NAME, 
+	        p.PR_THUMBNAIL,
+	        (SELECT PR_OPT_NAME FROM PRODUCT_OPTIONS WHERE PR_ID = p.PR_ID ORDER BY PR_OPT_ID ASC LIMIT 1) as PR_OPT_NAME,
+	        (SELECT PR_OPT_PRICE FROM PRODUCT_OPTIONS WHERE PR_ID = p.PR_ID ORDER BY PR_OPT_ID ASC LIMIT 1) as PR_OPT_PRICE,
+	        #{prwl_date}
+	    FROM PRODUCTS p
+	    WHERE p.PR_ID = #{pr_id}
 	</insert>
 	
 	<!-- 위시리스트 삭제 -->
@@ -444,7 +452,6 @@
 	    FROM PRODUCTS_WISHLIST 
 	    WHERE US_ID = #{us_id} 
 	    AND PR_ID = #{pr_id}
-	    AND PR_OPT_NAME = #{pr_opt_name}
 	</select>
 	
 	<!-- 위시리스트 조회 -->
@@ -464,8 +471,7 @@
 	<select id="checkReviewExists" resultType="int">
 	    SELECT COUNT(*) 
 	    FROM PRODUCTS_COMMENTS
-	    WHERE US_ID = #{us_id}
-	    AND PROR_ITEM_ID = #{pror_item_id}
+	    WHERE PROR_ITEM_ID = #{pror_item_id}  <!-- pr_id 대신 pror_item_id로 체크 -->
 	    AND PRC_STATUS = 'Y'
 	</select>
 	
@@ -486,6 +492,54 @@
 	    JOIN USERS u ON o.US_ID = u.US_ID
 	    WHERE o.MERCHANT_UID = #{merchant_uid}
 	    LIMIT 1
+	</select>
+	
+	<!-- 작성된 리뷰 수 조회 -->
+	<select id="getReviewCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM PRODUCTS_COMMENTS
+	    WHERE US_ID = #{us_id}
+	    AND PR_ID = #{pr_id}
+	    AND PRC_STATUS = 'Y'
+	</select>
+	
+	<!-- 배송완료된 주문건수 조회 -->
+	<select id="getDeliveredOrderCount" resultType="int">
+	    SELECT COUNT(DISTINCT i.PROR_ITEM_ID)
+	    FROM PRODUCTS_ORDERS o
+	    JOIN PRODUCTS_ORDERS_ITEMS i ON o.PROR_MASTER_ID = i.PROR_MASTER_ID
+	    WHERE o.US_ID = #{us_id}
+	    AND i.PR_ID = #{pr_id}
+	    AND o.PROR_STATUS = 'paid'
+	    AND o.PROR_DELI_STAT = 'delivered'
+	    AND <![CDATA[ 
+	        STR_TO_DATE(o.PROR_DATE, '%Y/%m/%d') >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+	    ]]>
+	</select>
+	
+	<select id="getProductReviewCount" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM PRODUCTS_COMMENTS pc
+	    WHERE pc.PR_ID = #{pr_id}
+	    AND pc.PRC_STATUS = 'Y'
+	</select>
+	
+	<update id="deactivateExistingReview" parameterType="product">
+	    UPDATE PRODUCTS_COMMENTS 
+	    SET PRC_STATUS = 'N'
+	    WHERE PROR_ITEM_ID = #{pror_item_id}
+	    AND PRC_STATUS = 'Y'
+	</update>
+	
+	<!-- 기존 리뷰 삭제 -->
+	<delete id="deleteExistingReview" parameterType="product">
+	    DELETE FROM PRODUCTS_COMMENTS 
+	    WHERE PROR_ITEM_ID = #{pror_item_id}
+	    AND US_ID = #{us_id}
+	</delete>
+	
+	<select id="productIndex" resultType="product">
+		SELECT * FROM PRODUCTS LIMIT 0, 5
 	</select>
 	
 </mapper>

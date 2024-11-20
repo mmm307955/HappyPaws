@@ -16,7 +16,7 @@
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 		<div class="n_write">
-			<h1>글 수정</h1>
+			<h1>아이를 찾아주세요</h1>
 			<div class="n_writeform">
 				<form action="/MIA/updateLostPet" method="post"
 					enctype="multipart/form-data" name="boardform">
@@ -33,7 +33,7 @@
 
 					<div class="n_ph">
 						<input type="text" class="form-control" name="lp_ph" value="${lostPet.lp_ph}" placeholder="연락처를 입력하세요." required 
-						oninput="formatPhoneNumber(this)">
+						oninput="formatPhoneNumber(this)" maxlength="13">
 					</div>
 
 					<div class="n_img">
@@ -98,8 +98,8 @@
 					</div>
 
 					<div class="n_content">
-						<textarea class="form-control" rows="5" name="lp_content"
-							placeholder="상세 설명을 입력하세요">${lostPet.lp_content}</textarea>
+						<textarea cols="100" wrap="hard" class="form-control" rows="5" name="lp_content" 
+						placeholder="상세 설명을 입력하세요">${lostPet.lp_content}</textarea>
 					</div>
 
 					<input type="hidden" name="lp_del" value="${lostPet.lp_del}">

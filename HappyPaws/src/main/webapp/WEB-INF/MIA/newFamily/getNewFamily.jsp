@@ -112,13 +112,10 @@ $(document).on('click', '#nfcDel', function() {
 				<form name="fm">
 					<input type="hidden" name="nf_seq" value="${newFamily.nf_seq}">
 					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
-					<input type="hidden" name="searchCondition"
-						value="${searchCondition}"> <input type="hidden"
-						name="category" value="${category}"> <input type="hidden"
-						name="nowPage" value="${nowPage}">
-					<div class="n_content">
-						<p>${fn:replace(newFamily.nf_content, lf, "<br>")}</p>
-					</div>
+					<input type="hidden" name="searchCondition" value="${searchCondition}"> 
+					<input type="hidden" name="category" value="${category}"> 
+					<input type="hidden" name="nowPage" value="${nowPage}">
+					<div class="n_content"><pre>${fn:replace(newFamily.nf_content, lf, "<br>")}</pre></div>
 				</form>
 			</div>
 		</div>
@@ -150,11 +147,9 @@ $(document).on('click', '#nfcDel', function() {
 								value="${nfComment.nfc_date}" /></span>
 					</div>
 					<div>
-						<p class="nfcMod1">
-							<c:out value="${nfComment.nfc_content}" />
-						</p>
+						<pre class="nfcMod1"><c:out value="${nfComment.nfc_content}" /></pre>
 						<div class="nfcMod2" style="display: none">
-							<textarea name="nfc_content" required>${nfComment.nfc_content}</textarea>
+							<textarea cols="100" wrap="hard" name="nfc_content" required>${nfComment.nfc_content}</textarea>
 							<div class="btn-container">
 								<button id="nfcMod" type="button">수정</button>
 								<button id="close" type="button">닫기</button>
@@ -186,7 +181,7 @@ $(document).on('click', '#nfcDel', function() {
 					alt="프로필">
 					${user.us_nick}</strong>
 		<c:if test="${not empty user.us_id}">
-				<textarea id="nfc_content" name="nfc_content" required></textarea>
+				<textarea cols="100" wrap="hard" id="nfc_content" name="nfc_content" required></textarea>
 				<div class="btn-container">
 					<button type="submit">등록</button>
 				</div>

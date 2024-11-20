@@ -71,4 +71,8 @@ public class NoticeDAO {
 	public int countNotice(NoticeVO vo) {
 		return mybatis.selectOne("NoticeDAO.countNotice",vo);
 	}
+
+	public NoticeVO notice_index() {
+		return mybatis.selectOne("NoticeDAO.notice_index");
+	}
 }

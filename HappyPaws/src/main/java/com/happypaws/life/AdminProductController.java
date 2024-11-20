@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ import com.happypaws.vo.ProductsVO;
 public class AdminProductController {
 	@Autowired
 	private AdminProductSVC svc;
+	@Autowired
+	private ServletContext servletContext;
 
 	// 글목록 검색 옵션
 	@ModelAttribute("conditionMap")
@@ -284,7 +287,7 @@ public class AdminProductController {
 	private String uploadFile(MultipartFile file, HttpServletRequest request) throws IOException {
 		if (!file.isEmpty()) {
 			// 파일 저장 경로 설정
-			String realPath = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/upload/";
+			String realPath = servletContext.getRealPath("/resources/upload/");
 			File uploadDir = new File(realPath);
 			if (!uploadDir.exists()) {
 				uploadDir.mkdirs();
@@ -305,7 +308,7 @@ public class AdminProductController {
 	@PostMapping("/productUpload")
 	@ResponseBody
 	public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
-		String uploadDir = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/upload/";
+		String uploadDir = servletContext.getRealPath("/resources/upload/");
 		
 	    String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 	    File targetFile = new File(uploadDir, fileName);
@@ -317,7 +320,7 @@ public class AdminProductController {
 	    }
 
 	    // 클라이언트로 반환할 이미지 URL
-	    String fileUrl = "/resources/upload/" + fileName;
+	    String fileUrl = fileName;
 	    
 	    Map<String, String> response = new HashMap<>();
 	    response.put("url", fileUrl);  // 이미지 URL을 클라이언트로 반환

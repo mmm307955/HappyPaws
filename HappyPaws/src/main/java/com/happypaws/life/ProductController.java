@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Arrays;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.happypaws.svc.ProductSVC;
 import com.happypaws.vo.ProductPagingVO;
@@ -48,7 +50,18 @@ public class ProductController {
 	@Autowired
 	private ProductSVC svc;
 	
+	@Autowired
+	private ServletContext servletContext;
+	
 	private final String uploadPath = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/upload/";
+//	private final String uploadPath = servletContext.getRealPath("/resources/upload/"); // replace 하기
+	
+    // 인덱스 페이지에 보여주기
+	@RequestMapping("/pr_index")
+	@ResponseBody
+	public List<ProductVO> productIndex() {
+		return svc.productIndex();
+	}
 	
 	@RequestMapping("/pr_list")
 	public String productList(
@@ -265,7 +278,7 @@ public class ProductController {
     
     @PostMapping("/review_write")
     @ResponseBody
-    public ResponseEntity<?> reviewWrite(
+    public ResponseEntity<Map<String, Object>> reviewWrite(
             @RequestParam(value = "prc_image", required = false) MultipartFile image,
             @RequestParam("pr_id") int pr_id,
             @RequestParam("pror_item_id") int pror_item_id,
@@ -281,7 +294,7 @@ public class ProductController {
             UsersVO us = (UsersVO) session.getAttribute("user");
             if (us == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                   .body("로그인이 필요합니다.");
+                                   .body(Map.of("error", "로그인이 필요합니다."));
             }
 
             ProductVO vo = new ProductVO();
@@ -294,39 +307,19 @@ public class ProductController {
             vo.setPrc_rating(prc_rating);
             vo.setPror_master_id(pror_master_id);
 
-            // 리뷰 중복 체크
-            if (svc.checkReviewExists(vo)) {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("이미 이 주문 상품에 대한 리뷰를 작성하셨습니다.");
-            }
-            
-            // 구매 정보 조회
-            ProductVO purchaseInfo = svc.getPurchaseInfo(vo);
-            if (purchaseInfo == null) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("리뷰를 작성할 수 없는 상품입니다.");
-            }
-
             // 날짜 관련 처리
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            Date orderDate = sdf.parse(purchaseInfo.getPror_date());
             Date currentDate = new Date();
             String currentDateStr = sdf.format(currentDate);
             
-            // 30일 이내 체크
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(orderDate);
-            calendar.add(Calendar.DAY_OF_MONTH, 30);
-            Date deadline = calendar.getTime();
-            
-            if (currentDate.after(deadline)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("리뷰 작성 기한이 만료되었습니다. (배송완료 후 30일 미만까지만 작성 가능)");
-            }
+            calendar.setTime(currentDate);
+            calendar.add(Calendar.DAY_OF_MONTH, 31);
+            String deadline = sdf.format(calendar.getTime());
 
             // 날짜 정보 설정
             vo.setPrc_start_date(currentDateStr);
-            vo.setPrc_review_deadline(sdf.format(deadline));
+            vo.setPrc_review_deadline(deadline);
 
             // 이미지 처리
             if (image != null && !image.isEmpty()) {
@@ -336,7 +329,7 @@ public class ProductController {
                     
                 if (!Arrays.asList(".jpg", ".jpeg", ".png", ".gif").contains(fileExtension)) {
                     return ResponseEntity.badRequest()
-                            .body("허용되지 않는 파일 형식입니다. (jpg, jpeg, png, gif만 가능)");
+                            .body(Map.of("error", "허용되지 않는 파일 형식입니다. (jpg, jpeg, png, gif만 가능)"));
                 }
                 
                 String newFileName = UUID.randomUUID().toString() + fileExtension;
@@ -348,43 +341,51 @@ public class ProductController {
                 File destFile = new File(uploadPath + newFileName);
                 image.transferTo(destFile);
                 vo.setPrc_image(newFileName);
-                
-                // 이전 이미지가 있다면 삭제
-                ProductVO oldReview = svc.getExistingReview(vo);
-                if (oldReview != null && oldReview.getPrc_image() != null && 
-                    !oldReview.getPrc_image().isEmpty()) {
-                    File oldFile = new File(uploadPath + oldReview.getPrc_image());
-                    if (oldFile.exists()) {
-                        oldFile.delete();
-                    }
-                }
             } else {
                 vo.setPrc_image("");
             }
 
             // 리뷰 저장
             int checkSet = svc.setProductReview(vo);
+            Map<String, Object> response = new HashMap<>();
+
             if (checkSet > 0) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("redirect", "/product/pr_detail?pr_id=" + vo.getPr_id() + "&tab=reviews#write-review-btn");
                 response.put("success", true);
-                return ResponseEntity.ok(response);
+                response.put("message", "리뷰가 등록되었습니다.");
+                
+                // 평균 평점 계산
+                List<ProductVO> reviewVO = svc.getProductReviewRating(pr_id);
+                double averageRating = 0;
+                int countRating = reviewVO.size();
+                
+                for (ProductVO rating : reviewVO) {
+                    averageRating += rating.getPrc_rating();
+                }
+                averageRating = countRating > 0 ? (averageRating / countRating) * 20 : 0;
+                
+                // 이미지 존재 여부 체크
+                vo.setImageExists(vo.getPrc_image() != null && !vo.getPrc_image().isEmpty());
+                response.put("review", vo);
+                response.put("averageRating", averageRating);
+                response.put("countRating", countRating);
+                
+                return ResponseEntity.ok(response);               
             } else {
                 // 실패 시 업로드된 이미지 삭제
-                if (!vo.getPrc_image().isEmpty()) {
+                if (vo.getPrc_image() != null && !vo.getPrc_image().isEmpty()) {
                     File uploadedFile = new File(uploadPath + vo.getPrc_image());
                     if (uploadedFile.exists()) {
                         uploadedFile.delete();
                     }
                 }
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("리뷰 등록에 실패했습니다.");
+                        .body(Map.of("error", "리뷰 등록에 실패했습니다."));
             }
             
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("서버 오류가 발생했습니다: " + e.getMessage());
+                    .body(Map.of("error", "서버 오류가 발생했습니다: " + e.getMessage()));
         }
     }
     
@@ -505,16 +506,22 @@ public class ProductController {
     @ResponseBody
     public ResponseEntity<?> inquiryRemove(@RequestParam("prq_no") int prq_no, HttpSession session) {
         try {
-            // 문의글 삭제
+            // 세션에서 사용자 정보 가져오기
+            UsersVO user = (UsersVO) session.getAttribute("user");
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+            }
+
+            // 문의 삭제
             int checkDelete = svc.deleteProductQuestion(prq_no);
             if (checkDelete > 0) {
                 return ResponseEntity.ok("success");
             } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("문의글 삭제에 실패했습니다.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("문의 삭제에 실패했습니다.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
         }
     }
     
@@ -730,7 +737,7 @@ public class ProductController {
 	@PostMapping("/check_review_permission")
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> checkReviewPermission(
-	        @RequestParam("pror_item_id") int pror_item_id,  // 주문 상품 번호로 변경
+	        @RequestParam("pr_id") int pr_id,
 	        HttpSession session) {
 	    Map<String, Object> response = new HashMap<>();
 	    
@@ -744,21 +751,26 @@ public class ProductController {
 	        
 	        ProductVO vo = new ProductVO();
 	        vo.setUs_id(user.getUs_id());
-	        vo.setPror_item_id(pror_item_id);  // 주문상품번호로 설정
+	        vo.setPr_id(pr_id);
 	        
-	        // 구매 및 배송 완료 확인
+	        // 배송완료된 주문건수 확인
+	        int orderCount = svc.getDeliveredOrderCount(vo);
+	        // 해당 상품의 작성된 리뷰 수 확인
+	        int reviewCount = svc.getReviewCount(vo);
+	        
+	        // 리뷰 수가 주문건수보다 크거나 같으면 더 이상 리뷰를 작성할 수 없음
+	        if (reviewCount >= orderCount) {
+	            response.put("canWrite", false);
+	            response.put("message", "이 상품의 모든 주문에 대해 이미 리뷰를 작성하셨습니다.");
+	            return ResponseEntity.ok(response);
+	        }
+	        
+	        // 아직 리뷰를 작성하지 않은 주문건 찾기
 	        ProductVO purchaseInfo = svc.getPurchaseInfo(vo);
 	        
 	        if (purchaseInfo == null) {
 	            response.put("canWrite", false);
-	            response.put("message", "구매 내역이 없는 상품입니다.");
-	            return ResponseEntity.ok(response);
-	        }
-
-	        // 주문상품번호로 중복 체크 
-	        if (svc.checkReviewExists(vo)) {
-	            response.put("canWrite", false);
-	            response.put("message", "이미 이 주문 상품에 대한 리뷰를 작성하셨습니다.");
+	            response.put("message", "리뷰를 작성할 수 있는 주문이 없습니다.");
 	            return ResponseEntity.ok(response);
 	        }
 
@@ -1325,5 +1337,223 @@ public class ProductController {
         Map<String, Object> responseBody = response.getBody();
         Map<String, Object> responseData = (Map<String, Object>) responseBody.get("response");
         return (String) responseData.get("access_token");
+    }
+    
+    @GetMapping("/getReviewStats")
+    @ResponseBody
+    public Map<String, Object> getReviewStats(@RequestParam("pr_id") int pr_id) {
+        Map<String, Object> response = new HashMap<>();
+        
+        // 평균 평점 계산
+        List<ProductVO> reviewVO = svc.getProductReviewRating(pr_id);
+        int averageRating = 0;
+        int countRating = reviewVO.size();
+        
+        for (ProductVO rating : reviewVO) {
+            averageRating += rating.getPrc_rating();
+        }
+        
+        double averageRatingDouble = countRating > 0 ? (double) averageRating / countRating : 0;
+        averageRating = (int) (averageRatingDouble * 20);
+        
+        response.put("averageRating", averageRating);
+        response.put("countRating", countRating);
+        
+        return response;
+    }
+    
+    @PostMapping("/check_wishlist_item")
+    @ResponseBody
+    public Map<String, Boolean> checkWishlistItem(@RequestBody ProductVO vo, HttpSession session) {
+        Map<String, Boolean> response = new HashMap<>();
+        
+        UsersVO user = (UsersVO) session.getAttribute("user");
+        if (user == null) {
+            response.put("exists", false);
+            return response;
+        }
+        
+        vo.setUs_id(user.getUs_id());
+        int count = svc.checkWishlistDuplicate(vo);
+        response.put("exists", count > 0);
+        
+        return response;
+    }
+
+    @PostMapping("/remove_all_from_cart")
+    @ResponseBody
+    public ResponseEntity<String> removeAllFromCart(@RequestBody List<Map<String, Object>> items, HttpSession session) {
+        try {
+            UsersVO user = (UsersVO) session.getAttribute("user");
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+            }
+
+            for (Map<String, Object> item : items) {
+                ProductVO vo = new ProductVO();
+                vo.setUs_id(user.getUs_id());
+                
+                Object prIdObj = item.get("pr_id");
+                if (prIdObj instanceof String) {
+                    vo.setPr_id(Integer.parseInt((String) prIdObj));
+                } else if (prIdObj instanceof Number) {
+                    vo.setPr_id(((Number) prIdObj).intValue());
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 상품 ID 형식입니다.");
+                }
+                
+                vo.setPr_opt_name((String)item.get("pr_opt_name"));
+                svc.removeFromCart(vo);
+            }
+
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+        }
+    }
+    
+    @GetMapping("/mobile_process_payment")
+    public String processMobilePayment(
+        @RequestParam(value = "imp_uid", required = false) String impUid,
+        @RequestParam(value = "merchant_uid", required = false) String merchantUid,
+        @RequestParam(value = "imp_success", required = false) Boolean impSuccess,
+        @RequestParam(value = "error_msg", required = false) String errorMsg,
+        HttpSession session,
+        RedirectAttributes redirectAttributes) {
+        
+        try {
+            // 디버깅 로그
+            System.out.println("imp_uid: " + impUid);
+            System.out.println("merchant_uid: " + merchantUid);
+            System.out.println("imp_success: " + impSuccess);
+            System.out.println("error_msg: " + errorMsg);
+
+            // 세션 체크
+            UsersVO user = (UsersVO) session.getAttribute("user");
+            if (user == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
+                return "redirect:/auth/login";
+            }
+
+            // 결제 실패 처리
+            if (impSuccess == null || !impSuccess) {
+                // 오류 메시지가 있으면 그대로 표시, 없으면 기본 메시지 사용
+                String failMessage = errorMsg != null && !errorMsg.isEmpty() 
+                    ? errorMsg 
+                    : "결제가 취소되었습니다.";
+                redirectAttributes.addFlashAttribute("errorMessage", failMessage);
+                return "redirect:/product/pr_cart";
+            }
+
+            // 여기서부터는 결제 성공 시의 처리
+            try {
+                // 포트원 토큰 발급
+                String token = getPortOneToken();
+                
+                HttpHeaders headers = new HttpHeaders();
+                headers.setBearerAuth(token);
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                
+                // 결제 정보 조회
+                RestTemplate restTemplate = new RestTemplate();
+                ResponseEntity<Map> paymentResponse = restTemplate.exchange(
+                    "https://api.iamport.kr/payments/" + impUid,
+                    HttpMethod.GET,
+                    new HttpEntity<>(headers),
+                    Map.class
+                );
+                
+                if (paymentResponse.getStatusCode() != HttpStatus.OK) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "결제 정보를 확인할 수 없습니다.");
+                    return "redirect:/product/pr_cart";
+                }
+
+                Map<String, Object> paymentData = (Map<String, Object>) paymentResponse.getBody().get("response");
+                
+                // 결제 상태 확인
+                if (!"paid".equals(paymentData.get("status"))) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "결제가 완료되지 않았습니다.");
+                    return "redirect:/product/pr_cart";
+                }
+
+                // 결제 금액 검증
+                int paidAmount = ((Number) paymentData.get("amount")).intValue();
+
+                // 여기서부터 주문 처리 로직
+                String userEmail = svc.getUserEmail(user.getUs_id());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String orderDate = sdf.format(new Date());
+
+                // 주문 마스터 정보 설정
+                ProductVO masterVO = new ProductVO();
+                masterVO.setUs_id(user.getUs_id());
+                masterVO.setUs_email(userEmail);
+                masterVO.setPror_date(orderDate);
+                masterVO.setPror_status("paid");
+                masterVO.setPror_deli_stat("preparation");
+                masterVO.setPror_pay_method("card");
+                masterVO.setMerchant_uid(merchantUid);
+                masterVO.setImp_uid(impUid);
+                masterVO.setPror_total_amt(paidAmount);
+                masterVO.setPror_ship_cost(3000);
+                masterVO.setPror_product_amt(paidAmount - 3000);
+
+                // 배송지 정보 설정
+                masterVO.setPror_recipient((String) paymentData.get("buyer_name"));
+                masterVO.setPror_phone((String) paymentData.get("buyer_tel"));
+                masterVO.setPror_addr((String) paymentData.get("buyer_addr"));
+                masterVO.setPror_zipcode((String) paymentData.get("buyer_postcode"));
+
+                // 장바구니에서 주문 상품 정보 가져오기
+                List<ProductVO> cartItems = svc.getCartList(user.getUs_id());
+                if (cartItems == null || cartItems.isEmpty()) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "주문할 상품이 없습니다.");
+                    return "redirect:/product/pr_cart";
+                }
+
+                List<ProductVO> orderItems = new ArrayList<>();
+                for (ProductVO item : cartItems) {
+                    ProductVO orderItem = new ProductVO();
+                    orderItem.setPr_id(item.getPr_id());
+                    orderItem.setPr_name(item.getPr_name());
+                    orderItem.setPr_opt_name(item.getPr_opt_name());
+                    orderItem.setPr_opt_price(item.getPr_opt_price());
+                    orderItem.setPror_item_qtt(item.getPrsc_quantity());
+                    orderItem.setPror_item_amt(item.getPr_opt_price() * item.getPrsc_quantity());
+                    orderItems.add(orderItem);
+                }
+
+                // 주문 처리
+                int result = svc.setProductOrder(masterVO, orderItems);
+
+                if (result > 0) {
+                    // 장바구니 비우기
+                    for (ProductVO item : cartItems) {
+                        ProductVO cartItem = new ProductVO();
+                        cartItem.setUs_id(user.getUs_id());
+                        cartItem.setPr_id(item.getPr_id());
+                        cartItem.setPr_opt_name(item.getPr_opt_name());
+                        svc.removeFromCart(cartItem);
+                    }
+                    
+                    redirectAttributes.addFlashAttribute("successMessage", "주문이 완료되었습니다.");
+                    return "redirect:/product/pr_order_list";
+                } else {
+                    redirectAttributes.addFlashAttribute("errorMessage", "주문 처리에 실패했습니다.");
+                    return "redirect:/product/pr_cart";
+                }
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("errorMessage", "주문 처리 중 오류가 발생했습니다: " + e.getMessage());
+                return "redirect:/product/pr_cart";
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "주문 처리 중 오류가 발생했습니다.");
+            return "redirect:/product/pr_cart";
+        }
     }
 }

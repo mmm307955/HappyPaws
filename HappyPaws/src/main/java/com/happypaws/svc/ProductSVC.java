@@ -3,6 +3,8 @@ package com.happypaws.svc;
 import java.io.File;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +17,11 @@ public class ProductSVC {
 	@Autowired
 	private ProductDAO dao;
 	
+	@Autowired
+	private ServletContext servletContext;
+	
 	private final String uploadPath = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/upload/";
+//	private final String uploadPath = servletContext.getRealPath("/resources/upload/"); // replace 하기
 	
 	public int getProductListCount(ProductVO vo) {
 		return dao.getProductListCount(vo);
@@ -49,8 +55,12 @@ public class ProductSVC {
 		return dao.deleteProductReview(prc_no);
 	}
 	
+	@Transactional
 	public int setProductReview(ProductVO vo) {
-		return dao.setProductReview(vo);
+	    // 기존 리뷰 삭제
+	    dao.deleteExistingReview(vo);
+	    // 새 리뷰 추가
+	    return dao.setProductReview(vo);
 	}
 	
 	public List<ProductVO> getProductQuestion(ProductVO vo) {
@@ -229,5 +239,26 @@ public class ProductSVC {
     
     public ProductVO getOrderByMerchantUid(String merchantUid) {
         return dao.getOrderByMerchantUid(merchantUid);
+    }
+    
+    public ProductVO getNextPurchaseInfo(ProductVO vo) {
+        return dao.getNextPurchaseInfo(vo);
+    }
+    
+    public int getReviewCount(ProductVO vo) {
+        return dao.getReviewCount(vo);
+    }
+    
+    public int getDeliveredOrderCount(ProductVO vo) {
+        return dao.getDeliveredOrderCount(vo);
+    }
+    
+    public ProductVO getReviewById(int prc_no) {
+        return dao.getReviewById(prc_no);
+    }
+    
+    // 인덱스 페이지에 보여주기
+    public List<ProductVO> productIndex() {
+        return dao.productIndex();
     }
 }

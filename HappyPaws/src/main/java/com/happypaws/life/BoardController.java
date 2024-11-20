@@ -45,7 +45,6 @@ public class BoardController {
 		
 		//관리자 차트
 		List<Map<String, Object>> getDaysTotalAmount = notic_SVC.getDaysTotalAmount();
-		System.out.println(getDaysTotalAmount);
 		
         model.addAttribute("getDaysTotalAmount", getDaysTotalAmount);
 		
@@ -82,8 +81,8 @@ public class BoardController {
 	@PostMapping("/upload")
 	@ResponseBody
 	public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
-//	    String uploadDir = request.getSession().getServletContext().getRealPath("/boarduploads/");
-		String uploadDir = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/boarduploads/";
+	    String uploadDir = request.getSession().getServletContext().getRealPath("/resources/boarduploads/");
+//		String uploadDir = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/boarduploads/";
 		
 	    String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 	    File targetFile = new File(uploadDir, fileName);
@@ -204,5 +203,12 @@ public class BoardController {
 		
 		notic_SVC.notice_delete(vo);
 		return "redirect:/admin/ad_notice_list";
+	}
+	
+	// 시작 페이지
+	@RequestMapping("/notice_index")
+	@ResponseBody
+	public NoticeVO notice_index() {
+		return notic_SVC.notice_index();
 	}
 }

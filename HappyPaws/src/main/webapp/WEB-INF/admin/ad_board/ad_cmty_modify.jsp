@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 	<!-- jQuery library -->
@@ -27,14 +27,14 @@
 					<span class="left">커뮤니티 수정</span>
 				</div>
 				<div class="c_category">
-					<label for="category">카테고리 선택:</label>
+					<label for="cmty_category">카테고리 선택:</label>
 					<select id="cmty_category" name="cmty_category">
 					    <option value="General" ${cmtyview.cmty_category == 'General' ? 'selected' : ''} >자유게시판</option>
 					    <option value="AdoptionReview" ${cmtyview.cmty_category == 'AdoptionReview' ? 'selected' : ''}>입양/분양 후기</option>
 					    <option value="FoundReview" ${cmtyview.cmty_category == 'FoundReview' ? 'selected' : ''}>찾은 후기</option>
 					</select>
 				</div>
-				<input type="text" name="cmty_title" placeholder="제목을 입력해주세요." value="${cmtyview.cmty_title}">
+				<label><input type="text" name="cmty_title" placeholder="제목을 입력해주세요." value="${cmtyview.cmty_title}"></label>
 				<input type="hidden" name="cmty_id" value="${cmtyview.cmty_id}">
 				<input type="hidden" name="cmty_content" id="cmty_content">
 				<input type="hidden" name="cmty_seq" value="${cmtyview.cmty_seq}">

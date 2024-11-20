@@ -38,6 +38,7 @@
 			</form>
 		</div>
 		<table>
+			<caption style="display:none;">공지사항</caption>
 			<thead>
 				<tr>
 					<th>번호</th>

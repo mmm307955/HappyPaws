@@ -180,5 +180,6 @@
 		</div>
 	</main>
 	<%@include file="./footer.jsp" %>
+	<script src="./resources/js/index.js"></script>
 </body>
 </html>

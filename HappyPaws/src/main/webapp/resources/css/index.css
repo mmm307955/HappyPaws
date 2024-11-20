@@ -17,14 +17,14 @@ main img[alt="logo"] {
 
 #hero-img span {
 	font-size: 30px;
-	color: #343a40;
+	/* color 없앰 */
 	font-weight: bold;
 }
 
 #hero-img img {
 	width: 50%;
 	height: 100%;
-	object-fit: cover; /* 이미지가 컨테이너를 가득 채우도록 조절 */
+	object-fit: cover;
 	object-position: 50% 35%;
 }
 

@@ -14,33 +14,53 @@ pageContext.setAttribute("categories", categories);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>행복한 발자국</title>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
-<link rel="stylesheet" type="text/css"
-    href="${pageContext.request.contextPath}/resources/css/MIA.css">
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/newFamily.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/notice.css">
+<link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/resources/css/MIA.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/newFamily.js"></script>
+<script>
+// 로그인 필요 알림
+$(document).on('click', '.nfIns2', function() {
+    const currentUri = encodeURIComponent(window.location.href);
+    alert("로그인이 필요합니다");
+    location.href = "/auth/login?returi=" + currentUri;
+});
+</script>
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 	<div class="n_list">
+	
 		<div class="c_category">
-				<ul>
-			    	<li><a href="/MIA/getLostPetList">아이를 찾아주세요</a></li>
-			    	<li><a href="/MIA/getFindPetList">아이를 발견했어요</a></li>
-				    <li><span>새로운 가족을 찾아요</span></li>
-				</ul>
-			</div>
-			<div class="n_seachform">
-				<form>
-					<label style="display: none;"><select name="searchCondition" >
+			<ul>
+		    	<li><a href="/MIA/getLostPetList">아이를 찾아주세요</a></li>
+		    	<li><a href="/MIA/getFindPetList">아이를 발견했어요</a></li>
+			    <li><span>새로운 가족을 찾아요</span></li>
+			</ul>
+		</div>
+		
+		<div class="c_category_ph">
+			<ul>
+		    	<li><a href="/MIA/getLostPetList">찾아주세요</a></li>
+		    	<li><a href="/MIA/getFindPetList">발견했어요</a></li>
+			    <li><span>가족을 찾아요</span></li>
+			</ul>
+		</div>
+		
+		<div class="n_seachform">
+			<form>
+				<label style="display: none;">
+					<select name="searchCondition" >
 						<option value="TITLE" ${searchCondition == 'TITLE' ? 'selected' : ''} >제목</option>
 						<option value="CONTENT" ${searchCondition == 'CONTENT' ? 'selected' : ''}>내용</option>
-					</select></label>
-					<div class="custom-select-wrapper">
-		                <div class="custom-select-display">
-		                    <span></span>
-		                    <i class="fas fa-chevron-down"></i>
-		                </div>
+					</select>
+				</label>
+				
+		<div class="custom-select-wrapper">
+			<div class="custom-select-display">
+				<span></span>
+		        <i class="fas fa-chevron-down"></i>
+		    </div>
 		                <div class="custom-options">
 		                    <div data-value="TITLE">제목</div>
 		                    <div data-value="CONTENT">내용</div>
@@ -52,10 +72,10 @@ pageContext.setAttribute("categories", categories);
 		            </div>
 				</form>
 				<c:if test="${not empty user.us_id}">
-					<button id="nfIns">글쓰기</button>
+					<button class="nfIns">글쓰기</button>
 				</c:if>
 				<c:if test="${empty user.us_id}">
-					<button id="nfIns2">글쓰기</button>
+					<button class="nfIns2">글쓰기</button>
 				</c:if>
 			</div>
 
@@ -124,5 +144,12 @@ pageContext.setAttribute("categories", categories);
 		</div>
 	</main>
 	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
+	
+	<c:if test="${not empty user.us_id}">
+		<button class="nfIns ph_write"><img src="/resources/images/edit-3.svg" alt="글쓰기"/></button>
+	</c:if>
+	<c:if test="${empty user.us_id}">
+		<button class="nfIns2 ph_write"><img src="/resources/images/edit-3.svg" alt="글쓰기"/></button>
+	</c:if>
 </body>
 </html>

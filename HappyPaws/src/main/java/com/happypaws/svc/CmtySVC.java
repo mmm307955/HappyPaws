@@ -9,6 +9,7 @@ import com.happypaws.dao.CmtyDAO;
 import com.happypaws.vo.CmtyCommentVO;
 import com.happypaws.vo.CmtyupVO;
 import com.happypaws.vo.CommunityVO;
+import com.happypaws.vo.NoticeVO;
 
 @Service
 public class CmtySVC {
@@ -85,5 +86,10 @@ public class CmtySVC {
     public int cmty_up_cut(CmtyupVO vo) {
     	return dao.cmty_up_cut(vo);
     }
+
+    // 시작 페이지
+	public List<CmtyupVO> cmyt_index() {
+		return dao.cmty_index();
+	}
     
 }

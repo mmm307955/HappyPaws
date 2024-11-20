@@ -55,6 +55,12 @@ $(document).on('click', '#lpcDel', function() {
         }
     }
 });
+
+//로그인 필요 알림
+$(document).on('click', '#login_button', function() {
+    const currentUri = encodeURIComponent(window.location.href);
+    location.href = "/auth/login?returi=" + currentUri;
+});
 </script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
@@ -114,9 +120,7 @@ $(document).on('click', '#lpcDel', function() {
 					<input type="hidden" name="searchCondition" value="${searchCondition}">
 					<input type="hidden" name="category" value="${category}">
 					<input type="hidden" name="nowPage" value="${nowPage}">
-					<div class="n_content">
-						<p>${fn:replace(lostPet.lp_content, lf, "<br>")}</p>
-					</div>
+					<div class="n_content"><pre>${fn:replace(lostPet.lp_content, lf, "<br>")}</pre></div>
 				</form>
 			</div>
 		</div>
@@ -149,12 +153,10 @@ $(document).on('click', '#lpcDel', function() {
 						<span><c:out value="${lpComment.lpc_date}" /></span>
 					</div>
 					<div>
-						<p class="lpcMod1">
-							<c:out value="${lpComment.lpc_content}" />
-						</p>
+						<pre class="lpcMod1"><c:out value="${lpComment.lpc_content}" /></pre>
 						
 						<div class="lpcMod2" style="display: none">
-							<textarea name="lpc_content" required>${lpComment.lpc_content}</textarea>
+							<textarea cols="100" wrap="hard" name="lpc_content" required>${lpComment.lpc_content}</textarea>
 							<div class="btn-container">
 								<button id="lpcMod" type="button">수정</button>
 								<button id="close" type="button">닫기</button>
@@ -187,7 +189,7 @@ $(document).on('click', '#lpcDel', function() {
 				 alt="프로필">
 				${user.us_nick}</strong>
 				<c:if test="${not empty user.us_id}">
-				<textarea id="lpc_content" name="lpc_content" required></textarea>
+				<textarea cols="100" wrap="hard" id="lpc_content" name="lpc_content" required></textarea>
 				<div class="btn-container">
 					<button type="submit">등록</button>
 				</div>
@@ -195,13 +197,12 @@ $(document).on('click', '#lpcDel', function() {
 				<c:if test="${empty user.us_id}">
 				<textarea id="lpc_content" name="lpc_content" placeholder="로그인 후 입력이 가능합니다." required disabled></textarea>
 				<div class="btn-container">
-					<button type="submit" disabled>등록</button>
+    				<button type="button" id="login_button">등록</button>
 				</div>
 				</c:if>
 			</div>
 		</form>
-
-	
+		
 		<section class="commandList">
 			<div class="btn-container">
 			<c:if test="${user.us_id == lostPet.lp_id || user.us_id == 'admin'}">

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.happypaws.svc.LostPetSVC;
@@ -37,8 +39,9 @@ public class LostPetController {
 	@Autowired
 	private LpCommentSVC lpCommentSVC;
 
-	String realPath = "c:/happyPaws/happyPaws/src/main/webapp/resources/MIA-img/lostPetImg/";
-
+	@Autowired
+    private ServletContext servletContext;
+	
 	// 글 등록
 	@RequestMapping(value = "/insertLostPet", method = RequestMethod.GET)
 	public String insertView(LostPetVO vo) throws IllegalStateException, IOException {
@@ -50,7 +53,7 @@ public class LostPetController {
 		System.out.println(vo.getUploadFile());
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
-
+		String realPath = servletContext.getRealPath("/resources/MIA-img/lostPetImg/");
 		// UUID를 사용하여 새로운 파일 이름 생성
 		String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFilename;
 		vo.setLp_img(uniqueFileName);
@@ -92,7 +95,7 @@ public class LostPetController {
 	public String updateLostPet(LostPetVO vo, HttpSession session) throws IllegalStateException, IOException {
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
-
+		String realPath = servletContext.getRealPath("/resources/MIA-img/lostPetImg/");
 		// 현재 이미지 이름을 가져오는 서비스 메서드
 		String existingImg = lostPetSVC.getCurrentImage(vo.getLp_seq());
 		String newFileName;
@@ -136,6 +139,7 @@ public class LostPetController {
 	// 글 완전히 삭제
 	@RequestMapping("/deleteAllLostPet")
 	public String deleteAllLostPet(LostPetVO vo, HttpServletRequest request) {
+		String realPath = servletContext.getRealPath("/resources/MIA-img/lostPetImg/");
 		realPath = request.getSession().getServletContext().getRealPath("/resources/img/");
 		if (vo.getLp_img() != null) {
 			System.out.println("파일삭제: " + realPath + vo.getLp_img());
@@ -226,6 +230,15 @@ public class LostPetController {
 
 		return "/WEB-INF/MIA/lostPet/getLostPetList.jsp";
 	}
+	
+	//인덱스 글 목록
+	@ResponseBody
+	@RequestMapping(value = "/getLostPetListIndex", method = RequestMethod.GET)
+	public List<LostPetVO> getLostPetListIndex(LostPetVO vo) {
+		// 분실 반려동물 목록 조회
+		List<LostPetVO> lostPetList = lostPetSVC.getLostPetList();
+		return lostPetList;
+	}	
 	
 	// 관리자 글 목록
 		@RequestMapping("/getLostPetListAdmin")

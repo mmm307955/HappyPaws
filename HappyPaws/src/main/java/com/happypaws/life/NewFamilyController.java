@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,10 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.happypaws.svc.NewFamilySVC;
 import com.happypaws.svc.NfCommentSVC;
+import com.happypaws.vo.LostPetVO;
 import com.happypaws.vo.NewFamilyVO;
 import com.happypaws.vo.NfCommentVO;
 import com.happypaws.vo.PagingVO;
@@ -35,8 +38,9 @@ public class NewFamilyController {
 	@Autowired
 	private NfCommentSVC nfCommentSVC;
 
-	String realPath = "c:/happyPaws/happyPaws/src/main/webapp/resources/MIA-img/newFamilyImg/";
-
+	@Autowired
+	private ServletContext servletContext;
+	
 	// 글 등록
 	@RequestMapping(value = "/insertNewFamily", method = RequestMethod.GET)
 	public String insertView(NewFamilyVO vo) throws IllegalStateException, IOException {
@@ -47,7 +51,7 @@ public class NewFamilyController {
 	public String insertNewFamily(NewFamilyVO vo) throws IllegalStateException, IOException {
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
-
+		String realPath = servletContext.getRealPath("/resources/MIA-img/newFamilyImg/");
 		// UUID를 사용하여 새로운 파일 이름 생성
 		String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFilename;
 		vo.setNf_img(uniqueFileName);
@@ -89,7 +93,7 @@ public class NewFamilyController {
 	public String updateNewFamily(NewFamilyVO vo, HttpSession session) throws IllegalStateException, IOException {
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
-
+		String realPath = servletContext.getRealPath("/resources/MIA-img/newFamilyImg/");
 		// 현재 이미지 이름을 가져오는 서비스 메서드
 		String existingImg = newFamilySVC.getCurrentImage(vo.getNf_seq());
 		String newFileName;
@@ -133,6 +137,7 @@ public class NewFamilyController {
 	// 글 완전히 삭제
 	@RequestMapping("/deleteAllNewFamily")
 	public String deleteAllNewFamily(NewFamilyVO vo, HttpServletRequest request) {
+		String realPath = servletContext.getRealPath("/resources/MIA-img/newFamilyImg/");
 		realPath = request.getSession().getServletContext().getRealPath("/resources/img/");
 		if (vo.getNf_img() != null) {
 			System.out.println("파일삭제: " + realPath + vo.getNf_img());
@@ -215,5 +220,13 @@ public class NewFamilyController {
 
 		return "/WEB-INF/MIA/newFamily/getNewFamilyList.jsp";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getNewFamilyListIndex", method = RequestMethod.GET)
+	public List<NewFamilyVO> getNewFamilyListIndex(NewFamilyVO vo) {
+		// 분실 반려동물 목록 조회
+		List<NewFamilyVO> newFamilyList = newFamilySVC.getNewFamilyList();
+		return newFamilyList;
+	}	
 
 }

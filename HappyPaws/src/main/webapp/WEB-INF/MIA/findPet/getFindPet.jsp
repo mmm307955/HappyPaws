@@ -74,6 +74,7 @@ $(document).on('click', '[id^="submitOpenFpcMod_"]', function() {
             fpCommentDiv.find(".fpcMod1").hide();
             fpCommentDiv.find(".fpcMod2").show();
             fpCommentDiv.find(".fpcMod4").hide();
+            fpCommentDiv.find(".fpcMod").hide();
         } else {
             alert("비밀번호가 틀렸습니다.");
         }
@@ -198,9 +199,7 @@ $(document).on('click', '[id^="closeFpcDelCheck_"]', function () {
 					<input type="hidden" name="searchCondition" value="${searchCondition}">
 					<input type="hidden" name="category" value="${category}">
 					<input type="hidden" name="nowPage" value="${nowPage}">
-					<div class="n_content">
-						<p>${fn:replace(findPet.fp_content, lf, "<br>")}</p>
-					</div>
+					<div class="n_content"><pre>${fn:replace(findPet.fp_content, lf, "<br>")}</pre></div>
 				</form>
 			</div>
 		</div>
@@ -236,12 +235,10 @@ $(document).on('click', '[id^="closeFpcDelCheck_"]', function () {
                 <span><c:out value="${fpComment.fpc_date}" /></span>
             </div>
             <div>
-                <p class="fpcMod1">
-                    <c:out value="${fpComment.fpc_content}" />
-                </p>
+            <pre class="fpcMod1"><c:out value="${fpComment.fpc_content}" /></pre>
 
                 <div class="fpcMod2" style="display: none">
-                    <textarea name="fpc_content" required>${fpComment.fpc_content}</textarea>
+                    <textarea cols="100" wrap="hard" name="fpc_content" required>${fpComment.fpc_content}</textarea>
                     <div class="btn-container">
                         <button id="fpcMod" type="button">수정</button>
                         <button id="close" type="button">닫기</button>
@@ -295,7 +292,7 @@ $(document).on('click', '[id^="closeFpcDelCheck_"]', function () {
 				<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${user.us_profile}" 
 				onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
 				${user.us_nick}</strong>
-				<textarea id="fpc_content" name="fpc_content" required></textarea>
+				<textarea cols="100" wrap="hard" id="fpc_content" name="fpc_content" required></textarea>
 				<div class="btn-container">
 					<button type="submit">등록</button>
 				</div>
@@ -314,7 +311,7 @@ $(document).on('click', '[id^="closeFpcDelCheck_"]', function () {
 				<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 				<input type="hidden" name="category" value="${category}">
 				<input type="hidden" name="nowPage" value="${nowPage}">
-				<textarea id="fpc_content" name="fpc_content" required></textarea>
+				<textarea cols="100" wrap="hard" id="fpc_content" name="fpc_content" required></textarea>
 				<div class="btn-container">
 					<button type="submit">등록</button>
 				</div>

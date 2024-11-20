@@ -43,6 +43,11 @@ public class NewFamilySVC {
     public List<NewFamilyVO> getNewFamilyList(NewFamilyVO vo) {
         return newFamilyDAO.getNewFamilyList(vo);  // NewFamily 글 목록 조회 (NewFamilyDAO 메서드 호출)
     }
+    
+    // 글 목록 조회
+    public List<NewFamilyVO> getNewFamilyList() {
+        return newFamilyDAO.getNewFamilyList();
+    }
 
     // 전체 페이지 수 조회
     public int countNewFamily(NewFamilyVO vo) {

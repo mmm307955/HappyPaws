@@ -22,6 +22,8 @@
 		
 		ul {
 		    list-style-type: none;
+		    padding: 0;
+		    margin: 0;
 		}
 		
 		.top {
@@ -31,19 +33,16 @@
 		
 		.top-controls {
 		    display: flex;
-		    justify-content: flex-end;
+		    justify-content: center;
 		    gap: 10px;
 		    padding: 10px 20px;
 		    background: white;
-		    border-bottom: 1px solid #dee2e6;
 		}
 		
 		.control-button {
 		    padding: 8px 16px;
-		    background: #868e96;
-		    color: white;
-		    border: none;
-		    border-radius: 5px;
+		    color: black;
+		    border-bottom: 2px solid #fcd11e;
 		    cursor: pointer;
 		    display: inline-flex;      
 		    align-items: center;       
@@ -51,27 +50,42 @@
 		    text-decoration: none;    
 		}
 		
-		.control-button:hover {
-		    background: #495057;      
-		}
-		
 		.search-container {
 		    max-width: 600px;
 		    margin: 20px auto;
 		    position: relative;
+		    padding: 0 15px;
 		}
 		
 		.search-input {
 		    width: 100%;
 		    padding: 12px 40px 12px 20px;
-		    border: 2px solid #dee2e6;
+		    border: 2px solid #fcd11e;
 		    border-radius: 25px;
-		    font-size: 16px;
+		    font-size: 15px;
+		    outline: none;
+		}
+		
+		.search-input:focus {
+		    border-color: #fcd11e;
+		}
+		
+		.search-input::placeholder {
+			color: black;
+		}
+		
+		.search-input::-webkit-search-cancel-button {
+		    -webkit-appearance: none;
+		    height: 16px;
+		    width: 16px;
+		    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>") no-repeat 50% 50%;
+		    cursor: pointer;
+		    margin-right: 10px;
 		}
 		
 		.search-icon {
 		    position: absolute;
-		    right: 15px;
+		    right: 25px;
 		    top: 50%;
 		    transform: translateY(-90%);
 		    color: #868e96;
@@ -80,18 +94,18 @@
 		.nav-menu {
 		    display: flex;
 		    justify-content: center;
-		    gap: 30px;
-		    padding: 20px;
+		    gap: 20px;
+		    padding: 15px;
 		    background: white;
-		    border-bottom: 1px solid #dee2e6;
 		    margin-bottom: 0;
+		    flex-wrap: wrap;
 		}
 		
 		.nav-menu a {
 		    text-decoration: none;
 		    color: #495057;
 		    font-size: 16px;
-		    padding: 10px 20px;
+		    padding: 8px 15px;
 		}
 		
 		.nav-menu a:hover {
@@ -109,7 +123,6 @@
 		    justify-content: flex-end;
 		    padding: 10px 20px;
 		    background: white;
-		    border-bottom: 1px solid #dee2e6;
 		}
 		
 		.filter-select {
@@ -118,13 +131,13 @@
 		    border-radius: 20px;
 		    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23495057' d='M4 6l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 10px center;
 		    color: #495057;
-		    font-size: 14px;
+		    font-size: 16px;
 		    cursor: pointer;
 		    outline: none;
 		    appearance: none;
 		    -webkit-appearance: none;
 		    -moz-appearance: none;
-		    padding-right: 35px; 
+		    padding-right: 35px;
 		}
 		
 		.filter-select:hover {
@@ -135,8 +148,8 @@
 		    display: flex;
 		    justify-content: flex-start;
 		    flex-wrap: wrap; 
-		    gap: 30px;
-		    padding: 20px;
+		    gap: 20px;
+		    padding: 15px;
 		    max-width: 1200px;
 		    margin: 0 auto;
 		}
@@ -147,7 +160,7 @@
 		    border-radius: 8px;
 		    overflow: hidden;
 		    position: relative;
-		    flex: 0 0 calc(33.333% - 20px); 
+		    flex: 0 0 calc(33.333% - 14px);
 		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		}
 		
@@ -168,7 +181,7 @@
 		.thumbnail-item {
 		    width: 100%;
 		    height: 100%;
-		    object-fit: cover; 
+		    object-fit: cover;
 		}
 		
 		.product-top {
@@ -178,21 +191,21 @@
 		}
 		
 		.product-title {
-		    font-size: 14px;
+		    font-size: 16px;
 		    color: #495057;
 		    margin-bottom: 8px;
 		}
 		
 		.product-price {
 		    font-weight: bold;
-		    font-size: 16px;
+		    font-size: 18px;
 		    color: #212529;
 		}
 		
 		.product-bottom {
 		    display: flex;
 		    justify-content: space-between;
-		    padding: 0;  
+		    padding: 0;
 		}
 		
 		.rating-link {
@@ -201,14 +214,14 @@
 		
 		.product-rating {
 		    color: #868e96;
-		    font-size: 14px;
+		    font-size: 13px;
 		    margin: 8px 0 0 12px;
 		    padding: 0;
 		}
 		
 		.product-button {
-		    display: inline-flex; 
-		    align-items: center;  
+		    display: inline-flex;
+		    align-items: center;
 		    justify-content: center;
 		    padding: 8px 16px;
 		    background: #868e96;
@@ -217,9 +230,9 @@
 		    border-radius: 5px;
 		    cursor: pointer;
 		    text-decoration: none;
-		    font-size: 14px;     
-		    margin: 10px;   
-		    height: 33px;       
+		    font-size: 13px;
+		    margin: 10px;
+		    height: 33px;
 		}
 		
 		.product-button:hover {
@@ -233,6 +246,7 @@
 		    justify-content: center;
 		    align-items: center;
 		    color: #6c757d;
+		    font-size: 14px;
 		}
 		
 		.detail-pagination {
@@ -240,7 +254,8 @@
 		    justify-content: center;
 		    align-items: center;
 		    gap: 5px;
-		    margin-top: 20px;
+		    margin: 20px 0;
+		    flex-wrap: wrap;
 		}
 		
 		.detail-page-item {
@@ -268,6 +283,7 @@
 		    display: flex;
 		    align-items: center;
 		    justify-content: center;
+		    font-size: 14px;
 		}
 		
 		.detail-page-link:hover {
@@ -281,6 +297,7 @@
 		.wishlist-btn {
 		    background: #6c757d;
 		    color: white;
+		    font-size: 15px;
 		}
 		
 		.wishlist-btn:hover {
@@ -296,109 +313,88 @@
 		    background: #454311;
 		}
 		
-		/* Mobile and Tablet View */
+		.rating-star {
+		    color: #e7711b;
+		    font-size: 16px;
+		}
+		
+		/* 태블릿 반응형 */
 		@media screen and (max-width: 768px) {
+		    .product-card {
+		        flex: 0 0 calc(50% - 10px);
+		    }
+		    
 		    .nav-menu {
-		        flex-direction: column;
+		        gap: 10px;
 		        padding: 10px;
 		    }
-		
+		    
 		    .nav-menu a {
 		        font-size: 14px;
-		        padding: 8px 0;
+		        padding: 6px 12px;
 		    }
-		
-		    .search-container {
-		        max-width: 90%;
-		    }
-		
-		    .product-grid {
-		        gap: 20px;
-		        padding: 10px;
-		    }
-		
-		    .product-card {
-		        flex: 0 0 calc(50% - 20px); /* 2 items per row on tablet */
-		    }
-		
+		    
 		    .top-controls {
-		        flex-direction: column;
-		        align-items: flex-start;
-		    }
-		
-		    .control-button {
-		        width: 100%;
-		        text-align: center;
-		        margin-bottom: 10px;
-		    }
-		
-		    .filter-container {
 		        padding: 10px;
 		    }
-		
-		    .filter-select {
-		        width: 100%;
+		    
+		    .control-button {
+		        padding: 6px 12px;
+		        font-size: 14px;
+		    }
+		    
+		    section {
+		    	padding: 10px;
 		    }
 		}
 		
-		/* Mobile View */
+		/* 모바일 반응형 */
 		@media screen and (max-width: 480px) {
-		    .nav-menu {
-		        flex-direction: column;
-		        padding: 10px;
-		    }
-		
-		    .nav-menu a {
-		        font-size: 14px;
-		        padding: 8px 0;
-		    }
-		
-		    .search-container {
-		        max-width: 90%;
-		    }
-		
-		    .product-grid {
-		        gap: 15px;
-		        padding: 5px;
-		    }
-		
 		    .product-card {
-		        flex: 0 0 100%; /* 1 item per row on mobile */
+		        flex: 0 0 100%;
 		    }
-		
-		    .top-controls {
-		        flex-direction: column;
-		        align-items: flex-start;
+		    
+		    .nav-menu {
+		        gap: 5px;
+		        padding: 8px;
 		    }
-		
-		    .control-button {
-		        width: 100%;
-		        text-align: center;
-		        margin-bottom: 10px;
+		    
+		    .nav-menu a {
+		        font-size: 13px;
+		        padding: 5px 10px;
 		    }
-		
-		    .filter-container {
-		        padding: 10px;
+		    
+		    .search-input {
+		        font-size: 14px;
 		    }
-		
-		    .filter-select {
-		        width: 100%;
-		    }
-		
+		    
 		    .product-title {
-		        font-size: 12px; /* smaller text for product title on mobile */
+		        font-size: 12px;
 		    }
-		
+		    
 		    .product-price {
-		        font-size: 14px; /* smaller text for price */
+		        font-size: 14px;
 		    }
-		
+		    
 		    .product-rating {
-		        font-size: 12px; /* smaller font for rating */
+		        font-size: 12px;
 		    }
-		
+		    
 		    .product-button {
-		        font-size: 12px; /* smaller buttons */
+		        font-size: 12px;
+		        padding: 6px 12px;
+		    }
+		    
+		    .filter-select {
+		        font-size: 12px;
+		    }
+		    
+		    .detail-page-link {
+		        font-size: 13px;
+		    }
+		    
+		    section {
+		    	padding: 10px;
 		    }
 		}
     </style>
@@ -489,7 +485,7 @@
     <main>
 		<div class="search-container">
 		    <form action="/product/pr_list" method="get" onsubmit="return validateSearch()">
-		        <input type="text" name="searchKeyword" class="search-input" placeholder="검색어를 입력해주세요." value="${searchKeyword}">
+		        <input type="search" name="searchKeyword" class="search-input" placeholder="검색어를 입력해주세요." value="${searchKeyword}">
 		        <input type="hidden" name="sortType" value="${sortType}">
 		        <c:if test="${not empty category}">
 		            <input type="hidden" name="category" value="${category}">
@@ -543,7 +539,7 @@
 	                </a>
 					<div class="product-bottom">
 					    <a href="/product/pr_detail?pr_id=${plist.pr_id}&tab=reviews" class="rating-link">
-					        <div class="product-rating">★<fmt:formatNumber value="${plist.avgRating}" pattern="#.#"/> 리뷰 ${plist.reviewCount}</div>
+					        <div class="product-rating"><span class="rating-star">★<fmt:formatNumber value="${plist.avgRating}" pattern="#.#"/> 리뷰 ${plist.reviewCount}</span></div>
 					    </a>
 					    <button class="product-button wishlist-btn">위시리스트</button>
 					</div>

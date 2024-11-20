@@ -50,6 +50,11 @@ public class NewFamilyDAO {
         return mybatis.selectList("NewFamilyDAO.getNewFamilyList", vo);
     }
     
+    public List<NewFamilyVO> getNewFamilyList() {
+        return mybatis.selectList("NewFamilyDAO.getNewFamilyListIndex");
+    }
+    
+    
     public int countNewFamily(NewFamilyVO vo) {
         return mybatis.selectOne("NewFamilyDAO.countNewFamily", vo);
     }

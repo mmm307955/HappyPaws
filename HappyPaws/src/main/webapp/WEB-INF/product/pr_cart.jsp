@@ -37,23 +37,24 @@
 		    margin: 0 auto;
 		}
 
-        .top-controls {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            padding: 10px 20px;
-            background: white;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .control-button {
-            padding: 8px 16px;
-            background: #868e96;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+		.top-controls {
+		    display: flex;
+		    justify-content: center;
+		    gap: 10px;
+		    padding: 10px 20px;
+		    background: white;
+		}
+		
+		.control-button {
+		    padding: 8px 16px;
+		    color: black;
+		    border-bottom: 2px solid #fcd11e;
+		    cursor: pointer;
+		    display: inline-flex;      
+		    align-items: center;       
+		    justify-content: center;   
+		    text-decoration: none;    
+		}
 
         .cart-title {
             text-align: center;
@@ -338,6 +339,7 @@
 	        font-size: 24px;
 	        font-weight: bold;
 	        text-align: center;
+	        color: 5e5a14;
 	        width: 100%;
 	    }
 	
@@ -389,6 +391,306 @@
 		
 		.modal-backdrop {
 		    pointer-events: none !important;
+		}
+		
+		.mobile-cart-items {
+		    display: none;
+		}
+		
+		.cart-table {
+		    display: table;
+		}
+		
+		.mobile-cart-footer {
+		    display: none;
+		}
+		
+		.pc-cart-footer {
+		    display: block;
+		    margin-top: 20px;
+		}
+		
+		.sales-sell {
+			font-size: 16px;
+		}
+		
+		.sales-sum {
+			font-size: 16px;
+		}
+		
+		.sales-deli {
+			font-size: 16px;
+		}
+		
+		/* 768px 이하 모바일 환경에서는 반대로 적용 */
+		@media screen and (max-width: 768px) {
+			section {
+				padding: 10px;
+			}
+		
+		    .mobile-cart-items {
+		        display: block;
+		    }
+		
+		    .cart-table {
+		        display: none;
+		    }
+		    
+		    /* 메인 컨테이너 조정 */
+		    main {
+		        padding: 0 10px;
+		    }
+		
+		    .cart-title {
+		        font-size: 24px;
+		        margin: 20px 0;
+		    }
+		
+		    /* 모바일용 카드 스타일 */
+		    .cart-item-card {
+		        background: white;
+		        border: 1px solid #dee2e6;
+		        border-radius: 8px;
+		        margin-bottom: 15px;
+		        padding: 15px;
+		    }
+		
+		    .cart-item-header {
+		        display: flex;
+		        align-items: center;
+		        margin-bottom: 10px;
+		    }
+		
+		    .cart-item-checkbox {
+		        margin-right: 10px;
+		    }
+		
+		    .cart-item-image {
+		        width: 80px;
+		        height: 80px;
+		        object-fit: cover;
+		        margin-right: 15px;
+		    }
+		
+		    .cart-item-info {
+		        flex: 1;
+		    }
+		
+		    .cart-item-name {
+		        font-size: 14px;
+		        font-weight: bold;
+		        margin-bottom: 5px;
+		    }
+		
+		    .cart-item-option {
+		        font-size: 12px;
+		        color: #666;
+		    }
+		
+		    .cart-item-price {
+		    	display: none;
+		    }
+		
+		    .cart-item-quantity {
+		        display: flex;
+		        align-items: center;
+		        margin: 10px 0;
+		    }
+		
+		    .quantity-label {
+		        font-size: 12px;
+		        margin-right: 10px;
+		    }
+		
+		    .mobile-quantity-input-group {
+		        display: flex;
+		        align-items: center;
+		        border: 1px solid #dee2e6;
+		        border-radius: 4px;
+		        overflow: hidden;
+		    }
+		
+		    .mobile-quantity-button {
+		        width: 30px;
+		        height: 30px;
+		        border: none;
+		        background: #f8f9fa;
+		        font-size: 16px;
+		    }
+		
+		    .mobile-quantity-input {
+		        width: 40px;
+		        height: 30px;
+		        border: none;
+		        text-align: center;
+		        -webkit-appearance: none;
+		        -moz-appearance: textfield;
+		    }
+		
+		    .cart-item-subtotal {
+		        font-size: 14px;
+		        font-weight: bold;
+		        text-align: right;
+		        margin: 10px 0;
+		    }
+		
+		    .cart-item-buttons {
+		        display: flex;
+		        gap: 8px;
+		        margin-top: 15px;
+		    }
+		
+		    .cart-item-button {
+		        flex: 1;
+		        padding: 8px;
+		        font-size: 12px;
+		        border: 1px solid #dee2e6;
+		        border-radius: 4px;
+		        background: white;
+		    }
+		
+		    .cart-item-button.order {
+		        background: #5e5a14;
+		        color: white;
+		        border: none;
+		    }
+		
+		    /* 가격 요약 섹션 */
+		    .price-summary {
+		        flex-direction: column;
+		        padding: 20px 15px;
+		        gap: 15px;
+		    }
+		
+		    .price-separator {
+		        transform: rotate(90deg);
+		        margin: 10px 0;
+		    }
+		
+		    .price-item {
+		        width: 100%;
+		    }
+		
+		    .price-label {
+		        font-size: 12px;
+		    }
+		
+		    .price-value {
+		        font-size: 18px;
+		    }
+		
+		    /* 하단 버튼 영역 */
+		    .purchase-buttons {
+		        padding: 0 15px;
+		        margin: 20px 0;
+		    }
+		
+		    .purchase-btn {
+		        width: 100%;
+		        margin-bottom: 10px;
+		        padding: 12px 0;
+		    }
+		
+		    /* 배송 모달 */
+		    .modal-dialog {
+		        margin: 10px;
+		    }
+
+		    .pc-cart-footer {
+		        display: none;
+		    }
+		
+		    .mobile-cart-footer {
+		        display: block;
+		        padding: 0 15px;
+		    }
+		
+		    .mobile-price-summary {
+		        background: #f8f9fa;
+		        padding: 15px;
+		        border-radius: 8px;
+		        margin-bottom: 15px;
+		    }
+		
+		    .mobile-price-row {
+		        display: flex;
+		        justify-content: space-between;
+		        align-items: center;
+		        padding: 8px 0;
+		        border-bottom: 1px solid #dee2e6;
+		    }
+		
+		    .mobile-price-row span {
+		        color: #495057;
+		        font-size: 14px;
+		    }
+		
+		    .mobile-price-row strong {
+		        font-size: 14px;
+		    }
+		
+		    .mobile-price-total {
+		        display: flex;
+		        justify-content: space-between;
+		        align-items: center;
+		        padding: 15px 0 5px 0;
+		    }
+		
+		    .mobile-price-total span {
+		        font-weight: bold;
+		        color: #212529;
+		        font-size: 16px;
+		    }
+		
+		    .mobile-price-total strong {
+		        color: #5e5a14;
+		        font-size: 20px;
+		    }
+		
+		    .mobile-cart-actions {
+		        margin-top: 20px;
+		    }
+		
+		    .mobile-action-row {
+		        display: flex;
+		        gap: 8px;
+		        margin-bottom: 10px;
+		    }
+		
+		    .mobile-action-row button {
+		        flex: 1;
+		        padding: 10px;
+		        border: 1px solid #dee2e6;
+		        background: white;
+		        border-radius: 4px;
+		        font-size: 13px;
+		    }
+		
+		    .mobile-order-buttons {
+		        display: flex;
+		        flex-direction: column;
+		        gap: 8px;
+		    }
+		
+		    .mobile-order-btn {
+		        width: 100%;
+		        padding: 15px 0;
+		        border: none;
+		        border-radius: 4px;
+		        font-size: 14px;
+		        font-weight: bold;
+		    }
+		
+		    .mobile-order-btn.order-all {
+		        background: #5e5a14;
+		        color: white;
+		    }
+		
+		    .mobile-order-btn.order-selected {
+		        background: white;
+		        border: 1px solid #5e5a14;
+		        color: #5e5a14;
+		    }
 		}
     </style>
 	<script>
@@ -465,8 +767,9 @@
 			    var checkedCount = $('.product-checkbox:checked').length;
 			    var totalCount = $('.product-checkbox').length;
 			
-			    // 체크된 상품이 없거나 전체 선택일 경우 모든 상품의 금액 계산
+			    // 모바일과 PC 구분하여 체크된 상품의 가격 계산
 			    if (checkedCount === 0 || checkedCount === totalCount) {
+			        // PC 버전 - 전체 상품 계산
 			        $('.cart-table tbody tr').each(function() {
 			            var quantity = parseInt($(this).find('.quantity-input').val()) || 0;
 			            var price = parseInt($(this).find('td:eq(3)').text().replace(/[^0-9]/g, '')) || 0;
@@ -475,8 +778,18 @@
 			            $(this).find('td:nth-last-child(2)').text('₩' + itemTotal.toLocaleString());
 			            totalProductPrice += itemTotal;
 			        });
+			
+			        // 모바일 버전 - 전체 상품 계산
+			        $('.cart-item-card').each(function() {
+			            var quantity = parseInt($(this).find('.mobile-quantity-input').val()) || 0;
+			            var price = parseInt($(this).find('.cart-item-price').text().replace(/[^0-9]/g, '')) || 0;
+			            var itemTotal = quantity * price;
+			            
+			            $(this).find('.cart-item-subtotal').text('합계: ₩' + itemTotal.toLocaleString());
+			            // 모바일에서는 이미 PC에서 계산된 값을 사용하므로 totalProductPrice에 더하지 않음
+			        });
 			    } else {
-			        // 일부 상품만 체크된 경우 체크된 상품의 금액만 계산
+			        // PC 버전 - 체크된 상품만 계산
 			        $('.cart-table tbody tr').each(function() {
 			            var isChecked = $(this).find('.product-checkbox').prop('checked');
 			            var quantity = parseInt($(this).find('.quantity-input').val()) || 0;
@@ -489,15 +802,39 @@
 			                totalProductPrice += itemTotal;
 			            }
 			        });
+
+			        // 모바일 버전 - 체크된 상품만 계산
+			        $('.cart-item-card').each(function() {
+			            var isChecked = $(this).find('.product-checkbox').prop('checked');
+			            var quantity = parseInt($(this).find('.mobile-quantity-input').val()) || 0;
+			            var price = parseInt($(this).find('.cart-item-price').text().replace(/[^0-9]/g, '')) || 0;
+			            var itemTotal = quantity * price;
+			            
+			            $(this).find('.cart-item-subtotal').text('합계: ₩' + itemTotal.toLocaleString());
+			            
+			            // 체크된 상품의 금액을 총액에 더함
+			            if (isChecked && !$(this).closest('tr').length) { // PC 버전에서 계산되지 않은 경우에만
+			                totalProductPrice += itemTotal;
+			            }
+			        });
 			    }
 			
-			    // 상품 금액이 있을 때만 배송비 추가
+			    // 배송비 계산
 			    totalShipping = totalProductPrice > 0 ? 3000 : 0;
 			
-			    // 화면 업데이트
+			    // PC 버전 총액 업데이트
+			    var finalTotal = totalProductPrice + totalShipping;
 			    $('.price-summary .price-value').eq(0).html(totalProductPrice.toLocaleString() + '<span>원</span>');
 			    $('.price-summary .price-value').eq(1).html(totalShipping.toLocaleString() + '<span>원</span>');
-			    $('.price-summary .price-value').eq(2).html((totalProductPrice + totalShipping).toLocaleString() + '<span>원</span>');
+			    $('.price-summary .price-value').eq(2).html(finalTotal.toLocaleString() + '<span>원</span>');
+			
+			    // 모바일 버전 총액 업데이트
+			    $('.mobile-price-row').eq(0).find('strong').text(totalProductPrice.toLocaleString() + '원');
+			    $('.mobile-price-row').eq(1).find('strong').text(totalShipping.toLocaleString() + '원');
+			    $('.mobile-price-total strong').text(finalTotal.toLocaleString() + '원');
+			
+			    // 전체 선택 체크박스 상태 업데이트
+			    $('#selectAll').prop('checked', checkedCount === totalCount && totalCount > 0);
 			}
 		
 		    // 장바구니 수량 DB 업데이트
@@ -594,87 +931,81 @@
 		        }
 		    });
 		
-		    // 장바구니 비우기
-		    $('button:contains("장바구니비우기")').on('click', function() {
-		        if (!confirm('장바구니를 비우시겠습니까?')) {
-		            return;
-		        }
-		
-		        const allItems = Object.values(products).map(product => ({
-		            pr_id: product.pr_id,
-		            pr_opt_name: product.pr_opt_name
-		        }));
-		
-		        Promise.all(allItems.map(item => 
-		            $.ajax({
-		                url: '${pageContext.request.contextPath}/product/remove_from_cart',
-		                type: 'POST',
-		                contentType: 'application/json',
-		                data: JSON.stringify(item)
-		            })
-		        )).then(() => {
-		            location.reload();
-		        }).catch(() => {
-		            alert('장바구니 비우기 중 오류가 발생했습니다.');
-		        });
-		    });
-		
 		    // 전체 선택 체크박스
 		    $('#selectAll').on('change', function() {
 		        const isChecked = $(this).prop('checked');
 		        $('.product-checkbox').prop('checked', isChecked);
 		    });
 		    
-		 	// 수량 증가 버튼 클릭 시
-			$(document).on('click', '.quantity-button.plus', function() {
-			    var input = $(this).closest('.quantity-input-group').find('.quantity-input');
-			    var targetId = input.attr('id');
-			    var currentValue = parseInt(input.val());
-			    var maxStock = products[targetId].stock;
-			    
-			    if (currentValue < maxStock) {
-			        input.val(currentValue + 1);
-			        updateProductTotal(targetId);
-			        updateTotalPrice();
-			        updateCartQuantity(targetId, currentValue + 1);
-			    } else {
-			        alert('재고가 부족합니다.');
-			    }
-			});
+		 	// PC 버전 - 수량 증가 버튼
+		    $(document).on('click', '.quantity-button.plus', function() {
+		        var input = $(this).closest('.quantity-input-group').find('.quantity-input');
+		        var targetId = input.attr('id');
+		        var currentValue = parseInt(input.val());
+		        var mobileInput = $('#mobile_' + targetId);
+		        
+		        if (!products[targetId]) {
+		            console.error('Product not found:', targetId);
+		            return;
+		        }
+		        
+		        var maxStock = products[targetId].stock;
+		        
+		        if (currentValue < maxStock) {
+		            currentValue += 1;
+		            input.val(currentValue);
+		            mobileInput.val(currentValue);
+		            updateProductTotal(targetId);
+		            updateTotalPrice();
+		            updateCartQuantity(targetId, currentValue);
+		        } else {
+		            alert('재고가 부족합니다.');
+		        }
+		    });
 
-		    // 수량 감소 버튼 클릭 시
-			$(document).on('click', '.quantity-button.minus', function() {
-			    var input = $(this).closest('.quantity-input-group').find('.quantity-input');
-			    var currentValue = parseInt(input.val());
-			    if (currentValue > 1) {
-			        input.val(currentValue - 1);
-			        updateProductTotal(targetId);  // 이 줄 추가
-			        updateTotalPrice();
-			        
-			        // DB 업데이트를 위한 데이터 준비
-			        var targetId = input.attr('id');
-			        updateCartQuantity(targetId, currentValue - 1);
-			    }
-			});
-
-			// 수량 직접 입력 처리
-			$(document).on('change', '.quantity-input', function() {
-			    var value = parseInt($(this).val());
-			    var targetId = $(this).attr('id');
-			    var maxStock = products[targetId].stock;
-			    
-			    if (isNaN(value) || value < 1) {
-			        value = 1;
-			    } else if (value > maxStock) {
-			        value = maxStock;
-			        alert('재고가 부족합니다.');
-			    }
-			    
-			    $(this).val(value);
-			    updateProductTotal(targetId);
-			    updateTotalPrice();
-			    updateCartQuantity(targetId, value);
-			});
+		 	// PC 버전 - 수량 감소 버튼
+		    $(document).on('click', '.quantity-button.minus', function() {
+		        var input = $(this).closest('.quantity-input-group').find('.quantity-input');
+		        var targetId = input.attr('id');
+		        var currentValue = parseInt(input.val());
+		        var mobileInput = $('#mobile_' + targetId);
+		        
+		        if (currentValue > 1) {
+		            currentValue -= 1;
+		            input.val(currentValue);
+		            mobileInput.val(currentValue);
+		            updateProductTotal(targetId);
+		            updateTotalPrice();
+		            updateCartQuantity(targetId, currentValue);
+		        }
+		    });
+		 	
+		 	// PC 버전 - 수량 직접 입력 처리
+		    $(document).on('change', '.quantity-input:not(.mobile-quantity-input)', function() {
+		        var targetId = $(this).attr('id');
+		        
+		        if (!products[targetId]) {
+		            console.error('Product not found:', targetId);
+		            return;
+		        }
+		        
+		        var value = parseInt($(this).val());
+		        var maxStock = products[targetId].stock;
+		        
+		        if (isNaN(value) || value < 1) {
+		            value = 1;
+		        } else if (value > maxStock) {
+		            value = maxStock;
+		            alert('재고가 부족합니다.');
+		        }
+		        
+		        $(this).val(value);
+		        $('#mobile_' + targetId).val(value);
+		        
+		        updateProductTotal(targetId);
+		        updateTotalPrice();
+		        updateCartQuantity(targetId, value);
+		    });
 		 	
 			// 숫자만 입력되도록 처리
 			$('.quantity-input').on('input', function() {
@@ -682,16 +1013,16 @@
 			    $(this).val(value);
 			});
 		    
-		 	// 체크박스 이벤트 통합 처리
+		    // 체크박스 이벤트 통합 처리 함수 수정
 		    function initializeCheckboxes() {
-		        // 전체 선택 체크박스
+		        // 전체 선택 체크박스 (PC & 모바일)
 		        $('#selectAll').on('change', function() {
 		            var isChecked = $(this).prop('checked');
 		            $('.product-checkbox').prop('checked', isChecked);
 		            updateTotalPrice(); // 전체 선택/해제 시 금액 업데이트
 		        });
 
-		        // 개별 체크박스
+		        // 개별 체크박스 (PC & 모바일)
 		        $('.product-checkbox').on('change', function() {
 		            var allChecked = $('.product-checkbox:not(:checked)').length === 0;
 		            $('#selectAll').prop('checked', allChecked);
@@ -755,12 +1086,34 @@
 			    $('#shippingForm').off('submit').on('submit', function(e) {
 			        e.preventDefault();
 			        
-			        const productTotalAmount = items.reduce((sum, item) => sum + (item.pr_opt_price * item.pror_qtt), 0); // 실제계산
-			        const shippingCost = 3000; // 고정 배송비
+			        // 모바일 체크
+			        function isMobileDevice() {
+			            const mobileKeywords = [
+			                'Mobile', 'iPhone', 'iPad', 'Android', 'BlackBerry', 
+			                'Opera Mini', 'Windows Phone'
+			            ];
+			            const userAgent = navigator.userAgent;
+			            
+			            // 실제 모바일 기기인 경우
+			            if (mobileKeywords.some(keyword => userAgent.includes(keyword))) {
+			                return true;
+			            }
+			            
+			            // 크롬 개발자 도구의 모바일 모드인 경우
+			            if (/Chrome/.test(userAgent) && window.innerWidth <= 768) {
+			                return true;
+			            }
+			            
+			            return false;
+			        }
 			        
-			        // 테스트용 결제 금액과 고정 배송비 설정
-			        const payAmount = 1; // 테스트용 1원 결제
-			     	// const payAmount = productTotalAmount + shippingCost; // 실제 환경
+			        const isMobile = isMobileDevice();
+			        const productTotalAmount = items.reduce((sum, item) => sum + (item.pr_opt_price * item.pror_qtt), 0);
+			        const shippingCost = 3000;
+			        
+			        // 테스트용 결제 금액 설정 (다날은 최소 금액 제한이 있음)
+			        const payAmount = isMobile ? 100 : 1; // 모바일은 100원, PC는 1원
+			     // const payAmount = productTotalAmount + shippingCost; // 실제 환경
 			        
 			        const shippingData = {
 			            pror_recipient: $('#recipient').val(),
@@ -769,13 +1122,10 @@
 			            pror_addr_detail: $('#addr_detail').val(),
 			            pror_zipcode: $('#zipcode').val(),
 			            pror_pay_method: 'card',
-			            pror_ship_cost: shippingCost,  // 고정 배송비
-			            pror_total_amt: payAmount      // 실제 결제 금액 (1원)
+			            pror_ship_cost: shippingCost,
+			            pror_total_amt: payAmount
 			        };
 			
-			        const modal = bootstrap.Modal.getInstance(document.getElementById('shippingModal'));
-			        modal.hide();
-			        
 			        const today = new Date();
 			        const merchantUid = 'PR_' + today.getTime();
 			        
@@ -783,13 +1133,14 @@
 			        const productName = items.length > 1 ? 
 			            firstItemName + " 외 " + (items.length - 1) + "건" :
 			            firstItemName;
-			
+			            
+			        // 결제 데이터 설정
 			        const paymentData = {
-			            pg: 'html5_inicis',
+			            pg: isMobile ? 'danal_tpay.9810030929' : 'html5_inicis',
 			            pay_method: 'card',
 			            merchant_uid: merchantUid,
 			            name: productName,
-			            amount: payAmount,  // 테스트용 1원 결제
+			            amount: payAmount,
 			            buyer_email: '${user.us_email}',
 			            buyer_name: shippingData.pror_recipient,
 			            buyer_tel: shippingData.pror_phone,
@@ -797,14 +1148,42 @@
 			            buyer_postcode: shippingData.pror_zipcode
 			        };
 			
-			        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-			
+			        // 모바일 결제시 필수 파라미터 추가
 			        if (isMobile) {
-			            IMP.request_pay(paymentData);
+			            paymentData.m_redirect_url = window.location.origin + '${pageContext.request.contextPath}/product/mobile_process_payment';
+			            paymentData.app_scheme = 'iamporttest';
+			            
+			            // 모바일 결제 데이터 저장
+			            const orderData = {
+			                items: items,
+			                shippingData: shippingData
+			            };
+			            
+			            // localStorage에도 저장 (세션스토리지 백업용)
+			            try {
+			                sessionStorage.setItem('orderData', JSON.stringify(orderData));
+			                localStorage.setItem('orderData', JSON.stringify(orderData));
+			            } catch (error) {
+			                console.error('Storage error:', error);
+			            }
+			        }
+			
+			        const modal = bootstrap.Modal.getInstance(document.getElementById('shippingModal'));
+			
+			        // 모바일 결제 처리
+			        if (isMobile) {
+			            modal.hide();
+			            // 약간의 지연 후 결제창 호출
+			            setTimeout(() => {
+			                console.log('Mobile payment data:', paymentData);
+			                IMP.request_pay(paymentData);
+			            }, 500);
 			        } else {
+			            // PC 결제 처리
 			            IMP.request_pay(paymentData, function(rsp) {
 			                if (rsp.success) {
-			                    // 각 상품의 개별 금액과 수량 정보 설정
+			                    modal.hide();
+			                    // PC 결제 성공 처리
 			                    const finalOrderData = items.map(item => ({
 			                        ...item,
 			                        ...shippingData,
@@ -816,8 +1195,8 @@
 			                        status: rsp.status,
 			                        paid_at: rsp.paid_at,
 			                        receipt_url: rsp.receipt_url,
-			                        pror_item_qtt: item.pror_qtt,         // 주문 수량
-			                        pror_item_amt: item.pror_product_amt  // 개별 상품의 총 금액
+			                        pror_item_qtt: item.pror_qtt,
+			                        pror_item_amt: item.pror_product_amt
 			                    }));
 			
 			                    $.ajax({
@@ -876,9 +1255,8 @@
 		        processOrder([orderItem]);
 		    });
 		    
-		 	// 위시리스트 버튼 클릭 이벤트
-		    $(document).on('click', '.btn-normal:contains("위시리스트")', function() {
-		        // 로그인 체크
+		    // PC 버전 위시리스트 버튼 클릭 이벤트
+		    $('.btn-normal:contains("위시리스트")').off('click').on('click', function() {
 		        if ('${user}' === '') {
 		            if (confirm('로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?')) {
 		                window.location.href = '${pageContext.request.contextPath}/auth/login';
@@ -888,83 +1266,420 @@
 		        
 		        const $row = $(this).closest('tr');
 		        const $thumbnail = $row.find('.product-img');
-		        
-		        // 썸네일 경로 가져오기
-		        let thumbnailPath = '';
-		        if ($thumbnail.length > 0) {
-		            // 이미지가 있는 경우
-		            thumbnailPath = $thumbnail.attr('src').split('/').pop(); // 파일명만 추출
-		        } else {
-		            // 이미지가 없는 경우 기본 이미지 설정
-		            thumbnailPath = 'no-image.jpg';
-		        }
-		        
-		        // 중복 체크를 위해 필요한 데이터 가져오기
 		        const productId = $row.find('.product-checkbox').val();
 		        const optionName = $row.find('.product-info span').text().replace('[옵션: ', '').replace(']', '');
 		        
-		        // 중복 체크를 위한 AJAX 요청
+		        // 상품 데이터 준비
+		        const productData = {
+		            pr_id: productId,
+		            pr_name: $row.find('.product-info a').first().contents().filter(function() {
+		                return this.nodeType === 3;
+		            }).text().trim(),
+		            pr_thumbnail: $thumbnail.length > 0 ? $thumbnail.attr('src').split('/').pop() : 'no-image.jpg',
+		            pr_opt_name: optionName,
+		            pr_opt_price: parseInt($row.find('td:eq(3)').text().replace(/[^0-9]/g, ''))
+		        };
+
+		        // 위시리스트 중복 체크 후 추가
 		        $.ajax({
-		            url: '${pageContext.request.contextPath}/product/check_cart_item',
+		            url: '${pageContext.request.contextPath}/product/check_wishlist_item',
 		            type: 'POST',
 		            contentType: 'application/json',
 		            data: JSON.stringify({
 		                pr_id: productId,
 		                pr_opt_name: optionName
-		            }),
-		            success: function(response) {
-		                if (response.exists) {
-		                    alert('이미 위시리스트에 있는 상품입니다.');
-		                    return;
-		                }
-		                
-		                // 상품명만 추출 (옵션 정보 제외)
-		                const productName = $row.find('.product-info a').first().contents().filter(function() {
-		                    return this.nodeType === 3; // 텍스트 노드만 선택
-		                }).text().trim();
-		                
-		                // 위시리스트에 추가
-		                const productData = {
-		                    pr_id: productId,
-		                    pr_name: productName,
-		                    pr_thumbnail: thumbnailPath,
-		                    pr_opt_name: optionName,
-		                    pr_opt_price: parseInt($row.find('td:eq(3)').text().replace(/[^0-9]/g, ''))
-		                };
-		                
-		                $.ajax({
+		            })
+		        })
+		        .then(response => {
+		            if (!response.exists) {
+		                return $.ajax({
 		                    url: '${pageContext.request.contextPath}/product/add_to_wishlist',
 		                    type: 'POST',
 		                    contentType: 'application/json',
-		                    data: JSON.stringify(productData),
-		                    success: function(response) {
-		                        if (response === 'success') {
-		                            alert('위시리스트에 추가되었습니다.');
-		                        }
-		                    },
-		                    error: function(xhr) {
-		                        if (xhr.status === 401) {
-		                            if (confirm('로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?')) {
-		                                window.location.href = '${pageContext.request.contextPath}/auth/login';
-		                            }
-		                        } else if (xhr.status === 409) {
-		                            alert('이미 위시리스트에 있는 상품입니다.');
-		                        } else {
-		                            alert('위시리스트 추가 중 오류가 발생했습니다.');
-		                        }
-		                    }
+		                    data: JSON.stringify(productData)
 		                });
-		            },
-		            error: function() {
+		            } else {
+		                alert('이미 위시리스트에 있는 상품입니다.');
+		                return Promise.reject('duplicate');
+		            }
+		        })
+		        .then(response => {
+		            if (response === 'success') {
+		                alert('위시리스트에 추가되었습니다.');
+		            }
+		        })
+		        .catch(error => {
+		            if (error !== 'duplicate') {
 		                alert('위시리스트 추가 중 오류가 발생했습니다.');
 		            }
 		        });
-		    }); 
+		    });
 			
+		 	// 모바일 버전 - 개별 상품 주문하기 버튼
+		    $(document).on('click', '.cart-item-button.order', function() {
+		        const $card = $(this).closest('.cart-item-card');
+		        const inputId = $card.find('.mobile-quantity-input').attr('id').replace('mobile_', '');
+		        const product = products[inputId];
+		        const quantity = parseInt($card.find('.mobile-quantity-input').val());
+		        
+		        const orderItem = {
+		            pr_id: $card.find('.product-checkbox').val(),
+		            pr_name: $card.find('.cart-item-name').text().trim(),
+		            pr_opt_name: $card.find('.cart-item-option').text().replace('[옵션: ', '').replace(']', ''),
+		            pr_opt_price: product.price,
+		            pror_qtt: quantity,
+		            pror_product_amt: product.price * quantity,
+		            pror_ship_cost: 3000
+		        };
+
+		        processOrder([orderItem]);
+		    });
+
+		    // 모바일 버전 - 위시리스트 버튼 클릭 이벤트 수정
+		    $(document).on('click', '.cart-item-button:contains("위시리스트")', function() {
+		        if ('${user}' === '') {
+		            if (confirm('로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?')) {
+		                window.location.href = '${pageContext.request.contextPath}/auth/login';
+		            }
+		            return;
+		        }
+		        
+		        const $card = $(this).closest('.cart-item-card');
+		        const $thumbnail = $card.find('.cart-item-image');
+		        const productId = $card.find('.product-checkbox').val();
+		        const optionName = $card.find('.cart-item-option').text().replace('[옵션: ', '').replace(']', '');
+		        
+		        let thumbnailPath = $thumbnail.length > 0 ? 
+		            $thumbnail.attr('src').split('/').pop() : 
+		            'no-image.jpg';
+		        
+		        const productData = {
+		            pr_id: productId,
+		            pr_name: $card.find('.cart-item-name').text().trim(),
+		            pr_thumbnail: thumbnailPath,
+		            pr_opt_name: optionName,
+		            pr_opt_price: parseInt($card.find('.cart-item-price').text().replace(/[^0-9]/g, ''))
+		        };
+
+		        checkWishlistDuplicate(productId, optionName)
+		            .then(response => {
+		                if (!response.exists) {
+		                    return $.ajax({
+		                        url: '${pageContext.request.contextPath}/product/add_to_wishlist',
+		                        type: 'POST',
+		                        contentType: 'application/json',
+		                        data: JSON.stringify(productData)
+		                    });
+		                } else {
+		                    throw new Error('duplicate');
+		                }
+		            })
+		            .then(response => {
+		                if (response === 'success') {
+		                    alert('위시리스트에 추가되었습니다.');
+		                }
+		            })
+		            .catch(error => {
+		                if (error.message === 'duplicate') {
+		                    alert('이미 위시리스트에 있는 상품입니다.');
+		                } else {
+		                    alert('위시리스트 추가 중 오류가 발생했습니다.');
+		                }
+		            });
+		    });
+
+		    // 모바일 버전 - 선택 상품 삭제 버튼
+		    $('.delete-selected-btn').on('click', function() {
+		        const selectedItems = $('.mobile-cart-items .product-checkbox:checked').map(function() {
+		            const $card = $(this).closest('.cart-item-card');
+		            const inputId = $card.find('.mobile-quantity-input').attr('id');
+		            return {
+		                pr_id: products[inputId.replace('mobile_', '')].pr_id,
+		                pr_opt_name: products[inputId.replace('mobile_', '')].pr_opt_name
+		            };
+		        }).get();
+
+		        if (selectedItems.length === 0) {
+		            alert('삭제할 상품을 선택해주세요.');
+		            return;
+		        }
+
+		        if (confirm('선택한 상품을 삭제하시겠습니까?')) {
+		            Promise.all(selectedItems.map(item => 
+		                $.ajax({
+		                    url: '${pageContext.request.contextPath}/product/remove_from_cart',
+		                    type: 'POST',
+		                    contentType: 'application/json',
+		                    data: JSON.stringify(item)
+		                })
+		            )).then(() => {
+		                location.reload();
+		            }).catch(() => {
+		                alert('삭제 중 오류가 발생했습니다.');
+		            });
+		        }
+		    });
+
+			// 모바일 버전 - 선택 상품 주문 버튼
+		    $('.mobile-order-btn.order-selected').on('click', function() {
+		        const selectedItems = $('.mobile-cart-items .product-checkbox:checked').map(function() {
+		            const $card = $(this).closest('.cart-item-card');
+		            const inputId = $card.find('.mobile-quantity-input').attr('id').replace('mobile_', '');
+		            
+		            // products 객체에서 직접 가격 정보 가져오기
+		            const product = products[inputId];
+		            const quantity = parseInt($card.find('.mobile-quantity-input').val());
+		            
+		            return {
+		                pr_id: $(this).val(),
+		                pr_name: $card.find('.cart-item-name').text().trim(),
+		                pr_opt_name: $card.find('.cart-item-option').text().replace('[옵션: ', '').replace(']', ''),
+		                pr_opt_price: product.price,
+		                pror_qtt: quantity,
+		                pror_product_amt: product.price * quantity,
+		                pror_ship_cost: 3000
+		            };
+		        }).get();
+
+		        if (selectedItems.length === 0) {
+		            alert('주문할 상품을 선택해주세요.');
+		            return;
+		        }
+
+		        processOrder(selectedItems);
+		    });
+
+		 	// 모바일 버전 - 전체 상품 주문 버튼도 같은 방식으로 수정
+		    $('.mobile-order-btn.order-all').on('click', function() {
+		        const allItems = $('.cart-item-card').map(function() {
+		            const $card = $(this);
+		            const inputId = $card.find('.mobile-quantity-input').attr('id').replace('mobile_', '');
+		            const product = products[inputId];
+		            const quantity = parseInt($card.find('.mobile-quantity-input').val());
+		            
+		            return {
+		                pr_id: $card.find('.product-checkbox').val(),
+		                pr_name: $card.find('.cart-item-name').text().trim(),
+		                pr_opt_name: $card.find('.cart-item-option').text().replace('[옵션: ', '').replace(']', ''),
+		                pr_opt_price: product.price,
+		                pror_qtt: quantity,
+		                pror_product_amt: product.price * quantity,
+		                pror_ship_cost: 3000
+		            };
+		        }).get();
+
+		        if (allItems.length === 0) {
+		            alert('장바구니가 비어있습니다.');
+		            return;
+		        }
+
+		        processOrder(allItems);
+		    });
+		    
+		 	// 모바일 버전 - 수량 증가 버튼
+		    $(document).on('click', '.mobile-quantity-button.plus', function() {
+		        var input = $(this).siblings('.mobile-quantity-input');
+		        var mobileInputId = input.attr('id');
+		        var pcInputId = mobileInputId.replace('mobile_quantity_', 'quantity_');
+		        var pcInput = $('#' + pcInputId);
+		        
+		        if (!products[pcInputId]) {
+		            console.error('Product not found:', pcInputId);
+		            return;
+		        }
+		        
+		        var currentValue = parseInt(input.val());
+		        var maxStock = products[pcInputId].stock;
+		        var basePrice = products[pcInputId].price;
+		        
+		        if (currentValue < maxStock) {
+		            currentValue += 1;
+		            
+		            // 모바일과 PC input 값 동기화
+		            input.val(currentValue);
+		            pcInput.val(currentValue);
+		            
+		            // 개별 상품 금액 계산
+		            var totalPrice = basePrice * currentValue;
+		            
+		            // 모바일 버전 개별 상품 금액 업데이트
+		            $(this).closest('.cart-item-card')
+		                  .find('.cart-item-subtotal')
+		                  .text('합계: ₩' + totalPrice.toLocaleString());
+		            
+		            // PC 버전도 업데이트
+		            updateProductTotal(pcInputId);
+		            // 전체 금액 업데이트
+		            updateTotalPrice();
+		            // DB 업데이트
+		            updateCartQuantity(pcInputId, currentValue);
+		        } else {
+		            alert('재고가 부족합니다.');
+		        }
+		    });
+
+		 	// 모바일 버전 - 수량 감소 버튼
+		    $(document).on('click', '.mobile-quantity-button.minus', function() {
+		        var input = $(this).siblings('.mobile-quantity-input');
+		        var mobileInputId = input.attr('id');
+		        var pcInputId = mobileInputId.replace('mobile_quantity_', 'quantity_');
+		        var pcInput = $('#' + pcInputId);
+		        var currentValue = parseInt(input.val());
+		        var basePrice = products[pcInputId].price;
+		        
+		        if (currentValue > 1) {
+		            currentValue -= 1;
+		            
+		            // 모바일과 PC input 값 동기화
+		            input.val(currentValue);
+		            pcInput.val(currentValue);
+		            
+		            // 개별 상품 금액 계산
+		            var totalPrice = basePrice * currentValue;
+		            
+		            // 모바일 버전 개별 상품 금액 업데이트
+		            $(this).closest('.cart-item-card')
+		                  .find('.cart-item-subtotal')
+		                  .text('합계: ₩' + totalPrice.toLocaleString());
+		            
+		            // PC 버전도 업데이트
+		            updateProductTotal(pcInputId);
+		            // 전체 금액 업데이트
+		            updateTotalPrice();
+		            // DB 업데이트
+		            updateCartQuantity(pcInputId, currentValue);
+		        }
+		    });
+
+			// 모바일 버전 - 수량 직접 입력 처리
+			$(document).on('change', '.mobile-quantity-input', function() {
+			    var mobileInputId = $(this).attr('id');
+			    
+			    // mobile_quantity_ 접두사를 quantity_로 변경
+			    var pcInputId = mobileInputId.replace('mobile_quantity_', 'quantity_');
+			    
+			    if (!products[pcInputId]) {
+			        console.error('Product not found:', pcInputId);
+			        return;
+			    }
+			    
+			    var value = parseInt($(this).val());
+			    var maxStock = products[pcInputId].stock;
+			    var basePrice = products[pcInputId].price;
+			    
+			    if (isNaN(value) || value < 1) {
+			        value = 1;
+			    } else if (value > maxStock) {
+			        value = maxStock;
+			        alert('재고가 부족합니다.');
+			    }
+			    
+			    // 모바일과 PC input 값 동기화
+			    $(this).val(value);
+			    $('#' + pcInputId).val(value);
+			    
+			    // 개별 상품 금액 계산
+			    var totalPrice = basePrice * value;
+			    
+			    // 모바일 버전 개별 상품 금액 업데이트
+			    $(this).closest('.cart-item-card')
+			          .find('.cart-item-subtotal')
+			          .text('합계: ₩' + totalPrice.toLocaleString());
+			    
+			    // PC 버전도 업데이트
+			    updateProductTotal(pcInputId);
+			    // 전체 금액 업데이트
+			    updateTotalPrice();
+			    // DB 업데이트
+			    updateCartQuantity(pcInputId, value);
+			});
+
+			// 숫자만 입력되도록 처리 (PC & 모바일 공통)
+			$(document).on('input', '.quantity-input, .mobile-quantity-input', function() {
+			    var value = $(this).val().replace(/[^0-9]/g, '');
+			    $(this).val(value);
+			});
+		 	
+		    // 위시리스트 중복 체크 API 엔드포인트 수정
+		    function checkWishlistDuplicate(productId, optionName) {
+		        return $.ajax({
+		            url: '${pageContext.request.contextPath}/product/check_wishlist_item', // 엔드포인트 변경
+		            type: 'POST',
+		            contentType: 'application/json',
+		            data: JSON.stringify({
+		                pr_id: productId,
+		                pr_opt_name: optionName
+		            })
+		        });
+		    }
+			
+		    // 장바구니 비우기 함수
+		    function clearCart() {
+		        if (!confirm('장바구니를 비우시겠습니까?')) {
+		            return;
+		        }
+
+		        // PC와 모바일 버전 모두에서 아이템 수집
+		        const allItems = [];
+		        $('.cart-table tbody tr, .cart-item-card').each(function() {
+		            const $element = $(this);
+		            const productId = $element.find('.product-checkbox').val();
+		            const optionName = $element.find('.product-info span, .cart-item-option')
+		                                     .text().replace('[옵션: ', '').replace(']', '');
+		            
+		            if (productId && optionName) {
+		                allItems.push({
+		                    pr_id: productId,
+		                    pr_opt_name: optionName
+		                });
+		            }
+		        });
+
+		        if (allItems.length === 0) {
+		            alert('장바구니가 이미 비어있습니다.');
+		            return;
+		        }
+
+		        // 한 번의 요청으로 모든 아이템 삭제
+		        $.ajax({
+		            url: '${pageContext.request.contextPath}/product/remove_all_from_cart',
+		            type: 'POST',
+		            contentType: 'application/json',
+		            data: JSON.stringify(allItems)
+		        })
+		        .then(() => {
+		            location.reload();
+		        })
+		        .catch(() => {
+		            alert('장바구니 비우기 중 오류가 발생했습니다.');
+		        });
+		    }
+
+		    // PC 버전 장바구니 비우기 버튼
+		    $('.action-buttons button:contains("장바구니비우기")').off('click').on('click', clearCart);
+		    
+		    // 모바일 버전 장바구니 비우기 버튼
+		    $('.clear-cart-btn').off('click').on('click', clearCart);
+
 		    // 초기 상태 설정
 		    initializeCheckboxes();
 		    updateTotalPrice();		 
 		});
+		
+		// 연락처 유효성 검사
+		function formatPhoneNumber(input) {
+		    // 숫자만 남기기
+		    let value = input.value.replace(/[^0-9]/g, '');
+		    
+		    // 포맷팅 적용 (010-1234-5678 형태)
+		    if (value.length <= 3) {
+		        input.value = value;
+		    } else if (value.length <= 7) {
+		        input.value = value.slice(0, 3) + '-' + value.slice(3);
+		    } else {
+		        input.value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+		    }
+		}
 	</script>  	
 </head>
 <body>
@@ -1020,12 +1735,13 @@
 								        <span>[옵션: ${item.pr_opt_name}]</span>
 								    </a>
 								</td>
-								<td>₩<fmt:formatNumber value="${item.pr_opt_price}" pattern="#,###"/></td>
+								<td class="sales-sell">₩<fmt:formatNumber value="${item.pr_opt_price}" pattern="#,###"/></td>
 								<td>
 								    <div class="quantity-wrap">
 								        <div class="quantity-input-group">
 											<input type="number" value="${item.prsc_quantity}" min="1" 
-											       class="quantity-input" id="quantity_${item.prsc_no}" 
+											       class="quantity-input" 
+											       id="quantity_${item.prsc_no}" 
 											       data-product-id="${item.pr_id}"
 											       data-option-name="${item.pr_opt_name}">
 											<div class="quantity-buttons">
@@ -1037,8 +1753,8 @@
 								        </div>
 								    </div>
 								</td>
-			                    <td>3,000원</td>
-			                    <td><fmt:formatNumber value="${item.pr_opt_price * item.prsc_quantity}" pattern="#,###"/>원</td>
+			                    <td class="sales-deli">3,000원</td>
+			                    <td class="sales-sum"><fmt:formatNumber value="${item.pr_opt_price * item.prsc_quantity}" pattern="#,###"/>원</td>
 			                    <td>
 			                        <div class="btn-list">
 			                            <button class="btn btn-order">주문하기</button>
@@ -1052,7 +1768,65 @@
 			    </c:choose>
 			</tbody>
         </table>
-        <div class="cart-footer">
+		<div class="mobile-cart-items">
+		    <c:choose>
+		        <c:when test="${empty cartList}">
+		            <div class="cart-item-card">
+		                <p class="text-center">장바구니가 비어있습니다.</p>
+		            </div>
+		        </c:when>
+		        <c:otherwise>
+		            <c:forEach var="item" items="${cartList}" varStatus="status">
+		                <div class="cart-item-card">
+		                    <div class="cart-item-header">
+		                        <input type="checkbox" class="cart-item-checkbox product-checkbox" name="selectedItem" value="${item.pr_id}">
+		                        <a href="/product/pr_detail?pr_id=${item.pr_id}">
+		                            <c:if test="${item.imageExists}">
+		                                <img src="${pageContext.request.contextPath}/product/getImage/${item.pr_thumbnail}" 
+		                                     alt="${item.pr_name}" class="cart-item-image">
+		                            </c:if>
+		                            <c:if test="${!item.imageExists}">
+		                                <div class="no-image cart-item-image">이미지 없음</div>
+		                            </c:if>
+		                        </a>
+		                        <div class="cart-item-info">
+		                            <div class="cart-item-name">${item.pr_name}</div>
+		                            <div class="cart-item-option">[옵션: ${item.pr_opt_name}]</div>
+		                        </div>
+		                    </div>
+		                    
+		                    <div class="cart-item-price">
+		                        판매가: ₩<fmt:formatNumber value="${item.pr_opt_price}" pattern="#,###"/>
+		                    </div>
+		                    
+		                    <div class="cart-item-quantity">
+		                        <span class="quantity-label">수량:</span>
+		                        <div class="mobile-quantity-input-group">
+		                            <button type="button" class="mobile-quantity-button minus">-</button>
+		                            <input type="number" value="${item.prsc_quantity}" min="1" 
+		                                   class="mobile-quantity-input quantity-input" 
+		                                   id="mobile_quantity_${item.prsc_no}" 
+		                                   data-product-id="${item.pr_id}"
+		                                   data-option-name="${item.pr_opt_name}">
+		                            <button type="button" class="mobile-quantity-button plus">+</button>
+		                        </div>
+		                    </div>
+		                    
+		                    <div class="cart-item-subtotal">
+		                        합계: ₩<fmt:formatNumber value="${item.pr_opt_price * item.prsc_quantity}" pattern="#,###"/>
+		                    </div>
+		                    
+		                    <div class="cart-item-buttons">
+		                        <button class="cart-item-button order">주문하기</button>
+		                        <button class="cart-item-button">위시리스트</button>
+		                        <button class="cart-item-button" onclick="removeFromCart(${item.pr_id}, '${item.pr_opt_name}')">삭제</button>
+		                    </div>
+		                </div>
+		            </c:forEach>
+		        </c:otherwise>
+		    </c:choose>
+		</div>
+        <div class="pc-cart-footer cart-footer">
 			<div class="price-summary">
 			    <div class="price-item">
 			        <div class="price-label">총 상품금액</div>
@@ -1095,6 +1869,32 @@
 			    <button class="purchase-btn btn-buy-selected">선택된 항목 주문하기</button>
 			</div>
         </div>
+		<div class="mobile-cart-footer cart-footer">
+		    <div class="mobile-price-summary">
+		        <div class="mobile-price-row">
+		            <span>총 상품금액</span>
+		            <strong><fmt:formatNumber value="${totalPrice}" pattern="#,###"/>원</strong>
+		        </div>
+		        <div class="mobile-price-row">
+		            <span>총 배송비</span>
+		            <strong><fmt:formatNumber value="${shippingCost}" pattern="#,###"/>원</strong>
+		        </div>
+		        <div class="mobile-price-total">
+		            <span>결제예정금액</span>
+		            <strong><fmt:formatNumber value="${totalPrice + shippingCost}" pattern="#,###"/>원</strong>
+		        </div>
+		    </div>
+		    <div class="mobile-cart-actions">
+		        <div class="mobile-action-row">
+		            <button class="delete-selected-btn">선택상품 삭제</button>
+		            <button class="clear-cart-btn">장바구니비우기</button>
+		        </div>
+		        <div class="mobile-order-buttons">
+		            <button class="mobile-order-btn order-selected">선택 상품 주문</button>
+		            <button class="mobile-order-btn order-all">전체 상품 주문</button>
+		        </div>
+		    </div>
+		</div>
 		<div class="modal fade" id="shippingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 		    <div class="modal-dialog">
 		        <form class="modal-content" id="shippingForm">
@@ -1109,7 +1909,7 @@
 		                </div>
 		                <div class="mb-3">
 		                    <label for="phone" class="form-label">연락처</label>
-		                    <input type="tel" class="form-control" id="phone" name="pror_phone" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" required>
+		                    <input type="tel" class="form-control" id="phone" name="pror_phone" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" oninput="formatPhoneNumber(this)" required>
 		                </div>
 		                <div class="mb-3">
 		                    <label for="zipcode" class="form-label">우편번호</label>

@@ -24,6 +24,7 @@ import com.happypaws.util.PagingVO;
 import com.happypaws.vo.CmtyCommentVO;
 import com.happypaws.vo.CmtyupVO;
 import com.happypaws.vo.CommunityVO;
+import com.happypaws.vo.NoticeVO;
 import com.happypaws.vo.UsersVO;
 
 @Controller
@@ -31,6 +32,13 @@ public class CmtyController {
 	
 	@Autowired
 	private CmtySVC cmty_SVC;
+	
+	// 시작페이지
+	@RequestMapping("/cmty_index")
+	@ResponseBody
+	public List<CmtyupVO> cmyt_index() {
+		return cmty_SVC.cmyt_index();
+	}
 	
 	//커뮤니티-리스트 페이지이동
 	@RequestMapping(value={"/board/cmty_list","/admin/ad_cmty_list"},method = RequestMethod.GET)

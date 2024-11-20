@@ -8,7 +8,7 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>사용자 마이페이지-main</title>
 <style>
-/* 전체 스타일 초기화 */
+
 * {
   margin: 0;
   padding: 0;
@@ -24,28 +24,11 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background-color: #fefbf6;
-  overflow-x: hidden; /* 수평 스크롤 방지 */
-  font-size: 16px; /* 기본 폰트 크기 설정 */
+  background-color: #ffffff;
+  overflow-x: hidden; 
+  font-size: 16px; 
 }
 
-/* 헤더 스타일 */
-header {
-  width: 100%;
-  max-width: 1200px;
-  background-color: #fdf8e5;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 5%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  flex-wrap: wrap; /* 작은 화면에서 요소들이 줄바꿈 되도록 처리 */
-}
-
-/* 컨테이너 */
 .container {
   width: 90%;
   max-width: 500px;
@@ -57,13 +40,13 @@ header {
   margin: 2rem auto;
 }
 
-/* 프로필 탭 */
+
 .profile-tabs {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin-bottom: 2rem;
-  overflow-x: auto; /* 넘칠 경우 스크롤 허용 */
+  overflow-x: auto; 
 }
 
 .profile-tabs button {
@@ -75,9 +58,21 @@ header {
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
+   outline: none; 
+  
 }
 
-/* 프로필 사진 */
+button {
+  -webkit-tap-highlight-color: transparent; 
+  outline: none;
+}
+
+
+.profile-tabs button:focus {
+  outline: none; 
+   box-shadow: none; 
+}
+
 .profile-picture {
   width: 20vw;
   height: 20vw;
@@ -95,11 +90,11 @@ header {
 .profile-picture img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 이미지 비율을 유지하며 컨테이너에 맞춤 */
+  object-fit: cover; 
   border-radius: 50%;
 }
 
-/* 수정 버튼 */
+
 .edit-button {
   width: 80%;
   max-width: 300px;
@@ -113,23 +108,16 @@ header {
   margin: 1rem auto;
 }
 
-/* 반응형 처리 */
-@media screen and (max-width: 768px) {
-  header {
-    padding: 0.5rem 1rem;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
 
+@media screen and (max-width: 768px) {
   .container {
-    width: 95%; /* 화면에 맞게 확장 */
+    width: 95%; 
     padding: 1.5rem;
   }
 
   .profile-tabs {
     gap: 0.5rem;
-    flex-wrap: wrap; /* 버튼이 화면을 벗어나지 않도록 감싸기 */
+    flex-wrap: wrap; 
   }
 
   .profile-tabs button {

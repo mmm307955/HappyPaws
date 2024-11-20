@@ -10,7 +10,7 @@
 	<main>
 		<div class="n_write">
 			<div class="n_writeform">
-				<h1>아이를 찾아주세요</h1>
+				<h1>아이를 발견했어요</h1>
 				<form action="/MIA/updateFindPet" method="post" enctype="multipart/form-data" name="boardform">
 					<input type="hidden" name="fp_seq" value="${findPet.fp_seq}">
 					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
@@ -23,7 +23,8 @@
 					</div>
 
 					<div class="n_ph">
-						<input type="text" class="form-control" name="fp_ph" value="${findPet.fp_ph}" placeholder="연락처를 입력하세요." required>
+						<input type="text" class="form-control" name="fp_ph" value="${findPet.fp_ph}" placeholder="연락처를 입력하세요." required
+						 oninput="formatPhoneNumber(this)" maxlength="13">
 					</div>
 
 					<div class="n_img">
@@ -76,7 +77,7 @@
 					</div>
 
 					<div class="n_content">
-						<textarea class="form-control" rows="5" name="fp_content" placeholder="상세 설명을 입력하세요">${findPet.fp_content}</textarea>
+						<textarea cols="100" wrap="hard" class="form-control" rows="5" name="fp_content" placeholder="상세 설명을 입력하세요">${findPet.fp_content}</textarea>
 					</div>
 
 					<input type="hidden" name="fp_del" value="${findPet.fp_del}">

@@ -11,7 +11,7 @@
  */
 
 // 공지사항
-fetch('주소 입력').then(response => response.json()).then(data => { // ajax 서블릿 링크
+fetch('/notice_index').then(response => response.json()).then(data => { // ajax 서블릿 링크
 	let section = document.querySelector("#notice-section");
 	section.innerHTML = '';
 
@@ -19,12 +19,24 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 	const pTag = document.createElement('p');
 	pTag.textContent = data.n_title;
 	aTag.appendChild(pTag);
-	aTag.src = "주소 입력" + data.n_seq;  // 글 상세 정보 보기 서블릿 링크
+	aTag.src = "/board/notice_view?n_seq=" + data.n_seq;  // 글 상세 정보 보기 서블릿 링크
 	section.appendChild(aTag);
 }).catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
 
+// 글 분류
+const cmtyCategoryList = {
+	'General': '자유',
+	'FoundReview': '후기',
+	'AdoptionReview': '후기'
+}
+const cmtyColorList = {
+	'General': '#3535e9',
+	'FoundReview': 'red',
+	'AdoptionReview': 'green'
+}
+
 // 커뮤니티
-fetch('주소 입력').then(response => response.json()).then(data => { // ajax 서블릿 링크
+fetch('/cmty_index').then(response => response.json()).then(data => { // ajax 서블릿 링크
 	let tbody = document.querySelector("#community-article tbody");
 	tbody.innerHTML = '';
 
@@ -32,7 +44,8 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 		const row = document.createElement('tr');
 
 		const categoryCell = document.createElement('td');
-		categoryCell.textContent = item.cmty_category;
+		categoryCell.textContent = cmtyCategoryList[item.cmty_category];
+		categoryCell.style = "color: " + cmtyColorList[item.cmty_category];
 		row.appendChild(categoryCell);
 
 		const titleCell = document.createElement('td');
@@ -40,12 +53,12 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 		row.appendChild(titleCell);
 
 		tbody.appendChild(row);
-		row.addEventListener('click', () => location.href = "주소 입력" + item.cmty_seq); // 글 상세 정보 보기 서블릿 링크
+		row.addEventListener('click', () => location.href = "/board/cmty_view?cmty_seq=" + item.cmty_seq + "&cmty_category=all"); // 글 상세 정보 보기 서블릿 링크
 	});
 }).catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
 
 // 반려용품
-fetch('주소 입력').then(response => response.json()).then(data => { // ajax 서블릿 링크
+fetch('/product/pr_index').then(response => response.json()).then(data => { // ajax 서블릿 링크
 	let tbody = document.querySelector("#shop-article tbody");
 	tbody.innerHTML = '';
 
@@ -54,7 +67,7 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 
 		const thumbnailCell = document.createElement('td');
         const thumbnail = document.createElement('img');
-		thumbnail.src = item.pr_thumbnail;
+		thumbnail.src = "/product/getImage/"+item.pr_thumbnail;
 		thumbnail.alt = item.pr_name;
 		thumbnailCell.appendChild(thumbnail);
 		row.appendChild(thumbnailCell);
@@ -64,7 +77,7 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 		row.appendChild(nameCell);
 
 		tbody.appendChild(row);
-		row.addEventListener('click', () => location.href = "주소 입력" + item.pr_id); // 글 상세 정보 보기 서블릿 링크
+		row.addEventListener('click', () => location.href = "/product/pr_detail?pr_id=" + item.pr_id); // 글 상세 정보 보기 서블릿 링크
 	});
 }).catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
 
@@ -77,7 +90,7 @@ const categoryList = {
 }
 
 // 아이를 찾아주세요
-fetch('주소 입력').then(response => response.json()).then(data => { // ajax 서블릿 링크
+fetch('/MIA/getLostPetListIndex').then(response => response.json()).then(data => { // ajax 서블릿 링크
 	let tbody = document.querySelector("#lostPet-article tbody");
 	tbody.innerHTML = '';
 
@@ -85,12 +98,12 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 		const row = document.createElement('tr');
 
 		const categoryCell = document.createElement('td');
-		categoryCell.textContent = categoryList(item.lp_category);
+		categoryCell.textContent = categoryList[item.lp_category];
 		row.appendChild(categoryCell);
 
 		const imgCell = document.createElement('td');
         const img = document.createElement('img');
-		img.src = item.lp_img;
+		img.src = "/resources/MIA-img/lostPetImg/" + item.lp_img;
 		img.alt = item.lp_title;
 		imgCell.appendChild(img);
 		row.appendChild(imgCell);
@@ -104,12 +117,12 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 		row.appendChild(placeCell);
 
 		tbody.appendChild(row);
-		row.addEventListener('click', () => location.href = "주소 입력" + item.lp_seq); // 글 상세 정보 보기 서블릿 링크
+		row.addEventListener('click', () => location.href = "/MIA/getLostPet?lp_seq=" + item.lp_seq + "&searchCondition=TITLE&searchKeyword=&category=&nowPage=1"); // 글 상세 정보 보기 서블릿 링크
 	});
 }).catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
 
 // 새로운 가족을 찾아요
-fetch('주소 입력').then(response => response.json()).then(data => { // ajax 서블릿 링크
+fetch('/MIA/getNewFamilyListIndex').then(response => response.json()).then(data => { // ajax 서블릿 링크
 	let tbody = document.querySelector("#newFamily-article tbody");
 	tbody.innerHTML = '';
 
@@ -117,12 +130,12 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 		const row = document.createElement('tr');
 
 		const categoryCell = document.createElement('td');
-		categoryCell.textContent = categoryList(item.nf_category);
+		categoryCell.textContent = categoryList[item.nf_category];
 		row.appendChild(categoryCell);
 
 		const imgCell = document.createElement('td');
         const img = document.createElement('img');
-		img.src = item.nf_img;
+		img.src = "/resources/MIA-img/newFamilyImg/" + item.nf_img;
 		img.alt = item.nf_title;
 		imgCell.appendChild(img);
 		row.appendChild(imgCell);
@@ -136,6 +149,6 @@ fetch('주소 입력').then(response => response.json()).then(data => { // ajax 
 		row.appendChild(placeCell);
 
 		tbody.appendChild(row);
-		row.addEventListener('click', () => location.href = "주소 입력" + item.nf_seq); // 글 상세 정보 보기 서블릿 링크
+		row.addEventListener('click', () => location.href = "/MIA/getNewFamily?nf_seq=" + item.nf_seq + "&searchCondition=TITLE&searchKeyword=&category=&nowPage=1"); // 글 상세 정보 보기 서블릿 링크
 	});
 }).catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));

@@ -39,6 +39,7 @@
 			<button id="notice_write">글쓰기</button>
 		</div>
 		<table>
+			<caption style="display:none;">공지사항</caption>
 			<thead>
 				<tr>
 					<th>번호</th>

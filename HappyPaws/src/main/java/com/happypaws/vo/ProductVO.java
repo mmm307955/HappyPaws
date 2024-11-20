@@ -90,6 +90,9 @@ public class ProductVO {
 	private String receipt_url;      // 영수증 URL
 	private String custom_data;      // 커스텀 데이터
 	
+    private int review_count;      // 리뷰 수
+    private int total_orders;      // 총 주문 수
+	
 	public int getPr_id() {
 		return pr_id;
 	}
@@ -672,5 +675,21 @@ public class ProductVO {
 
 	public void setCustom_data(String custom_data) {
 		this.custom_data = custom_data;
+	}
+
+	public int getReview_count() {
+		return review_count;
+	}
+
+	public void setReview_count(int review_count) {
+		this.review_count = review_count;
+	}
+
+	public int getTotal_orders() {
+		return total_orders;
+	}
+
+	public void setTotal_orders(int total_orders) {
+		this.total_orders = total_orders;
 	}
 }

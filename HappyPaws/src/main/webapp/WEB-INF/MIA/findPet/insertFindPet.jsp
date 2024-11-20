@@ -6,13 +6,21 @@
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/findPet.js"></script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var now_utc = Date.now();
+    var timeOff = new Date().getTimezoneOffset() * 60000;
+    var today = new Date(now_utc - timeOff).toISOString().split("T")[0];
+    document.getElementById("Date").setAttribute("max", today);
+});
+</script>
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
 	<main>
 		<div class="n_write">
 			<div class="n_writeform">
-				<h1>아이를 찾아주세요</h1>
+				<h1>아이를 발견했어요</h1>
 				<form action="/MIA/insertFindPet" method="post" enctype="multipart/form-data" name="boardform">
 					
 					<div class="n_write_header">
@@ -39,7 +47,7 @@
 					
 					<div class="n_ph">
    						 <input type="text" class="form-control" name="fp_ph" id="fp_ph" placeholder="연락처를 입력하세요" required 
-   						 oninput="formatPhoneNumber(this)">
+   						 oninput="formatPhoneNumber(this)" maxlength="13">
 					</div>
 					
 					<div class="n_img">
@@ -62,8 +70,8 @@
 							</tr>
 							<tr class="detail-row">
 								<td class="label">발견 날짜</td>
-								<td class="value"><input type="date" class="form-control"
-									name="fp_time" required></td>
+								<td class="value">
+								<input type="date" id="Date" class="form-control" name="fp_time" required></td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">분류</td>
@@ -84,9 +92,8 @@
 
 					</div>
 					<div class="n_content">
-						<textarea class="form-control" rows="5" name="fp_content"
-							placeholder="상세 설명을 입력하세요"></textarea>
-					
+						<textarea cols="100" wrap="hard" class="form-control" rows="5" name="fp_content"
+							placeholder="상세 설명을 입력하세요"></textarea>					
 					</div>
 					<input type="hidden" name="fp_ok" value="N"> 
 					<input type="hidden" name="fp_del" value="N">

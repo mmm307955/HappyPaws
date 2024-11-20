@@ -9,10 +9,8 @@
     <title>내정보 수정</title>
    <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
         }
         .container {
             max-width: 600px;
@@ -61,6 +59,8 @@
             width: 100%;
             border-spacing: 10px;
             table-layout: auto;
+            position: relative;
+            margin-left: -40px;
         }
         td.label {
             width: 30%;
@@ -137,11 +137,16 @@ input[name="us_password"] {
     padding: 5px 10px; 
     font-size: 14px; 
     border-radius: 5px;
-    background-color: #e0e0e0;
+    padding: 6px 12px;
+    background-color: #FFD700;
     border: 1px solid #ddd;
     cursor: pointer;
-    height: 40px; 
+    height: 30px; 
     box-sizing: border-box; 
+    position: absolute;
+    right: 6px;
+    font-size: 12px;
+    
 }
 
        .button-container {
@@ -161,7 +166,6 @@ input[name="us_password"] {
     border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
-    color: #666;
     text-align: center;
     box-sizing: border-box;
 }
@@ -183,13 +187,9 @@ input[name="us_password"] {
             }
             table {
                 border-spacing: 5px;
+                margin-left: -20px;
             }
-            td.label {
-                text-align: left;
-                width: 40%;
-                padding-right: 5px;
-
-            }
+        
             td.input-field {
                 width: 60%;
             }
@@ -312,17 +312,15 @@ input[name="us_password"] {
                         <td class="label">이메일:</td>
                         <td class="input-field"><input type="email" name="us_email" value="${user.us_email}" required></td>
                     </tr>
-            <tr>
-    <td class="label">
-        <button type="button" class="zipcode-btn" onclick="openZipcodeSearch()">우편번호 찾기</button>
-    </td>
-    <td class="input-field">
-        <div class="zipcode-container">
-            <input type="text" id="postcode" name="postcode" readonly value="${user.postcode}">
-        </div>
-    </td>
-</tr>
-
+		            <tr>
+					    <td class="label">우편번호: </td>
+					    <td class="input-field">
+					        <div class="zipcode-container">
+					            <input type="text" id="postcode" name="postcode" readonly value="${user.postcode}">
+					            <button type="button" class="zipcode-btn" onclick="openZipcodeSearch()">우편번호 찾기</button>
+					        </div>
+					    </td>
+					</tr>
 
                     <tr>
                         <td class="label">주소:</td>
@@ -342,7 +340,7 @@ input[name="us_password"] {
         <input type="hidden" name="us_id" value="${user.us_id}">
          
         <button type="submit" class="delete-btn">탈퇴</button>
-         <button type="button" onclick="location.href='/logout'" class="logout-btn">로그아웃</button>
+<!--          <button type="button" onclick="location.href='/logout'" class="logout-btn">로그아웃</button> -->
     </form>
 </div>
 

@@ -3,6 +3,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="NoticeDAO">
+	<!-- 시작 페이지 -->
+	<select id="notice_index" resultType="com.happypaws.vo.NoticeVO">
+		SELECT * FROM notice WHERE n_chk="Y" AND n_del="N" limit 1
+	</select>
+
 	<!-- 글 등록 -->
 	<insert id="notice_insert">
 		INSERT INTO notice (N_ID, N_TITLE, N_CONTENT, N_DATE, N_COUNT, N_CHK) 

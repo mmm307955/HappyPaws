@@ -11,6 +11,14 @@
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lostPet.js"></script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var now_utc = Date.now();
+    var timeOff = new Date().getTimezoneOffset() * 60000;
+    var today = new Date(now_utc - timeOff).toISOString().split("T")[0];
+    document.getElementById("Date").setAttribute("max", today);
+});
+</script>
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
@@ -33,7 +41,7 @@
 
 					<div class="n_ph">
    						 <input type="text" class="form-control" name="lp_ph" id="lp_ph" placeholder="연락처를 입력하세요" required 
-   						 oninput="formatPhoneNumber(this)">
+   						 oninput="formatPhoneNumber(this)" maxlength="13">
 					</div>
 
 					<div class="n_img">
@@ -56,8 +64,9 @@
 							</tr>
 							<tr class="detail-row">
 								<td class="label">실종 날짜</td>
-								<td class="value"><input type="date" class="form-control"
-									name="lp_time" required></td>
+								<td class="value">
+								<input type="date" id="Date" class="form-control" name="lp_time" required>
+								</td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">분류</td>
@@ -83,7 +92,7 @@
 
 					</div>
 					<div class="n_content">
-						<textarea class="form-control" rows="5" name="lp_content"
+						<textarea cols="100" wrap="hard" class="form-control" rows="5" name="lp_content"
 							placeholder="상세 설명을 입력하세요"></textarea>
 					</div>
 					<input type="hidden" name="lp_ok" value="N"> <input

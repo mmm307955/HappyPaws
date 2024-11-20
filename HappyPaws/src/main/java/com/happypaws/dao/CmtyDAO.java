@@ -96,5 +96,10 @@ public class CmtyDAO {
     
     	return mybatis.selectOne("CommunityDAO.cmty_up_cut",vo);
     }
+
+    // 시작 페이지
+	public List<CmtyupVO> cmty_index() {
+		return mybatis.selectList("CommunityDAO.cmty_index");
+	}
    
 }

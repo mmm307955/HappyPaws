@@ -4,11 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -39,7 +38,8 @@ public class FindPetController {
     @Autowired
     private FpCommentSVC fpCommentSVC;
 
-    String realPath = "c:/happyPaws/happyPaws/src/main/webapp/resources/MIA-img/findPetImg/";
+    @Autowired
+    private ServletContext servletContext;
 
     // 글 등록
     @RequestMapping(value = "/insertFindPet", method = RequestMethod.GET)
@@ -51,7 +51,8 @@ public class FindPetController {
     public String insertFindPet(FindPetVO vo) throws IllegalStateException, IOException {
         MultipartFile uploadFile = vo.getUploadFile();
         String originalFilename = uploadFile.getOriginalFilename();
-
+        String realPath = servletContext.getRealPath("/resources/MIA-img/findPetImg/");
+        
         // UUID를 사용하여 새로운 파일 이름 생성
         String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFilename;
         vo.setFp_img(uniqueFileName);
@@ -96,7 +97,7 @@ public class FindPetController {
     public String updateFindPet(FindPetVO vo, HttpSession session) throws IllegalStateException, IOException {
         MultipartFile uploadFile = vo.getUploadFile();
         String originalFilename = uploadFile.getOriginalFilename();
-
+        String realPath = servletContext.getRealPath("/resources/MIA-img/findPetImg/");
         // 현재 이미지 이름을 가져오는 서비스 메서드
         String existingImg = findPetSVC.getCurrentImage(vo.getFp_seq());
         String newFileName;
@@ -140,6 +141,7 @@ public class FindPetController {
     // 글 완전히 삭제
     @RequestMapping("/deleteAllFindPet")
     public String deleteAllFindPet(FindPetVO vo, HttpServletRequest request) {
+    	String realPath = servletContext.getRealPath("/resources/MIA-img/findPetImg/");
         realPath = request.getSession().getServletContext().getRealPath("/resources/img/");
         if (vo.getFp_img() != null) {
             System.out.println("파일삭제: " + realPath + vo.getFp_img());

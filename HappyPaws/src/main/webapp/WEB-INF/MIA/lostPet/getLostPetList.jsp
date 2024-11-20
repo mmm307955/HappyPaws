@@ -14,11 +14,17 @@ pageContext.setAttribute("categories", categories);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>행복한 발자국</title>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/css/MIA.css">
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lostPet.js"></script>
-
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/notice.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/MIA.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/lostPet.js"></script>
+<script>
+// 로그인 필요 알림
+$(document).on('click', '.lpIns2', function() {
+    const currentUri = encodeURIComponent(window.location.href);
+    alert("로그인이 필요합니다");
+    location.href = "/auth/login?returi=" + currentUri;
+});
+</script>
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp" />
@@ -31,6 +37,15 @@ pageContext.setAttribute("categories", categories);
 				    <li><a href="/MIA/getNewFamilyList">새로운 가족을 찾아요</a></li>
 				</ul>
 			</div>
+			
+			<div class="c_category_ph">
+				<ul>
+			    	<li><span>찾아주세요</span></li>
+			    	<li><a href="/MIA/getFindPetList">발견했어요</a></li>
+				    <li><a href="/MIA/getNewFamilyList">가족을 찾아요</a></li>
+				</ul>
+			</div>
+			
 		<div class="n_seachform">
 				<form>
 					<label style="display: none;"><select name="searchCondition" >
@@ -53,10 +68,10 @@ pageContext.setAttribute("categories", categories);
 		            </div>
 				</form>
 				<c:if test="${not empty user.us_id}">
-					<button id="lpIns">글쓰기</button>
+					<button class="lpIns">글쓰기</button>
 				</c:if>
 				<c:if test="${empty user.us_id}">
-					<button id="lpIns2">글쓰기</button>
+					<button class="lpIns2">글쓰기</button>
 				</c:if>
 			</div>
 
@@ -124,5 +139,12 @@ pageContext.setAttribute("categories", categories);
 		</div>
 	</main>
 	<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
+	
+	<c:if test="${not empty user.us_id}">
+		<button class="lpIns ph_write"><img src="/resources/images/edit-3.svg" alt="글쓰기"/></button>
+	</c:if>
+	<c:if test="${empty user.us_id}">
+		<button class="lpIns2 ph_write"><img src="/resources/images/edit-3.svg" alt="글쓰기"/></button>
+	</c:if>	
 </body>
 </html>

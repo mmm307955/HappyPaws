@@ -10,9 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내 등록 게시물</title>
    <style>
-        body {
-            background-color: #f9f9f9;
-        }
         .container {
             width: 80%;
             max-width: 1200px;
