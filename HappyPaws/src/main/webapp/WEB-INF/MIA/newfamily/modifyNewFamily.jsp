@@ -14,7 +14,7 @@
     <jsp:include page="${pageContext.request.contextPath}/header.jsp" />
     <main>
         <div class="n_write">
-            <h1>글 수정</h1>
+            <h1>새로운 가족을 찾아요</h1>
             <div class="n_writeform">
                 <form action="/MIA/updateNewFamily" method="post" enctype="multipart/form-data" name="boardform">
                     <input type="hidden" name="nf_seq" value="${newFamily.nf_seq}">
@@ -28,7 +28,8 @@
                     </div>
 
                     <div class="n_ph">
-                        <input type="text" class="form-control" name="nf_ph" value="${newFamily.nf_ph}" placeholder="연락처를 입력하세요." required>
+                        <input type="text" class="form-control" name="nf_ph" value="${newFamily.nf_ph}" placeholder="연락처를 입력하세요." required
+                        oninput="formatPhoneNumber(this)" maxlength="13">
                     </div>
 
                     <div class="n_img">
@@ -96,7 +97,7 @@
                     </div>
 
                     <div class="n_content">
-                        <textarea class="form-control" rows="5" name="nf_content" placeholder="상세 설명을 입력하세요">${newFamily.nf_content}</textarea>
+                        <textarea cols="100" wrap="hard" class="form-control" rows="5" name="nf_content" placeholder="상세 설명을 입력하세요">${newFamily.nf_content}</textarea>
                     </div>
 
                     <input type="hidden" name="nf_del" value="${newFamily.nf_del}">
