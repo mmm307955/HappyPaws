@@ -33,6 +33,12 @@
 		main h1 {
 			margin-bottom: 15px;
 		}
+
+		@media (pointer:coarse) {
+			main img {
+				width: 100%;
+			}
+		}
 	</style>
 </head>
 <body>

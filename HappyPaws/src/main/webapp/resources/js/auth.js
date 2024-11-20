@@ -39,6 +39,11 @@ function nick_duplicate_check() {
 		alert("닉네임을 입력해주세요.");
 		return false;
 	}
+
+	if (document.querySelector("#us_nick").value.length > 8) {
+		alert("8글자 이내로 입력해주세요.");
+		return false;
+	}
 	
 	fetch('/auth/nick_check', {
 		method: "POST",
@@ -68,7 +73,7 @@ document.querySelector("#us_nick")?.addEventListener('change', () => auth_nick =
 
 // 전화번호 인증
 let auth_phone = false;
-document.querySelector('#us_phone+input[type=button]')?.addEventListener('click', function () {
+document.querySelector('#us_phone+input[type=button]')?.addEventListener('click', () => {
 	if (!switchPhoneFormat()) {
 		alert("전화번호 형식을 지켜주세요.");
 		return;
@@ -81,14 +86,36 @@ document.querySelector('#us_phone+input[type=button]')?.addEventListener('click'
 		success: response => {
 			if (response) {
 				$('#us_phone_auth_div').css('display', 'flex');
+				startTimer(duration, document.getElementById('timer'));
 			}
 		},
 		error: () => alert('인증번호 전송에 실패하였습니다.')
 	});
 });
 
+// 인증번호 입력 시간
+const duration = 60 * 5;
+function startTimer(duration, display) {
+    let timer = duration, minutes, seconds;
+    const interval = setInterval(function () {
+        minutes = Math.floor(timer / 60);
+        seconds = timer % 60;
+
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            clearInterval(interval);
+			display.textContent = "00:00";
+			$('#us_phone_auth_div').css('display', 'none');
+        }
+    }, 1000);
+}
+
 // 인증번호 확인
-document.querySelector('#us_phone_auth_code+input[type=button]')?.addEventListener('click', function () {
+document.querySelector('#us_phone_auth_code+input[type=button]')?.addEventListener('click', () => {
 	let us_phone_auth_code = $('#us_phone_auth_code').val();
 	if (us_phone_auth_code.length != 6) {
 		alert("6자리를 입력해주세요.");
@@ -130,7 +157,7 @@ function switchPhoneFormat() {
 }
 
 // onsubmit
-document.loginForm?.addEventListener('submit', function () {
+document.loginForm?.addEventListener('submit', event => {
 	let isValidity = true;
 
 	if (document.loginForm.us_id.value.trim() === '') {
@@ -148,7 +175,7 @@ document.loginForm?.addEventListener('submit', function () {
 	}
 });
 
-document.joinForm?.addEventListener('submit', function () {
+document.joinForm?.addEventListener('submit', event => {
 	let isValidity = true;
 
 	if (!auth_id) {
@@ -186,7 +213,7 @@ document.joinForm?.addEventListener('submit', function () {
 	}
 });
 
-document.findIdForm?.addEventListener('submit', function () {
+document.findIdForm?.addEventListener('submit', event => {
 	let isValidity = true;
 
 	if (document.findIdForm.us_name.value.trim() === "") {
@@ -204,9 +231,9 @@ document.findIdForm?.addEventListener('submit', function () {
 	}
 });
 
-document.querySelector('input[value="비밀번호 찾기"]')?.addEventListener('click', async function () {
+document.querySelector('input[value="비밀번호 찾기"]')?.addEventListener('click', async () => {
 	let isValidity = true;
-	
+
 	if (document.findPwForm.us_id.value.trim() === "") {
 		showInputError(document.findPwForm.us_id);
 		isValidity = false;
@@ -246,12 +273,12 @@ document.querySelector('input[value="비밀번호 찾기"]')?.addEventListener('
 	} catch (error) {
 		alert('사용자 정보를 확인하지 못했습니다.');
 	}
-})
+});
 
-document.findPwForm?.addEventListener('submit', function () {
+document.findPwForm?.addEventListener('submit', event => {
 	let isValidity = true;
 
-	if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,64}$/.test(document.findPwForm.us_password.value)) {
+	if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/.test(document.findPwForm.us_password.value)) {
 		showInputError(document.findPwForm.us_password);
 		isValidity = false;
 	}
@@ -264,10 +291,9 @@ document.findPwForm?.addEventListener('submit', function () {
 	if (!isValidity) {
 		event.preventDefault();
 	}
-	
 });
 
-document.change_nick_form?.addEventListener('submit', function () {
+document.change_nick_form?.addEventListener('submit', event => {
 	if (!auth_nick) {
 		showInputError(document.change_nick_form.us_nick);
 		event.preventDefault();

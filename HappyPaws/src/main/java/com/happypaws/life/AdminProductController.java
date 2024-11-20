@@ -95,7 +95,6 @@ public class AdminProductController {
 	public String adManageProductListGet(ProductsVO vo, PagingVO pv, Model model, ProductOptionVO opt,
 			@RequestParam(value = "nowPage", required = false) String nowPage,
 			@RequestParam(value = "category", required = false) String category) {
-
 		String cntPerPage = "10";
 		if (vo.getSearchCondition() == null)
 			vo.setSearchCondition("pr_id");
@@ -137,7 +136,6 @@ public class AdminProductController {
 	public String adManageProductListPost(ProductsVO vo, PagingVO pv, Model model, ProductOptionVO opt,
 			@RequestParam(value = "nowPage", required = false) String nowPage,
 			@RequestParam(value = "category", required = false) String category) {
-
 		String cntPerPage = "10";
 		if (vo.getSearchCondition() == null)
 			vo.setSearchCondition("pr_id");

@@ -25,7 +25,8 @@
 					</div>
 					<p class="error-message">전화번호 인증을 받아주세요.</p>
 					<div id="us_phone_auth_div" style="display: none;">
-						<input type="text" name="us_phone_auth_code" id="us_phone_auth_code" placeholder="인증번호 입력">
+						<input type="text" name="us_phone_auth_code" id="us_phone_auth_code" placeholder="인증번호 입력" maxlength="6">
+						<span class="timer" id="timer">05:00</span>
 						<input type="button" value="인증번호 확인">
 					</div>
 

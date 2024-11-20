@@ -19,7 +19,7 @@
 				<p class="error-message">아이디 중복 확인을 해주세요.</p>
 
 				<div><input type="password" name="us_password" id="us_password" placeholder="비밀번호 입력"></div>
-				<p class="error-message">비밀번호가 유효하지 않습니다.</p>
+				<p class="error-message">비밀번호가 유효하지 않습니다.<br>대·소문자, 숫자, 특수문자를 1개 이상씩 사용하여 8~20자로 작성해주세요.</p>
 				<div><input type="password" name="us_check_password" id="us_check_password" placeholder="비밀번호 확인"></div>
 				<p class="error-message">비밀번호가 서로 다릅니다.</p>
 
@@ -41,7 +41,8 @@
 				</div>
 				<p class="error-message">전화번호 인증을 해주세요.</p>
 				<div id="us_phone_auth_div" style="display: none;">
-					<input type="text" name="us_phone_auth_code" id="us_phone_auth_code" placeholder="인증번호 입력">
+					<input type="text" name="us_phone_auth_code" id="us_phone_auth_code" placeholder="인증번호 입력" maxlength="6">
+					<span class="timer" id="timer">05:00</span>
 					<input type="button" value="인증번호 확인">
 				</div>
 

@@ -38,7 +38,6 @@
         WHERE fp_seq = #{fp_seq}
     </update>
 
-
     <delete id="deleteAllFindPet">
         DELETE FROM findpet WHERE fp_seq = #{fp_seq}
     </delete>

@@ -85,6 +85,8 @@ public class AuthApiSVC implements InitializingBean {
 	private String kakaoUserInfoUri;
 	@Value("${spring.security.oauth2.client.provider.kakao.logout-uri}")
 	private String kakaoLogoutUri;
+	@Value("${spring.security.oauth2.client.provider.kakao.logout-continue-uri}")
+	private String kakaoLogoutContinueUri;
 	@Value("${spring.security.oauth2.client.provider.kakao.logout-redirect-uri}")
 	private String kakaoLogoutRedirectUri;
 
@@ -272,18 +274,20 @@ public class AuthApiSVC implements InitializingBean {
 
 	// ========== method by logout divider ========== //
 	public String requestNaverLogoutUri() {
-		String logoutUri = "/";
-		return logoutUri;
+		return "/WEB-INF/auth/naverLogout.jsp";
 	}
 	
-	public String requestKakaoLogoutUri(HttpServletRequest request) {
+	public String requestKakaoLogoutUri(HttpServletRequest request) throws UnsupportedEncodingException {
 		String state = UUID.randomUUID().toString();
 		request.getSession().setAttribute("oauthState", state);
-		
-		String logoutUri = kakaoLogoutUri;
-		logoutUri += "?client_id=" + kakaoClientId;
-		logoutUri += "&logout_redirect_uri=" + kakaoLogoutRedirectUri;
-		logoutUri += "&state=" + state;
+
+		String logoutUri = kakaoLogoutUri
+				+ "?continue=" + URLEncoder.encode(kakaoLogoutContinueUri
+					+ "?through_account=true"
+					+ "&state=" + state
+					+ "&logout_redirect_uri=" + URLEncoder.encode(kakaoLogoutRedirectUri, "UTF-8")
+					+ "&client_id=" + kakaoClientId, "UTF-8");
+
 		return logoutUri;
 	}
 	

@@ -1,6 +1,11 @@
 package com.happypaws.svc;
 
+import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +21,28 @@ public class AuthSVC {
 	public UsersVO login(UsersVO user) {
 		return dao.login(user);
 	}
+
+    public Map<String, String> getQueryParams(String url) {
+        Map<String, String> queryPairs = new HashMap<>();
+        try {
+            URI uri = new URI(url);
+            String query = uri.getQuery(); // 쿼리 문자열 추출
+            if (query != null) {
+                String[] pairs = query.split("&");
+                for (String pair : pairs) {
+                    String[] keyValue = pair.split("=", 2);
+                    String key = URLDecoder.decode(keyValue[0], StandardCharsets.UTF_8);
+                    String value = keyValue.length > 1 
+                                   ? URLDecoder.decode(keyValue[1], StandardCharsets.UTF_8)
+                                   : "";
+                    queryPairs.put(key, value);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return queryPairs;
+    }
 
 	public boolean snsJoin(UsersVO user) {
 		return dao.snsJoin(user);

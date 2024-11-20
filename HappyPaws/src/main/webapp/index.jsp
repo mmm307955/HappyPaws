@@ -13,7 +13,10 @@
 			<span>안녕하세요, 행복한 발자국입니다.</span>
 			<img src="/resources/images/index.png" alt="메인 이미지">
 		</div>
-		<section id="notice-section"><!-- Contents Area --></section>
+		<div>
+			<i class="fas fa-bullhorn"></i>
+			<section id="notice-section"><!-- Contents Area --></section>
+		</div>
 		<div id="contents-bundle">
 			<section id="left-contents" class="contents">
 				<article id="community-article">

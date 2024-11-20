@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.happypaws.svc.AuthApiSVC;
 import com.happypaws.svc.AuthSVC;
@@ -51,24 +52,28 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public String login(UsersVO user, HttpServletResponse response, Model model) {
+	public String login(UsersVO user, HttpServletRequest request, HttpServletResponse response, Model model, RedirectAttributes redirectAttributes) {
+		String referer = request.getHeader("Referer");
+		String returi = svc.getQueryParams(referer).get("returi");
+
 		String password = user.getUs_password();
 		user.setUs_sns("default");
 		user = svc.login(user);
+
 		if (user == null) {
-			model.addAttribute("error", "id");
+			redirectAttributes.addFlashAttribute("error", "id");
 		} else if (user.getUs_is_del().equals("Y")) {
-			model.addAttribute("error", "del");
+			redirectAttributes.addFlashAttribute("error", "del");
 		} else if (!user.getUs_sns().equals("default")) {
-			model.addAttribute("error", "sns");
+			redirectAttributes.addFlashAttribute("error", "sns");
 		} else if (Argon2Util.verifyPassword(user.getUs_password(), password)) {
 			user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
 			JwtCookieUtil.createJwtCookie(response, user);
-			return "redirect:/";
+			return "redirect:" + (returi == null ? "/" : returi);
 		} else {
-			model.addAttribute("error", "password");
+			redirectAttributes.addFlashAttribute("error", "password");
 		}
-		return "/WEB-INF/auth/login.jsp";
+		return "redirect:/auth/login" + (returi != null ? "?returi=" + returi : "");
 	}
 
 	@RequestMapping("/login/{divider}")
@@ -277,29 +282,29 @@ public class AuthController {
 	}
 
 	@RequestMapping("/logout")
-	public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-		session.removeAttribute("user");
+	public String logout(HttpServletRequest request, HttpServletResponse response, Model model) throws UnsupportedEncodingException {
+		request.getSession().removeAttribute("user");
 		String us_sns = JwtCookieUtil.extractJwtFromCookie(request).getUs_sns();
 		JwtCookieUtil.deleteJwtCookie(response);
 
 		switch (us_sns) {
 		case "naver":
-			return "redirect:" + apiSvc.requestNaverLogoutUri();
+			return apiSvc.requestNaverLogoutUri();
 		case "kakao":
 			return "redirect:" + apiSvc.requestKakaoLogoutUri(request);
 		}
 		return "redirect:/";
 	}
 	
-	@RequestMapping("/logout/{divider}")
+	@RequestMapping("/logout/kakao")
 	public String snsLogout(@RequestParam(value = "state") String state,
 			@PathVariable String divider, HttpSession session, Model model) {
-		if (session.getAttribute("oauthState").equals(state)) {
-			model.addAttribute("logoutMassage", divider + "에서 정상적으로 로그아웃 처리되었습니다.");
+		if (state != null && !session.getAttribute("oauthState").equals(state)) {
+			model.addAttribute("logoutMassage", "카카오에서 정상적으로 로그아웃 처리되지 않았습니다.");
 		} else {
-			model.addAttribute("logoutMassage", divider + "에서 정상적으로 로그아웃 처리되지 않았습니다.");
+			model.addAttribute("logoutMassage", "카카오에서 정상적으로 로그아웃 처리되었습니다.");
 		}
-		return "/WEB-INF/auth/successLogout.jsp";
+		return "/WEB-INF/auth/kakaoLogout.jsp";
 	}
 
 	@GetMapping("/error")

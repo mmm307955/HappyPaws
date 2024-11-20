@@ -15,11 +15,14 @@
 	<main>
 		<img src="/resources/images/HappyPawsLogo.png" alt="logo">
 		<div id="hero-img" style="background-color: transparent; aspect-ratio: auto;">
-			<img src="/resources/images/error-page.png" alt="메인 이미지" style="width: 85%;">
+			<img src="/resources/images/error-page.png" alt="메인 이미지" style="width: 100%;">
 		</div>
-		<section id="notice-section">
-			<a href=""><p>긴급 공지: 시스템 유지보수 안내</p></a>
-		</section>
+		<div>
+			<i class="fas fa-bullhorn"></i>
+			<section id="notice-section">
+				<a href=""><p>긴급 공지: 시스템 유지보수 안내</p></a>
+			</section>
+		</div>
 		<div id="contents-bundle">
 			<section id="left-contents" class="contents">
 				<article id="community-article">
@@ -180,6 +183,5 @@
 		</div>
 	</main>
 	<%@include file="./footer.jsp" %>
-	<script src="./resources/js/index.js"></script>
 </body>
 </html>
