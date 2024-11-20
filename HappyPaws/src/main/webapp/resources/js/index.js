@@ -7,7 +7,7 @@ fetch('/notice_index').then(response => response.json()).then(data => {
 	const pTag = document.createElement('p');
 	pTag.textContent = data.n_title;
 	aTag.appendChild(pTag);
-	aTag.src = "/board/notice_view?n_seq=" + data.n_seq;
+	aTag.href = "/board/notice_view?n_seq=" + data.n_seq;
 	section.appendChild(aTag);
 }).catch(error => console.error('데이터를 가져오는 중 오류 발생:', error));
 

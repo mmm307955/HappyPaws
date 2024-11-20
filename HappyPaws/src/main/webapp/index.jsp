@@ -67,6 +67,7 @@
 								<col>
 								<col>
 								<col>
+								<col>
 							</colgroup>
 							<tbody><!-- Contents Area --></tbody>
 						</table>
