@@ -53,9 +53,6 @@ public class ProductController {
 	@Autowired
 	private ServletContext servletContext;
 	
-	private final String uploadPath = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/upload/";
-//	private final String uploadPath = servletContext.getRealPath("/resources/upload/"); // replace 하기
-	
     // 인덱스 페이지에 보여주기
 	@RequestMapping("/pr_index")
 	@ResponseBody
@@ -101,7 +98,7 @@ public class ProductController {
 	        
 	        // 썸네일 이미지 존재 여부 체크
 	        if (product.getPr_thumbnail() != null && !product.getPr_thumbnail().isEmpty()) {
-	            String imagePath = uploadPath + product.getPr_thumbnail();
+	            String imagePath = servletContext.getRealPath("/resources/upload/") + product.getPr_thumbnail();
 	            product.setImageExists(new File(imagePath).exists());
 	        } else {
 	            product.setImageExists(false);
@@ -129,7 +126,7 @@ public class ProductController {
 	    
 	    // 상품 썸네일 이미지 존재 여부 체크
 	    if (productDetail.get(0).getPr_thumbnail() != null && !productDetail.get(0).getPr_thumbnail().isEmpty()) {
-	        String imagePath = uploadPath + productDetail.get(0).getPr_thumbnail();
+	        String imagePath = servletContext.getRealPath("/resources/upload/") + productDetail.get(0).getPr_thumbnail();
 	        productDetail.get(0).setImageExists(new File(imagePath).exists());
 	    } else {
 	        productDetail.get(0).setImageExists(false);
@@ -208,7 +205,7 @@ public class ProductController {
 	    // 리뷰 이미지 존재 여부 체크
 	    for (ProductVO review : reviews) {
 	        if (review.getPrc_image() != null && !review.getPrc_image().isEmpty()) {
-	            String imagePath = uploadPath + review.getPrc_image();
+	            String imagePath = servletContext.getRealPath("/resources/upload/") + review.getPrc_image();
 	            review.setImageExists(new File(imagePath).exists());
 	        } else {
 	            review.setImageExists(false);
@@ -246,7 +243,7 @@ public class ProductController {
     @ResponseBody
     public ResponseEntity<byte[]> getImage(@PathVariable String fileName) {
         try {
-            File file = new File(uploadPath + fileName);
+            File file = new File(servletContext.getRealPath("/resources/upload/") + fileName);
             byte[] imageContent = Files.readAllBytes(file.toPath());
             
             HttpHeaders headers = new HttpHeaders();
@@ -333,12 +330,12 @@ public class ProductController {
                 }
                 
                 String newFileName = UUID.randomUUID().toString() + fileExtension;
-                File uploadDir = new File(uploadPath);
+                File uploadDir = new File(servletContext.getRealPath("/resources/upload/"));
                 if (!uploadDir.exists()) {
                     uploadDir.mkdirs();
                 }
 
-                File destFile = new File(uploadPath + newFileName);
+                File destFile = new File(servletContext.getRealPath("/resources/upload/") + newFileName);
                 image.transferTo(destFile);
                 vo.setPrc_image(newFileName);
             } else {
@@ -373,7 +370,7 @@ public class ProductController {
             } else {
                 // 실패 시 업로드된 이미지 삭제
                 if (vo.getPrc_image() != null && !vo.getPrc_image().isEmpty()) {
-                    File uploadedFile = new File(uploadPath + vo.getPrc_image());
+                    File uploadedFile = new File(servletContext.getRealPath("/resources/upload/") + vo.getPrc_image());
                     if (uploadedFile.exists()) {
                         uploadedFile.delete();
                     }
@@ -454,7 +451,7 @@ public class ProductController {
             // 리뷰 이미지 존재 여부 체크
             for (ProductVO review : reviews) {
                 if (review.getPrc_image() != null && !review.getPrc_image().isEmpty()) {
-                    String imagePath = uploadPath + review.getPrc_image();
+                    String imagePath = servletContext.getRealPath("/resources/upload/") + review.getPrc_image();
                     review.setImageExists(new File(imagePath).exists());
                 } else {
                     review.setImageExists(false);
@@ -602,7 +599,7 @@ public class ProductController {
             // 썸네일 이미지 존재 여부 체크
             for (ProductVO item : cartList) {
                 if (item.getPr_thumbnail() != null && !item.getPr_thumbnail().isEmpty()) {
-                    String imagePath = uploadPath + item.getPr_thumbnail();
+                    String imagePath = servletContext.getRealPath("/resources/upload/") + item.getPr_thumbnail();
                     item.setImageExists(new File(imagePath).exists());
                 } else {
                     item.setImageExists(false);
@@ -857,7 +854,7 @@ public class ProductController {
 	        // 각 위시리스트 아이템의 이미지 존재 여부 확인
 	        for (ProductVO item : wishlist) {
 	            if (item.getPr_thumbnail() != null && !item.getPr_thumbnail().isEmpty()) {
-	                String imagePath = uploadPath + item.getPr_thumbnail();
+	                String imagePath = servletContext.getRealPath("/resources/upload/") + item.getPr_thumbnail();
 	                item.setImageExists(new File(imagePath).exists());
 	            } else {
 	                item.setImageExists(false);

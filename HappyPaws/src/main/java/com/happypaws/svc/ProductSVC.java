@@ -20,9 +20,6 @@ public class ProductSVC {
 	@Autowired
 	private ServletContext servletContext;
 	
-	private final String uploadPath = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/upload/";
-//	private final String uploadPath = servletContext.getRealPath("/resources/upload/"); // replace 하기
-	
 	public int getProductListCount(ProductVO vo) {
 		return dao.getProductListCount(vo);
 	}
@@ -215,7 +212,7 @@ public class ProductSVC {
         // 이미지 존재 여부 체크
         for (ProductVO item : wishlist) {
             if (item.getPr_thumbnail() != null && !item.getPr_thumbnail().isEmpty()) {
-                String imagePath = uploadPath + item.getPr_thumbnail();
+                String imagePath = servletContext.getRealPath("/resources/upload/") + item.getPr_thumbnail();
                 item.setImageExists(new File(imagePath).exists());
             } else {
                 item.setImageExists(false);

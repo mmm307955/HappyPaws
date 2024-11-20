@@ -55,7 +55,7 @@ fetch('/product/pr_index').then(response => response.json()).then(data => {
 
 		const thumbnailCell = document.createElement('td');
         const thumbnail = document.createElement('img');
-		thumbnail.src = "/product/getImage/"+item.pr_thumbnail;
+		thumbnail.src = "/resources/upload/"+item.pr_thumbnail;
 		thumbnail.alt = item.pr_name;
 		thumbnailCell.appendChild(thumbnail);
 		row.appendChild(thumbnailCell);
