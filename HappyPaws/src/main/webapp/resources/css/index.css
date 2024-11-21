@@ -31,7 +31,7 @@ div:has(#notice-section) {
 	display: flex;
 	align-items: center;
 	margin: 10px 15px;
-	background-color: #fe8;
+	background-color: #fdce68;
 	border-radius: 20px;
 }
 
@@ -113,6 +113,8 @@ tbody img {
 	margin: 0 auto;
 }
 
+#left-contents td { font-size: 15px; }
+
 #community-article colgroup col:first-child { width: 15%; }
 #community-article colgroup col:last-child { width: 85%; }
 
@@ -129,7 +131,6 @@ tbody img {
 @media (pointer: coarse) {
 	main {
 		width: 100%;
-		font-size: 12px;
 	}
 
 	main img[alt="logo"] {

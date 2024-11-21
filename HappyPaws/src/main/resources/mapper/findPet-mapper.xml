@@ -8,15 +8,14 @@
     <insert id="insertFindPet">
         INSERT INTO findpet(
             fp_id, fp_code, fp_title, fp_ph, fp_img, fp_place, fp_time,
-            fp_category, fp_breed, fp_content, fp_date, fp_ok, fp_del
+            fp_category, fp_breed, fp_content, fp_date, fp_login, fp_ok, fp_del
         )
         VALUES(
             #{fp_id}, #{fp_code}, #{fp_title}, #{fp_ph}, #{fp_img}, #{fp_place}, #{fp_time},
-            #{fp_category}, #{fp_breed}, #{fp_content}, #{fp_date}, #{fp_ok}, #{fp_del}
+            #{fp_category}, #{fp_breed}, #{fp_content}, #{fp_date}, #{fp_login}, #{fp_ok}, #{fp_del}
         )
     </insert>
 
-    <!-- Update findPet -->
     <update id="updateFindPet">
         UPDATE findpet
         SET
@@ -37,11 +36,6 @@
         SET fp_del = 'Y'
         WHERE fp_seq = #{fp_seq}
     </update>
-
-    <delete id="deleteAllFindPet">
-        DELETE FROM findpet WHERE fp_seq = #{fp_seq}
-    </delete>
-
 
     <select id="getFindPet" resultType="findPet">
     	SELECT * 
@@ -74,9 +68,7 @@
         <if test="searchCondition == 'TITLE,CONTENT'">
             AND (fp_title LIKE CONCAT('%', #{searchKeyword}, '%') OR
                  fp_content LIKE CONCAT('%', #{searchKeyword}, '%'))
-        </if>
-
-        
+        </if>      
         ORDER BY fp_seq DESC
         LIMIT #{listcnt} OFFSET #{start}
     </select>

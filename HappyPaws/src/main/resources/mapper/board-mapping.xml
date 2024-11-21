@@ -5,7 +5,7 @@
 <mapper namespace="NoticeDAO">
 	<!-- 시작 페이지 -->
 	<select id="notice_index" resultType="com.happypaws.vo.NoticeVO">
-		SELECT * FROM notice WHERE n_chk="Y" AND n_del="N" limit 1
+		SELECT * FROM notice WHERE n_chk="Y" AND n_del="N" ORDER BY n_seq DESC limit 1
 	</select>
 
 	<!-- 글 등록 -->

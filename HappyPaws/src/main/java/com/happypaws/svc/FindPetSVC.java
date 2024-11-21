@@ -29,11 +29,6 @@ public class FindPetSVC {
         findPetDAO.deleteFindPet(vo);
     }
 
-    // 글 완전히 삭제
-    public void deleteAllFindPet(FindPetVO vo) {
-        findPetDAO.deleteAllFindPet(vo);
-    }
-
     // 글상세 조회
     public FindPetVO getFindPet(FindPetVO vo) {
         return findPetDAO.getFindPet(vo);

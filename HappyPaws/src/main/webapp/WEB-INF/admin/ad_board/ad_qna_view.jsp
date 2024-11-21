@@ -28,8 +28,6 @@
 			</div>
 			
 			<div class="comments">
-				
-			    <div id="commentList"></div>
 			    <c:if test="${not empty user.us_id}">
 			    <span>댓글쓰기</span>
 			    <div class="comment-input">
@@ -43,6 +41,7 @@
 				    <button id="submitComment" value="${param.qna_seq}" disabled>댓글 등록</button>
 			    </div>
 				</c:if>
+				<div id="commentList"></div>
 			</div>
 			<div class="n_buttons">
 			    <div style="flex-grow: 1; text-align: center;">

@@ -74,7 +74,7 @@ $(document).on('click', '#login_button', function() {
 					<span class="title">
 						${lostPet.lp_title}
 						<c:if test="${lostPet.lp_ok == 'Y'}">
-							<span style="color: red; font-weight: bold;">[찾았어요]</span>
+							<div style="color: red; font-weight: bold;">[찾았어요]</div>
 						</c:if>
 					</span>
 					
@@ -82,7 +82,7 @@ $(document).on('click', '#login_button', function() {
 					 <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${lostPet.us_profile}" 
 					 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" 
 					 alt="프로필">
-					작성자: ${lostPet.us_nick}</span>
+					${lostPet.us_nick}</span>
 				</div>
 				<div class="n_second">
 					<span class="cnt">조회수: ${lostPet.lp_cnt}</span>

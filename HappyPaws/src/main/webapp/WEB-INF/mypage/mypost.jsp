@@ -54,26 +54,26 @@
             cursor: pointer;
         }
 
-.search-container {
+      .search-container {
     display: flex; 
     justify-content: center; 
     align-items: center; 
     margin: 20px auto;
-    gap: 10px;
-    width: 100%;
+    gap: 10px; 
+    width: 100%; 
 }
 
 .search-container select,
 .search-container button {
     padding: 7px 20px;
-    margin: 0;
-    border: 2px solid #FFD700;
+    margin: 0; 
+    border: 2px solid #FFD700; 
     border-radius: 20px; 
-    outline: none;
+    outline: none; 
     background-color: white; 
     height: 40px; 
     width: auto; 
-    font-size: 14px;
+    font-size: 18px;
     text-align: center; 
     cursor: pointer; 
 }
@@ -153,19 +153,30 @@
 </style>
 
     <script>
-        function goToDetail(postId, sourceTable) {
-            let detailPage;
-            if (sourceTable === 'COMMUNITY') {
-                location.href = '/board/cmty_view?cmty_seq=' + postId;
-            } else if (sourceTable === 'QNA') {
-                location.href = '/board/qna_view?qna_seq=' + postId;
-            } else if (sourceTable === 'NOTICE') {
-                location.href = '/board/notice_view?notice_seq=' + postId;
-            } else {
-                alert("유효하지 않은 게시물입니다."); // 잘못된 경우 경고 메시지
-                return; // 함수 종료하여 페이지 이동 방지
-            }
+    function goToDetail(postId, sourceTable) {
+        console.log("postId:", postId); // postId 값 출력
+        console.log("sourceTable:", sourceTable); // sourceTable 값 출력
+
+        if (sourceTable === 'COMMUNITY') {
+            location.href = '/board/cmty_view?cmty_seq=' + postId;
+        } else if (sourceTable === 'QNA') {
+            location.href = '/board/qna_view?qna_seq=' + postId;
+        } else if (sourceTable === 'NOTICE') {
+            location.href = '/board/notice_view?notice_seq=' + postId;
+        } else if (sourceTable === '아이를 찾아주세요') {
+            location.href = '/MIA/getLostPet?lp_seq=' + postId; 
+        } else if (sourceTable === '아이를 발견했어요') {
+            location.href = '/MIA/getFindPet?fp_seq=' + postId; 
+        } else if (sourceTable === '새로운 가족을 찾아요') {
+            location.href = '/MIA/getNewFamily?nf_seq=' + postId;
+        } else {
+            alert("유효하지 않은 게시물입니다.");
+            return;
         }
+    }
+
+
+
     </script>
 </head>
 <body>
@@ -174,34 +185,34 @@
 <div class="container">
     <h2>내 등록 게시물</h2>
     <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>제목</th>
-                    <th>등록게시판</th>
-                    <th>작성일</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:choose>
-                    <c:when test="${not empty currentPagePosts}">
-                        <c:forEach var="post" items="${currentPagePosts}">
-                            <tr onclick="goToDetail(${post.post_id}, '${post.source_table}')">
-                                <td class="title-column">${post.title}</td>
-                                <td>${post.source_table}</td>
-                                <td>${post.created_date}</td>
-                            </tr>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <tr>
-                            <td colspan="3">등록된 게시물이 없습니다.</td>
+    <table>
+        <thead>
+            <tr>
+                <th>등록게시판</th>
+                <th>제목</th>
+                <th>작성일</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:choose>
+                <c:when test="${not empty currentPagePosts}">
+                    <c:forEach var="post" items="${currentPagePosts}">
+                        <tr onclick="goToDetail(${post.post_id}, '${post.source_table}')">
+                            <td>${post.source_table}</td> <!-- 등록게시판 -->
+                            <td class="title-column">${post.title}</td> <!-- 제목 -->
+                            <td>${post.created_date}</td> <!-- 작성일 -->
                         </tr>
-                    </c:otherwise>
-                </c:choose>
-            </tbody>
-        </table>
-    </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <tr>
+                        <td colspan="3">등록된 게시물이 없습니다.</td>
+                    </tr>
+                </c:otherwise>
+            </c:choose>
+        </tbody>
+    </table>
+</div>
 
     <div class="search-container">
         <form action="/myPosts" method="get"> <!-- GET 방식으로 서버에 검색 요청 -->

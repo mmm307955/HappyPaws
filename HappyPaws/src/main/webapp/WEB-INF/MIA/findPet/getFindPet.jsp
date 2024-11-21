@@ -149,22 +149,22 @@ $(document).on('click', '[id^="closeFpcDelCheck_"]', function () {
 	<main>
 		<div class="n_view">
 			<div class="n_viewform">
-				<h1>아이를 찾아주세요</h1>
+				<h1>아이를 발견했어요</h1>
 				<div class="n_title">
 					<span class="title">
 						${findPet.fp_title}
 						<c:if test="${findPet.fp_ok == 'Y'}">
-							<span style="color: red; font-weight: bold;">[찾았어요]</span>
+							<div style="color: red; font-weight: bold;">[찾았어요]</div>
 						</c:if>
 					</span>
 					<c:if test="${not empty findPet.us_nick}">
 					<span class="author">
 					<img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${findPet.us_profile}" 
 					onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" alt="프로필">
-					작성자: ${findPet.us_nick}</span>
+					${findPet.us_nick}</span>
 					</c:if>
 					<c:if test="${empty findPet.us_nick}">
-					<span class="author">작성자: ${findPet.fp_id}</span>
+					<span class="author">${findPet.fp_id}</span>
 					</c:if>
 				</div>
 				<div class="n_second">

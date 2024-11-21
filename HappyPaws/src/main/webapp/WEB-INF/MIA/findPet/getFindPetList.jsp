@@ -77,14 +77,14 @@
                             onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/MIA-img/default.png';"
                             alt="Found Pet Image" class="pet-image">
                         </a>
-                        <p>${findPet.fp_title}</p>
-                        <p>
+                        <p class="title">${findPet.fp_title}</p>
+                        <p class="mark">
                             <c:if test="${findPet.fp_ok == 'Y'}">
-                                <span style="color: red; font-weight: bold;">[찾았어요]</span>
+                                <span>[찾았어요]</span>
                             </c:if>
                         </p>
-                        <p>지역: ${findPet.fp_place}</p>
-                        <p>${findPet.fp_date} &nbsp댓글:${findPet.commentCount}</p>
+                        <p class="place">지역: ${findPet.fp_place}</p>
+                        <p class="date">${findPet.fp_date} &nbsp댓글:${findPet.commentCount}</p>
                     </div>
                 </c:forEach>
             </div>

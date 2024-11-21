@@ -40,11 +40,6 @@ public class FindPetDAO {
         mybatis.delete("FindPetDAO.deleteFindPet", vo);
     }
 
-    // 글 완전히 삭제
-    public void deleteAllFindPet(FindPetVO vo) {
-        mybatis.delete("FindPetDAO.deleteAllFindPet", vo);
-    }
-
     // 글상세 조회
     public FindPetVO getFindPet(FindPetVO vo) {
         return mybatis.selectOne("FindPetDAO.getFindPet", vo);
@@ -53,11 +48,6 @@ public class FindPetDAO {
     // 글목록 조회
     public List<FindPetVO> getFindPetList(FindPetVO vo) {
         return mybatis.selectList("FindPetDAO.getFindPetList", vo);
-    }
-
-    // 관리자 글 목록 조회
-    public List<FindPetVO> getFindPetListAdmin(FindPetVO vo) {
-        return mybatis.selectList("FindPetDAO.getFindPetListAdmin", vo);
     }
     
     // 전체 페이지 수 조회

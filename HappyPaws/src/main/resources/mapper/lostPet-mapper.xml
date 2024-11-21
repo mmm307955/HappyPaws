@@ -47,10 +47,6 @@
 		#{lp_seq}
 	</update>
 
-	<delete id="deleteAllLostPet">
-		DELETE FROM lostpet WHERE lp_seq = #{lp_seq}
-	</delete>
-
 	<select id="getLostPet" resultType="lostPet">
 		SELECT * 
 		FROM lostpet, users
@@ -87,34 +83,7 @@
 		FROM lostpet
 		WHERE lp_del='N'
 		ORDER BY lp_seq DESC
-		LIMIT 3
-	</select>
-	
-
-	<select id="getLostPetListAdmin" resultType="lostPet">
-		SELECT * 
-		FROM lostpet, users
-		WHERE lp_id = us_id
-		<if test="category != null and category != ''">
-			AND lp_category = #{category}
-		</if>
-		<if test="searchCondition == 'TITLE' ">
-			AND lp_title LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
-		<if test="searchCondition == 'CONTENT' ">
-			AND lp_content LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
-		<if test="searchCondition == 'ID' ">
-			AND lp_id LIKE CONCAT('%', #{searchKeyword}, '%')
-		</if>
-		<if test="searchCondition == 'TITLE,CONTENT' ">
-			AND (lp_title LIKE CONCAT('%', #{searchKeyword}, '%') OR
-			lp_content LIKE
-			CONCAT('%', #{searchKeyword}, '%'))
-		</if>
-		AND us_id= #{lp_seq}
-		ORDER BY lp_seq DESC
-		LIMIT #{listcnt} OFFSET #{start}
+		LIMIT 4
 	</select>
 
 	<select id="countLostPet" resultType="int">

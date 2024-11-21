@@ -138,20 +138,6 @@ public class FindPetController {
         return "redirect:/MIA/getFindPetList";
     }
 
-    // 글 완전히 삭제
-    @RequestMapping("/deleteAllFindPet")
-    public String deleteAllFindPet(FindPetVO vo, HttpServletRequest request) {
-    	String realPath = servletContext.getRealPath("/resources/MIA-img/findPetImg/");
-        realPath = request.getSession().getServletContext().getRealPath("/resources/img/");
-        if (vo.getFp_img() != null) {
-            System.out.println("파일삭제: " + realPath + vo.getFp_img());
-            File f = new File(realPath + vo.getFp_img());
-            f.delete();
-        }
-        findPetSVC.deleteAllFindPet(vo);
-        return "redirect:/MIA/getFindPetList";
-    }
-
     // 글 상세 조회 + 댓글 조회
     @RequestMapping("/getFindPet")
     public String getFindPet(@RequestParam(value = "error", required = false) String error,

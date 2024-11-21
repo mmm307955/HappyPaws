@@ -77,7 +77,7 @@ $(document).on('click', '.lpIns2', function() {
 
             <div class="n_categoryform">
                 <c:forEach var="category" items="${categories}">
-                    <form action="/MIA/getFindPetList" method="post" style="display: inline;">
+                    <form action="/MIA/getLostPetList" method="post" style="display: inline;">
                         <input type="hidden" name="searchCondition" value="${searchCondition}">
                         <input type="hidden" name="searchKeyword" value="${searchKeyword}">
                         <input type="hidden" name="category" value="${category}">
@@ -92,20 +92,20 @@ $(document).on('click', '.lpIns2', function() {
 					<div class="n_list_item"
 						onclick="selLp(${lostPet.lp_seq}, '${searchCondition}', '${searchKeyword}', '${category}', ${paging.nowPage})"
 						style="cursor: pointer;">
-						<a
-							href="/MIA/getLostPet?lp_seq=${lostPet.lp_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
+						<a href="/MIA/getLostPet?lp_seq=${lostPet.lp_seq}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&category=${category}&nowPage=${paging.nowPage}">
 							<img
 							src="${pageContext.request.contextPath}/resources/MIA-img/lostPetImg/${lostPet.lp_img}"
 							alt="Lost Pet Image" class="pet-image">
 						</a>
-						<p>${lostPet.lp_title}</p>
-						<p>	<c:if test="${lostPet.lp_ok == 'Y'}">
-								<span style="color: red; font-weight: bold;">[찾았어요]</span>
+						<p class="title">${lostPet.lp_title}</p>
+						<p class="mark">	
+							<c:if test="${lostPet.lp_ok == 'Y'}">
+								<span>[찾았어요]</span>
 							</c:if>
 						</p>
-						<p>지역: ${lostPet.lp_place}</p>
-						<p>사례금: ${lostPet.formattedReward}원</p>
-						<p>${lostPet.lp_date} &nbsp댓글:${lostPet.commentCount}</p>
+						<p class="place">지역: ${lostPet.lp_place}</p>
+						<p class="reward">사례금: ${lostPet.formattedReward}원</p>
+						<p class="date">${lostPet.lp_date} &nbsp댓글:${lostPet.commentCount}</p>
 					</div>
 				</c:forEach>
 			</div>

@@ -52,10 +52,6 @@
 		#{nf_seq}
 	</update>
 
-	<delete id="deleteAllNewFamily">
-		DELETE FROM newfamily WHERE nf_seq = #{nf_seq}
-	</delete>
-
 	<select id="getNewFamily" resultType="newFamily">
 		SELECT *
 		FROM newfamily, users
@@ -92,7 +88,7 @@
 		FROM newfamily
 		WHERE nf_del = 'N'
 		ORDER BY nf_seq DESC
-		LIMIT 3
+		LIMIT 4
 	</select>
 
 	<select id="countNewFamily" resultType="int">

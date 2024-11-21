@@ -92,16 +92,16 @@
 	</div>
 	<ul class="pagination">
 			<c:if test="${paging.nowPage > 1 && paging.lastBtn > paging.viewBtnCnt}">
-				<li class="page-item"><a class="page-link" href="/admin/ad_notice_list?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">이전</a></li>
+				<li class="page-item"><a class="page-link" href="/admin/ad_notice_list?nowPage=${paging.nowPage-1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&cmty_category=${param.cmty_category}">이전</a></li>
 			</c:if>
 			<c:forEach var="i" begin="${paging.startBtn}" end="${paging.endBtn}" step="1">
 				<c:choose>
 					<c:when test="${paging.nowPage==i}"><li class="page-item active"><a class="page-link" >${i}</a></li></c:when>
-					<c:otherwise><li class="page-item"><a class="page-link" href="/admin/ad_notice_list?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">${i}</a></li></c:otherwise>
+					<c:otherwise><li class="page-item"><a class="page-link" href="/admin/ad_notice_list?nowPage=${i}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&cmty_category=${param.cmty_category}">${i}</a></li></c:otherwise>
 				</c:choose>
 			</c:forEach>
 			<c:if test="${paging.nowPage < paging.lastBtn  && paging.lastBtn > paging.viewBtnCnt}">
-				<li class="page-item"><a class="page-link" href="/admin/ad_notice_list?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}">이후</a></li>
+				<li class="page-item"><a class="page-link" href="/admin/ad_notice_list?nowPage=${paging.nowPage+1}&searchCondition=${searchCondition}&searchKeyword=${searchKeyword}&cmty_category=${param.cmty_category}">이후</a></li>
 			</c:if>
 		</ul>
 	</main>

@@ -28,7 +28,6 @@ main{
 	    	<a href="${pageContext.request.contextPath}/admin" class="main-link">메인</a>
 		    <a href="/userList.do" class="user-link">회원관리</a>
 		    <a href="/ad_manageProductList" class="ad_manage-link">상품관리</a>
-		    <a>유기동물</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_notice_list" class="notice-link">공지사항</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_qna_list" class="qna-link" >Q&amp;A</a>
 		    <a href="${pageContext.request.contextPath}/admin/ad_cmty_list?cmty_category=all" class="cmty-link">커뮤니티</a>
@@ -52,17 +51,17 @@ main{
         	if (window.location.href.endsWith("/admin")){
             	$(".main-link").addClass("active");
             }
-        	else if (window.location.href.includes("/notice_")) {
+        	else if (window.location.href.includes("notice_")) {
                 $(".notice-link").addClass("active");
                 $("aside").html(
                 	'<h3>공지사항</h3>'
                 );
-            } else if (window.location.href.includes("/qna_")) {
+            } else if (window.location.href.includes("qna_")) {
                 $(".qna-link").addClass("active");
                 $("aside").html(
                     '<h3>Q&amp;A</h3>'
                 );
-            } else if (window.location.href.includes("/cmty_")) {
+            } else if (window.location.href.includes("cmty_")) {
                 $(".cmty-link").addClass("active");
                 $("aside").html(
                     "<h3>커뮤니티</h3>"+

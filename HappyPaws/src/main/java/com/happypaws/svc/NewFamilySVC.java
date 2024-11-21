@@ -28,11 +28,6 @@ public class NewFamilySVC {
     public void deleteNewFamily(NewFamilyVO vo) {
         newFamilyDAO.deleteNewFamily(vo);  // NewFamily 글 삭제 (NewFamilyDAO 메서드 호출)
     }
-
-    // 글 완전히 삭제
-    public void deleteAllNewFamily(NewFamilyVO vo) {
-        newFamilyDAO.deleteAllNewFamily(vo);  // NewFamily 글 완전히 삭제 (NewFamilyDAO 메서드 호출)
-    }
     
     // 글 상세 조회
     public NewFamilyVO getNewFamily(NewFamilyVO vo) {

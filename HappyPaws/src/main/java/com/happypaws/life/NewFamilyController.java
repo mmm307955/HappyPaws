@@ -134,20 +134,6 @@ public class NewFamilyController {
 		return "redirect:/MIA/getNewFamilyList";
 	}
 
-	// 글 완전히 삭제
-	@RequestMapping("/deleteAllNewFamily")
-	public String deleteAllNewFamily(NewFamilyVO vo, HttpServletRequest request) {
-		String realPath = servletContext.getRealPath("/resources/MIA-img/newFamilyImg/");
-		realPath = request.getSession().getServletContext().getRealPath("/resources/img/");
-		if (vo.getNf_img() != null) {
-			System.out.println("파일삭제: " + realPath + vo.getNf_img());
-			File f = new File(realPath + vo.getNf_img());
-			f.delete();
-		}
-		newFamilySVC.deleteAllNewFamily(vo);
-		return "redirect:/MIA/getNewFamilyList";
-	}
-
 	// 글 상세 조회 + 댓글 조회
 	@RequestMapping("/getNewFamily")
 	public String getNewFamily(@RequestParam(value = "error", required = false) String error,

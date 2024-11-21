@@ -298,7 +298,7 @@ public class AuthController {
 	
 	@RequestMapping("/logout/kakao")
 	public String snsLogout(@RequestParam(value = "state") String state,
-			@PathVariable String divider, HttpSession session, Model model) {
+			HttpSession session, Model model) {
 		if (state != null && !session.getAttribute("oauthState").equals(state)) {
 			model.addAttribute("logoutMassage", "카카오에서 정상적으로 로그아웃 처리되지 않았습니다.");
 		} else {

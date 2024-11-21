@@ -57,8 +57,21 @@ html, body {
   white-space: nowrap;
   flex-shrink: 0;
    outline: none; 
+   transition: background-color 0.3s ease;
   
 }
+
+/* 현재 페이지 버튼 스타일 */
+.profile-tabs button.active {
+  background-color: #fff5cc; /* 더 연한 노란색으로 변경 */
+  cursor: default; /* 클릭 불가한 스타일 */
+}
+
+/* 호버 스타일 */
+.profile-tabs button:hover:not(.active) {
+  background-color: #ffd600; /* 호버 시 배경색 변경, active는 제외 */
+}
+
 
 button {
   -webkit-tap-highlight-color: transparent; 
@@ -168,7 +181,7 @@ button {
     <h2 class="title">나의 페이지</h2>
     
     <div class="profile-tabs">
-        <button>내 프로필</button>
+        <button class="active">내 프로필</button>
         <button onclick="location.href='/product/pr_order_list'">상품주문내역</button>
         <button onclick="location.href='/myPosts'">내 등록 게시물</button>
     </div>

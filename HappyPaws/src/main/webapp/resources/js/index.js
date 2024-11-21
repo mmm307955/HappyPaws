@@ -56,6 +56,7 @@ fetch('/product/pr_index').then(response => response.json()).then(data => {
 		const thumbnailCell = document.createElement('td');
         const thumbnail = document.createElement('img');
 		thumbnail.src = "/resources/upload/"+item.pr_thumbnail;
+		thumbnail.onerror = function () { thumbnail.onerror = null; thumbnail.src = '/resources/img/default.png'; };
 		thumbnail.alt = item.pr_name;
 		thumbnailCell.appendChild(thumbnail);
 		row.appendChild(thumbnailCell);
@@ -76,6 +77,12 @@ const miaCategoryList = {
 	'small': '소동물',
 	'etc': '기타'
 }
+const miaColorList = {
+	'dog': 'brown',
+	'cat': 'blueviolet',
+	'small': 'seagreen',
+	'etc': 'deeppink'
+}
 
 // 아이를 찾아주세요
 fetch('/MIA/getLostPetListIndex').then(response => response.json()).then(data => {
@@ -87,11 +94,13 @@ fetch('/MIA/getLostPetListIndex').then(response => response.json()).then(data =>
 
 		const categoryCell = document.createElement('td');
 		categoryCell.textContent = miaCategoryList[item.lp_category];
+		categoryCell.style = "color: " + miaColorList[item.lp_category];
 		row.appendChild(categoryCell);
 
 		const imgCell = document.createElement('td');
         const img = document.createElement('img');
 		img.src = "/resources/MIA-img/lostPetImg/" + item.lp_img;
+		img.onerror = function () { img.onerror = null; img.src = '/resources/img/default.png'; };
 		img.alt = item.lp_title;
 		imgCell.appendChild(img);
 		row.appendChild(imgCell);
@@ -119,11 +128,13 @@ fetch('/MIA/getNewFamilyListIndex').then(response => response.json()).then(data 
 
 		const categoryCell = document.createElement('td');
 		categoryCell.textContent = miaCategoryList[item.nf_category];
+		categoryCell.style = "color: " + miaColorList[item.nf_category];
 		row.appendChild(categoryCell);
 
 		const imgCell = document.createElement('td');
         const img = document.createElement('img');
 		img.src = "/resources/MIA-img/newFamilyImg/" + item.nf_img;
+		img.onerror = function () { img.onerror = null; img.src = '/resources/img/default.png'; };
 		img.alt = item.nf_title;
 		imgCell.appendChild(img);
 		row.appendChild(imgCell);

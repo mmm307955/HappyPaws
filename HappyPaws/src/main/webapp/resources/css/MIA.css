@@ -114,6 +114,7 @@ body {
 	width: 200px;
 	height: 200px;
 	background-color: #fff;
+	object-fit: contain;
 }
 
 .n_list_item p {
@@ -123,6 +124,28 @@ body {
 	max-width: 200px;
 	vertical-align: bottom;
 	margin: 0 auto;
+}
+
+.n_list_item .title {
+	font-weight: bold;
+}
+
+.n_list_item .mark {
+	background: none;
+	color: red;
+	font-weight: bold;
+}
+
+.n_list_item .place {
+	color: blueviolet;
+}
+
+.n_list_item .reward {
+	color: seagreen;
+}
+
+.n_list_item .date {
+	color: dimgray;
 }
 
 .pagination {
@@ -318,56 +341,72 @@ body {
 }
 
 .n_third {
-	text-align: left; /* 전체 텍스트 왼쪽 정렬 */
-	margin-bottom: 10px;
+	display: grid; /* 그리드 레이아웃 사용 */
+	grid-template-areas: "header header" "image table"; /* 영역 정의 */
+	grid-template-rows: auto 1fr; /* 첫 행은 자동 높이, 두 번째는 나머지 차지 */
+	grid-template-columns: 1fr 1fr; /* 두 열로 분리 */
+	gap: 20px; /* 요소 사이 간격 */
 	height: 500px;
-	border-bottom: 2px solid #ccc; /* 전체 하단에 테두리 추가 */
+	position: relative;
+	border-bottom: 2px solid #ccc;
+	margin-bottom: 10px;
 }
 
 .n_third .ph {
-	font-size: 30px;
-	margin-bottom: 10px;
-	text-align: center; /* 연락처 왼쪽 정렬 */
+	grid-area: header; /* 그리드의 header 영역 */
+	text-align: center; /* 중앙 정렬 */
+	font-size: 20px;
+	font-weight: bold;
+	background-color: #fff;
+	padding: 10px 20px;
+	border-radius: 5px;
+	z-index: 1; /* 다른 요소 위에 표시 */
 }
 
 .n_third img {
-	height: 400px;
-	width: 400px;
-	object-fit: contain;
-	float: left; /* 이미지를 왼쪽으로 정렬 */
-	margin-right: 20px; /* 이미지와 텍스트 사이에 여백 */
+	grid-area: image; /* 그리드의 image 영역 */
+	height: 400px; /* 고정 높이 */
+	width: 400px; /* 고정 너비 */
+	object-fit: contain; /* 이미지 비율 유지 */
 }
 
 .n_third .detail-table {
-	width: 330px; /* 테이블의 가로 크기 */
-	height: 400px; /* 테이블의 세로 크기 */
-	margin: 0 auto;
+	grid-area: table; /* 그리드의 table 영역 */
+	height: 400px; /* 고정 높이 */
+	width: 330px; /* 고정 너비 */
 	border-collapse: collapse;
-	text-align: left; /* 테이블 내 텍스트 왼쪽 정렬 */
+	text-align: left;
+	table-layout: fixed; /* 셀의 너비를 고정 */
+	word-wrap: break-word; /* 단어가 길 경우 줄바꿈 허용 */
 }
 
-.n_third .detail-table .detail-row {
+.n_third .detail-table tr {
 	border-bottom: 1px solid #ccc;
 }
 
-.n_third .detail-table .detail-row {
-	border-bottom: 1px solid #ccc;
-}
-
-.n_third .detail-table .detail-row:last-child {
+.n_third .detail-table tr:last-child {
 	border-bottom: none;
 }
 
 .n_third .detail-table td, .n_third .detail-table th {
 	padding: 8px;
+	overflow: hidden; /* 넘치는 내용 숨기기 */
+	text-overflow: ellipsis; /* "..." 표시 */
+	white-space: nowrap; /* 한 줄로 표시 */
 }
 
 .n_third .detail-table .label {
 	font-weight: bold;
+	text-overflow: ellipsis; /* "..." 표시 */
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .n_third .detail-table .value {
 	color: #333;
+	text-overflow: ellipsis; /* "..." 표시 */
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .n_content {
@@ -418,6 +457,7 @@ body {
 	font-family: 'NunNu', sans-serif;
 	display: inline-block;
 	width: calc(100% - 40px);
+	overflow: hidden;
 }
 
 .comment textarea {
@@ -514,7 +554,7 @@ body {
 		font-size: 18px;
 	}
 	.n_title .us_profile {
-		width: : 15px;
+		width: 15px;
 		height: 15px;
 	}
 	.n_title .author {
@@ -532,18 +572,19 @@ body {
 		margin-top: 0;
 	}
 	.n_third {
-		height: 300px;
+		gap: 5px;
+		height: 300px;		
 	}
 	.n_third .ph {
-		font-size: 24px;
+		font-size: 18px;
 	}
 	.n_third img {
-		height: 80%;
-		width: 50%;
+		height: 100%;
+		width: 100%;
 	}
 	.n_third .detail-table {
-		height: 80%;
-		width: 40%;
+		height: 100%;
+		width: 100%;
 		font-size: 11px;
 	}
 	.n_third .detail-table td, .n_third .detail-table th {
@@ -553,7 +594,7 @@ body {
 		min-height: 100px;
 	}
 	.n_content pre {
-		font-size: 11px;
+		font-size: 10pt;
 	}
 	.commentlist {
 		width: 100%;
@@ -650,6 +691,8 @@ body {
 	display: block;
 	margin: 0 auto; /* 이미지 중앙 정렬 */
 	width: 400px;
+	height: 400px;
+	object-fit: contain;
 }
 
 .img_save {
@@ -727,8 +770,8 @@ body {
 		font-size: 10pt;
 		bottom: 2vw;
 	}
-	.n_writeform .detail-table{
-		font-size: 16px; 
+	.n_writeform .detail-table {
+		font-size: 16px;
 	}
 	.n_writeform .form-control {
 		font-size: 10pt;

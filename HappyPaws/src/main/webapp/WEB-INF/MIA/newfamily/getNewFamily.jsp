@@ -41,8 +41,8 @@ $(document).on('click', '#nfcMod', function() {
 // 댓글 삭제
 $(document).on('click', '#nfcDel', function() {
     if (confirm("정말로 삭제하시겠습니까?")) {
-        let nf_seq = $(this).closest(".nfComment").find("input[name='nf_seq']").val();
-        let nfc_seq = $(this).closest(".nfComment").find("input[name='nfc_seq']").val();
+        let nf_seq = $(this).closest(".comment").find("input[name='nf_seq']").val();
+        let nfc_seq = $(this).closest(".comment").find("input[name='nfc_seq']").val();
 
         if (nf_seq && nfc_seq) {
             location.href = "/MIA/deleteNfComment?nf_seq=" + nf_seq +
@@ -64,18 +64,18 @@ $(document).on('click', '#nfcDel', function() {
 	<main>
 		<div class="n_view">
 			<div class="n_viewform">
-				<h1>아이를 찾아주세요</h1>
+				<h1>새로운 가족을 찾아요</h1>
 				<div class="n_title">
 					<span class="title"> ${newFamily.nf_title} <c:if
 							test="${newFamily.nf_ok == 'Y'}">
-							<span style="color: red; font-weight: bold;">[찾았어요]</span>
+							<div style="color: red; font-weight: bold;">[찾았어요]</div>
 						</c:if>
 					</span>
 					 <span class="author">
 					 <img class="us_profile" src="${pageContext.request.contextPath}/resources/profile_images/${newFamily.us_profile}" 
 					 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/resources/profile_images/default.jpg';" 
 					 alt="프로필">
-					 작성자: ${newFamily.us_nick}</span>
+					 ${newFamily.us_nick}</span>
 				</div>
 				<div class="n_second">
 					<span class="cnt">조회수: ${newFamily.nf_cnt}</span> <span

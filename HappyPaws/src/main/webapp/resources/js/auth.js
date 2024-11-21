@@ -115,7 +115,7 @@ function startTimer(duration, display) {
 }
 
 // 인증번호 확인
-document.querySelector('#us_phone_auth_code+input[type=button]')?.addEventListener('click', () => {
+document.querySelector('#us_phone_auth_code~input[type=button]')?.addEventListener('click', () => {
 	let us_phone_auth_code = $('#us_phone_auth_code').val();
 	if (us_phone_auth_code.length != 6) {
 		alert("6자리를 입력해주세요.");

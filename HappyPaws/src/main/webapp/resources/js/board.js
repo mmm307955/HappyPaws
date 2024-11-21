@@ -415,7 +415,6 @@ $(document).ready(function(){
             method: "POST",
             data: {
                 "qna_seq": qna_seq,                  // 해당 qna_seq 설정
-                "qna_cmt_id": "사용자 아이디",           // 실제 사용자 아이디 설정
                 "qna_cmt_content": commentContent
             },
             success: function() {
@@ -454,7 +453,7 @@ $(document).ready(function(){
 		const $commentbody = $(`#comment-${qna_cmt_seq}`).find(".comment-body");
 
 		// 댓글 내용을 가져오기
-		const commentContent = $content.text().trim();
+		const commentContent = $content.html().trim().replace(/<br\s*\/?>/g, "\n");
 
 		// 기존 입력 폼이 있으면 삭제
 		$(".reply-form").remove();
@@ -646,8 +645,8 @@ $(document).ready(function(){
 		const replyFormHtml = `
 			<div class="reply-form" style="margin-top: 10px; margin-left: ${marginLeft}">
 				<div class="reply-form-header">
-					<span><i data-feather="corner-down-right"></i>댓글 쓰기<span>
-					<button class="reply-form-close" ><i data-feather="x-circle"></i>닫기</button>
+					<span><i data-feather="corner-down-right"></i>댓글 쓰기</span>
+					<button class="reply-form-close" style="top:34px; right:3px;" ><i data-feather="x-circle"></i>닫기</button>
 				</div>
 				<div class="reply-form-body">
 					<textarea rows="2" class="reply-textarea" placeholder="답글을 입력하세요"></textarea>
@@ -757,7 +756,7 @@ $(document).ready(function(){
 		const $commentbody = $(`#comment-${cmty_cmt_seq}`).find(".comment-body");
 
 		// 댓글 내용을 가져오기
-		const commentContent = $content.text().trim();
+		const commentContent = $content.html().trim().replace(/<br\s*\/?>/g, "\n");
 
 		// 기존 입력 폼이 있으면 삭제
 		$(".reply-form").remove();
@@ -865,6 +864,8 @@ function loadComments() {
 
             $('#commentList').empty();
             comments.forEach(comment => {
+				const content = comment.qna_cmt_content.replace(/\n/g, "<br>");
+
                 $('#commentList').append(`
                     <div class="comment" id="comment-${comment.qna_cmt_seq}">
 						<div class="comment-header">
@@ -885,7 +886,7 @@ function loadComments() {
 							</div>
 						</div>
 						<div class="comment-body">
-							<span class="comment-content">${comment.qna_cmt_content}<span>
+							<span class="comment-content">${content}</span>
 						</div>
                     </div>
                 `);
@@ -1002,7 +1003,7 @@ function renderComments(commentMap, parentSeq, depth, us_id) {
                         ${
                             comment.cmty_cmt_del === 'Y' && comment.has_active_child === "1" 
                             ? '[삭제된 댓글입니다.]' 
-                            : comment.cmty_cmt_content
+                            : comment.cmty_cmt_content.replace(/\n/g, "<br>")
                         }
                     </span>
                 </div>
@@ -1038,4 +1039,3 @@ function cmty_up_reload(){
         }
 	});
 }
-

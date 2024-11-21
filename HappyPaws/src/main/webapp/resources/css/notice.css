@@ -152,8 +152,8 @@ input[type="search"]::-webkit-search-results-decoration {
         height: 50px;
         width: 50px;
         border-radius: 50%;
-        box-shadow: 2px 4px 8px rgba(0,0,0,0.3);
-     }
+        box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3); /* 그림자 추가 */
+   }
 }
 /*공지 테이블*/
 .n_list table {
@@ -378,6 +378,7 @@ input[type="search"]::-webkit-search-results-decoration {
     font-size: 14px;
     color: #888;
     margin-top: 11px;
+    white-space: nowrap;
 }
 
 .n_date {
@@ -424,6 +425,11 @@ input[type="search"]::-webkit-search-results-decoration {
     font-size: 16px;
 }
 
+#commentList{
+    border-top: 2px solid #ccc; 
+    margin-top: 10px;
+}
+
 .comment-header {
     display: flex; /* Flexbox를 사용하여 아이디와 날짜 정렬 */
     justify-content: space-between; /* 양쪽 끝으로 배치 */
@@ -466,24 +472,40 @@ input[type="search"]::-webkit-search-results-decoration {
     border-radius: 10px;
     
 }
+.comments{
+	margin-top:5px;
+}
+
+.comments > span{
+	padding-left: 5px;
+}
+.comments label{
+	width: 100%;
+}
 
 .comments textarea {
     margin-top: 5px;
-    width: 690px;
-    height: 60px;
+    width: 100%;
+    height: 88px;
     margin-right: 10px;
     resize: none;
     flex: 1;
+    padding:5px;
+    padding-right: 60px;
 }
 
 .comments #submitComment {
     width: 50px;
     height: 60px;
     border-radius: 10px;
+    position: absolute;
+    right: 10px;
 }
 .comment-input {
     display: flex; /* Flexbox로 정렬 */
     align-items: center; /* 세로 중앙 정렬 */
+    position: relative;
+    padding-left: 5px;
 }
 
 /*========================커뮤니티시작============================*/
@@ -539,6 +561,8 @@ input[type="search"]::-webkit-search-results-decoration {
     width: 50px;
     height: 60px;
     border-radius: 10px;
+    position: absolute;
+    right: 10px;
 }
 
 .comment-header .c_comment:hover{
@@ -639,33 +663,36 @@ input[type="search"]::-webkit-search-results-decoration {
     border: none;
     font-size: 16px;
     cursor: pointer;
+    letter-spacing: -4px;
 }
 
 .action-menu {
-    width: 81px;
+    width: 60px;
     position: absolute;
     top: 25px;
-    left: -45px;
+    left: -40px;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 5px 10px;
     z-index: 100;
+    text-align:center;
     display: none;
 }
 
 .action-menu span {
-    display: inline-block;
-    margin: 5px 0;
+	width:100%;
+    display:block;
     cursor: pointer;
     color: #333;
-    white-space: nowrap;
+    padding: 5px;
+
 }
 
 .action-menu span:hover {
     text-decoration: underline;
-    color: #ffcc00;
+    color: #fff;
+    background-color: black;
 }
 
 @media (max-width: 768px) {
@@ -749,7 +776,7 @@ input[type="search"]::-webkit-search-results-decoration {
 .submit-c_udate , .submit-q_udate{
     width: 60px;
     height: 40px;
-    margin-top: 25px;
+    margin-top: 50px;
     border: 1px solid #ccc;
     background-color: #f8f8f8;
     cursor: pointer;
@@ -759,7 +786,7 @@ input[type="search"]::-webkit-search-results-decoration {
 .submit-reply {
     width: 60px;
     height: 60px;
-    margin-top: 4px;
+    margin-top: 32px;
     border: 1px solid #ccc;
     background-color: #f8f8f8;
     cursor: pointer;

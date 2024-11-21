@@ -24,15 +24,16 @@ $(document).ready(function() {
 
         // 댓글 수정 시작
         $(document).on('click', '#open', function() {
-            let nfCommentDiv = $(this).closest(".nfComment");
+            let nfCommentDiv = $(this).closest(".comment");
             nfCommentDiv.find(".nfcMod1").hide();
             nfCommentDiv.find(".nfcMod2").show();
             nfCommentDiv.find(".nfcMod3").hide();
         });
+        
 
         // 댓글 수정 취소
         $(document).on('click', '#close', function() {
-            let nfCommentDiv = $(this).closest(".nfComment");
+            let nfCommentDiv = $(this).closest(".comment");
             nfCommentDiv.find(".nfcMod1").show();
             nfCommentDiv.find(".nfcMod2").hide();
             nfCommentDiv.find(".nfcMod3").show();

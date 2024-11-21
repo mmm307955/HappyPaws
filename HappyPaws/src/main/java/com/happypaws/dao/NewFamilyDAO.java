@@ -38,10 +38,6 @@ public class NewFamilyDAO {
         mybatis.update("NewFamilyDAO.deleteNewFamily", vo);
     }
 
-    public void deleteAllNewFamily(NewFamilyVO vo) {
-        mybatis.delete("NewFamilyDAO.deleteAllNewFamily", vo);
-    }
-
     public NewFamilyVO getNewFamily(NewFamilyVO vo) {
         return mybatis.selectOne("NewFamilyDAO.getNewFamily", vo);
     }
@@ -53,8 +49,7 @@ public class NewFamilyDAO {
     public List<NewFamilyVO> getNewFamilyList() {
         return mybatis.selectList("NewFamilyDAO.getNewFamilyListIndex");
     }
-    
-    
+     
     public int countNewFamily(NewFamilyVO vo) {
         return mybatis.selectOne("NewFamilyDAO.countNewFamily", vo);
     }

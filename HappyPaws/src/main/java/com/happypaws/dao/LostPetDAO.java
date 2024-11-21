@@ -37,11 +37,6 @@ public class LostPetDAO {
     public void deleteLostPet(LostPetVO vo) {
         mybatis.delete("LostPetDAO.deleteLostPet", vo);
     }
-
-    // 글 완전히 삭제
-    public void deleteAllLostPet(LostPetVO vo) {
-        mybatis.delete("LostPetDAO.deleteAllLostPet", vo);
-    }
     
     // 글상세 조회
     public LostPetVO getLostPet(LostPetVO vo) {
@@ -58,10 +53,6 @@ public class LostPetDAO {
     	return mybatis.selectList("LostPetDAO.getLostPetListIndex");
     }
 
-    //관리자 글목록 조회
-    public List<LostPetVO> getLostPetListAdmin(LostPetVO vo) {
-        return mybatis.selectList("LostPetDAO.getLostPetListAdmin", vo);
-    }
     
     // 전체 페이지 수 조회
     public int countLostPet(LostPetVO vo) {

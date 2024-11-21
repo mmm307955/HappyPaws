@@ -111,6 +111,11 @@
             <th>주소</th>
             <td>${user.us_address}</td>
         </tr>
+        
+         <tr>
+            <th>우편번호</th>
+         	<td>${user.postcode}</td>
+        </tr>
         <tr>
             <th>가입일</th>
          	<td>${user.us_date}</td>

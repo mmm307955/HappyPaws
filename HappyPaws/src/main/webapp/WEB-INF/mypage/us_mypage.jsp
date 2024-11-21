@@ -48,7 +48,6 @@
             border-radius: 15px;
             cursor: pointer;
             font-size: 12px;
-            border: 1px solid #ccc;
             margin-top: 8px;
             display: inline-block;
         }
@@ -133,7 +132,7 @@ input[name="us_password"] {
     margin-left: 0; 
 }
 
-.zipcode-btn {
+.zipcode-btn , #us_nick_btn {
     padding: 5px 10px; 
     font-size: 14px; 
     border-radius: 5px;
@@ -149,7 +148,8 @@ input[name="us_password"] {
     
 }
 
-       .button-container {
+
+.button-container {
     display: flex;
     justify-content: center; 
     gap: 17px;
@@ -158,7 +158,7 @@ input[name="us_password"] {
 
 .submit-btn,
 .delete-btn,
-.logout-btn {
+.mypage-btn {
     width: 120px; 
     padding: 10px;
     background-color: #FFD700;
@@ -169,14 +169,13 @@ input[name="us_password"] {
     text-align: center;
     box-sizing: border-box;
 }
-
         .delete-btn {
-            background-color: #FFD700;  
+            background-color: #e0e0e0;   
             color: black;
         }
-        .logout-btn {
+          .mypage-btn {
             color: black;
-            background-color: #FF6347;
+            background-color: #FFD700;
         }
         
           /* 반응형 처리 */
@@ -192,6 +191,10 @@ input[name="us_password"] {
         
             td.input-field {
                 width: 60%;
+                position: relative;
+            }
+            .zipcode-btn , #us_nick_btn{
+            	top: 6px;
             }
             .zipcode-container {
                 flex-direction: column;
@@ -212,9 +215,7 @@ input[name="us_password"] {
 
     <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
     <script>
-        function confirmUpdate() {
-            return confirm("수정하시겠습니까?");
-        }
+     
         function previewImage(event) {
             var reader = new FileReader();
             reader.onload = function() {
@@ -261,6 +262,75 @@ input[name="us_password"] {
 
             return confirm("정보를 수정하시겠습니까?"); 
         }
+        
+        let auth_nick = false;
+   	 
+     	// 닉네임 중복 검사
+        async function nick_duplicate_check() {
+            const nickField = document.querySelector("#us_nick");
+
+            if (nickField.value == "") {
+                alert("닉네임을 입력해주세요.");
+                return false;
+            }
+
+            if (nickField.value.length > 8) {
+                alert("8글자 이내로 입력해주세요.");
+                return false;
+            }
+
+            try {
+                const response = await fetch('/auth/nick_check', {
+                    method: "POST",
+                    headers: { 'Content-Type': 'text/plain; charset=UTF-8' },
+                    body: nickField.value
+                });
+
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+
+                const data = await response.text();
+                let us_nick = "${user.us_nick}";
+
+                if (nickField.value == us_nick) {
+                    auth_nick = true;
+                    return true;
+                } else if (data === "true") {
+                    alert("사용할 수 있는 닉네임입니다.");
+                    auth_nick = true;
+                    return true;
+                } else {
+                    alert("이 닉네임은 이미 사용중입니다.");
+                    auth_nick = false;
+                    return false;
+                }
+            } catch (error) {
+                console.error('닉네임 중복확인 검사 도중 에러가 발생하였습니다.', error);
+                auth_nick = false;
+                return false;
+            }
+        }
+
+        // 폼 확인 함수
+        async function confirmUpdate(event) {
+        	event.preventDefault();
+        	 
+            const isNickValid = await nick_duplicate_check(); // 닉네임 중복 체크가 완료될 때까지 대기
+
+            if (!isNickValid) {
+                return false;
+            }
+
+            const isConfirmed = confirm("수정하시겠습니까?");
+            if (isConfirmed) {
+                event.target.submit(); // 사용자가 확인 버튼을 눌렀을 때만 폼 제출
+            } else {
+                return false; // 취소 시 폼 제출 중단
+            }
+        }
+	    
+	    
     </script>
 
     </script>
@@ -273,7 +343,7 @@ input[name="us_password"] {
             <c:if test="${not empty message}">
                 <script>alert("${message}");</script>
             </c:if>
-            <form action="/us_myPage.do" method="post" enctype="multipart/form-data">
+            <form action="/us_myPage.do" method="post" enctype="multipart/form-data" onsubmit="return confirmUpdate(event)">
               <div class="profile-container">
   			<img id="profilePreview" src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="프로필 이미지">
     
@@ -306,7 +376,11 @@ input[name="us_password"] {
                     </tr>
                     <tr>
                         <td class="label">닉네임:</td>
-                        <td class="input-field"><input type="text" name="us_nick" value="${user.us_nick}" required></td>
+                        <td class="input-field">
+                        	<input type="text" name="us_nick" id="us_nick" value="${user.us_nick}" required>
+                        	<input type="button" id="us_nick_btn" value="중복 확인" onclick="nick_duplicate_check()">
+                        </td>
+                        
                     </tr>
                     <tr>
                         <td class="label">이메일:</td>
@@ -333,14 +407,14 @@ input[name="us_password"] {
                 </table>
              
 <div class="button-container">
-    <form action="/us_myPage.do" method="post" style="display:inline;" onsubmit="return confirmUpdate();">
+    <form action="/us_myPage.do" method="post" style="display:inline;" >
         <button type="submit" class="submit-btn">정보 수정</button>  
     </form>
     <form action="userDelete.do" method="post" style="display:inline;" onsubmit="return confirm('정말로 탈퇴하시겠습니까?');">
         <input type="hidden" name="us_id" value="${user.us_id}">
          
         <button type="submit" class="delete-btn">탈퇴</button>
-<!--          <button type="button" onclick="location.href='/logout'" class="logout-btn">로그아웃</button> -->
+          <button type="button" onclick="location.href='/us_mainmyPage.do'" class="mypage-btn">나의 페이지</button> 
     </form>
 </div>
 
@@ -354,5 +428,6 @@ input[name="us_password"] {
         </div>
     </main>
     <%@include file="../../footer.jsp" %> 
+ 
 </body>
 </html>

@@ -81,7 +81,7 @@ $(document).on('click', '.nfIns2', function() {
 
             <div class="n_categoryform">
                 <c:forEach var="category" items="${categories}">
-                    <form action="/MIA/getFindPetList" method="post" style="display: inline;">
+                    <form action="/MIA/getNewFamilyList" method="post" style="display: inline;">
                         <input type="hidden" name="searchCondition" value="${searchCondition}">
                         <input type="hidden" name="searchKeyword" value="${searchKeyword}">
                         <input type="hidden" name="category" value="${category}">
@@ -104,13 +104,14 @@ $(document).on('click', '.nfIns2', function() {
 							alt="New Family Image" class="pet-image"
 							>
 						</a>
-						<p>${newFamily.nf_title}</p>
-						<p>	<c:if test="${newFamily.nf_ok == 'Y'}">
-								<span style="color: red; font-weight: bold;">[분앙완료]</span>
+						<p class="title">${newFamily.nf_title}</p>
+						<p class="mark">	
+							<c:if test="${newFamily.nf_ok == 'Y'}">
+								<span>[분앙완료]</span>
 							</c:if>
 						</p>
-						<p>지역: ${newFamily.nf_place}</p>
-						<p>${newFamily.nf_date} &nbsp댓글:${newFamily.commentCount}</p>
+						<p class="place">지역: ${newFamily.nf_place}</p>
+						<p class="date">${newFamily.nf_date} &nbsp댓글:${newFamily.commentCount}</p>
 					</div>
 				</c:forEach>
 			</div>

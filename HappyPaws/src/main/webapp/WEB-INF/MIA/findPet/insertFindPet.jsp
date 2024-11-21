@@ -30,18 +30,18 @@ document.addEventListener("DOMContentLoaded", function() {
 					<c:if test="${empty user.us_id}">
 					<div class="n_title">
 					<input id="fp_id" type="text" class="form-control" name="fp_id" placeholder="닉네임을 입력하세요."  value="${user.us_id}"> 
-					
 					<input type="password" class="form-control" name="fp_code" placeholder="비밀번호를 입력하세요."  value="${user.us_id}">
+					<input type="hidden" name="fp_login" value="N"> 
 					</div>
 					</c:if>
 					
 					<c:if test="${not empty user.us_id}">
 					<input type="hidden" name="fp_id" value="${user.us_id}"> 
-					<input type="hidden" name="fp_code" value="${user.us_id}"> 
+					<input type="hidden" name="fp_code" value="${user.us_id}">
+					<input type="hidden" name="fp_login" value="Y"> 
 					</c:if>
 					
 					<div class="n_title">
-					<input type="hidden" name="fp_login" value="Y">
 					<input type="text" class="form-control" name="fp_title" placeholder="제목을 입력하세요." required>
 					</div>
 					

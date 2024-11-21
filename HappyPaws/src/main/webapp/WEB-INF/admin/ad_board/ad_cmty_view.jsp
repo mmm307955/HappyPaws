@@ -40,7 +40,6 @@
 				<div id="cmty_up"><i data-feather="thumbs-up"></i>추천수: ${cmtyup_cnt}</div>
 			</div>
 			<div class="comments">
-			    <div id="commentList"></div>
 			    <span>댓글쓰기</span>
 			    <c:if test="${not empty user.us_id}">
 			    <div class="comment-input">
@@ -54,6 +53,7 @@
 				    <button id="cmty_comment" value="${param.cmty_seq}" disabled>댓글 등록</button>
 			    </div>
 				</c:if>
+				<div id="commentList"></div>
 			</div>
 			
 			<div class="n_buttons">
