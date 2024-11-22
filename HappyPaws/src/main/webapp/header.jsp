@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
 <header>
 	<div class="header-container">
 		<!-- 로고 -->
@@ -24,7 +26,7 @@
 				</c:when>
 				<c:otherwise>
 					<a href="${pageContext.request.contextPath}/us_mainmyPage.do" class="header-login-link">
-						<img src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="이미지를 불러오는데 실패하였습니다.">
+						<img src="/resources/profile_images/${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="이미지를 불러오는데 실패하였습니다.">
 						${user.us_nick}</a>
 					<b>님</b>
 					<a href="/auth/logout" class="header-login-link logout">로그아웃</a>

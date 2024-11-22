@@ -2,6 +2,8 @@
 body { margin: 0; }
 p {margin: 0;}
 
+
+
 .custom-options {
     display: none;
     position: absolute;
@@ -43,6 +45,7 @@ button{
     border-radius: 20px;
     background-color: #fcd11e;
     cursor: pointer;
+    color:black;
 }
 
 .us_profile{
@@ -95,6 +98,7 @@ input[type="search"]::-webkit-search-cancel-button {
     font-size: 16px;
     line-height: normal;
     vertical-align: middle; /* 세로 가운데 정렬 */
+    background-color: white;
 }
 
 .n_seachform button{
@@ -124,7 +128,8 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .ph_write{
-  display: none;   
+  display: none; 
+  padding: 0px;
 }
 
 @media (max-width: 768px) {
@@ -216,6 +221,10 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .n_list tr:hover {
     background-color: #f1f1f1; /* 행에 마우스오버 시 배경색 */
+    cursor: pointer;
+}
+.n_list thead tr:first-child:hover {
+	cursor: default;	
 }
 
 .n_list td {
@@ -500,6 +509,9 @@ input[type="search"]::-webkit-search-results-decoration {
     border-radius: 10px;
     position: absolute;
     right: 10px;
+    text-align: center;
+    font-size: 16px;
+	padding: 0px;
 }
 .comment-input {
     display: flex; /* Flexbox로 정렬 */
@@ -555,6 +567,7 @@ input[type="search"]::-webkit-search-results-decoration {
 .n_list > #c_category ul li a:hover,
 .n_list > #c_category ul li a:active {
     color: #3c80e7;
+    cursor: pointer;
 }
 
 .comments #cmty_comment{
@@ -563,6 +576,8 @@ input[type="search"]::-webkit-search-results-decoration {
     border-radius: 10px;
     position: absolute;
     right: 10px;
+    font-size: 16px;
+    padding: 0px;
 }
 
 .comment-header .c_comment:hover{

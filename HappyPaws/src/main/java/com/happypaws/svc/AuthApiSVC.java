@@ -20,6 +20,9 @@ import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +33,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -273,10 +277,18 @@ public class AuthApiSVC implements InitializingBean {
 	}
 
 	// ========== method by logout divider ========== //
-	public String requestNaverLogoutUri() {
+	public String requestNaverLogoutUri(Model model) {
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpGet get = new HttpGet(naverLogoutUri);
+		try {
+			client.execute(get);
+			model.addAttribute("logoutMassage", "네이버에서 정상적으로 로그아웃 처리되었습니다.");
+		} catch (Exception e) {
+			model.addAttribute("logoutMassage", "네이버에서 정상적으로 로그아웃 처리되지 않았습니다.");
+		}
 		return "/WEB-INF/auth/naverLogout.jsp";
 	}
-	
+
 	public String requestKakaoLogoutUri(HttpServletRequest request) throws UnsupportedEncodingException {
 		String state = UUID.randomUUID().toString();
 		request.getSession().setAttribute("oauthState", state);

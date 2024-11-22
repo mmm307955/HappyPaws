@@ -18,8 +18,7 @@
 		<div class="n_write">
 			<h1>아이를 찾아주세요</h1>
 			<div class="n_writeform">
-				<form action="/MIA/updateLostPet" method="post"
-					enctype="multipart/form-data" name="boardform">
+				<form action="/MIA/updateLostPet" method="post" enctype="multipart/form-data" name="boardform">
 					<input type="hidden" name="lp_seq" value="${lostPet.lp_seq}">
 					<input type="hidden" name="searchKeyword" value="${searchKeyword}">
 					<input type="hidden" name="searchCondition" value="${searchCondition}"> 
@@ -28,7 +27,7 @@
 
 					<div class="n_title">
 						<input type="text" class="form-control" name="lp_title"
-							value="${lostPet.lp_title}" placeholder="제목을 입력하세요." required>
+							value="${lostPet.lp_title}" placeholder="제목을 입력하세요." required maxlength="30">
 					</div>
 
 					<div class="n_ph">
@@ -42,8 +41,7 @@
 						alt="Lost Pet Image" class="lost-pet-image">
 						<div class="img_save">
 							<label for="file2" class="upload-btn" style="cursor: pointer;">
-								<input id="file2" type="file" name="uploadFile" accept="image/*"
-								style="display: none;" /> <span>사진 첨부</span>
+								<input id="file2" type="file" name="uploadFile" accept="image/*" style="display: none;" /> <span>사진 첨부</span>
 							</label>
 						</div>
 					</div>
@@ -53,7 +51,7 @@
 							<tr class="detail-row">
 								<td class="label">실종 장소</td>
 								<td class="value"><input type="text" class="form-control"
-									name="lp_place" value="${lostPet.lp_place}" required></td>
+									name="lp_place" value="${lostPet.lp_place}" required maxlength="30"></td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">실종 날짜</td>
@@ -77,12 +75,14 @@
 							<tr class="detail-row">
 								<td class="label">품종</td>
 								<td class="value"><input type="text" class="form-control"
-									name="lp_breed" value="${lostPet.lp_breed}" required></td>
+									name="lp_breed" value="${lostPet.lp_breed}" required maxlength="10"></td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">사례금</td>
 								<td class="value"><input type="number" class="form-control"
-									name="lp_reward" value="${lostPet.lp_reward}" min="0" required></td>
+									name="lp_reward" value="${lostPet.lp_reward}" min="0" required maxlength="9" 
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+								</td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">실종 여부</td>
@@ -98,8 +98,8 @@
 					</div>
 
 					<div class="n_content">
-						<textarea cols="100" wrap="hard" class="form-control" rows="5" name="lp_content" 
-						placeholder="상세 설명을 입력하세요">${lostPet.lp_content}</textarea>
+						<textarea cols="100" wrap="soft" class="form-control" rows="5" name="lp_content" 
+						placeholder="상세 설명을 입력하세요" required>${lostPet.lp_content}</textarea>
 					</div>
 
 					<input type="hidden" name="lp_del" value="${lostPet.lp_del}">

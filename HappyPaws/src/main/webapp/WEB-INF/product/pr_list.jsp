@@ -26,30 +26,6 @@
 		    margin: 0;
 		}
 		
-		.top {
-		    max-width: 1000px;
-		    margin: 0 auto;
-		}
-		
-		.top-controls {
-		    display: flex;
-		    justify-content: center;
-		    gap: 10px;
-		    padding: 10px 20px;
-		    background: white;
-		}
-		
-		.control-button {
-		    padding: 8px 16px;
-		    color: black;
-		    border-bottom: 2px solid #fcd11e;
-		    cursor: pointer;
-		    display: inline-flex;      
-		    align-items: center;       
-		    justify-content: center;   
-		    text-decoration: none;    
-		}
-		
 		.search-container {
 		    max-width: 600px;
 		    margin: 20px auto;
@@ -81,6 +57,7 @@
 		    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>") no-repeat 50% 50%;
 		    cursor: pointer;
 		    margin-right: 10px;
+		    background-color: white;
 		}
 		
 		.search-icon {
@@ -104,8 +81,8 @@
 		.nav-menu a {
 		    text-decoration: none;
 		    color: #495057;
-		    font-size: 16px;
 		    padding: 8px 15px;
+		    font-size: 18px;
 		}
 		
 		.nav-menu a:hover {
@@ -115,7 +92,7 @@
 		.nav-menu a.active {
 		    color: #000;
 		    font-weight: bold;
-		    border-bottom: 2px solid #000;
+		    border-bottom: 2px solid #fcd11e;
 		}
 		
 		.filter-container {
@@ -131,7 +108,7 @@
 		    border-radius: 20px;
 		    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23495057' d='M4 6l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 10px center;
 		    color: #495057;
-		    font-size: 16px;
+		    font-size: 18px;
 		    cursor: pointer;
 		    outline: none;
 		    appearance: none;
@@ -268,11 +245,23 @@
 		}
 		
 		.detail-page-item:hover {
-		    background-color: #000;
+		    color: #fcd11e !important;
 		}
 		
 		.detail-page-item.active {
-		    background: #000;
+			position: relative !important; 
+		    width: 30px !important;
+		    height: 30px !important; 
+		    color: black !important;
+		    background-color: #ffeb994d !important;
+		    border-radius: 50% !important;
+		    border: 2px solid #fcd11e !important;
+		    display: flex !important;
+		    justify-content: center !important;
+		    align-items: center !important;
+		    text-align: center !important;
+		    line-height: normal !important; 
+		    padding: 0 !important; 
 		}
 		
 		.detail-page-link {
@@ -283,15 +272,11 @@
 		    display: flex;
 		    align-items: center;
 		    justify-content: center;
-		    font-size: 14px;
+		    font-size: 18px;
 		}
 		
 		.detail-page-link:hover {
-		    color: #fff;
-		}
-		
-		.detail-page-item.active .detail-page-link {
-		    color: #fff;
+		    color: #fcd11e;
 		}
 		
 		.wishlist-btn {
@@ -318,7 +303,6 @@
 		    font-size: 16px;
 		}
 		
-		/* 태블릿 반응형 */
 		@media screen and (max-width: 768px) {
 		    .product-card {
 		        flex: 0 0 calc(50% - 10px);
@@ -334,21 +318,8 @@
 		        padding: 6px 12px;
 		    }
 		    
-		    .top-controls {
-		        padding: 10px;
-		    }
-		    
-		    .control-button {
-		        padding: 6px 12px;
-		        font-size: 14px;
-		    }
-		    
-		    section {
-		    	padding: 10px;
-		    }
 		}
 		
-		/* 모바일 반응형 */
 		@media screen and (max-width: 480px) {
 		    .product-card {
 		        flex: 0 0 100%;
@@ -391,10 +362,6 @@
 		    
 		    .detail-page-link {
 		        font-size: 13px;
-		    }
-		    
-		    section {
-		    	padding: 10px;
 		    }
 		}
     </style>
@@ -474,14 +441,7 @@
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp"/>
-    <section>
-		<div class="top">
-		    <div class="top-controls">
-		        <a href="/product/pr_order_list" class="control-button">주문내역/위시리스트</a>
-		        <a href="/product/pr_cart" class="control-button">장바구니</a>
-		    </div>
-		</div>
-    </section>
+	<%@ include file="./cartOrderWishCommon.jsp" %>
     <main>
 		<div class="search-container">
 		    <form action="/product/pr_list" method="get" onsubmit="return validateSearch()">
@@ -525,8 +485,7 @@
 	                <a href="/product/pr_detail?pr_id=${plist.pr_id}" class="product-top">
 		                <div class="product-thumbnail" data-thumbnail="${plist.pr_thumbnail}">
 	               			<c:if test="${plist.imageExists}">
-							    <img class="thumbnail-item" src="${pageContext.request.contextPath}/product/getImage/${plist.pr_thumbnail}" 
-							    alt="${plist.pr_thumbnail}">
+							    <img class="thumbnail-item" src="${pageContext.request.contextPath}/product/getImage/${plist.pr_thumbnail}" alt="${plist.pr_thumbnail}">
 	                		</c:if>
 						    <c:if test="${!plist.imageExists}">
 						        <div class="no-image-text">이미지 없음</div>
@@ -539,7 +498,11 @@
 	                </a>
 					<div class="product-bottom">
 					    <a href="/product/pr_detail?pr_id=${plist.pr_id}&tab=reviews" class="rating-link">
-					        <div class="product-rating"><span class="rating-star">★<fmt:formatNumber value="${plist.avgRating}" pattern="#.#"/> 리뷰 ${plist.reviewCount}</span></div>
+					        <div class="product-rating">
+					        	<span class="rating-star">
+					        		★<fmt:formatNumber value="${plist.avgRating}" pattern="#.#"/> 리뷰 ${plist.reviewCount}
+					        	</span>
+					        </div>
 					    </a>
 					    <button class="product-button wishlist-btn">위시리스트</button>
 					</div>

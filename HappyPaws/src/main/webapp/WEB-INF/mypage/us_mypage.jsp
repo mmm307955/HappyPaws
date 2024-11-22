@@ -204,9 +204,14 @@ input[name="us_password"] {
                 flex-direction: column;
                 gap: 10px;
             }
+            
+                .delete-btn + .mypage-btn {
+                 margin-top: 10px; 
+          }
+            
             .submit-btn,
             .delete-btn,
-            .logout-btn {
+            .mypage-btn {
                 width: 100%;
             }
         }
@@ -345,7 +350,7 @@ input[name="us_password"] {
             </c:if>
             <form action="/us_myPage.do" method="post" enctype="multipart/form-data" onsubmit="return confirmUpdate(event)">
               <div class="profile-container">
-  			<img id="profilePreview" src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="프로필 이미지">
+  			<img id="profilePreview" src="/resources/profile_images/${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="프로필 이미지">
     
     <label class="add-photo-btn" for="profileImage">사진 추가</label>
     <input type="file" id="profileImage" class="file-input" name="us_profile_file" accept="image/*" onchange="previewImage(event)">

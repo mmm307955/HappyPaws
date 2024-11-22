@@ -50,7 +50,7 @@ public class LostPetController {
 
 	@RequestMapping(value = "/insertLostPet", method = RequestMethod.POST)
 	public String insertLostPet(LostPetVO vo) throws IllegalStateException, IOException {
-		System.out.println(vo.getUploadFile());
+		
 		MultipartFile uploadFile = vo.getUploadFile();
 		String originalFilename = uploadFile.getOriginalFilename();
 		String realPath = servletContext.getRealPath("/resources/MIA-img/lostPetImg/");

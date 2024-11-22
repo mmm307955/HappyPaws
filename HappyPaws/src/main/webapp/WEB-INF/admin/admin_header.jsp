@@ -46,6 +46,11 @@ main{
 </header>
 <aside>
 	<h3>메인</h3>
+	<c:if test="${user.us_id ne 'admin'}">
+		<script>
+			window.location.href = "/";
+		</script>
+	</c:if>
 	 <script>
         $(document).ready(function() {
         	if (window.location.href.endsWith("/admin")){
@@ -81,6 +86,7 @@ main{
                 	        "<ul>" +
                 	        "<li><a href='/ad_manageProductList'>상품 리스트</a></li>" +  // 링크 끝에 ">" 추가
                 	        "<li><a href='/ad_manageProductAdd'>상품 등록하기</a></li>" +  // 링크 끝에 ">" 추가
+                	        "<li><a href='/product/pr_admin'>주문/배송 관리</a></li>" +  // 링크 끝에 ">" 추가
                 	        "</ul>"
                 );
             } else if (window.location.href.includes("/user")) {

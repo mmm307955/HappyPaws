@@ -148,7 +148,7 @@ public class BoardController {
 		
 		notic_SVC.notice_insert(vo);
 		
-		return "redirect:/board/notice_list";
+		return "/WEB-INF/admin/ad_board/ad_notice_list.jsp";
 	}
 	
 	//공지사항-상세보기

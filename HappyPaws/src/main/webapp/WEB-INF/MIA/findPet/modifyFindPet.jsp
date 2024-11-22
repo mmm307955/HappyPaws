@@ -19,7 +19,7 @@
 					<input type="hidden" name="nowPage" value="${nowPage}">
 					
 					<div class="n_title">
-						<input type="text" class="form-control" name="fp_title" value="${findPet.fp_title}" placeholder="제목을 입력하세요." required>
+						<input type="text" class="form-control" name="fp_title" value="${findPet.fp_title}" placeholder="제목을 입력하세요." required maxlength="30">
 					</div>
 
 					<div class="n_ph">
@@ -43,7 +43,7 @@
 						<table class="detail-table">
 							<tr class="detail-row">
 								<td class="label">발견 장소</td>
-								<td class="value"><input type="text" class="form-control" name="fp_place" value="${findPet.fp_place}" required></td>
+								<td class="value"><input type="text" class="form-control" name="fp_place" value="${findPet.fp_place}" required maxlength="30"></td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">발견 날짜</td>
@@ -62,7 +62,7 @@
 							</tr>
 							<tr class="detail-row">
 								<td class="label">품종</td>
-								<td class="value"><input type="text" class="form-control" name="fp_breed" value="${findPet.fp_breed}" required></td>
+								<td class="value"><input type="text" class="form-control" name="fp_breed" value="${findPet.fp_breed}" required maxlength="10"></td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">발견 여부</td>
@@ -77,7 +77,8 @@
 					</div>
 
 					<div class="n_content">
-						<textarea cols="100" wrap="hard" class="form-control" rows="5" name="fp_content" placeholder="상세 설명을 입력하세요">${findPet.fp_content}</textarea>
+						<textarea cols="100" wrap="soft" class="form-control" rows="5" name="fp_content" placeholder="상세 설명을 입력하세요" required
+						>${findPet.fp_content}</textarea>
 					</div>
 
 					<input type="hidden" name="fp_del" value="${findPet.fp_del}">

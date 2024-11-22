@@ -79,7 +79,7 @@
 <body>
 <%@include file="../../header.jsp" %>
     <main>
-    <h2>비밀번호 변경</h2>
+<!--    <h2>비밀번호 변경</h2>--> 
     <div id="content">
         <!-- 서버에서 전달된 메시지 확인 -->
         <c:if test="${not empty message}">

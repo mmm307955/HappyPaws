@@ -88,8 +88,7 @@ public class FpCommentController {
         String category = request.getParameter("category");
         String nowPage = request.getParameter("nowPage");
         
-        System.out.println("deleteFpComment called with fp_seq: " + fp_seq + " and fpc_seq: " + fpc_seq);
-
+       
         FpCommentVO vo = new FpCommentVO();
         vo.setFp_seq(Integer.parseInt(fp_seq));
         vo.setFpc_seq(Integer.parseInt(fpc_seq));

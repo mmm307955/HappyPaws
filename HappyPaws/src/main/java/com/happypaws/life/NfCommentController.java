@@ -85,8 +85,7 @@ public class NfCommentController {
 		String category = request.getParameter("category");
 		String nowPage = request.getParameter("nowPage");
 		
-		System.out.println("deleteNfComment called with nf_seq: " + nf_seq + " and nfc_seq: " + nfc_seq);
-
+		
 		NfCommentVO vo = new NfCommentVO();
 		vo.setNf_seq(Integer.parseInt(nf_seq));
 		vo.setNfc_seq(Integer.parseInt(nfc_seq));

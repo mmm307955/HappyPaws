@@ -5,6 +5,28 @@
 	<title>행복한 발자국 - 회원가입</title>
 	<%@include file="/head.jsp"%>
 	<link rel="stylesheet" href="/resources/css/auth.css">
+    <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
+	<script>
+		// 주소 받아오기 - 경숙님, 감사합니다.
+		function openZipcodeSearch() {
+			new daum.Postcode({
+				oncomplete: function(data) {
+					var fullAddr = data.address;
+					var extraAddr = '';
+
+					if (data.addressType === 'R') {
+						if (data.bname !== '') extraAddr += data.bname;
+						if (data.buildingName !== '') extraAddr += (extraAddr !== '' ? ', ' : '') + data.buildingName;
+						fullAddr += (extraAddr !== '' ? ' (' + extraAddr + ')' : '');
+					}
+
+					// 입력 필드에 값 설정
+					document.getElementById('postcode').value = data.zonecode;
+					document.getElementById('us_address').value = fullAddr;
+				}
+			}).open();
+		}
+	</script>
 </head>
 <body>
 	<%@include file="/header.jsp"%>
@@ -46,7 +68,12 @@
 					<input type="button" value="인증번호 확인">
 				</div>
 
-				<div><input type="text" name="us_address" id="us_address" placeholder="주소 입력"></div>
+				<div>
+					<input type="text" name="postcode" id="postcode" placeholder="우편번호" style="width: 40%; flex: none;" readonly>
+					<input type="button" value="우편번호 찾기" onclick="openZipcodeSearch()">
+				</div>
+				<div><input type="text" name="us_address" id="us_address" placeholder="주소 입력" readonly></div>
+				<div><input type="text" name="us_address_detail" id="us_address_detail" placeholder="상세 주소 입력"></div>
 
 				<div><input type="submit" value="회원가입하기"></div>
 			</form>

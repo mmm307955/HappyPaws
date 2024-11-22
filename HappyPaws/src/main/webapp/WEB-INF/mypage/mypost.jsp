@@ -25,6 +25,8 @@
         }
         .table-container {
             overflow-x: auto;
+              margin-top: 10px;
+            
         }
         table {
             width: 100%;
@@ -59,23 +61,28 @@
     justify-content: center; 
     align-items: center; 
     margin: 20px auto;
-    gap: 10px; 
-    width: 100%; 
+    gap: 50px; 
+    width: 100%;
+    flex-wrap: wrap;  
 }
 
 .search-container select,
+.search-container input[type="search"],
 .search-container button {
-    padding: 7px 20px;
-    margin: 0; 
+    padding: 10px 15px;
+   
     border: 2px solid #FFD700; 
     border-radius: 20px; 
     outline: none; 
     background-color: white; 
     height: 40px; 
     width: auto; 
-    font-size: 18px;
+    font-size: 16px;
     text-align: center; 
     cursor: pointer; 
+     flex: 1;
+    min-width: 120px;
+    
 }
 
 .search-container input[type="search"] {
@@ -99,12 +106,12 @@
             justify-content: center;
             align-items: center;
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .pagination a, .pagination span {
             display: inline-block;
-            padding: 8px 12px;
+            padding: 5px 10px;
             margin: 0 3px;
             text-decoration: none;
             color: #333;
@@ -126,42 +133,60 @@
             cursor: default;
         }
 
-        @media (max-width: 768px) {
-            h2 {
-                font-size: 20px;
-            }
-            .container {
-                width: 90%;
-                padding: 10px;
-            }
-            table {
-                font-size: 14px;
-            }
-        }
+    @media (max-width: 768px) {
+    .search-container {
+        flex-direction: column; 
+        gap: 30px;
+    }
 
-        @media (max-width: 480px) {
-            h2 {
-                font-size: 18px;
-            }
-            table, th, td {
-                font-size: 12px;
-            }
-            .pagination a {
-                padding: 5px;
-            }
-        }
+    .search-container select,
+    .search-container input[type="search"],
+    .search-container button {
+     margin-bottom: 10px;
+        font-size: 14px;
+        padding: 8px;
+        width: 100%; 
+        gap:50px;
+    }
+    
+    .search-container button:last-child {
+        margin-bottom: 0;
+    }
+    
+}
+       @media (max-width: 480px) {
+    .search-container {
+        flex-direction: column; /* 모바일에서 세로 정렬 유지 */
+        gap: 40px; /* 모바일 환경에서 세로 간격 더 넓히기 */
+    }
+
+    .search-container select,
+    .search-container input[type="search"],
+    .search-container button {
+        width: 100%; /* 모바일 화면 너비에 맞춤 */
+        font-size: 14px;
+        padding: 10px; 
+        gap:50px;
+        margin-bottom: 10px;
+    }
+    
+    .search-container button:last-child {
+        margin-bottom: 0;
+    }
+    
+}
+
 </style>
-
     <script>
     function goToDetail(postId, sourceTable) {
         console.log("postId:", postId); // postId 값 출력
         console.log("sourceTable:", sourceTable); // sourceTable 값 출력
 
-        if (sourceTable === 'COMMUNITY') {
-            location.href = '/board/cmty_view?cmty_seq=' + postId;
+        if (sourceTable === '커뮤니티') {
+            location.href = '/board/cmty_view?cmty_seq=' + postId + "&cmty_category=all";
         } else if (sourceTable === 'QNA') {
             location.href = '/board/qna_view?qna_seq=' + postId;
-        } else if (sourceTable === 'NOTICE') {
+        } else if (sourceTable === '공지사항') {
             location.href = '/board/notice_view?notice_seq=' + postId;
         } else if (sourceTable === '아이를 찾아주세요') {
             location.href = '/MIA/getLostPet?lp_seq=' + postId; 

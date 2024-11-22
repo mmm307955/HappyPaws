@@ -22,35 +22,8 @@
 		
 		a {
 		    text-decoration: none;
-		    color: #000;
 		}
 		
-		.top {
-		    max-width: 1000px;
-		    margin: 0 auto;
-		}
-		
-		/* Controls */
-		.top-controls {
-		    display: flex;
-		    justify-content: center;
-		    gap: 10px;
-		    padding: 10px 20px;
-		    background: white;
-		}
-		
-		.control-button {
-		    padding: 8px 16px;
-		    color: black;
-		    border-bottom: 2px solid #fcd11e;
-		    cursor: pointer;
-		    display: inline-flex;      
-		    align-items: center;       
-		    justify-content: center;   
-		    text-decoration: none;    
-		}
-		
-		/* Navigation Tabs */
 		.nav-tabs {
 		    display: flex;
 		    list-style: none;
@@ -79,7 +52,6 @@
 		    font-weight: bold;
 		}
 		
-		/* Tab Content */
 		.tab-content {
 		    display: none;
 		}
@@ -88,7 +60,6 @@
 		    display: block;
 		}
 		
-		/* Period Filters */
 		.period-filters {
 		    display: flex;
 		    gap: 10px;
@@ -104,9 +75,8 @@
 		}
 		
 		.period-btn.active {
-		    background: #2196F3;
+		    background: #6c757d;
 		    color: white;
-		    border-color: #2196F3;
 		}
 		
 		.search-btn {
@@ -118,7 +88,6 @@
 		    cursor: pointer;
 		}
 		
-		/* Tables */
 		.order-table,
 		.wishlist-table {
 		    width: 100%;
@@ -142,7 +111,6 @@
 		    font-weight: 500;
 		}
 		
-		/* Status Badges */
 		.status-badge,
 		.delivery-badge {
 		    display: inline-block;
@@ -182,7 +150,6 @@
 		    color: #155724;
 		}
 		
-		/* Detail Button */
 		.detail-btn {
 		    padding: 5px 10px;
 		    background: #6c757d;
@@ -194,7 +161,6 @@
 		    font-size: 12px;
 		}
 		
-		/* Wishlist Specific */
 		.wishlist-container {
 		    padding: 20px;
 		}
@@ -211,7 +177,6 @@
 		    color: #fcd11e;
 		}
 		
-		/* Wishlist Buttons */
 		.wishlist-btn-group {
 		    display: flex;
 		    flex-direction: column;
@@ -260,7 +225,6 @@
 		    padding-right: 20px;
 		}
 		
-		/* Checkboxes */
 		.wishlist-checkbox,
 		#selectAllWishlist {
 		    width: 16px;
@@ -290,13 +254,13 @@
 		    font-size: 10px;
 		}
 		
-		/* Pagination */
 		.detail-pagination {
 		    display: flex;
 		    justify-content: center;
 		    align-items: center;
 		    gap: 5px;
-		    margin-top: 20px;
+		    margin: 20px 0;
+		    flex-wrap: wrap;
 		}
 		
 		.detail-page-item {
@@ -308,21 +272,41 @@
 		    cursor: pointer;
 		}
 		
+		.detail-page-item:hover {
+		    color: #fcd11e !important;
+		}
+		
 		.detail-page-item.active {
-		    background: #000;
-		    border-radius: 4px;
+			position: relative !important; 
+		    width: 30px !important; 
+		    height: 30px !important;
+		    color: black !important;
+		    background-color: #ffeb994d !important;
+		    border-radius: 50% !important;
+		    border: 2px solid #fcd11e !important;
+		    display: flex !important;
+		    justify-content: center !important;
+		    align-items: center !important;
+		    text-align: center !important;
+		    line-height: normal !important; 
+		    padding: 0 !important; 
 		}
 		
 		.detail-page-link {
+		    text-decoration: none;
 		    color: #000;
-		    padding: 5px 10px;
+		    width: 100%;
+		    height: 100%;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    font-size: 18px;
 		}
 		
-		.detail-page-item.active .detail-page-link {
-		    color: #fff;
+		.detail-page-link:hover {
+		    color: #fcd11e;
 		}
 		
-		/* Modal Styles */
 		.section-title {
 		    padding-bottom: 10px;
 		    margin-bottom: 20px;
@@ -346,7 +330,6 @@
 		    color: #dc3545;
 		}
 		
-		/* Mobile Table Styles */
 		.desktop-table {
 		    display: table;
 		}
@@ -355,14 +338,46 @@
 		    display: none;
 		}
 		
-		/* Responsive Styles */
+		.modal-dialog {
+		    transform: none !important;
+		}
+		
+		.modal-body {
+		    padding: 20px;
+		}
+		
+		.section-title {
+		    padding-bottom: 10px;
+		    margin-bottom: 20px;
+		    border-bottom: 1px solid #dee2e6;
+		    font-weight: bold;
+		}
+		
+		.modal label {
+		    color: #666;
+		    font-size: 14px;
+		    margin-bottom: 5px;
+		}
+		
+		.modal p {
+		    font-size: 15px;
+		    margin-bottom: 15px;
+		}
+		
+		.modal .table th,
+		.modal .table td {
+		    padding: 12px;
+		    vertical-align: middle;
+		}
+		
+		.total-amount {
+		    font-weight: bold;
+		    color: #dc3545;
+		}
+		
 		@media screen and (max-width: 768px) {
 		    main {
 		        padding: 0 15px;
-		    }
-		
-		    section {
-		        padding: 10px;
 		    }
 		
 		    .period-filters {
@@ -508,7 +523,44 @@
 		        padding: 10px 20px;
 		        width: auto;
 		        min-width: 120px;
-		    }		    
+		    }		
+		    
+		    .modal-body {
+		        padding: 15px;
+		    }
+		
+		    .modal .table {
+		        font-size: 14px; 
+		    }
+		
+		    .modal .table th,
+		    .modal .table td {
+		        padding: 8px; 
+		    }
+		
+		    .section-title {
+		        font-size: 16px;
+		        margin-bottom: 15px;
+		    }
+		
+		    .modal label {
+		        font-size: 13px;
+		    }
+		
+		    .modal p {
+		        font-size: 14px;
+		        margin-bottom: 10px;
+		    }
+		
+		    .product-info-section .table {
+		        font-size: 13px; 
+		    }
+		
+		    .product-info-section .table th,
+		    .product-info-section .table td {
+		        padding: 6px 4px; 
+		        word-break: break-word; 
+		    }    
 		}
 		
 		@media screen and (max-width: 480px) {
@@ -573,7 +625,43 @@
 		    .btn-remove-selected {
 		        padding: 8px 16px;
 		        font-size: 12px;
-		    }		    
+		    }	
+		    
+		    .modal-body {
+		        padding: 10px;
+		    }
+		
+		    .modal .table {
+		        font-size: 12px; 
+		    }
+		
+		    .modal .table th,
+		    .modal .table td {
+		        padding: 6px 4px; 
+		    }
+		
+		    .product-info-section .table {
+		        font-size: 11px; 
+		    }
+		
+		    .product-info-section .table th,
+		    .product-info-section .table td {
+		        padding: 4px 2px; 
+		    }
+		
+		    .section-title {
+		        font-size: 15px;
+		        margin-bottom: 10px;
+		    }
+		
+		    .modal label {
+		        font-size: 12px;
+		    }
+		
+		    .modal p {
+		        font-size: 13px;
+		        margin-bottom: 8px;
+		    }	    
 		}		
     </style>
 	<script>
@@ -750,7 +838,6 @@
 		    });
 		});
 	
-		// Helper functions
 		function loadOrderDetails(orderId) {
 		    $.ajax({
 		        url: '${pageContext.request.contextPath}/product/get_order_detail',
@@ -888,23 +975,14 @@
 </head>
 <body>
     <jsp:include page="${pageContext.request.contextPath}/header.jsp"/>
-    <section>
-        <div class="top">
-            <div class="top-controls">
-                <a href="/product/pr_order_list" class="control-button">주문내역/위시리스트</a>
-                <a href="/product/pr_cart" class="control-button">장바구니</a>
-            </div>
-        </div>
-    </section>    
+	<%@ include file="./cartOrderWishCommon.jsp" %>  
     <main>
 		<ul class="nav-tabs">
 		    <li class="nav-item">
-		        <a class="nav-link ${activeTab eq 'orders' || empty activeTab ? 'active' : ''}" 
-		           href="/product/pr_order_list?tab=orders">주문내역</a>
+		        <a class="nav-link ${activeTab eq 'orders' || empty activeTab ? 'active' : ''}" href="/product/pr_order_list?tab=orders">주문내역</a>
 		    </li>
 		    <li class="nav-item">
-		        <a class="nav-link ${activeTab eq 'wishlist' ? 'active' : ''}" 
-		           href="/product/pr_order_list?tab=wishlist">위시리스트</a>
+		        <a class="nav-link ${activeTab eq 'wishlist' ? 'active' : ''}" href="/product/pr_order_list?tab=wishlist">위시리스트</a>
 		    </li>
 		</ul>
         <div class="tab-content ${activeTab eq 'orders' || empty activeTab ? 'active' : ''}" id="orders">
@@ -1017,12 +1095,10 @@
                 <div class="detail-pagination">
                     <c:if test="${paging.btnCur > 1}">
                         <div class="detail-page-item">
-                            <a class="detail-page-link" 
-                               href="/product/pr_order_list?page=1&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">＜＜</a>
+                            <a class="detail-page-link" href="/product/pr_order_list?page=1&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">＜＜</a>
                         </div>
                         <div class="detail-page-item">
-                            <a class="detail-page-link" 
-                               href="/product/pr_order_list?page=${paging.btnCur-1}&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">＜</a>
+                            <a class="detail-page-link" href="/product/pr_order_list?page=${paging.btnCur-1}&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">＜</a>
                         </div>
                     </c:if>
                     <c:forEach var="i" begin="${paging.btnFirst}" end="${paging.btnLast}" step="1">
@@ -1034,20 +1110,17 @@
                             </c:when>
                             <c:otherwise>
                                 <div class="detail-page-item">
-                                    <a class="detail-page-link" 
-                                       href="/product/pr_order_list?page=${i}&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">${i}</a>
+                                    <a class="detail-page-link" href="/product/pr_order_list?page=${i}&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">${i}</a>
                                 </div>
                             </c:otherwise>
                         </c:choose>
                     </c:forEach>
                     <c:if test="${paging.btnCur < paging.btnTotalCount}">
                         <div class="detail-page-item">
-                            <a class="detail-page-link" 
-                               href="/product/pr_order_list?page=${paging.btnCur+1}&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">＞</a>
+                            <a class="detail-page-link" href="/product/pr_order_list?page=${paging.btnCur+1}&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">＞</a>
                         </div>
                         <div class="detail-page-item">
-                            <a class="detail-page-link" 
-                               href="/product/pr_order_list?page=${paging.btnTotalCount}&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">＞＞</a>
+                            <a class="detail-page-link" href="/product/pr_order_list?page=${paging.btnTotalCount}&period=${period}&startDate=${startDate}&endDate=${endDate}&tab=${activeTab}">＞＞</a>
                         </div>
                     </c:if>
                 </div>
@@ -1075,8 +1148,7 @@
 						            <td>
 						                <a href="/product/pr_detail?pr_id=${item.pr_id}" class="product-link">
 						                    <c:if test="${item.imageExists}">
-						                        <img src="${pageContext.request.contextPath}/product/getImage/${item.pr_thumbnail}" 
-						                             alt="${item.pr_name}" class="wishlist-img">
+						                        <img src="${pageContext.request.contextPath}/product/getImage/${item.pr_thumbnail}" alt="${item.pr_name}" class="wishlist-img">
 						                    </c:if>
 						                    <c:if test="${!item.imageExists}">
 						                        <div class="no-image">이미지 없음</div>
@@ -1091,8 +1163,7 @@
 						            <td>₩<fmt:formatNumber value="${item.pr_opt_price}" pattern="#,###"/></td>
 						            <td>
 						                <div class="wishlist-btn-group">
-										<button type="button" class="btn-remove" 
-										        onclick="removeFromWishlist(${item.prwl_no})">삭제</button>
+										<button type="button" class="btn-remove" onclick="removeFromWishlist(${item.prwl_no})">삭제</button>
 						                </div>
 						            </td>
 						        </tr>
@@ -1125,8 +1196,7 @@
 					                    <div class="product-price">₩<fmt:formatNumber value="${item.pr_opt_price}" pattern="#,###"/></div>
 					                </td>
 					                <td>
-					                    <button type="button" class="btn-remove" 
-					                            onclick="removeFromWishlist(${item.prwl_no})">삭제</button>
+					                    <button type="button" class="btn-remove" onclick="removeFromWishlist(${item.prwl_no})">삭제</button>
 					                </td>
 					            </tr>
 					        </c:forEach>

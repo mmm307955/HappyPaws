@@ -29,39 +29,14 @@
             margin: 0;
         }
 		
-		.top {
-		    max-width: 1000px;
-		    margin: 0 auto;
-		}
-		
-		.top-controls {
-		    display: flex;
-		    justify-content: center;
-		    gap: 10px;
-		    padding: 10px 20px;
-		    background: white;
-		}
-		
-		.control-button {
-		    padding: 8px 16px;
-		    color: black;
-		    border-bottom: 2px solid #fcd11e;
-		    cursor: pointer;
-		    display: inline-flex;      
-		    align-items: center;       
-		    justify-content: center;   
-		    text-decoration: none;    
-		}
-		
 		.header {
 		    text-align: center;
 		    padding: 10px 0;
-		    border-bottom: 2px solid #fcd11e;
 		    margin-bottom: 20px;
 		}
 		
 		.product-title {
-		    font-size: 30px;
+		    font-size: 40px;
 		    margin-bottom: 10px;
 		}
 		
@@ -265,21 +240,31 @@
 		
 		.tabs {
 		    display: flex;
-		    margin: 20px 0;
-		    border-bottom: 1px solid #ddd;
+		    margin: 0;
+		    padding: 0;
+		    list-style: none;
+		    border-bottom: 1px solid #dee2e6;
+		    background-color: #fff;
+		    width: 100%;
 		}
 		
 		.tab {
-		    padding: 10px 20px;
+		    flex: 1;  
+		    text-align: center;
+		    padding: 15px 0;
 		    cursor: pointer;
-		    border: 1px solid transparent;
-		    margin-bottom: -1px;
+		    border: none;
+		    background: transparent;
+		    color: #495057;
+		    font-size: 18px;
+		    font-weight: 500;
+		    position: relative;
+		    transition: color 0.2s;
 		}
 		
 		.tab.active {
-		    border: 1px solid #ddd;
-		    border-bottom: 1px solid white;
-		    background: white;
+		    color: #000;
+		    border: 2px solid #6c757d;
 		}
 		
 		.tab-content {
@@ -291,7 +276,6 @@
 		    display: block;
 		}
 		
-		/* 리뷰 섹션 */
 		.review-section {
 		    padding: 20px;
 		}
@@ -394,7 +378,6 @@
 		    line-height: 1.5;
 		}
 		
-		/* 리뷰 수정/삭제 버튼 */
 		.review-modify {
 		    display: flex;
 		    justify-content: flex-end;
@@ -417,7 +400,7 @@
 		
 		.review-delete {
 		    background-color: #dc3545;
-		    color: black;
+		    color: white;
 		}
 		
 		.review-edit:hover,
@@ -479,11 +462,23 @@
 		}
 		
 		.detail-page-item:hover {
-		    background-color: #000;
+		    color: #fcd11e !important;
 		}
 		
 		.detail-page-item.active {
-		    background: #000;
+			position: relative !important; 
+		    width: 30px !important; 
+		    height: 30px !important;
+		    color: black !important;
+		    background-color: #ffeb994d !important;
+		    border-radius: 50% !important;
+		    border: 2px solid #fcd11e !important;
+		    display: flex !important;
+		    justify-content: center !important;
+		    align-items: center !important;
+		    text-align: center !important;
+		    line-height: normal !important; 
+		    padding: 0 !important; 
 		}
 		
 		.detail-page-link {
@@ -494,16 +489,13 @@
 		    display: flex;
 		    align-items: center;
 		    justify-content: center;
+		    font-size: 18px;
 		}
 		
 		.detail-page-link:hover {
-		    color: #fff;
+		    color: #fcd11e;
 		}
 		
-		.detail-page-item.active .detail-page-link {
-		    color: #fff;
-		}
-		        
 		.no-image-text,
 		.modal-no-image-text {
 		    display: flex;
@@ -707,15 +699,15 @@
 		    border: none;
 		    padding: 0;
 		    position: absolute;
-		    right: -15px;    /* 오른쪽으로 더 가깝게 */
-		    top: -15px;      /* 위로 더 가깝게 */
+		    right: -15px;   
+		    top: -15px;     
 		    z-index: 1;
 		}
 		
 		#imageModal .btn-close {
 		    background-color: white;
 		    opacity: 0.8;
-		    padding: 6px;    /* 패딩 줄임 */
+		    padding: 6px;   
 		    margin: 0;
 		    box-shadow: 0 0 5px rgba(0,0,0,0.2);
 		    border-radius: 50%;
@@ -767,15 +759,14 @@
 		}
 		
 		.review-thumbnail-item {
-		    width: 150px;  /* 원하는 크기로 조정 */
-		    height: 150px; /* 정사각형 형태로 */
-		    border-radius: 50%; /* 완전한 원형으로 */
-		    object-fit: cover; /* 이미지 비율 유지하면서 채우기 */
+		    width: 150px; 
+		    height: 150px; 
+		    border-radius: 50%; 
+		    object-fit: cover; 
 		    display: block;
-		    margin: 0 auto 10px; /* 상하 마진으로 간격 조정 */
+		    margin: 0 auto 10px; 
 		}
 		
-		/* 리뷰 모달의 기타 스타일도 정리 */
 		.modal-body .text-center.mb-3 {
 		    display: flex;
 		    flex-direction: column;
@@ -871,7 +862,6 @@
 		    pointer-events: none !important;
 		}
 		
-		/* 장바구니 성공 모달 스타일 */
 		.cart-success-modal {
 		    text-align: center;
 		    padding: 20px;
@@ -917,7 +907,7 @@
 		.navigation-bar {
 		    max-width: 1000px;
 		    margin: 20px auto;
-		    font-size: 16px;
+		    font-size: 18px;
 		    color: #666;
 		}
 		
@@ -938,38 +928,17 @@
 		    color: #000;
 		}
 		
-		/* 모바일 스타일 */
 		@media screen and (max-width: 768px) {
-			section {
-				padding: 10px;
-			}
-		
-		    /* 공통 스타일 수정 */
-		    .top {
-		        padding: 0 10px;
-		    }
-		    
-		    .top-controls {
-		        flex-wrap: wrap;
-		        padding: 5px 10px;
-		    }
-		    
-		    .control-button {
-		        font-size: 14px;
-		        padding: 6px 12px;
-		    }
-		    
 		    .product-title {
-		        font-size: 24px;
+		        font-size: 30px;
 		        padding: 0 10px;
 		    }
 		    
 		    .navigation-bar {
 		        padding: 0 10px;
-		        font-size: 14px;
+		        font-size: 15px;
 		    }
 		
-		    /* 상품 컨텐츠 영역 */
 		    .product-content {
 		        flex-direction: column;
 		        padding: 0 10px;
@@ -1007,7 +976,6 @@
 		        font-size: 20px;
 		    }
 		    
-		    /* 옵션 선택 영역 */
 		    .option-select {
 		        font-size: 14px;
 		    }
@@ -1031,7 +999,6 @@
 		        text-align: center;
 		    }
 		    
-		    /* 버튼 그룹 */
 		    .button-group {
 		        flex-direction: column;
 		        gap: 10px;
@@ -1043,19 +1010,17 @@
 		        padding: 15px 0;
 		    }
 		    
-		    /* 탭 영역 */
 		    .tabs {
+		        width: 100%;
 		        overflow-x: auto;
-		        white-space: nowrap;
-		        padding: 0 10px;
+		        -webkit-overflow-scrolling: touch;
 		    }
 		    
 		    .tab {
-		        padding: 8px 15px;
-		        font-size: 14px;
+				padding: 12px 0;
+       			font-size: 16px
 		    }
 		    
-		    /* 리뷰 섹션 */
 		    .review-section {
 		        padding: 10px;
 		    }
@@ -1092,7 +1057,6 @@
 		        max-width: 100%;
 		    }
 		    
-		    /* 문의 섹션 */
 		    .inquiry-container {
 		        padding: 10px;
 		    }
@@ -1113,7 +1077,6 @@
 		        padding: 15px 0;
 		    }
 		    
-		    /* 페이지네이션 */
 		    .detail-pagination {
 		        flex-wrap: wrap;
 		        justify-content: center;
@@ -1126,7 +1089,6 @@
 		        font-size: 12px;
 		    }
 		    
-		    /* 모달 */
 		    .modal-dialog {
 		        margin: 10px;
 		    }
@@ -1144,7 +1106,6 @@
 		        font-size: 24px;
 		    }
 		    
-		    /* 장바구니 성공 모달 */
 		    .cart-success-modal img {
 		        width: 150px;
 		        height: 150px;
@@ -1158,23 +1119,53 @@
 		        width: 100%;
 		    }
 		    
-		    /* 이미지 모달 */
 		    #imageModal .modal-dialog {
 		        max-width: 95%;
 		        margin: 10px;
 		    }
-		}
-		
-		/* 태블릿 스타일 */
-		@media screen and (min-width: 769px) and (max-width: 1024px) {
-			section {
-				padding: 10px;
-			}
-		
-		    .top {
-		        padding: 0 20px;
+		    
+		    .inquiry-info {
+		        flex-wrap: wrap;
+		        gap: 8px;
+		        font-size: 13px;
 		    }
 		    
+		    .inquiry-delete-btn,
+		    .inquiry-answer-btn {
+		        padding: 6px 12px;
+		        font-size: 12px;
+		        height: auto;
+		        line-height: normal;
+		    }
+		
+		    .inquiry-delete-btn {
+		        margin-left: auto;
+		        background-color: #dc3545;
+		        color: white;
+		        border: none;
+		        border-radius: 4px;
+		    }
+		
+		    .inquiry-answer-btn {
+		        background-color: #28a745;
+		        color: white;
+		        border: none;
+		        border-radius: 4px;
+		    }
+		
+		    .inquiry-content {
+		        padding: 10px 15px;
+		        font-size: 14px;
+		    }
+		
+		    .inquiry-badge,
+		    .answer-badge {
+		        padding: 3px 6px;
+		        font-size: 11px;
+		    }
+		}
+		
+		@media screen and (min-width: 769px) and (max-width: 1024px) {
 		    .product-content {
 		        padding: 0 20px;
 		    }
@@ -1460,42 +1451,47 @@
 			            removePreview();
 			            
 			            // 리뷰 HTML 생성 (안전한 값 참조)
-			            var newReviewHtml = '<div class="review-item">' +
-			                '<div class="review-user">' +
-			                    '<div class="user-info">' + 
-			                        (response.review.us_id || '') + ' 작성일 - ' + 
-			                        (response.review.prc_start_date || '') + 
-			                    '</div>' +
-			                    '<div class="review-rating">' +
-			                        '<div class="review-fill-ratings" style="width: ' + 
-			                            ((response.review.prc_rating || 0) * 20) + '%;">' +
-			                            '<span>★★★★★</span>' +
-			                        '</div>' +
-			                        '<div class="review-empty-ratings">' +
-			                            '<span>★★★★★</span>' +
-			                        '</div>' +
-			                    '</div>' +
-			                '</div>';
+						var newReviewHtml = '<div class="review-item">' +
+						    '<div class="review-user">' +
+						        '<div class="user-info">' + 
+						            (response.review.us_id || '') + ' 작성일 - ' + 
+						            (response.review.prc_start_date || '') + 
+						        '</div>' +
+						        '<div class="review-rating">' +
+						            '<div class="review-fill-ratings" style="width: ' + 
+						                ((response.review.prc_rating || 0) * 20) + '%;">' +
+						                '<span>★★★★★</span>' +
+						            '</div>' +
+						            '<div class="review-empty-ratings">' +
+						                '<span>★★★★★</span>' +
+						            '</div>' +
+						        '</div>' +
+						    '</div>';
 			
-			            // 이미지가 있는 경우에만 이미지 컨테이너 추가
-			            if (response.review.imageExists) {
-			                newReviewHtml += '<div class="review-image-container">' +
-			                    '<img class="review-show-item" ' +
-			                         'src="${pageContext.request.contextPath}/product/getImage/' + 
-			                         (response.review.prc_image || '') + '" ' +
-			                         'alt="' + (response.review.prc_image || '') + '" ' +
-			                         'style="cursor: pointer;" ' +
-			                         'onclick="showImageModal(this.src)">' +
-			                    '</div>';
-			            }
+						 	// 이미지가 있는 경우에만 이미지 컨테이너 추가
+						    if (response.review.imageExists) {
+						        newReviewHtml += '<div class="review-image-container">' +
+						            '<img class="review-show-item" ' +
+						                 'src="${pageContext.request.contextPath}/product/getImage/' + 
+						                 (response.review.prc_image || '') + '" ' +
+						                 'alt="' + (response.review.prc_image || '') + '" ' +
+						                 'style="cursor: pointer;" ' +
+						                 'onclick="showImageModal(this.src)">' +
+						            '</div>';
+						    }
 			
-			            newReviewHtml += '<div class="review-content">' + 
-			                (response.review.prc_desc || '') + '</div>' +
-			                '<div class="review-modify">' +
-			                    '<button type="button" class="review-delete" data-review-no="' + 
-			                    (response.review.prc_no || '') + '">삭제</button>' +
-			                '</div>' +
-			            '</div>';
+						    newReviewHtml += '<div class="review-content">' + 
+						    (response.review.prc_desc || '') + '</div>';
+
+						// admin 계정일 경우에만 삭제 버튼 추가
+						if ('${user.us_id}' === 'admin') {
+						    newReviewHtml += '<div class="review-modify">' +
+						        '<button type="button" class="review-delete" data-review-no="' + 
+						        (response.review.prc_no || '') + '">삭제</button>' +
+						        '</div>';
+						}
+
+						newReviewHtml += '</div>';
 			
 			            // 리뷰가 없다는 메시지 제거
 			            $('.text-center.p-5').remove();
@@ -1763,7 +1759,7 @@
 			    }
             });
 
-            // 구매하기 버튼도 동일하게 수정
+            // 구매하기 버튼
 			$('.button-buy').click(async function() {
 			    // 로그인 체크
 			    if ('${user}' === '') {
@@ -2056,14 +2052,7 @@
 </head>
 <body>
 	<jsp:include page="${pageContext.request.contextPath}/header.jsp"/>
-	<section>
-	    <div class="top">
-	        <div class="top-controls">
-	            <a href="/product/pr_order_list" class="control-button">주문내역/위시리스트</a>
-	            <a href="/product/pr_cart" class="control-button">장바구니</a>
-	        </div>
-	    </div>
-	</section>
+	<%@ include file="./cartOrderWishCommon.jsp" %>
     <main>
         <div class="header">
             <h1 class="product-title">${productDetail[0].pr_name}</h1>
@@ -2078,8 +2067,7 @@
         <div class="product-content">
 			<div class="product-thumbnail">
 			    <c:if test="${productDetail[0].imageExists}">
-			        <img class="thumbnail-item" src="${pageContext.request.contextPath}/product/getImage/${productDetail[0].pr_thumbnail}" 
-			             alt="${productDetail[0].pr_thumbnail}">
+			        <img class="thumbnail-item" src="${pageContext.request.contextPath}/product/getImage/${productDetail[0].pr_thumbnail}" alt="${productDetail[0].pr_thumbnail}">
 			    </c:if>
 			    <c:if test="${!productDetail[0].imageExists}">
 			        <div class="no-image-text">이미지 없음</div>
@@ -2105,9 +2093,7 @@
 				<select class="option-select">
 				    <option value="" disabled selected>- [필수] 옵션을 선택해 주세요 -</option>
 				    <c:forEach var="options" items="${productDetail}">
-				        <option value="${options.pr_name}" 
-				                data-option-price="${options.pr_opt_price}" 
-				                data-option-name="${options.pr_opt_name}">
+				        <option value="${options.pr_name}" data-option-price="${options.pr_opt_price}" data-option-name="${options.pr_opt_name}">
 				            ${options.pr_opt_name} (${options.pr_opt_stock}개) 
 				            <c:if test="${options.pr_opt_price - options.pr_price != 0}">
 				                (+<fmt:formatNumber value="${options.pr_opt_price - options.pr_price}" pattern="#,###"/>원)
@@ -2182,13 +2168,11 @@
 			                    </div>
 								<c:if test="${rev.imageExists}">
 								    <div class="review-image-container">
-								        <img class="review-show-item" src="${pageContext.request.contextPath}/product/getImage/${rev.prc_image}" 
-								             alt="${rev.prc_image}" style="cursor: pointer;" onclick="showImageModal(this.src)">
+								        <img class="review-show-item" src="${pageContext.request.contextPath}/product/getImage/${rev.prc_image}" alt="${rev.prc_image}" style="cursor: pointer;" onclick="showImageModal(this.src)">
 								    </div>
 								</c:if>
 			                    <div class="review-content">${rev.prc_desc}</div>
-			                    <c:if test=
-			                    "${not empty sessionScope.user.us_id && sessionScope.user.us_id eq rev.us_id || sessionScope.user.us_id eq 'admin'}">
+			                    <c:if test="${sessionScope.user.us_id eq 'admin'}">
 			                   		<div class="review-modify">
 					                    <button type="button" id="review-delete" class="review-delete" data-review-no="${rev.prc_no}">삭제</button>
 				                    </div>
@@ -2254,7 +2238,7 @@
 		                <li>공개 게시판이므로 전화번호, 메일 주소 등 고객님의 소중한 개인정보는 절대 남기지 말아주세요.</li>
 		            </ul>
 		        </div>
-				<c:set var="currentQNo" value="0" />
+				<c:set var="currentQNo" value="0"/>
 				<c:forEach var="proQ" items="${productQuestion}">
 				    <c:if test="${currentQNo ne proQ.prq_no}">
 				        <div class="inquiry-list">
@@ -2287,12 +2271,10 @@
 				<div class="detail-pagination">
 				    <c:if test="${inquiryPaging.btnCur > 1}">
 				        <div class="detail-page-item">
-				            <a class="detail-page-link" 
-				               href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=1&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">＜＜</a>
+				            <a class="detail-page-link" href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=1&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">＜＜</a>
 				        </div>
 				        <div class="detail-page-item">
-				            <a class="detail-page-link" 
-				               href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=${inquiryPaging.btnCur-1}&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">＜</a>
+				            <a class="detail-page-link" href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=${inquiryPaging.btnCur-1}&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">＜</a>
 				        </div>
 				    </c:if>
 				    <c:forEach var="i" begin="${inquiryPaging.btnFirst}" end="${inquiryPaging.btnLast}" step="1">
@@ -2304,27 +2286,23 @@
 				            </c:when>
 				            <c:otherwise>
 				                <div class="detail-page-item">
-				                    <a class="detail-page-link" 
-				                       href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=${i}&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">${i}</a>
+				                    <a class="detail-page-link" href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=${i}&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">${i}</a>
 				                </div>
 				            </c:otherwise>
 				        </c:choose>
 				    </c:forEach>
 				    <c:if test="${inquiryPaging.btnCur < inquiryPaging.btnTotalCount}">
 				        <div class="detail-page-item">
-				            <a class="detail-page-link" 
-				               href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=${inquiryPaging.btnCur+1}&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">＞</a>
+				            <a class="detail-page-link" href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=${inquiryPaging.btnCur+1}&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">＞</a>
 				        </div>
 				        <div class="detail-page-item">
-				            <a class="detail-page-link" 
-				               href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=${inquiryPaging.btnTotalCount}&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">＞＞</a>
+				            <a class="detail-page-link" href="/product/pr_detail?pr_id=${pr_id}&inquiryPage=${inquiryPaging.btnTotalCount}&reviewPage=${reviewPaging.btnCur}&sortType=${sortType}&tab=inquiries">＞＞</a>
 				        </div>
 				    </c:if>
 				</div>				
 		    </div>
 		</div>
-		<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true" data-bs-backdrop="static" 
-			 data-bs-keyboard="false">
+		<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
   			<form class="modal-dialog" id="reviewForm" method="post" action="/product/review_write" enctype="multipart/form-data">
 	        <input type="hidden" name="pr_id" value="${productDetail[0].pr_id}">
 	        <input type="hidden" name="pror_item_id" id="pror_item_id">
@@ -2339,8 +2317,7 @@
 		            <div class="modal-body">
 						<div class="text-center mb-3">
 						    <c:if test="${productDetail[0].imageExists}">
-						        <img class="review-thumbnail-item" src="${pageContext.request.contextPath}/product/getImage/${productDetail[0].pr_thumbnail}" 
-						        	 alt="${productDetail[0].pr_thumbnail}">
+						        <img class="review-thumbnail-item" src="${pageContext.request.contextPath}/product/getImage/${productDetail[0].pr_thumbnail}" alt="${productDetail[0].pr_thumbnail}">
 						    </c:if>
 						    <c:if test="${!productDetail[0].imageExists}">
 						        <div class="modal-no-image-text">이미지 없음</div>
@@ -2393,7 +2370,6 @@
 	    </div>
 		<div class="modal no-move" id="inquiryModal" tabindex="-1" aria-labelledby="inquiryModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 		    <form class="modal-dialog" id="inquiryForm" method="post" action="${pageContext.request.contextPath}/product/question_write">
-		        <!-- pr_id를 hidden input으로 추가 -->
 		        <input type="hidden" name="pr_id" value="${productDetail[0].pr_id}">
 		        <div class="modal-content">
 		            <div class="modal-header">
@@ -2412,8 +2388,7 @@
 		        </div>
 		    </form>
 		</div>
-		<div class="modal no-move" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true" data-bs-backdrop="static" 
-		     data-bs-keyboard="false">
+		<div class="modal no-move" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 		    <form class="modal-dialog" id="answerForm" method="post" action="/product/answer_write">
 		    	<input type="hidden" name="pr_id" value="${productDetail[0].pr_id}">
 		        <div class="modal-content">

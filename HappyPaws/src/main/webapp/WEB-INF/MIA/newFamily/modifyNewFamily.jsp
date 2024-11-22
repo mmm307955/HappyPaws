@@ -3,12 +3,12 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>행복한 발자국</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/MIA.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/newFamily.js"></script>
-    <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>행복한 발자국</title>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/MIA.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/newFamily.js"></script>
+<jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
     <jsp:include page="${pageContext.request.contextPath}/header.jsp" />
@@ -24,7 +24,7 @@
                     <input type="hidden" name="nowPage" value="${nowPage}">
 
                     <div class="n_title">
-                        <input type="text" class="form-control" name="nf_title" value="${newFamily.nf_title}" placeholder="제목을 입력하세요." required>
+                        <input type="text" class="form-control" name="nf_title" value="${newFamily.nf_title}" placeholder="제목을 입력하세요." required maxlength="30">
                     </div>
 
                     <div class="n_ph">
@@ -49,13 +49,13 @@
                             <tr class="detail-row">
                                 <td class="label">분양 지역</td>
                                 <td class="value">
-                                    <input type="text" class="form-control" name="nf_place" value="${newFamily.nf_place}" required>
+                                    <input type="text" class="form-control" name="nf_place" value="${newFamily.nf_place}" required maxlength="30">
                                 </td>
                             </tr>
                             <tr class="detail-row">
                                 <td class="label">나이</td>
                                 <td class="value">
-                                    <input type="text" class="form-control" name="nf_age" value="${newFamily.nf_age}" required>
+                                    <input type="text" class="form-control" name="nf_age" value="${newFamily.nf_age}" required maxlength="10">
                                 </td>
                             </tr>
                             <tr class="detail-row">
@@ -81,7 +81,7 @@
                             <tr class="detail-row">
                                 <td class="label">품종</td>
                                 <td class="value">
-                                    <input type="text" class="form-control" name="nf_breed" value="${newFamily.nf_breed}" required>
+                                    <input type="text" class="form-control" name="nf_breed" value="${newFamily.nf_breed}" required maxlength="10">
                                 </td>
                             </tr>
                             <tr class="detail-row">
@@ -97,7 +97,7 @@
                     </div>
 
                     <div class="n_content">
-                        <textarea cols="100" wrap="hard" class="form-control" rows="5" name="nf_content" placeholder="상세 설명을 입력하세요">${newFamily.nf_content}</textarea>
+                        <textarea cols="100" wrap="soft" class="form-control" rows="5" name="nf_content" placeholder="상세 설명을 입력하세요">${newFamily.nf_content}</textarea>
                     </div>
 
                     <input type="hidden" name="nf_del" value="${newFamily.nf_del}">

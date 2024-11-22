@@ -56,6 +56,12 @@ $(document).on('click', '#nfcDel', function() {
         }
     }
 });
+
+//로그인 필요 알림
+$(document).on('click', '#login_button', function() {
+    const currentUri = encodeURIComponent(window.location.href);
+    location.href = "/auth/login?returi=" + currentUri;
+});
 </script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
@@ -189,7 +195,7 @@ $(document).on('click', '#nfcDel', function() {
 		<c:if test="${empty user.us_id}">
 				<textarea id="nfc_content" name="nfc_content" placeholder="로그인 후 입력이 가능합니다." required disabled></textarea>
 				<div class="btn-container">
-					<button type="submit" disabled>등록</button>
+					<button type="button" id="login_button">등록</button>
 				</div>
 		</c:if>
 			</div>

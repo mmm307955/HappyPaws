@@ -186,7 +186,7 @@ button {
         <button onclick="location.href='/myPosts'">내 등록 게시물</button>
     </div>
     <div class="profile-picture">
-        <img src="${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="프로필 이미지">
+        <img src="/resources/profile_images/${user.us_profile}" onerror="this.onerror=null; this.src='/resources/profile_images/default.jpg';" alt="프로필 이미지">
     </div>
     <p style="font-weight: bold; color: #333; margin: 10px 0;">${user.us_nick}</p>
 

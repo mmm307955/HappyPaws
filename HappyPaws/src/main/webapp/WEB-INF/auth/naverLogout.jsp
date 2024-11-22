@@ -5,30 +5,33 @@
 <head>
 	<meta charset="UTF-8">
 	<title>행복한 발자국</title>
-	<script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 </head>
 <body>
 	<script>
-		alert("네이버 로그아웃은 아직 구현되지 않았습니다.");
-		window.location.href = "/";
+		let naverLogoutWindow = window.open('https://nid.naver.com/nidlogin.logout?returl=https://www.naver.com/',"_blank" ,'네이버 앱');
 	</script>
-
-	<!-- 아래 임시 코드 -->
 	<script defer>
-		window.onload = function () {
-		}
-		var naverLogin = new naver.LoginWithNaverId({
-			clientId: "clientId",
-			callbackUrl: "네이버에 등록된 url"
+		$.ajax({
+			url : "/auth/logout/naver",
+			type :  "GET",
+			async : false,
+			success : function(res){
+				console.log('성공');
+				alert('네이버에서 정상적으로 로그아웃 처리되었습니다.');
+				closeWindow();
+			},
+			error : function(err){
+				console.log('실패');
+				alert('네이버에서 정상적으로 로그아웃 로그아웃 처리되지 않았습니다.');
+			}
 		});
-		try {
-			naverLogin.init();
-			naverLogin.logout();
-			alert("네이버에서 정상적으로 로그아웃 되었습니다.");
-		} catch (error) {
-			alert("네이버에서 정상적으로 로그아웃 처리되지 않았습니다.");
+
+		function closeWindow() {
+			naverLogoutWindow.close();
+			location.href = "/";
 		}
-		window.location.href = "/";
 	</script>
 </body>
 </html>

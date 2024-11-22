@@ -92,6 +92,10 @@ public class ProductVO {
 	
     private int review_count;      // 리뷰 수
     private int total_orders;      // 총 주문 수
+    
+    private String status_date;    // 배송상태 변경일
+    private String old_status;     // 이전 배송상태
+    private String new_status;     // 새로운 배송상태
 	
 	public int getPr_id() {
 		return pr_id;
@@ -691,5 +695,29 @@ public class ProductVO {
 
 	public void setTotal_orders(int total_orders) {
 		this.total_orders = total_orders;
+	}
+
+	public String getStatus_date() {
+		return status_date;
+	}
+
+	public void setStatus_date(String status_date) {
+		this.status_date = status_date;
+	}
+
+	public String getOld_status() {
+		return old_status;
+	}
+
+	public void setOld_status(String old_status) {
+		this.old_status = old_status;
+	}
+
+	public String getNew_status() {
+		return new_status;
+	}
+
+	public void setNew_status(String new_status) {
+		this.new_status = new_status;
 	}
 }

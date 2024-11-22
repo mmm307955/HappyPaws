@@ -237,9 +237,10 @@
 	<select id="getProductOrder" resultType="product">
 	    SELECT 
 	        o.*,
+	        o.US_ID as us_id,  <!-- 명시적으로 US_ID 필드 추가 -->
 	        u.US_EMAIL as us_email,
-	        o.MERCHANT_UID as merchant_uid,  <!-- 별칭 추가 -->
-	        o.IMP_UID as imp_uid            <!-- 별칭 추가 -->
+	        o.MERCHANT_UID,
+	        o.IMP_UID
 	    FROM PRODUCTS_ORDERS o
 	    JOIN USERS u ON o.US_ID = u.US_ID
 	    WHERE o.PROR_MASTER_ID = #{pror_master_id}
@@ -538,8 +539,200 @@
 	    AND US_ID = #{us_id}
 	</delete>
 	
+	<select id="getCartItem" resultType="product">
+	    SELECT * FROM PRODUCTS_SHOPPING_CARTS 
+	    WHERE US_ID = #{us_id} 
+	    AND PR_ID = #{pr_id} 
+	    AND PR_OPT_NAME = #{pr_opt_name}
+	</select>
+	
 	<select id="productIndex" resultType="product">
 		SELECT * FROM PRODUCTS LIMIT 0, 5
+	</select>
+
+	<!-- 관리자용 리뷰 목록 조회 -->
+	<select id="getAdminProductReview" resultType="product">
+	    SELECT pc.*, 
+	           p.PR_NAME,
+	           o.US_ID
+	    FROM PRODUCTS_COMMENTS pc
+	    JOIN PRODUCTS_ORDERS_ITEMS i ON pc.PROR_ITEM_ID = i.PROR_ITEM_ID
+	    JOIN PRODUCTS_ORDERS o ON i.PROR_MASTER_ID = o.PROR_MASTER_ID
+	    JOIN PRODUCTS p ON pc.PR_ID = p.PR_ID
+	    WHERE pc.PRC_STATUS = 'Y'
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND (p.PR_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	        OR o.US_ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+	    </if>
+	    ORDER BY pc.PRC_NO DESC
+	    LIMIT #{rowFirst}, #{rowSizePerPage}
+	</select>
+	
+	<!-- 관리자용 문의 목록 조회 -->
+	<select id="getAdminProductQuestion" resultType="product">
+	    SELECT DISTINCT q.*, p.PR_NAME, u.US_ID
+	    FROM PRODUCTS_QNA q
+	    LEFT JOIN PRODUCTS p ON q.PR_ID = p.PR_ID
+	    LEFT JOIN USERS u ON q.US_ID = u.US_ID
+	    WHERE q.PRQ_STATUS = 'Y'
+	    AND q.PRQ_COMMENTS IS NULL  <!-- 원본 문의글만 가져오기 -->
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND (p.PR_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	        OR u.US_ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+	    </if>
+	    ORDER BY q.PRQ_NO DESC
+	    LIMIT #{rowFirst}, #{rowSizePerPage}
+	</select>
+	
+	<!-- 관리자용 주문 목록 조회 -->
+	<select id="getAdminProductOrderList" resultType="product">
+	    SELECT 
+	        o.*,
+	        u.US_ID,
+	        u.US_EMAIL,
+	        (SELECT 
+	            CONCAT(p.PR_NAME, 
+	                CASE 
+	                    WHEN COUNT(*) > 1 
+	                    THEN CONCAT(' 외 ', COUNT(*)-1, '건')
+	                    ELSE ''
+	                END)
+	         FROM PRODUCTS_ORDERS_ITEMS i
+	         JOIN PRODUCTS p ON i.PR_ID = p.PR_ID
+	         WHERE i.PROR_MASTER_ID = o.PROR_MASTER_ID
+	         GROUP BY i.PROR_MASTER_ID) as pr_name
+	    FROM PRODUCTS_ORDERS o
+	    JOIN USERS u ON o.US_ID = u.US_ID
+	    WHERE 1=1
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND (o.PROR_MASTER_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+	        OR u.US_ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+	    </if>
+	    ORDER BY o.PROR_MASTER_ID DESC
+	    LIMIT #{rowFirst}, #{rowSizePerPage}
+	</select>
+	
+	<!-- 배송 상태 업데이트 -->
+	<update id="updateOrderDeliveryStatus">
+	    UPDATE PRODUCTS_ORDERS 
+	    SET PROR_DELI_STAT = #{pror_deli_stat}
+	    WHERE PROR_MASTER_ID = #{pror_master_id}
+	</update>
+	
+	<!-- 배송상태 이력 저장 -->
+	<insert id="insertDeliveryStatusHistory">
+	    INSERT INTO DELIVERY_STATUS_HISTORY (
+	        PROR_MASTER_ID, 
+	        OLD_STATUS,
+	        NEW_STATUS,
+	        STATUS_DATE,
+	        UPDATE_BY
+	    ) VALUES (
+	        #{pror_master_id},
+	        #{old_status},
+	        #{new_status},
+	        #{status_date},
+	        #{us_id}
+	    )
+	</insert>
+	
+	<!-- 리뷰 총 개수 조회 -->
+	<select id="getProductReviewTotalCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM PRODUCTS_COMMENTS pc
+	    JOIN PRODUCTS_ORDERS_ITEMS i ON pc.PROR_ITEM_ID = i.PROR_ITEM_ID
+	    JOIN PRODUCTS_ORDERS o ON i.PROR_MASTER_ID = o.PROR_MASTER_ID
+	    JOIN PRODUCTS p ON pc.PR_ID = p.PR_ID
+	    WHERE pc.PRC_STATUS = 'Y'
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND (p.PR_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	        OR o.US_ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+	    </if>
+	</select>
+	
+	<!-- 주문 총 개수 조회 -->
+	<select id="getAdminOrderListCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM PRODUCTS_ORDERS o
+	    JOIN USERS u ON o.US_ID = u.US_ID
+	    WHERE 1=1
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND (o.PROR_MASTER_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+	        OR u.US_ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+	    </if>
+	</select>
+	
+	<!-- 답변 완료된 문의 개수 조회 -->
+	<select id="getAnsweredQuestionCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM PRODUCTS_QNA
+	    WHERE PR_ID = #{pr_id}
+	    AND PRQ_STATUS = 'Y'
+	    AND PRQ_COMMENTS IS NOT NULL
+	</select>
+	
+	<!-- 결제상태별 주문 통계 -->
+	<select id="getPaymentStatusStats" resultType="map">
+	    SELECT 
+	        PROR_STATUS as status,
+	        COUNT(*) as count,
+	        SUM(PROR_TOTAL_AMT) as total_amount
+	    FROM PRODUCTS_ORDERS
+	    GROUP BY PROR_STATUS
+	</select>
+	
+	<!-- 배송상태별 주문 통계 -->
+	<select id="getDeliveryStatusStats" resultType="map">
+	    SELECT 
+	        PROR_DELI_STAT as status,
+	        COUNT(*) as count
+	    FROM PRODUCTS_ORDERS
+	    WHERE PROR_STATUS = 'paid'
+	    GROUP BY PROR_DELI_STAT
+	</select>
+	
+	<!-- 오늘의 주문/취소 현황 -->
+	<select id="getTodayOrderStats" resultType="map">
+	    SELECT 
+	        COUNT(CASE WHEN PROR_STATUS = 'paid' THEN 1 END) as order_count,
+	        COUNT(CASE WHEN PROR_STATUS = 'cancelled' THEN 1 END) as cancel_count,
+	        SUM(CASE WHEN PROR_STATUS = 'paid' THEN PROR_TOTAL_AMT ELSE 0 END) as total_sales
+	    FROM PRODUCTS_ORDERS
+	    WHERE DATE(STR_TO_DATE(PROR_DATE, '%Y/%m/%d')) = CURDATE()
+	</select>
+	
+	<!-- 기간별 매출 통계 -->
+	<select id="getSalesStatsByPeriod" resultType="map">
+	    SELECT 
+	        DATE(STR_TO_DATE(PROR_DATE, '%Y/%m/%d')) as order_date,
+	        COUNT(*) as order_count,
+	        SUM(PROR_TOTAL_AMT) as daily_sales
+	    FROM PRODUCTS_ORDERS
+	    WHERE PROR_STATUS = 'paid'
+	    AND DATE(STR_TO_DATE(PROR_DATE, '%Y/%m/%d')) BETWEEN #{startDate} AND #{endDate}
+	    GROUP BY DATE(STR_TO_DATE(PROR_DATE, '%Y/%m/%d'))
+	    ORDER BY order_date
+	</select>
+	
+	<update id="updateQuestionAnswer">
+	    UPDATE PRODUCTS_QNA 
+	    SET PRQ_COMMENTS = #{prq_comments},
+	        PRQ_DATE = #{prq_date}
+	    WHERE PRQ_NO = #{prq_no}
+	</update>
+	
+	<!-- 문의 총 개수 조회 -->
+	<select id="getProductQuestionTotalCount" resultType="int">
+	    SELECT COUNT(DISTINCT q.PRQ_NO)
+	    FROM PRODUCTS_QNA q
+	    LEFT JOIN PRODUCTS p ON q.PR_ID = p.PR_ID
+	    LEFT JOIN USERS u ON q.US_ID = u.US_ID
+	    WHERE q.PRQ_STATUS = 'Y'
+	    AND q.PRQ_COMMENTS IS NULL  <!-- 원본 문의글만 카운트 -->
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND (p.PR_NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+	        OR u.US_ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+	    </if>
 	</select>
 	
 </mapper>

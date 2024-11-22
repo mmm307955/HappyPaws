@@ -18,6 +18,15 @@ document.addEventListener("DOMContentLoaded", function() {
     var today = new Date(now_utc - timeOff).toISOString().split("T")[0];
     document.getElementById("Date").setAttribute("max", today);
 });
+
+function checkNull(){
+	var imgValue = $('#file2').val();
+	
+	if(imgValue == null || imgValue ==''){
+		alert("사진을 첨부해주세요.");
+		return false;
+	}
+}
 </script>
 </head>
 <body>
@@ -26,17 +35,15 @@ document.addEventListener("DOMContentLoaded", function() {
 		<div class="n_write">
 			<h1>아이를 찾아주세요</h1>
 			<div class="n_writeform">
-				<form action="/MIA/insertLostPet" method="post"
-					enctype="multipart/form-data" name="boardform">
+				<form action="/MIA/insertLostPet" method="post" enctype="multipart/form-data" name="boardform" onsubmit="return checkNull()">
 
 					<div class="n_write_header">
 						<span class="left">글 작성</span>
 					</div>
 
 					<div class="n_title">
-						<input type="hidden" name="lp_id" value="${user.us_id}"> <input
-							type="text" class="form-control" name="lp_title"
-							placeholder="제목을 입력하세요." required>
+						<input type="hidden" name="lp_id" value="${user.us_id}"> 
+						<input type="text" class="form-control" name="lp_title"placeholder="제목을 입력하세요." required maxlength="30">
 					</div>
 
 					<div class="n_ph">
@@ -49,8 +56,8 @@ document.addEventListener("DOMContentLoaded", function() {
 						<img src="${pageContext.request.contextPath}/resources/MIA-img/default.png;"
 						alt="Lost Pet Image" class="lost-pet-image">
 						<div class="img_save">
-								<input id="file2" type="file" name="uploadFile" accept="image/*"
-								style="display: none;" required> <span>사진 첨부</span>
+							<input id="file2" type="file" name="uploadFile" accept="image/*"
+								style="display: none;"> <span>사진 첨부</span>
 						</div>
 						</label>
 					</div>
@@ -60,12 +67,12 @@ document.addEventListener("DOMContentLoaded", function() {
 							<tr class="detail-row">
 								<td class="label">실종 장소</td>
 								<td class="value"><input type="text" class="form-control"
-									name="lp_place" placeholder="실종 장소 입력" required></td>
+									name="lp_place" placeholder="실종 장소 입력" required maxlength="30"></td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">실종 날짜</td>
 								<td class="value">
-								<input type="date" id="Date" class="form-control" name="lp_time" required>
+								<input type="date" id="Date" class="form-control" name="lp_time" required >
 								</td>
 							</tr>
 							<tr class="detail-row">
@@ -81,19 +88,21 @@ document.addEventListener("DOMContentLoaded", function() {
 							<tr class="detail-row">
 								<td class="label">품종</td>
 								<td class="value"><input type="text" class="form-control"
-									name="lp_breed" placeholder="품종 입력" required></td>
+									name="lp_breed" placeholder="품종 입력" required maxlength="10"></td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">사례금</td>
 								<td class="value"><input type="number" class="form-control"
-									name="lp_reward" placeholder="숫자만 입력해주세요" min="0" required></td>
+									name="lp_reward" placeholder="숫자만 입력해주세요" min="0" required maxlength="9" 
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+								</td>
 							</tr>
 						</table>
 
 					</div>
 					<div class="n_content">
-						<textarea cols="100" wrap="hard" class="form-control" rows="5" name="lp_content"
-							placeholder="상세 설명을 입력하세요"></textarea>
+						<textarea cols="100" wrap="soft" class="form-control" rows="5" name="lp_content"
+							placeholder="상세 설명을 입력하세요" required></textarea>
 					</div>
 					<input type="hidden" name="lp_ok" value="N"> <input
 						type="hidden" name="lp_del" value="N">

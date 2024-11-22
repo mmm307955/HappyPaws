@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -33,12 +34,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.happypaws.svc.ProductSVC;
 import com.happypaws.vo.ProductPagingVO;
 import com.happypaws.vo.ProductVO;
@@ -123,6 +126,12 @@ public class ProductController {
 	    
 	    // 상품 상세 정보 먼저 조회
 	    List<ProductVO> productDetail = svc.getProductDetail(pr_id);
+	    
+	    // 상품이 존재하지 않는 경우 처리
+	    if (productDetail == null || productDetail.isEmpty()) {
+	        // 에러 페이지로 리다이렉트하거나 적절한 메시지를 표시
+	        return "redirect:/error";  // 또는 다른 처리 방법
+	    }
 	    
 	    // 상품 썸네일 이미지 존재 여부 체크
 	    if (productDetail.get(0).getPr_thumbnail() != null && !productDetail.get(0).getPr_thumbnail().isEmpty()) {
@@ -670,13 +679,15 @@ public class ProductController {
 	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	        String orderDate = sdf.format(new Date());
 
+	        String userEmail = svc.getUserEmail(user.getUs_id());
+	        
 	        // 주문 마스터 정보 설정
 	        ProductVO masterVO = new ProductVO();
 	        masterVO.setUs_id(user.getUs_id());
 	        masterVO.setPror_date(orderDate);
 	        masterVO.setPror_status("paid");
 	        masterVO.setPror_deli_stat("preparation");
-	        masterVO.setUs_email(user.getUs_email());
+	        masterVO.setUs_email(userEmail);
 	        
 	        // 첫 번째 아이템의 배송 정보 설정
 	        if (!orderItems.isEmpty()) {
@@ -758,7 +769,7 @@ public class ProductController {
 	        // 리뷰 수가 주문건수보다 크거나 같으면 더 이상 리뷰를 작성할 수 없음
 	        if (reviewCount >= orderCount) {
 	            response.put("canWrite", false);
-	            response.put("message", "이 상품의 모든 주문에 대해 이미 리뷰를 작성하셨습니다.");
+	            response.put("message", "리뷰를 작성할 수 있는 주문이 없습니다.");
 	            return ResponseEntity.ok(response);
 	        }
 	        
@@ -912,6 +923,8 @@ public class ProductController {
 	        
 	        Map<String, Object> response = new HashMap<>();
 	        
+	        String userEmail = svc.getUserEmail(user.getUs_id());
+	        
 	        // 주문 마스터 정보 설정
 	        response.put("pror_master_id", order.getPror_master_id());
 	        response.put("pror_date", order.getPror_date());
@@ -926,7 +939,7 @@ public class ProductController {
 	        response.put("pror_ship_cost", order.getPror_ship_cost());
 	        response.put("pror_product_amt", order.getPror_product_amt());
 	        response.put("pror_pay_method", order.getPror_pay_method());
-	        response.put("pror_email", order.getUs_email());
+	        response.put("pror_email", userEmail);
 	        // merchant_uid와 imp_uid 추가
 	        response.put("merchant_uid", order.getMerchant_uid());
 	        response.put("imp_uid", order.getImp_uid());
@@ -1149,7 +1162,7 @@ public class ProductController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("success", false, "message", "로그인이 필요합니다."));
             }
-            
+
             // 사용자 이메일 조회
             String userEmail = svc.getUserEmail(user.getUs_id());
 
@@ -1163,24 +1176,28 @@ public class ProductController {
             masterVO.setPror_date(orderDate);
             masterVO.setPror_status("paid");
             masterVO.setPror_deli_stat("preparation");
-            
-            // 상품 총액 계산 (모든 상품의 가격 * 수량 합계)
-            int productTotalAmount = 0;
+
+            // 상품 총액 계산 및 주문 아이템 처리
+            int totalProductAmount = 0;
             for (ProductVO item : orderItems) {
-                productTotalAmount += (item.getPr_opt_price() * item.getPror_item_qtt());
-                
-                // 각 주문 상품의 수량과 금액 정보 설정
-                item.setPror_item_qtt(item.getPror_item_qtt());  // 주문 수량
-                item.setPror_item_amt(item.getPr_opt_price() * item.getPror_item_qtt());  // 개별 상품 금액
+                totalProductAmount += (item.getPr_opt_price() * item.getPror_item_qtt());
+
+                // 상품명에서 옵션 정보 제거
+                String cleanProductName = item.getPr_name();
+                if (cleanProductName.contains("[옵션:")) {
+                    cleanProductName = cleanProductName.substring(0, cleanProductName.indexOf("[옵션:")).trim();
+                }
+                item.setPr_name(cleanProductName);
+
+                // 주문 상품 정보 설정
+                item.setPror_item_qtt(item.getPror_item_qtt());
+                item.setPror_item_amt(item.getPr_opt_price() * item.getPror_item_qtt());
             }
-            
+
             // 배송비 설정
-            int shippingCost = 3000;  // 고정 배송비
-            masterVO.setPror_ship_cost(shippingCost);
-            
-            // 상품 총액 설정 (순수 상품 가격의 합)
-            masterVO.setPror_product_amt(productTotalAmount);
-            
+            masterVO.setPror_ship_cost(3000);
+            masterVO.setPror_product_amt(totalProductAmount);
+
             // 첫 번째 아이템의 정보 설정
             if (!orderItems.isEmpty()) {
                 ProductVO firstItem = orderItems.get(0);
@@ -1192,7 +1209,6 @@ public class ProductController {
                 masterVO.setPror_pay_method("card");
                 masterVO.setMerchant_uid(firstItem.getMerchant_uid());
                 masterVO.setImp_uid(firstItem.getImp_uid());
-                // JSP에서 넘어온 실제 결제금액(1원) 사용
                 masterVO.setPror_total_amt(firstItem.getPror_total_amt());
             }
 
@@ -1208,7 +1224,7 @@ public class ProductController {
                     cartItem.setPr_opt_name(item.getPr_opt_name());
                     svc.removeFromCart(cartItem);
                 }
-                
+
                 return ResponseEntity.ok().body(Map.of("success", true));
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -1409,148 +1425,353 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
         }
     }
-    
-    @GetMapping("/mobile_process_payment")
-    public String processMobilePayment(
-        @RequestParam(value = "imp_uid", required = false) String impUid,
-        @RequestParam(value = "merchant_uid", required = false) String merchantUid,
-        @RequestParam(value = "imp_success", required = false) Boolean impSuccess,
-        @RequestParam(value = "error_msg", required = false) String errorMsg,
-        HttpSession session,
-        RedirectAttributes redirectAttributes) {
-        
-        try {
-            // 디버깅 로그
-            System.out.println("imp_uid: " + impUid);
-            System.out.println("merchant_uid: " + merchantUid);
-            System.out.println("imp_success: " + impSuccess);
-            System.out.println("error_msg: " + errorMsg);
 
-            // 세션 체크
+    @RequestMapping(value = "/mobile_process_payment", method = {RequestMethod.GET, RequestMethod.POST})
+    public String processMobilePayment(
+            @RequestParam(value = "imp_uid") String imp_uid,
+            @RequestParam(value = "merchant_uid") String merchant_uid,
+            @RequestParam(value = "imp_success", defaultValue = "false") boolean imp_success,
+            @RequestParam(value = "selectedItems", required = false) String selectedItems,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        try {
             UsersVO user = (UsersVO) session.getAttribute("user");
             if (user == null) {
-                redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
                 return "redirect:/auth/login";
             }
 
-            // 결제 실패 처리
-            if (impSuccess == null || !impSuccess) {
-                // 오류 메시지가 있으면 그대로 표시, 없으면 기본 메시지 사용
-                String failMessage = errorMsg != null && !errorMsg.isEmpty() 
-                    ? errorMsg 
-                    : "결제가 취소되었습니다.";
-                redirectAttributes.addFlashAttribute("errorMessage", failMessage);
+            if (!imp_success) {
+                redirectAttributes.addFlashAttribute("errorMessage", "결제가 취소되었습니다.");
                 return "redirect:/product/pr_cart";
             }
 
-            // 여기서부터는 결제 성공 시의 처리
-            try {
-                // 포트원 토큰 발급
-                String token = getPortOneToken();
-                
-                HttpHeaders headers = new HttpHeaders();
-                headers.setBearerAuth(token);
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                
-                // 결제 정보 조회
-                RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<Map> paymentResponse = restTemplate.exchange(
-                    "https://api.iamport.kr/payments/" + impUid,
-                    HttpMethod.GET,
-                    new HttpEntity<>(headers),
-                    Map.class
-                );
-                
-                if (paymentResponse.getStatusCode() != HttpStatus.OK) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "결제 정보를 확인할 수 없습니다.");
-                    return "redirect:/product/pr_cart";
-                }
+            // 장바구니에서 선택된 상품 정보 조회
+            List<ProductVO> orderItems = new ArrayList<>();
+            int productTotalAmount = 0;
 
-                Map<String, Object> paymentData = (Map<String, Object>) paymentResponse.getBody().get("response");
-                
-                // 결제 상태 확인
-                if (!"paid".equals(paymentData.get("status"))) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "결제가 완료되지 않았습니다.");
-                    return "redirect:/product/pr_cart";
-                }
+            if (selectedItems != null && !selectedItems.isEmpty()) {
+                String[] items = selectedItems.split(",");
+                for (String item : items) {
+                    String[] parts = item.split("\\|");
+                    if (parts.length == 2) {
+                        int prId = Integer.parseInt(parts[0]);
+                        String prOptName = parts[1];
 
-                // 결제 금액 검증
-                int paidAmount = ((Number) paymentData.get("amount")).intValue();
-
-                // 여기서부터 주문 처리 로직
-                String userEmail = svc.getUserEmail(user.getUs_id());
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                String orderDate = sdf.format(new Date());
-
-                // 주문 마스터 정보 설정
-                ProductVO masterVO = new ProductVO();
-                masterVO.setUs_id(user.getUs_id());
-                masterVO.setUs_email(userEmail);
-                masterVO.setPror_date(orderDate);
-                masterVO.setPror_status("paid");
-                masterVO.setPror_deli_stat("preparation");
-                masterVO.setPror_pay_method("card");
-                masterVO.setMerchant_uid(merchantUid);
-                masterVO.setImp_uid(impUid);
-                masterVO.setPror_total_amt(paidAmount);
-                masterVO.setPror_ship_cost(3000);
-                masterVO.setPror_product_amt(paidAmount - 3000);
-
-                // 배송지 정보 설정
-                masterVO.setPror_recipient((String) paymentData.get("buyer_name"));
-                masterVO.setPror_phone((String) paymentData.get("buyer_tel"));
-                masterVO.setPror_addr((String) paymentData.get("buyer_addr"));
-                masterVO.setPror_zipcode((String) paymentData.get("buyer_postcode"));
-
-                // 장바구니에서 주문 상품 정보 가져오기
-                List<ProductVO> cartItems = svc.getCartList(user.getUs_id());
-                if (cartItems == null || cartItems.isEmpty()) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "주문할 상품이 없습니다.");
-                    return "redirect:/product/pr_cart";
-                }
-
-                List<ProductVO> orderItems = new ArrayList<>();
-                for (ProductVO item : cartItems) {
-                    ProductVO orderItem = new ProductVO();
-                    orderItem.setPr_id(item.getPr_id());
-                    orderItem.setPr_name(item.getPr_name());
-                    orderItem.setPr_opt_name(item.getPr_opt_name());
-                    orderItem.setPr_opt_price(item.getPr_opt_price());
-                    orderItem.setPror_item_qtt(item.getPrsc_quantity());
-                    orderItem.setPror_item_amt(item.getPr_opt_price() * item.getPrsc_quantity());
-                    orderItems.add(orderItem);
-                }
-
-                // 주문 처리
-                int result = svc.setProductOrder(masterVO, orderItems);
-
-                if (result > 0) {
-                    // 장바구니 비우기
-                    for (ProductVO item : cartItems) {
-                        ProductVO cartItem = new ProductVO();
-                        cartItem.setUs_id(user.getUs_id());
-                        cartItem.setPr_id(item.getPr_id());
-                        cartItem.setPr_opt_name(item.getPr_opt_name());
-                        svc.removeFromCart(cartItem);
+                        // 장바구니에서 해당 상품 정보 조회
+                        ProductVO cartItem = svc.getCartItem(user.getUs_id(), prId, prOptName);
+                        if (cartItem != null) {
+                            ProductVO orderItem = new ProductVO();
+                            orderItem.setPr_id(cartItem.getPr_id());
+                            orderItem.setPr_name(cartItem.getPr_name());
+                            orderItem.setPr_opt_name(cartItem.getPr_opt_name());
+                            orderItem.setPr_opt_price(cartItem.getPr_opt_price());
+                            orderItem.setPror_item_qtt(cartItem.getPrsc_quantity());
+                            orderItem.setPror_item_amt(cartItem.getPr_opt_price() * cartItem.getPrsc_quantity());
+                            
+                            orderItems.add(orderItem);
+                            productTotalAmount += orderItem.getPror_item_amt();
+                        }
                     }
-                    
-                    redirectAttributes.addFlashAttribute("successMessage", "주문이 완료되었습니다.");
-                    return "redirect:/product/pr_order_list";
-                } else {
-                    redirectAttributes.addFlashAttribute("errorMessage", "주문 처리에 실패했습니다.");
-                    return "redirect:/product/pr_cart";
                 }
-                
-            } catch (Exception e) {
-                e.printStackTrace();
-                redirectAttributes.addFlashAttribute("errorMessage", "주문 처리 중 오류가 발생했습니다: " + e.getMessage());
-                return "redirect:/product/pr_cart";
+            }
+
+            // 결제 정보 조회
+            String token = getPortOneToken();
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBearerAuth(token);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            ResponseEntity<Map> paymentResponse = restTemplate.exchange(
+                "https://api.iamport.kr/payments/" + imp_uid,
+                HttpMethod.GET,
+                new HttpEntity<>(headers),
+                Map.class
+            );
+
+            Map<String, Object> paymentData = (Map<String, Object>) paymentResponse.getBody().get("response");
+
+            String userEmail = svc.getUserEmail(user.getUs_id());
+            
+            // 주문 마스터 정보 설정
+            ProductVO masterVO = new ProductVO();
+            masterVO.setUs_id(user.getUs_id());
+            masterVO.setUs_email(userEmail);
+            masterVO.setPror_date(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+            masterVO.setPror_status("paid");
+            masterVO.setPror_deli_stat("preparation");
+            masterVO.setMerchant_uid(merchant_uid);
+            masterVO.setImp_uid(imp_uid);
+            masterVO.setPror_recipient((String) paymentData.get("buyer_name"));
+            masterVO.setPror_phone((String) paymentData.get("buyer_tel"));
+            masterVO.setPror_zipcode((String) paymentData.get("buyer_postcode"));
+
+            // 주소 정보 처리
+            String fullAddress = (String) paymentData.get("buyer_addr");
+            String[] addressParts = fullAddress.split("\\s+");
+            StringBuilder mainAddress = new StringBuilder();
+            StringBuilder detailAddress = new StringBuilder();
+            boolean isDetail = false;
+            
+            for (String part : addressParts) {
+                if (part.contains("동") || part.contains("호") || part.matches("\\d{1,5}(-\\d{1,5})*")) {
+                    isDetail = true;
+                }
+                if (isDetail) {
+                    if (detailAddress.length() > 0) detailAddress.append(" ");
+                    detailAddress.append(part);
+                } else {
+                    if (mainAddress.length() > 0) mainAddress.append(" ");
+                    mainAddress.append(part);
+                }
+            }
+
+            masterVO.setPror_addr(mainAddress.toString());
+            masterVO.setPror_addr_detail(detailAddress.toString());
+            masterVO.setPror_pay_method("card");
+            masterVO.setPror_product_amt(productTotalAmount);
+            masterVO.setPror_ship_cost(3000);
+            masterVO.setPror_total_amt(((Number) paymentData.get("amount")).intValue());
+
+            // 주문 처리
+            int result = svc.setProductOrder(masterVO, orderItems);
+
+            if (result > 0) {
+                // 장바구니에서 주문한 상품 제거
+                for (ProductVO orderItem : orderItems) {
+                    ProductVO cartItem = new ProductVO();
+                    cartItem.setUs_id(user.getUs_id());
+                    cartItem.setPr_id(orderItem.getPr_id());
+                    cartItem.setPr_opt_name(orderItem.getPr_opt_name());
+                    svc.removeFromCart(cartItem);
+                }
+
+                redirectAttributes.addFlashAttribute("successMessage", "주문이 완료되었습니다.");
+                return "redirect:/product/pr_order_list";
+            } else {
+                throw new RuntimeException("Order processing failed");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "주문 처리 중 오류가 발생했습니다.");
+            redirectAttributes.addFlashAttribute("errorMessage", "주문 처리 중 오류가 발생했습니다: " + e.getMessage());
             return "redirect:/product/pr_cart";
         }
     }
+    
+    // 관리자 페이지 메인
+    @GetMapping("/pr_admin")
+    public String adminPage(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(required = false) String tab,
+            @RequestParam(required = false) String search,
+            Model model,
+            HttpSession session) {
+
+        // 관리자 체크
+        UsersVO user = (UsersVO) session.getAttribute("user");
+        if (user == null || !user.getUs_id().equals("admin")) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            // 검색어 처리
+            ProductVO vo = new ProductVO();
+            if (search != null && !search.isEmpty()) {
+                vo.setSearchKeyword(search);
+            }
+
+            // 페이징 기본 설정
+            int pageSize = 10;
+
+            String activeTab = (tab == null) ? "orders" : tab; //"reviews"
+            
+            switch(activeTab) {
+	            case "inquiries":
+	                ProductPagingVO inquiryPaging = new ProductPagingVO();
+	                inquiryPaging.setBtnCur(page);
+	                inquiryPaging.setRowSizePerPage(pageSize);
+	                inquiryPaging.setRowTotalCount(svc.getProductQuestionTotalCount(vo)); // 총 개수 설정
+	                inquiryPaging = new ProductPagingVO(inquiryPaging); // 페이징 정보 재계산
+	                
+	                vo.setRowFirst(inquiryPaging.getRowFirst());
+	                vo.setRowSizePerPage(inquiryPaging.getRowSizePerPage());
+	                
+	                List<ProductVO> inquiries = svc.getAdminProductQuestion(vo);
+	                model.addAttribute("inquiries", inquiries);
+	                model.addAttribute("inquiryPaging", inquiryPaging);
+	                break;
+
+                case "orders":
+                    ProductPagingVO orderPaging = new ProductPagingVO();
+                    orderPaging.setBtnCur(page);
+                    orderPaging.setRowSizePerPage(pageSize);
+                    orderPaging.setRowTotalCount(svc.getAdminOrderListCount(vo));
+                    orderPaging = new ProductPagingVO(orderPaging);
+                    
+                    vo.setRowFirst(orderPaging.getRowFirst());
+                    vo.setRowSizePerPage(orderPaging.getRowSizePerPage());
+                    
+                    List<ProductVO> orders = svc.getAdminProductOrderList(vo);
+                    model.addAttribute("orders", orders);
+                    model.addAttribute("orderPaging", orderPaging);
+                    break;
+
+                default: // reviews
+                    ProductPagingVO reviewPaging = new ProductPagingVO();
+                    reviewPaging.setBtnCur(page);
+                    reviewPaging.setRowSizePerPage(pageSize);
+                    reviewPaging.setRowTotalCount(svc.getProductReviewTotalCount(vo));
+                    reviewPaging = new ProductPagingVO(reviewPaging);
+                    
+                    vo.setRowFirst(reviewPaging.getRowFirst());
+                    vo.setRowSizePerPage(reviewPaging.getRowSizePerPage());
+                    
+                    List<ProductVO> reviews = svc.getAdminProductReview(vo);
+                    model.addAttribute("reviews", reviews);
+                    model.addAttribute("reviewPaging", reviewPaging); // 변경: paging -> reviewPaging
+                    break;
+            }
+            
+            // 공통 모델 속성 추가
+            model.addAttribute("tab", activeTab);
+            model.addAttribute("search", search);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 에러 처리
+        }
+
+        return "/WEB-INF/product/pr_admin.jsp";
+    }
+
+    // 배송 상태 업데이트 (관리자용)
+    @PostMapping("/update_delivery_status")
+    @ResponseBody
+    public ResponseEntity<String> updateDeliveryStatus(
+            @RequestParam("pror_master_id") int orderId,
+            @RequestParam("pror_deli_stat") String status,
+            HttpSession session) {
+        
+        try {
+            UsersVO user = (UsersVO) session.getAttribute("user");
+            if (user == null || !user.getUs_id().equals("admin")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .header("Content-Type", "text/plain;charset=UTF-8")
+                    .body("관리자만 접근 가능합니다.");
+            }
+
+            ProductVO vo = new ProductVO();
+            vo.setPror_master_id(orderId);
+            vo.setPror_deli_stat(status);
+            
+            // 현재 주문 상태 확인
+            ProductVO currentOrder = svc.getProductOrder(orderId);
+            if (currentOrder == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .header("Content-Type", "text/plain;charset=UTF-8")
+                    .body("주문을 찾을 수 없습니다.");
+            }
+            
+            // 취소된 주문인 경우
+            if ("cancelled".equals(currentOrder.getPror_status())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("Content-Type", "text/plain;charset=UTF-8")
+                    .body("취소된 주문은 배송상태를 변경할 수 없습니다.");
+            }
+            
+            int result = svc.updateOrderDeliveryStatus(vo);
+            if (result > 0) {
+                return ResponseEntity.ok()
+                    .header("Content-Type", "text/plain;charset=UTF-8")
+                    .body("success");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Content-Type", "text/plain;charset=UTF-8")
+                    .body("배송상태 업데이트에 실패했습니다.");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .header("Content-Type", "text/plain;charset=UTF-8")
+                .body("서버 오류가 발생했습니다.");
+        }
+    }
+
+    // 문의 답변 관련 처리
+    @PostMapping("/answer_inquiry")
+    @ResponseBody
+    public ResponseEntity<String> answerInquiry(
+            @RequestParam("prq_no") int inquiryNo,
+            @RequestParam("prq_comments") String answer,
+            HttpSession session) {
+        
+        UsersVO user = (UsersVO) session.getAttribute("user");
+        if (user == null || !user.getUs_id().equals("admin")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("관리자만 접근 가능합니다.");
+        }
+        
+        try {
+            ProductVO vo = new ProductVO();
+            vo.setPrq_no(inquiryNo);
+            vo.setPrq_comments(answer);
+            vo.setPrq_date(new SimpleDateFormat("yyyy/MM/dd").format(new Date()));
+            
+            int result = svc.setProductQuestionComments(vo);
+            return result > 0 ? ResponseEntity.ok("success") : ResponseEntity.badRequest().body("답변 등록 실패");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
+        }
+    }
+
+    // 검색 기능
+    @GetMapping("/admin_search")
+    @ResponseBody
+    public ResponseEntity<?> adminSearch(
+            @RequestParam String keyword,
+            @RequestParam String type,
+            HttpSession session) {
+        
+        UsersVO user = (UsersVO) session.getAttribute("user");
+        if (user == null || !user.getUs_id().equals("admin")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("관리자만 접근 가능합니다.");
+        }
+        
+        try {
+            ProductVO vo = new ProductVO();
+            vo.setSearchKeyword(keyword);
+            vo.setRowFirst(0);
+            vo.setRowSizePerPage(10);
+            
+            Map<String, Object> response = new HashMap<>();
+            
+            switch (type) {
+                case "reviews":
+                    response.put("items", svc.getAdminProductReview(vo));
+                    response.put("total", svc.getProductReviewTotalCount(vo));
+                    break;
+                case "inquiries":
+                    response.put("items", svc.getAdminProductQuestion(vo));
+                    response.put("total", svc.getProductQuestionTotalCount(vo));
+                    break;
+                case "orders":
+                    response.put("items", svc.getAdminProductOrderList(vo));
+                    response.put("total", svc.getAdminOrderListCount(vo));
+                    break;
+                default:
+                    return ResponseEntity.badRequest().body("잘못된 검색 유형입니다.");
+            }
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                               .body("검색 중 오류가 발생했습니다.");
+        }
+    }    
 }

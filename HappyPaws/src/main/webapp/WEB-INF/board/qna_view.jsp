@@ -32,13 +32,13 @@
 			    <span>댓글쓰기</span>
 			    <div class="comment-input">
 				   	<label><textarea id="commentContent" placeholder="댓글을 입력하세요"></textarea></label>
-				    <button id="submitComment" value="${param.qna_seq}">댓글 등록</button>
+				    <button id="submitComment" value="${param.qna_seq}">댓글<br>등록</button>
 			    </div>
 			    </c:if>
 			    <c:if test="${empty user.us_id}">
 				<div class="comment-input">
 				    <label><textarea id="commentContent" placeholder="로그인후 입력이 가능합니다." disabled></textarea></label>
-				    <button id="submitComment" value="${param.qna_seq}" disabled>댓글 등록</button>
+				    <button id="submitComment" value="${param.qna_seq}" disabled>댓글<br>등록</button>
 			    </div>
 				</c:if>
 				<div id="commentList"></div>

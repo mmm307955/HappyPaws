@@ -128,7 +128,7 @@ if( !('${message}'=='' ||'${message}'==null ) ) alert('${message}');
 <div id="content">
     <h3>회원관리 목록</h3>
     <c:set var="currentPage" value="${param.page != null ? param.page : 1}" scope="request"/>
-    <c:set var="itemsPerPage" value="5" scope="request"/>
+    <c:set var="itemsPerPage" value="10" scope="request"/>
     <c:set var="startIndex" value="${(currentPage - 1) * itemsPerPage}" scope="request"/>
     <c:set var="endIndex" value="${startIndex + itemsPerPage}" scope="request"/>
     

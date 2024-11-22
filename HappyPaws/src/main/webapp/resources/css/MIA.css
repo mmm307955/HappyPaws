@@ -11,7 +11,7 @@ body {
 	width: 1000px;
 	text-align: center;
 	margin: 0 auto;
-	font-size: 18px;
+	font-size: 20px;
 }
 
 .us_profile {
@@ -103,11 +103,13 @@ body {
 
 /* 리스트 아이템 스타일 */
 .n_list_item {
-	border: 1px solid #fcd11e;
+	border: 1px solid #b7b7b7;
 	padding: 10px;
 	text-align: center;
 	background-color: #fff;
 	box-sizing: border-box;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .n_listform .n_list_item img {
@@ -255,7 +257,7 @@ body {
 	}
 	.n_categoryform .category {
 		width: 18%;
-		font-size: 18px;
+		font-size: 20px;
 		margin-left: 0;
 		padding: 0;
 	}
@@ -263,10 +265,11 @@ body {
 		grid-template-columns: 50% 50%;
 		max-width: 95%;
 		gap: 5px;
-		font-size: 16px;
+		font-size: 20px;
 	}
 	.n_list_item {
 		padding: 5px;
+		font-size: 14px;
 	}
 	.n_listform .n_list_item img {
 		width: 100%;
@@ -279,7 +282,7 @@ body {
 .n_view {
 	width: 1000px;
 	margin: 0 auto;
-	font-size: 18px
+	font-size: 20px
 }
 
 .n_viewform {
@@ -311,7 +314,7 @@ body {
 
 .n_title .author {
 	text-align: right;
-	font-size: 14px;
+	font-size: 20px;
 	color: #888;
 	margin-top: 11px;
 	max-width: 120px;
@@ -323,21 +326,21 @@ body {
 	margin-top: 10px;
 	margin-bottom: 10px;
 	color: #888;
-	font-size: 14px;
+	font-size: 20px;
 }
 
 .n_second .cnt {
 	text-align: left;
 	margin-top: 10px;
 	color: #888;
-	font-size: 14px;
+	font-size: 20px;
 }
 
 .n_second .date {
 	text-align: right;
 	margin-top: 10px;
 	color: #888;
-	font-size: 14px;
+	font-size: 20px;
 }
 
 .n_third {
@@ -355,10 +358,10 @@ body {
 .n_third .ph {
 	grid-area: header; /* 그리드의 header 영역 */
 	text-align: center; /* 중앙 정렬 */
-	font-size: 20px;
+	font-size: 24px;
 	font-weight: bold;
 	background-color: #fff;
-	padding: 10px 20px;
+	padding: 0 20px;
 	border-radius: 5px;
 	z-index: 1; /* 다른 요소 위에 표시 */
 }
@@ -390,36 +393,29 @@ body {
 
 .n_third .detail-table td, .n_third .detail-table th {
 	padding: 8px;
-	overflow: hidden; /* 넘치는 내용 숨기기 */
-	text-overflow: ellipsis; /* "..." 표시 */
-	white-space: nowrap; /* 한 줄로 표시 */
 }
 
 .n_third .detail-table .label {
 	font-weight: bold;
-	text-overflow: ellipsis; /* "..." 표시 */
-	white-space: nowrap;
-	overflow: hidden;
 }
 
 .n_third .detail-table .value {
 	color: #333;
-	text-overflow: ellipsis; /* "..." 표시 */
-	white-space: nowrap;
-	overflow: hidden;
 }
 
 .n_content {
 	margin-top: -2px;
 	padding-bottom: 10px;
-	font-size: 17px;
+	font-size: 20px;
 	min-height: 200px;
 	text-align: left;
 }
 
 .n_content pre {
-	font-size: 16px;
+	font-size: 20px;
 	font-family: 'NunNu', sans-serif;
+	white-space: pre-wrap;
+	word-wrap: break-word;
 }
 
 .commentlist {
@@ -449,7 +445,7 @@ body {
 
 .comment div span {
 	float: right;
-	font-size: 14px;
+	font-size: 20px;
 	color: #888;
 }
 
@@ -458,6 +454,9 @@ body {
 	display: inline-block;
 	width: calc(100% - 40px);
 	overflow: hidden;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	font-size: 20px;
 }
 
 .comment textarea {
@@ -573,7 +572,7 @@ body {
 	}
 	.n_third {
 		gap: 5px;
-		height: 300px;		
+		height: 400px;
 	}
 	.n_third .ph {
 		font-size: 18px;
@@ -585,7 +584,7 @@ body {
 	.n_third .detail-table {
 		height: 100%;
 		width: 100%;
-		font-size: 11px;
+		font-size: 14px;
 	}
 	.n_third .detail-table td, .n_third .detail-table th {
 		padding: 0;
@@ -594,7 +593,7 @@ body {
 		min-height: 100px;
 	}
 	.n_content pre {
-		font-size: 10pt;
+		font-size: 14px;
 	}
 	.commentlist {
 		width: 100%;
@@ -608,17 +607,17 @@ body {
 		height: 15px;
 	}
 	.comment div strong {
-		font-size: 11pt;
+		font-size: 14px;
 	}
 	.comment div span {
 		font-size: 11px;
 	}
 	.comment pre {
-		font-size: 10pt;
+		font-size: 14px;
 	}
 	.comment textarea {
 		width: 80%;
-		font-size: 10pt;
+		font-size: 14px;
 		height: 75px;
 	}
 	.commentWrite {
@@ -630,7 +629,7 @@ body {
 		font-size: 10pt;
 	}
 	.commentWrite strong {
-		font-size: 11pt;
+		font-size: 14px;
 	}
 	.commentWrite textarea {
 		width: 100%;
@@ -641,7 +640,7 @@ body {
 		font-size: 10pt;
 	}
 	.comment #login_button {
-		font-size: 11pt;
+		font-size: 14px;
 	}
 	.commandList {
 		width: 80%;

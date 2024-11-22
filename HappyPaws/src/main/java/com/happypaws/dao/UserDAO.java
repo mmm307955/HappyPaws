@@ -46,7 +46,7 @@ public class UserDAO {
 
 //    public void us_is_del(String us_id) {
 //        int deletedRows = sql.delete("com.happypaws.dao.UserDAO.us_is_del", us_id);
-//        System.out.println("삭제된 행의 수: " + deletedRows);
+//       
 //    }
 
     

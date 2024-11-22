@@ -85,9 +85,7 @@ public class LpCommentController {
 		String searchKeyword = request.getParameter("searchKeyword");
 		String category = request.getParameter("category");
 		String nowPage = request.getParameter("nowPage");
-		
-		System.out.println("deleteLpComment called with lp_seq: " + lp_seq + " and lpc_seq: " + lpc_seq);
-
+				
 		LpCommentVO vo = new LpCommentVO();
 		vo.setLp_seq(Integer.parseInt(lp_seq));
 		vo.setLpc_seq(Integer.parseInt(lpc_seq));

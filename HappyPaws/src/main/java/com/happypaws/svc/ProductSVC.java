@@ -1,7 +1,11 @@
 package com.happypaws.svc;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -136,8 +140,8 @@ public class ProductSVC {
     }
     
     // 주문 조회
-    public ProductVO getProductOrder(int prorMasterId) {
-        return dao.getProductOrder(prorMasterId);
+    public ProductVO getProductOrder(int pror_master_id) {
+        return dao.getProductOrder(pror_master_id);
     }
     
     // 사용자별 주문 목록 조회
@@ -182,8 +186,8 @@ public class ProductSVC {
 	}
 	
     // 주문 상품 목록 조회
-    public List<ProductVO> getOrderItems(int prorMasterId) {
-        return dao.getOrderItems(prorMasterId);
+    public List<ProductVO> getOrderItems(int pror_master_id) {
+        return dao.getOrderItems(pror_master_id);
     }
     
     public int getProductStock(int pr_id, String pr_opt_name) {
@@ -254,8 +258,148 @@ public class ProductSVC {
         return dao.getReviewById(prc_no);
     }
     
+    public ProductVO getCartItem(String usId, int prId, String prOptName) {
+        return dao.getCartItem(usId, prId, prOptName);
+    }
+    
     // 인덱스 페이지에 보여주기
     public List<ProductVO> productIndex() {
         return dao.productIndex();
+    }
+
+    // 관리자용 리뷰 목록 조회
+    public List<ProductVO> getAdminProductReview(ProductVO vo) {
+        List<ProductVO> reviews = dao.getAdminProductReview(vo);
+        return reviews;
+    }
+
+    // 관리자용 문의 목록 조회
+    public List<ProductVO> getAdminProductQuestion(ProductVO vo) {
+        List<ProductVO> inquiries = dao.getAdminProductQuestion(vo);
+        return inquiries;
+    }
+
+    // 관리자용 주문 목록 조회
+    public List<ProductVO> getAdminProductOrderList(ProductVO vo) {
+        return dao.getAdminProductOrderList(vo);
+    }
+
+    // 배송 상태 업데이트
+    public int updateOrderDeliveryStatus(ProductVO vo) {
+        return dao.updateOrderDeliveryStatus(vo);
+    }
+
+    // 리뷰 총 갯수 조회 (검색 조건 포함)
+    public int getProductReviewTotalCount(ProductVO vo) {
+        return dao.getProductReviewTotalCount(vo);
+    }
+
+    // 관리자용 주문 총 갯수 조회 (검색 조건 포함)
+    public int getAdminOrderListCount(ProductVO vo) {
+        return dao.getAdminOrderListCount(vo);
+    }
+
+    // 리뷰 파일 삭제 처리
+    private void deleteReviewImage(int prc_no) {
+        ProductVO review = getReviewById(prc_no);
+        if(review != null && review.getPrc_image() != null && !review.getPrc_image().isEmpty()) {
+            File imageFile = new File(servletContext.getRealPath("/resources/upload/") + review.getPrc_image());
+            if(imageFile.exists()) {
+                imageFile.delete();
+            }
+        }
+    }
+
+    // 리뷰 삭제 (이미지 파일도 함께 삭제)
+    @Transactional
+    public int adminDeleteReview(int prc_no) {
+        deleteReviewImage(prc_no);
+        return dao.deleteProductReview(prc_no);
+    }
+
+    // 문의 답변 업데이트
+    public int updateQuestionAnswer(ProductVO vo) {
+        return dao.updateQuestionAnswer(vo);
+    }
+
+    // 주문 상세 정보 조회 (관리자용)
+    public Map<String, Object> getAdminOrderDetail(int orderId) {
+        Map<String, Object> result = new HashMap<>();
+        
+        // 주문 마스터 정보 조회
+        ProductVO orderMaster = dao.getProductOrder(orderId);
+        if(orderMaster != null) {
+            // 주문 상세 목록 조회
+            List<ProductVO> orderItems = dao.getOrderItems(orderId);
+            
+            result.put("master", orderMaster);
+            result.put("items", orderItems);
+        }
+        
+        return result;
+    }
+
+    // 배송상태 이력 저장
+    public int insertDeliveryStatusHistory(ProductVO vo) {
+        vo.setStatus_date(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        return dao.insertDeliveryStatusHistory(vo);
+    }
+
+    // 주문 상태별 통계
+    public Map<String, Object> getOrderStatistics() {
+        Map<String, Object> stats = new HashMap<>();
+        
+        // 결제상태별 주문 수
+        stats.put("paymentStats", dao.getPaymentStatusStats());
+        
+        // 배송상태별 주문 수
+        stats.put("deliveryStats", dao.getDeliveryStatusStats());
+        
+        // 오늘의 주문/취소 현황
+        stats.put("todayStats", dao.getTodayOrderStats());
+        
+        return stats;
+    }
+
+    // 기간별 매출 통계
+    public List<Map<String, Object>> getSalesStatsByPeriod(String startDate, String endDate) {
+        Map<String, String> params = new HashMap<>();
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
+        return dao.getSalesStatsByPeriod(params);
+    }
+
+    // 특정 상품의 리뷰 평균 평점
+    public double getProductAverageRating(int pr_id) {
+        List<ProductVO> reviews = dao.getProductReviewRating(pr_id);
+        if(reviews == null || reviews.isEmpty()) {
+            return 0.0;
+        }
+        
+        double totalRating = 0;
+        for(ProductVO review : reviews) {
+            totalRating += review.getPrc_rating();
+        }
+        
+        return totalRating / reviews.size();
+    }
+
+    // 상품별 문의 응답률
+    public Map<String, Object> getInquiryResponseRate(int pr_id) {
+        Map<String, Object> result = new HashMap<>();
+        
+        int totalCount = dao.getProductQuestionCount(pr_id);
+        int answeredCount = dao.getAnsweredQuestionCount(pr_id);
+        
+        result.put("totalCount", totalCount);
+        result.put("answeredCount", answeredCount);
+        result.put("responseRate", totalCount > 0 ? (double)answeredCount/totalCount * 100 : 0);
+        
+        return result;
+    } 
+    
+    // ProductSVC에 추가할 메서드
+    public int getProductQuestionTotalCount(ProductVO vo) {
+        return dao.getProductQuestionTotalCount(vo);
     }
 }

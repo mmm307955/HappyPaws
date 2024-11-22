@@ -10,6 +10,16 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/css/MIA.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/newFamily.js"></script>
+<script>
+function checkNull(){
+	var imgValue = $('#file2').val();
+	
+	if(imgValue == null || imgValue ==''){
+		alert("사진을 첨부해주세요.");
+		return false;
+	}
+}
+</script>
 <jsp:include page="${pageContext.request.contextPath}/head.jsp" />
 </head>
 <body>
@@ -18,8 +28,7 @@
 		<div class="n_write">
 			<h1>새로운 가족을 찾아요</h1>
 			<div class="n_writeform">
-				<form action="/MIA/insertNewFamily" method="post"
-					enctype="multipart/form-data" name="boardform">
+				<form action="/MIA/insertNewFamily" method="post" enctype="multipart/form-data" name="boardform" onsubmit="return checkNull()">
 
 					<div class="n_write_header">
 						<span class="left">글 작성</span>
@@ -28,7 +37,7 @@
 					<div class="n_title">
 						<input type="hidden" name="nf_id" value="${user.us_id}"> <input
 							type="text" class="form-control" name="nf_title"
-							placeholder="제목을 입력하세요." required>
+							placeholder="제목을 입력하세요." required maxlength="30">
 					</div>
 
 					<div class="n_ph">
@@ -41,8 +50,7 @@
 						<img src="${pageContext.request.contextPath}/resources/MIA-img/default.png;"
 						alt="New Family Image" class="new-family-image">
 						<div class="img_save">
-								<input id="file2" type="file" name="uploadFile" accept="image/*"
-								style="display: none;" required> <span>사진 첨부</span>
+								<input id="file2" type="file" name="uploadFile" accept="image/*" style="display: none;"> <span>사진 첨부</span>
 						</div>
 						</label>
 					</div>
@@ -52,12 +60,12 @@
 							<tr class="detail-row">
 								<td class="label">분양 지역</td>
 								<td class="value"><input type="text" class="form-control"
-									name="nf_place" placeholder="분양 지역를 입력해주세요" required></td>
+									name="nf_place" placeholder="분양 지역를 입력해주세요" required maxlength="30"></td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">나이</td>
 								<td class="value"><input type="text" class="form-control"
-									name="nf_age" placeholder="나이를 입력해주세요" required></td>
+									name="nf_age" placeholder="나이를 입력해주세요" required maxlength="10"></td>
 							</tr>
 							<tr class="detail-row">
 								<td class="label">성별</td>
@@ -80,13 +88,13 @@
 							<tr class="detail-row">
 								<td class="label">품종</td>
 								<td class="value"><input type="text" class="form-control"
-									name="nf_breed" placeholder="품종 입력" required></td>
+									name="nf_breed" placeholder="품종 입력" required maxlength="10"></td>
 							</tr>
 						</table>
 
 					</div>
 					<div class="n_content">
-						<textarea cols="100" wrap="hard" class="form-control" rows="5" name="nf_content"
+						<textarea cols="100" wrap="soft" class="form-control" rows="5" name="nf_content"
 							placeholder="상세 설명을 입력하세요"></textarea>
 					</div>
 					<input type="hidden" name="nf_ok" value="N"> <input

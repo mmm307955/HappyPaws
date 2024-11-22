@@ -251,13 +251,12 @@ public class AdminProductController {
 		// 상대 경로 추가 시 realPath 추가
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/upload/");
 		if (vo.getPr_thumbnail() != null) {
-//			System.out.println("파일삭제: " + realPath + vo.getPr_thumbnail());
+//		
 			File f = new File(realPath + vo.getPr_thumbnail());
 			f.delete();
 		}
 		
-//		System.out.println(vo.getPr_id());
-		
+//				
 		String encodedCondition = URLEncoder.encode(vo.getSearchCondition(), StandardCharsets.UTF_8.toString());
 		String encodedKeyword = URLEncoder.encode(vo.getSearchKeyword(), StandardCharsets.UTF_8.toString());
 		String encodedCategory = URLEncoder.encode(vo.getPr_category(), StandardCharsets.UTF_8.toString());

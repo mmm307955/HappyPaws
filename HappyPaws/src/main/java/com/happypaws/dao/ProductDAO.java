@@ -102,8 +102,8 @@ public class ProductDAO {
     }
     
     // 주문 조회 (마스터 + 상세)
-    public ProductVO getProductOrder(int prorMasterId) {
-        List<ProductVO> results = mybatis.selectList("ProductDAO.getProductOrder", prorMasterId);
+    public ProductVO getProductOrder(int pror_master_id) {
+        List<ProductVO> results = mybatis.selectList("ProductDAO.getProductOrder", pror_master_id);
         return results != null && !results.isEmpty() ? results.get(0) : null;
     }
 
@@ -139,8 +139,8 @@ public class ProductDAO {
         return mybatis.selectOne("ProductDAO.getOrderListCount", vo);
     }
     
-    public List<ProductVO> getOrderItems(int prorMasterId) {
-        return mybatis.selectList("ProductDAO.getOrderItems", prorMasterId);
+    public List<ProductVO> getOrderItems(int pror_master_id) {
+        return mybatis.selectList("ProductDAO.getOrderItems", pror_master_id);
     }
     
     public int updateProductStock(ProductVO vo) {
@@ -220,8 +220,84 @@ public class ProductDAO {
         return mybatis.delete("ProductDAO.deleteExistingReview", vo);
     }
     
+    public ProductVO getCartItem(String usId, int prId, String prOptName) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("us_id", usId);
+        params.put("pr_id", prId);
+        params.put("pr_opt_name", prOptName);
+        return mybatis.selectOne("ProductDAO.getCartItem", params);
+    }
+    
     // 인덱스 페이지에 보여주기
     public List<ProductVO> productIndex() {
         return mybatis.selectList("ProductDAO.productIndex");
+    }
+    
+ // 관리자용 리뷰 목록 조회
+    public List<ProductVO> getAdminProductReview(ProductVO vo) {
+        return mybatis.selectList("ProductDAO.getAdminProductReview", vo);
+    }
+
+    // 관리자용 문의 목록 조회
+    public List<ProductVO> getAdminProductQuestion(ProductVO vo) {
+        return mybatis.selectList("ProductDAO.getAdminProductQuestion", vo);
+    }
+
+    // 관리자용 주문 목록 조회
+    public List<ProductVO> getAdminProductOrderList(ProductVO vo) {
+        return mybatis.selectList("ProductDAO.getAdminProductOrderList", vo);
+    }
+
+    // 배송 상태 업데이트
+    public int updateOrderDeliveryStatus(ProductVO vo) {
+        return mybatis.update("ProductDAO.updateOrderDeliveryStatus", vo);
+    }
+
+    // 배송상태 이력 저장
+    public int insertDeliveryStatusHistory(ProductVO vo) {
+        return mybatis.insert("ProductDAO.insertDeliveryStatusHistory", vo);
+    }
+
+    // 리뷰 총 개수 조회 (검색 조건 포함)
+    public int getProductReviewTotalCount(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.getProductReviewTotalCount", vo);
+    }
+
+    // 관리자용 주문 총 개수 조회
+    public int getAdminOrderListCount(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.getAdminOrderListCount", vo);
+    }
+
+    // 답변 완료된 문의 개수 조회
+    public int getAnsweredQuestionCount(int pr_id) {
+        return mybatis.selectOne("ProductDAO.getAnsweredQuestionCount", pr_id);
+    }
+
+    // 결제상태별 주문 통계
+    public List<Map<String, Object>> getPaymentStatusStats() {
+        return mybatis.selectList("ProductDAO.getPaymentStatusStats");
+    }
+
+    // 배송상태별 주문 통계
+    public List<Map<String, Object>> getDeliveryStatusStats() {
+        return mybatis.selectList("ProductDAO.getDeliveryStatusStats");
+    }
+
+    // 오늘의 주문/취소 현황
+    public Map<String, Object> getTodayOrderStats() {
+        return mybatis.selectOne("ProductDAO.getTodayOrderStats");
+    }
+
+    // 기간별 매출 통계
+    public List<Map<String, Object>> getSalesStatsByPeriod(Map<String, String> params) {
+        return mybatis.selectList("ProductDAO.getSalesStatsByPeriod", params);
+    }
+    
+    public int updateQuestionAnswer(ProductVO vo) {
+        return mybatis.update("ProductDAO.updateQuestionAnswer", vo);
+    }
+    
+    public int getProductQuestionTotalCount(ProductVO vo) {
+        return mybatis.selectOne("ProductDAO.getProductQuestionTotalCount", vo);
     }
 }

@@ -28,7 +28,7 @@ public class AdDAO {
 
     // 비밀번호 업데이트
     public void updatePassword(String us_id, String newPassword) {
-    	System.out.println("updatePassword");
+    	
         Map<String, Object> params = new HashMap<>();
         params.put("us_id", us_id);
         params.put("us_password", newPassword);

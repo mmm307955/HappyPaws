@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,9 @@ import com.happypaws.vo.UsersVO;
 public class UserController {
     @Autowired
     private UserSVC svc;
+    
+    @Autowired
+	private ServletContext servletContext;
     
     @GetMapping("/userList.do")
     public void userSelectAll(
@@ -160,9 +164,7 @@ public class UserController {
             return "redirect:/userList.do";
         }
         
-        
-        System.out.println("탈퇴 처리 결과: " + us_id);
-        
+                
         boolean isDeleted = svc.updateUserToDeleted(us_id);
         if (isDeleted) {
             redirectAttributes.addFlashAttribute("alertMessage", "회원 탈퇴가 완료되었습니다.");
@@ -187,7 +189,6 @@ public class UserController {
 
         // 최신 사용자 정보 조회 및 모델에 추가
         UsersVO updatedUser = svc.user_detail(user.getUs_id());
-        updatedUser.setUs_profile("/resources/profile_images/" + updatedUser.getUs_profile());
         m.addAttribute("user", updatedUser);
 
         // 마이페이지로 이동
@@ -206,14 +207,13 @@ public class UserController {
         }
        String us_id= user.getUs_id();
        user=svc.user_detail(us_id);
-		user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
         // 사용자 정보를 모델에 추가하여 JSP에서 사용할 수 있도록 합니다.
         m.addAttribute("user", user);
        
         // 마이페이지로 이동
         return "/WEB-INF/mypage/us_mypage.jsp";  
     }
-
+    
     @PostMapping("/us_myPage.do")
     public String updateMyPage(
         HttpServletRequest request,
@@ -230,16 +230,22 @@ public class UserController {
         }
 
         user.setUs_id(userFromCookie.getUs_id());
-
-        System.out.println("user"+user);
+        if (user.getUs_profile_file().getSize() == 0) {
+			user.setUs_profile(userFromCookie.getUs_profile());
+		}
+       
         if (user.getUs_profile_file() != null && !user.getUs_profile_file().isEmpty()) {
             try {
-                String originalFilename = user.getUs_profile_file().getOriginalFilename();
+            	
+            	String originalFilename = user.getUs_profile_file().getOriginalFilename();
+            	      	      
                 String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
 
                 String uniqueFileName = userFromCookie.getUs_id() + fileExtension;
 
-                String uploadDir = "C:/HappyPaws/HappyPaws/src/main/webapp/resources/profile_images/";
+//                String uploadDir = "C:/swork/HappyPaws/src/main/webapp/resources/profile_images/";
+                String uploadDir = servletContext.getRealPath("/resources/profile_images/");
+                
                 File uploadDirFile = new File(uploadDir);
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();
@@ -271,6 +277,8 @@ public class UserController {
         // 메인 마이페이지로 리다이렉트
         return "redirect:/us_mainmyPage.do";
     }
+
+
     @RequestMapping("/logout")
    	public String logout(HttpServletResponse response, HttpSession session) {
    		session.removeAttribute("user");

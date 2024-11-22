@@ -67,7 +67,6 @@ public class AuthController {
 		} else if (!user.getUs_sns().equals("default")) {
 			redirectAttributes.addFlashAttribute("error", "sns");
 		} else if (Argon2Util.verifyPassword(user.getUs_password(), password)) {
-			user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
 			JwtCookieUtil.createJwtCookie(response, user);
 			return "redirect:" + (returi == null ? "/" : returi);
 		} else {
@@ -109,7 +108,6 @@ public class AuthController {
 
 		if (!svc.checkId(user.getUs_id())) {
 			user = svc.login(user);
-			user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
 			JwtCookieUtil.createJwtCookie(response, user);
 			return "redirect:/";
 		}
@@ -118,7 +116,6 @@ public class AuthController {
 			apiSvc.saveProfileImage(user);
 			svc.snsJoin(user);
 			user = svc.login(user);
-			user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
 			if (user != null && user.getUs_sns().equals(divider)) {
 				JwtCookieUtil.createJwtCookie(response, user);
 				return "redirect:/";
@@ -136,7 +133,6 @@ public class AuthController {
 		apiSvc.saveProfileImage(user);
 		svc.snsJoin(user);
 		user = svc.login(user);
-		user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
 		if (user != null && user.getUs_sns().equals("naver")) {
 			JwtCookieUtil.createJwtCookie(response, user);
 		}
@@ -169,7 +165,6 @@ public class AuthController {
 		} else if (!admin.getUs_id().equals("admin")) {
 			model.addAttribute("error", "admin");
 		} else if (Argon2Util.verifyPassword(admin.getUs_password(), password)) {
-			admin.setUs_profile("/resources/profile_images/" + admin.getUs_profile());
 			JwtCookieUtil.createJwtCookie(response, admin);
 			return "redirect:/admin";
 		} else {
@@ -227,11 +222,11 @@ public class AuthController {
 	}
 
 	@PostMapping("/join")
-	public String join(UsersVO user, HttpServletResponse response) {
+	public String join(UsersVO user, HttpServletResponse response, String us_address_detail) {
 		user.setUs_password(Argon2Util.hashPassword(user.getUs_password()));
+		user.setUs_address(user.getUs_address() + " " + us_address_detail);
 		if (svc.join(user)) {
 			user = svc.login(user);
-			user.setUs_profile("/resources/profile_images/" + user.getUs_profile());
 			JwtCookieUtil.createJwtCookie(response, user);
 			return "redirect:/auth/login";
 		} else {
@@ -289,13 +284,18 @@ public class AuthController {
 
 		switch (us_sns) {
 		case "naver":
-			return apiSvc.requestNaverLogoutUri();
+			return "/WEB-INF/auth/naverLogout.jsp";
 		case "kakao":
 			return "redirect:" + apiSvc.requestKakaoLogoutUri(request);
 		}
 		return "redirect:/";
 	}
-	
+
+	@RequestMapping("/logout/naver")
+	public String naverLogout(Model model) {
+		return apiSvc.requestNaverLogoutUri(model);
+	}
+
 	@RequestMapping("/logout/kakao")
 	public String snsLogout(@RequestParam(value = "state") String state,
 			HttpSession session, Model model) {
