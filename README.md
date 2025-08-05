@@ -1,8 +1,9 @@
 # 행복한 발자국 🐾
 ## 유기동물 입양 플랫폼, 행복한 발자국입니다.
 
-![img_3.png](images/img_3.png)
-![img_6.png](images/img_6.png)
+![행복한발자국_page-0001](https://github.com/user-attachments/assets/3f623725-819f-41bc-ad65-68d640423df1)
+![행복한발자국_page-0002](https://github.com/user-attachments/assets/a499910b-bd84-4525-88af-02cbac42eb25)
+
 
 ## 💻 사용 기술
 
@@ -22,10 +23,11 @@
 ### 도구
 - STS, VS Code, HeidiSQL, Figma
 
-### 담당 기능
+
+## 담당 기능
 > 관리자 상품 관리 기능 구현
 
-![img_4.png](images/img_4.png)
+<img width="8000" height="4500" alt="image" src="https://github.com/user-attachments/assets/f8ae18c2-c8e7-4522-b2f8-76b8a6734c7d" />
 
 ### 🔧 구현 내용
 - 썸네일 이미지 업로드 및 서버 저장 (UUID로 파일명 중복 방지)
@@ -62,4 +64,4 @@ src/
 
 
 ### 📄 전체 문서
-전체 기획안은 `images/` 폴더에서 확인할 수 있습니다.
+전체 기획안은 `images/` 폴더에서 확인하실 수 있습니다.
