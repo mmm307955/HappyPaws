@@ -1,14 +1,14 @@
 # 행복한 발자국 🐾
 ## 유기동물 입양 플랫폼, 행복한 발자국입니다.
 
-![img_3.png](img_3.png)
-![img_6.png](img_6.png)
+![img_3.png](images/img_3.png)
+![img_6.png](images/img_6.png)
 
 
 ### 담당 기능
 > 관리자 상품 관리 기능 구현
 
-![img_4.png](img_4.png)
+![img_4.png](images/img_4.png)
 
 ### 🔧 구현 내용
 - 썸네일 이미지 업로드 및 서버 저장 (UUID로 파일명 중복 방지)
